@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALIA coiffure — Salon de coiffure à Champigny-sur-Marne</title>
+  <meta name="description" content="ALIA coiffure, salon de coiffure à Champigny-sur-Marne. Ouvert 7 j/7 de 10 h à 19 h. Réservation sur Planity.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Alex+Brush&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="alia.css">
+  <meta name="theme-color" content="#0d0d0d">
+  <meta property="og:title" content="ALIA coiffure — Champigny-sur-Marne">
+  <meta property="og:description" content="Brushing, coupe, couleur, mèches, lissage. Ouvert 7 j/7, 10 h – 19 h. Réservez sur Planity.">
+  <meta property="og:image" content="images/hero.jpg">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+  <!-- ══════════ PRELOADER ══════════ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-inner">
+      <p class="loader-wordmark">ALIA</p>
+      <span class="loader-rule"><i id="loaderBar"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════ CONTENU ══════════ -->
+  <main class="smooth" id="smooth">
+
+    <!-- ─── SCÈNE 1 · PASTEBOARD → ZOOM TEXTE → SÉRIE EN LUMIÈRE ─── -->
+    <section class="scene s-hero" id="hero" data-pin="5">
+      <div class="pin">
+
+        <div class="floaters" aria-hidden="true">
+          <figure class="fl" style="--x:-4%;  --y:13%; --w:196px" data-d="0.55"><img src="images/fl-01.jpg" alt=""></figure>
+          <figure class="fl" style="--x:21%;   --y:3%; --w:142px" data-d="0.90"><img src="images/fl-02.jpg" alt=""></figure>
+          <figure class="fl" style="--x:40%;  --y:-8%; --w:232px" data-d="0.40"><img src="images/fl-03.jpg" alt=""></figure>
+          <figure class="fl" style="--x:63%;  --y:7%; --w:126px" data-d="0.75"><img src="images/fl-04.jpg" alt=""></figure>
+          <figure class="fl" style="--x:85%;  --y:1%; --w:208px" data-d="1.00"><img src="images/fl-05.jpg" alt=""></figure>
+          <figure class="fl" style="--x:-2%;  --y:45%; --w:116px" data-d="0.50"><img src="images/fl-06.jpg" alt=""></figure>
+          <figure class="fl" style="--x:94%;  --y:37%; --w:172px" data-d="0.70"><img src="images/fl-07.jpg" alt=""></figure>
+          <figure class="fl" style="--x:13%;  --y:71%; --w:248px" data-d="0.35"><img src="images/fl-08.jpg" alt=""></figure>
+          <figure class="fl" style="--x:44%;  --y:81%; --w:134px" data-d="0.85"><img src="images/fl-09.jpg" alt=""></figure>
+          <figure class="fl" style="--x:73%;  --y:64%; --w:188px" data-d="0.60"><img src="images/fl-10.jpg" alt=""></figure>
+        </div>
+
+        <div class="hero-copy">
+          <p class="hero-kicker mono" id="heroKicker">ALIA COIFFURE — SALON, CHAMPIGNY-SUR-MARNE</p>
+          <h1 class="hero-title">
+            <span class="hero-line1" id="heroLine1">L’élégance commence</span>
+            <span class="hero-line2" id="heroLine2">
+              <span class="hl">par vos</span>
+              <span class="grow" id="grow1"><img src="images/hero.jpg" alt="Chevelure brillante en mouvement"></span>
+              <span class="hl">cheveux.</span>
+            </span>
+          </h1>
+        </div>
+
+        <!-- calque plein écran : titre blanc sur l'image -->
+        <div class="spot" id="spot" aria-hidden="true">
+          <h2 class="spot-intro" id="spotIntro"><span>Coupe,</span> <span>couleur,</span> <span>lissage</span> <span>—</span> <span>à</span> <span>Champigny.</span></h2>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── SCÈNE 2 · MANIFESTE (remplissage caractère par caractère) ─── -->
+    <section class="scene s-fill" id="manifeste" data-pin="3.5">
+      <div class="pin">
+        <p class="fill-text" id="fillText">Chez ALIA, chaque rendez-vous commence par une écoute. On lit la matière, la lumière, votre rythme — puis on crée une coiffure <span class="boxed" id="boxedPhrase">qui vous ressemble<svg class="box-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path id="boxPath" d="M50,6 C88,4 98,22 97,50 C96,82 76,96 49,95 C16,94 3,76 4,48 C5,18 20,7 50,6 Z"/></svg></span>, et qui tient bien après la sortie du salon.</p>
+      </div>
+    </section>
+
+    <!-- ─── SCÈNE 3 · SÉLECTION (panneau blanc, masonry parallaxe) ─── -->
+    <section class="collection" id="travaux">
+      <header class="coll-head">
+        <p class="mono ash">RÉALISATIONS DU SALON</p>
+        <h2 class="coll-title" id="collTitle">Le travail, en images</h2>
+        <p class="coll-sub">Brushings, couleurs, mèches et lissages, réalisés au salon.</p>
+        <p class="mono ash">HUIT RÉALISATIONS — CHAMPIGNY-SUR-MARNE</p>
+      </header>
+
+      <div id="collGrid"></div>
+    </section>
+
+    <!-- ─── 5 · DEVISE — train de mots-clés géants sur bande lime ─── -->
+    <div class="band" id="temps">
+      <div class="diag to-lime" aria-hidden="true"></div>
+      <section class="scene s-motto" data-pin="4">
+        <div class="pin motto-pin">
+          <p class="motto-kicker mono" id="mottoKicker">CE QUI GUIDE CHAQUE RENDEZ-VOUS</p>
+          <div class="motto-track" id="mottoTrack"></div>
+          <p class="motto-hint mono" id="mottoHint"></p>
+        </div>
+      </section>
+      <div class="diag from-lime" aria-hidden="true"></div>
+    </div>
+
+    <!-- ─── SCÈNE 5 · « UN PROJET, 3 ÉTAPES » → LE PROCESSUS IMMERSIF ─── -->
+    <section class="scene s-night" id="explorer" data-pin="9">
+      <div class="pin">
+
+        <div class="night-line" id="nightLine">
+          <span class="hl nw" id="nw1">Une</span>
+          <span class="hl nw" id="nw2">visite,</span>
+          <span class="grow" id="grow2"><img src="images/process.jpg" alt="Coiffeuse au travail au salon ALIA"></span>
+          <span class="hl nw" id="nw3">3 temps.</span>
+        </div>
+
+        <!-- compteur monumental : le numéro d'étape défile comme un odomètre -->
+        <div class="bignum" id="bigNum" aria-hidden="true"><span class="bignum-fixed">0</span><span class="bignum-roll"><span id="bigRoll"></span></span></div>
+
+        <!-- contenu de l'étape, à gauche -->
+        <div class="psteps" id="psteps"></div>
+
+        <p class="steps-cta" id="stepsCta">
+          <a href="https://www.planity.com/alia-coiffure-94500-champigny-sur-marne" target="_blank" rel="noopener" id="stepsCtaLink">Prendre rendez-vous →<svg class="cta-oval" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path id="ctaOval" d="M50,6 C88,4 98,22 97,50 C96,82 76,96 49,95 C16,94 3,76 4,48 C5,18 20,7 50,6 Z"/></svg></a>
+        </p>
+
+        <!-- rideau de lames : essuie le plein écran SANS jamais dézoomer -->
+        <div class="wipe" id="nightWipe" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+      </div>
+    </section>
+
+    <!-- ─── 8 · PREUVE SOCIALE — citation en rideau, guillemets géants ─── -->
+    <section class="scene s-quote" id="temoignage" data-pin="3">
+      <div class="pin">
+        <div class="q-stack">
+          <span class="q-glyph" aria-hidden="true">“</span>
+          <blockquote class="q-block">
+            <p class="q-text" id="quoteText"></p>
+          </blockquote>
+          <div class="q-sign">
+            <span class="q-rule" aria-hidden="true"></span>
+            <div class="q-sign-row" id="quoteAuthorWrap">
+              <p class="q-name" id="quoteAuthor"></p>
+              <p class="q-ctx mono ash" id="figKicker"></p>
+              <p class="q-fig" id="bigFigure"><span class="fig-pre" id="figPre"></span><span class="fig-val" id="figVal">0</span><span class="fig-unit" id="figUnit"></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PRESTATIONS & TARIFS (extension ALIA) ─── -->
+    <section class="prices" id="prestations">
+      <header class="prices-head">
+        <p class="mono ash reveal">PRESTATIONS &amp; TARIFS</p>
+        <h2 class="prices-title reveal" style="--i:1">La carte du salon</h2>
+        <p class="prices-sub reveal" style="--i:2">Les prestations « sur devis » sont confirmées au salon, après diagnostic de vos cheveux.</p>
+      </header>
+      <div class="prices-grid">
+        <article class="price-cat reveal" style="--i:0">
+          <p class="mono ash">01</p>
+          <h3>Brushing</h3>
+          <ul>
+            <li><span class="p-name">Cheveux courts</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">20 €</span></li>
+            <li><span class="p-name">Cheveux mi-longs</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">25 €</span></li>
+            <li><span class="p-name">Cheveux longs</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">30 €</span></li>
+            <li><span class="p-name">Supplément bouclé</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">+5 €</span></li>
+          </ul>
+        </article>
+        <article class="price-cat reveal" style="--i:1">
+          <p class="mono ash">02</p>
+          <h3>Coupe &amp; brushing</h3>
+          <ul>
+            <li><span class="p-name">Shampoing, coupe, brushing — court</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">30 €</span></li>
+            <li><span class="p-name">Shampoing, coupe, brushing — mi-long</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">40 €</span></li>
+            <li><span class="p-name">Shampoing, coupe, brushing — long</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">45 €</span></li>
+            <li><span class="p-name">Coupe simple</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">15 €</span></li>
+          </ul>
+        </article>
+        <article class="price-cat reveal" style="--i:2">
+          <p class="mono ash">03</p>
+          <h3>Enfants</h3>
+          <ul>
+            <li><span class="p-name">Coupe brushing fille</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">20 €</span></li>
+            <li><span class="p-name">Coupe garçon</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">15 €</span></li>
+          </ul>
+        </article>
+        <article class="price-cat reveal" style="--i:0">
+          <p class="mono ash">04</p>
+          <h3>Couleurs</h3>
+          <ul>
+            <li><span class="p-name">Racine + brushing — courts</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">45 €</span></li>
+            <li><span class="p-name">Racine + brushing — mi-longs</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">50 €</span></li>
+            <li><span class="p-name">Racine + brushing — longs</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">55 €</span></li>
+          </ul>
+        </article>
+        <article class="price-cat reveal" style="--i:1">
+          <p class="mono ash">05</p>
+          <h3>Mèches</h3>
+          <ul>
+            <li><span class="p-name">Mèches + brushing, toutes longueurs <em class="mono ash">SUR DEVIS</em></span><span class="p-dots" aria-hidden="true"></span><span class="p-val">dès 80 €</span></li>
+            <li><span class="p-name">Mèches + shampoing, coupe, brushing <em class="mono ash">SUR DEVIS</em></span><span class="p-dots" aria-hidden="true"></span><span class="p-val">dès 95 €</span></li>
+            <li><span class="p-name">Patine</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">25 €</span></li>
+          </ul>
+        </article>
+        <article class="price-cat reveal" style="--i:2">
+          <p class="mono ash">06</p>
+          <h3>Couleur + mèches</h3>
+          <ul>
+            <li><span class="p-name">Couleur, mèches, brushing — toutes longueurs <em class="mono ash">SUR DEVIS</em></span><span class="p-dots" aria-hidden="true"></span><span class="p-val">dès 130 €</span></li>
+          </ul>
+        </article>
+        <article class="price-cat reveal" style="--i:0">
+          <p class="mono ash">07</p>
+          <h3>Lissage &amp; soins</h3>
+          <ul>
+            <li><span class="p-name">Lissage brésilien — courts à longs <em class="mono ash">SUR DEVIS</em></span><span class="p-dots" aria-hidden="true"></span><span class="p-val">dès 120 €</span></li>
+            <li><span class="p-name">Soin botox + brushing <em class="mono ash">SUR DEVIS</em></span><span class="p-dots" aria-hidden="true"></span><span class="p-val">dès 60 €</span></li>
+            <li><span class="p-name">Soin</span><span class="p-dots" aria-hidden="true"></span><span class="p-val">5 €</span></li>
+          </ul>
+        </article>
+      </div>
+      <div class="prices-cta reveal">
+        <a class="btn-chrome" href="https://www.planity.com/alia-coiffure-94500-champigny-sur-marne" target="_blank" rel="noopener">Réserver sur Planity <span aria-hidden="true">↗</span></a>
+        <a class="btn-line" href="tel:+33143973989">01 43 97 39 89</a>
+      </div>
+    </section>
+
+    <!-- ─── SCÈNE 9 · OBJECTIONS — PHRASES + TRAÎNÉE D'IMAGES SOUS LA SOURIS ─── -->
+    <section class="scene s-final" id="final" data-pin="2.6">
+      <div class="pin">
+        <p class="final-text">
+          <span class="fs" id="fs1">Pas d’attente interminable.</span>
+          <span class="fs" id="fs2">Pas de prix cachés.</span>
+          <span class="fs" id="fs3">Pas de coiffure standard.</span><br>
+          <span class="fs" id="fs4">Juste vous, <span class="pill" id="pillPhrase">sublimée.<svg class="pill-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path id="pillPath" d="M50,6 C88,4 98,22 97,50 C96,82 76,96 49,95 C16,94 3,76 4,48 C5,18 20,7 50,6 Z"/></svg></span></span>
+        </p>
+
+        <!-- réserve d'images pour la traînée sous la souris -->
+        <div class="trail" id="trail" aria-hidden="true">
+          <img src="images/trail-01.jpg"   style="--tw:150px" alt="">
+          <img src="images/trail-02.jpg"   style="--tw:190px" alt="">
+          <img src="images/trail-03.jpg"  style="--tw:120px" alt="">
+          <img src="images/trail-04.jpg"  style="--tw:200px" alt="">
+          <img src="images/trail-05.jpg" style="--tw:96px"  alt="">
+          <img src="images/trail-06.jpg"  style="--tw:170px" alt="">
+          <img src="images/trail-07.jpg"  style="--tw:34px"  alt="">
+          <img src="images/trail-08.jpg"  style="--tw:140px" alt="">
+          <img src="images/trail-09.jpg"  style="--tw:200px" alt="">
+          <img src="images/trail-10.jpg" style="--tw:110px" alt="">
+          <img src="images/trail-11.jpg"  style="--tw:28px"  alt="">
+          <img src="images/trail-12.jpg"  style="--tw:160px" alt="">
+          <img src="images/trail-13.jpg"  style="--tw:130px" alt="">
+          <img src="images/trail-14.jpg"  style="--tw:180px" alt="">
+          <img src="images/trail-15.jpg"  style="--tw:40px"  alt="">
+          <img src="images/trail-16.jpg"  style="--tw:150px" alt="">
+          <img src="images/trail-17.jpg"  style="--tw:120px" alt="">
+          <img src="images/trail-18.jpg"  style="--tw:200px" alt="">
+          <img src="images/trail-19.jpg" style="--tw:100px" alt="">
+          <img src="images/trail-20.jpg"  style="--tw:170px" alt="">
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FOOTER · RÉSERVATION, RÉSEAUX, INFOS PRATIQUES ─── -->
+    <footer class="footer" id="contact">
+      <p class="footer-kicker mono ash reveal">PRENEZ RENDEZ-VOUS</p>
+      <div class="book reveal" style="--i:1">
+        <a class="btn-chrome btn-xl" href="https://www.planity.com/alia-coiffure-94500-champigny-sur-marne" target="_blank" rel="noopener">Réserver sur Planity <span aria-hidden="true">↗</span></a>
+        <a class="book-tel" href="tel:+33143973989"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg><span>01 43 97 39 89</span></a>
+      </div>
+      <p class="footer-reassurance mono ash reveal" style="--i:2">RÉSERVATION EN LIGNE 24 H/24 — CONFIRMATION IMMÉDIATE</p>
+
+      <div class="follow reveal" style="--i:3">
+        <p class="mono ash">SUIVEZ-NOUS</p>
+        <ul class="socials">
+          <li><a href="https://www.instagram.com/_aliacoiffureofficial/" target="_blank" rel="noopener" aria-label="Instagram — @_aliacoiffureofficial"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span>Instagram</span></a></li>
+          <li><a href="https://www.tiktok.com/@_aliacoiffureofficial" target="_blank" rel="noopener" aria-label="TikTok — @_aliacoiffureofficial"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>TikTok</span></a></li>
+          <li><a href="https://www.snapchat.com/add/aliacoiffure" target="_blank" rel="noopener" aria-label="Snapchat — aliacoiffure"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.18-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z"/></svg><span>Snapchat</span></a></li>
+        </ul>
+      </div>
+
+      <div class="infos">
+        <div class="info reveal">
+          <p class="mono ash">ADRESSE</p>
+          <p>17 avenue du Général de Gaulle<br>94500 Champigny-sur-Marne</p>
+          <a class="info-link mono" href="https://www.google.com/maps/dir/?api=1&amp;destination=17+avenue+du+G%C3%A9n%C3%A9ral+de+Gaulle+94500+Champigny-sur-Marne" target="_blank" rel="noopener">ITINÉRAIRE ↗</a>
+        </div>
+        <div class="info reveal" style="--i:1">
+          <p class="mono ash">HORAIRES</p>
+          <p>Lundi → dimanche<br>10 h — 19 h</p>
+          <p class="mono open-badge">OUVERT 7 J/7</p>
+        </div>
+        <div class="info reveal" style="--i:2">
+          <p class="mono ash">TÉLÉPHONE</p>
+          <p><a href="tel:+33143973989">01 43 97 39 89</a></p>
+          <a class="info-link mono" href="https://www.planity.com/alia-coiffure-94500-champigny-sur-marne" target="_blank" rel="noopener">PLANITY ↗</a>
+        </div>
+        <div class="map reveal" style="--i:3">
+          <iframe title="Plan d’accès — ALIA coiffure" src="https://www.google.com/maps?q=17+avenue+du+G%C3%A9n%C3%A9ral+de+Gaulle,+94500+Champigny-sur-Marne&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+
+      <h2 class="footer-name" id="footerName" aria-label="ALIA">ALIA</h2>
+      <p class="footer-script" aria-hidden="true">coiffure</p>
+      <div class="footer-bottom">
+        <p class="mono ash">© 2026 — ALIA COIFFURE, CHAMPIGNY-SUR-MARNE</p>
+        <p class="mono"><a href="https://www.instagram.com/_aliacoiffureofficial/" target="_blank" rel="noopener">INSTAGRAM ↗</a></p>
+        <p class="mono ash">OUVERT 7 J/7 — 10 H → 19 H</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ══════════ CHROME FIXE — barre flottante en haut ══════════ -->
+
+  <header class="dock" id="dock">
+    <a class="dock-wordmark" href="#hero" data-nav>ALIA</a>
+    <nav class="dock-nav" aria-label="Navigation principale">
+      <a class="dock-link mono" href="#travaux" data-nav>RÉALISATIONS</a>
+      <a class="dock-link mono" href="#prestations" data-nav>TARIFS</a>
+    </nav>
+    <a class="dock-cta mono" href="https://www.planity.com/alia-coiffure-94500-champigny-sur-marne" target="_blank" rel="noopener">RÉSERVER</a>
+  </header>
+
+  <!-- barre de réservation flottante (mobile) -->
+  <div class="mbar" id="mbar">
+    <a class="mbar-book mono" href="https://www.planity.com/alia-coiffure-94500-champigny-sur-marne" target="_blank" rel="noopener">Réserver sur Planity</a>
+    <a class="mbar-call" href="tel:+33143973989" aria-label="Appeler le salon : 01 43 97 39 89"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg></a>
+  </div>
+
+  <script src="content.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

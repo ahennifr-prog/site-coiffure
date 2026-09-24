@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "alia-coiffure",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [".claude/serve-alia-coiffure.mjs"],
+      "port": 4385
+    }
+  ]
+}

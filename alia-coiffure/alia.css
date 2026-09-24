@@ -1,0 +1,275 @@
+/* ═══════════════════════════════════════════════════════════
+   ALIA coiffure — extension de marque du template Site Immersif
+   Chargée APRÈS styles.css. Le moteur (app.js) et la feuille
+   canonique ne sont pas modifiés : tout l'habillage ALIA vit ici.
+   · palette noir / anthracite / argent chrome (aucun doré)
+   · logo « ALIA » serif chromé + « coiffure » en script
+   · sections ajoutées : prestations & tarifs, réservation,
+     réseaux, infos pratiques, barre de réservation mobile
+   ═══════════════════════════════════════════════════════════ */
+
+/* ═══ PALETTE — sombre neutre, froid, sans teinte chaude ═══ */
+html[data-theme="dark"] {
+  --ink-rgb: 236, 238, 241;
+  --bone: #0d0d0d;
+  --ink: #eceef1;
+  --ash: #8b9097;
+  --white: #17181a;
+  --ink-faint: rgba(var(--ink-rgb), 0.16);
+}
+:root {
+  --sans: 'Playfair Display', 'Didot', Georgia, serif;
+  --geo: var(--sans);
+  --script: 'Alex Brush', 'Snell Roundhand', cursive;
+  /* chrome : reflet haut, ombre médiane, rebond de lumière bas */
+  --chrome: linear-gradient(180deg, #ffffff 0%, #dfe2e6 30%, #8d939b 50%, #cfd3d8 68%, #f4f5f7 84%, #a4a9b0 100%);
+  --chrome-x: linear-gradient(100deg, #9aa0a8 0%, #e9ecef 22%, #ffffff 30%, #b9bec5 48%, #f4f5f7 66%, #a7adb5 84%, #dfe2e6 100%);
+}
+body { font-variant-numeric: lining-nums; }
+.bignum, .q-fig { font-variant-numeric: lining-nums tabular-nums; }
+::selection { background: #d6dae0; color: #0d0d0d; }
+
+/* ═══ LOGO — serif fin, chromé, léger relief ═══ */
+.dock-wordmark, .loader-wordmark {
+  font-family: var(--sans);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  background: var(--chrome);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6));
+}
+.dock-wordmark::after, .loader-wordmark::after {
+  content: 'coiffure';
+  font-family: var(--script);
+  font-weight: 400;
+  letter-spacing: 0;
+  font-size: 1.05em;
+  margin-left: 0.3em;
+  background: none;
+  color: #c9cdd3; -webkit-text-fill-color: #c9cdd3;
+}
+
+/* ═══ TITRAILLE — serif éditorial ═══ */
+.hero-title, .spot-intro, .fill-text, .coll-title, .pstep h3,
+.q-text, .final-text, .night-line { font-weight: 400; letter-spacing: -0.01em; }
+.hero-line2 .hl:last-child, .night-line #nw3 { font-style: italic; }
+.mw { font-weight: 400; letter-spacing: -0.01em; }
+.bignum { font-weight: 400; }
+
+/* ═══ ACCENTS LUMINEUX — réservés aux CTA et aux prix ═══ */
+.dock-cta, .btn-chrome, .mbar-book {
+  background: var(--chrome-x);
+  background-size: 220% 100%;
+  color: #0d0d0d;
+  animation: sheen 7s linear infinite;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 6px 22px rgba(214, 218, 224, 0.12);
+}
+@keyframes sheen { from { background-position: 0% 0; } to { background-position: 220% 0; } }
+
+.btn-chrome {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 16px 22px;
+  border-radius: var(--radius);
+  transition: transform .4s var(--ease-out), filter .3s;
+}
+.btn-chrome:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.btn-line {
+  display: inline-flex; align-items: center;
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em;
+  padding: 15px 20px;
+  border: 1px solid rgba(var(--ink-rgb), 0.28);
+  border-radius: var(--radius);
+  transition: border-color .3s, background .3s;
+}
+.btn-line:hover { border-color: var(--ink); background: rgba(var(--ink-rgb), 0.04); }
+
+/* ═══ PRESTATIONS & TARIFS ═══ */
+.prices {
+  position: relative; z-index: 2;
+  background: var(--bone);
+  padding: 18vh var(--gutter) 16vh;
+}
+.prices::before {
+  content: ''; position: absolute; left: var(--gutter); right: var(--gutter); top: 0;
+  height: 1px; background: var(--ink-faint);
+}
+.prices-head { text-align: center; margin-bottom: 9vh; }
+.prices-title { font-size: var(--t-heading); letter-spacing: -0.01em; margin: 16px 0 12px; }
+.prices-sub { color: var(--ash); max-width: 34em; margin: 0 auto; }
+.prices-grid {
+  columns: 3 300px;
+  column-gap: clamp(20px, 3vw, 48px);
+  max-width: 1280px; margin: 0 auto;
+}
+.price-cat {
+  break-inside: avoid;
+  display: inline-block; width: 100%;
+  background: var(--white);
+  border: 1px solid rgba(var(--ink-rgb), 0.07);
+  border-radius: var(--radius);
+  padding: 28px 26px 22px;
+  margin-bottom: clamp(20px, 3vw, 48px);
+}
+.price-cat h3 {
+  font-size: clamp(28px, 2.6vw, 38px);
+  letter-spacing: -0.01em; line-height: 1.1;
+  margin: 10px 0 20px;
+}
+.price-cat li {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 11px 0;
+  border-top: 1px solid rgba(var(--ink-rgb), 0.08);
+  font-size: 17px; line-height: 1.35;
+}
+.p-name { flex: 0 1 auto; }
+.p-name em { display: block; font-style: normal; margin-top: 3px; font-size: 10px; }
+.p-dots { flex: 1 1 12px; min-width: 12px; border-bottom: 1px dotted rgba(var(--ink-rgb), 0.22); transform: translateY(-4px); }
+.p-val {
+  flex: 0 0 auto;
+  font-size: 21px; font-weight: 500; white-space: nowrap;
+  background: var(--chrome-x); background-size: 220% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-fill-color: transparent;
+  animation: sheen 9s linear infinite;
+}
+.prices-cta {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
+  margin-top: 5vh;
+}
+
+/* ═══ FOOTER — réservation, réseaux, infos pratiques ═══ */
+.book {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 18px 34px;
+}
+.btn-xl { font-size: clamp(14px, 1.3vw, 17px); padding: 22px 34px; }
+.book-tel {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: clamp(28px, 3.4vw, 46px); letter-spacing: -0.01em;
+  position: relative;
+}
+.book-tel svg { width: 0.62em; height: 0.62em; fill: currentColor; opacity: 0.7; }
+.book-tel span { position: relative; }
+.book-tel span::after {
+  content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1px;
+  background: var(--ink); transform: scaleX(0); transform-origin: right;
+  transition: transform .6s var(--ease-inout);
+}
+.book-tel:hover span::after { transform: scaleX(1); transform-origin: left; }
+
+.follow { margin-top: 11vh; }
+.socials { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 18px; }
+.socials a {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 14px 22px 14px 16px;
+  border: 1px solid rgba(var(--ink-rgb), 0.2);
+  border-radius: 999px;
+  font-size: 18px;
+  transition: border-color .3s, background .3s, transform .4s var(--ease-out);
+}
+.socials a:hover { border-color: rgba(var(--ink-rgb), 0.6); background: rgba(var(--ink-rgb), 0.05); transform: translateY(-2px); }
+.socials svg { width: 22px; height: 22px; fill: currentColor; }
+
+.infos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.5fr);
+  gap: clamp(20px, 3vw, 44px);
+  margin: 12vh auto 0; max-width: 1280px;
+  text-align: left;
+  padding-top: 28px;
+  border-top: 1px solid var(--ink-faint);
+}
+.info p:not(.mono) { font-size: 19px; line-height: 1.45; margin-top: 12px; }
+.info-link { display: inline-block; margin-top: 14px; border-bottom: 1px solid rgba(var(--ink-rgb), 0.3); padding-bottom: 2px; }
+.info-link:hover { border-color: var(--ink); }
+.open-badge {
+  display: inline-block; margin-top: 14px;
+  padding: 6px 10px; border-radius: var(--radius);
+  background: var(--chrome-x); background-size: 220% 100%;
+  color: #0d0d0d; animation: sheen 8s linear infinite;
+}
+.map {
+  min-height: 240px;
+  border-radius: var(--radius); overflow: hidden;
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
+  background: var(--white);
+}
+.map iframe {
+  display: block; width: 100%; height: 100%; min-height: 240px; border: 0;
+  filter: grayscale(1) invert(0.92) contrast(0.9) brightness(0.95);
+}
+
+/* nom géant : ALIA chromé, « coiffure » en script qui vient s'y poser */
+.footer-name { margin-top: 14vh; font-weight: 400; letter-spacing: 0.12em; line-height: 1; }
+.footer-name .chi {
+  background: var(--chrome);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-fill-color: transparent;
+}
+.footer-script {
+  font-family: var(--script);
+  font-size: clamp(34px, 5.4vw, 96px);
+  line-height: 1;
+  color: #c9cdd3;
+  margin-top: -0.28em;
+  position: relative;
+}
+
+/* ═══ BARRE DE RÉSERVATION FLOTTANTE (mobile) ═══ */
+.mbar { display: none; }
+
+@media (max-width: 900px) {
+  .dock-wordmark::after { font-size: 1em; }
+  .price-cat { padding: 22px 18px 16px; }
+  .price-cat li { font-size: 16px; }
+  .p-val { font-size: 19px; }
+  .infos { grid-template-columns: 1fr 1fr; }
+  .map { grid-column: 1 / -1; }
+  .follow { margin-top: 8vh; }
+  .infos { margin-top: 8vh; }
+
+  .mbar {
+    display: flex; gap: 8px;
+    position: fixed; left: 10px; right: 10px; bottom: 10px;
+    z-index: 90;
+    padding: 8px;
+    background: rgba(23, 24, 26, 0.86);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border: 1px solid rgba(var(--ink-rgb), 0.1);
+    border-radius: 6px;
+    transform: translateY(calc(100% + 20px));
+    transition: transform .8s var(--ease-out) .3s;
+  }
+  body.is-ready .mbar { transform: translateY(0); }
+  .mbar-book {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 48px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 0.06em;
+  }
+  .mbar-call {
+    flex: 0 0 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(var(--ink-rgb), 0.24); border-radius: 4px;
+  }
+  .mbar-call svg { width: 20px; height: 20px; fill: var(--ink); }
+  .footer { padding-bottom: 110px; }
+  /* le CTA du processus reste au-dessus de la barre flottante
+     (seul `bottom` change : app.js pilote left/transform) */
+  .steps-cta { bottom: calc(8vh + 72px); }
+}
+
+@media (max-width: 480px) {
+  .dock-wordmark { letter-spacing: 0.12em; }
+  .infos { grid-template-columns: 1fr; }
+  .socials a { padding: 12px 18px 12px 14px; font-size: 16px; }
+  .book { flex-direction: column; }
+  .btn-xl { width: 100%; justify-content: center; }
+}
+
+/* mode réduit : pas de reflet animé */
+@media (prefers-reduced-motion: reduce) {
+  .dock-cta, .btn-chrome, .mbar-book, .p-val, .open-badge { animation: none; }
+}
