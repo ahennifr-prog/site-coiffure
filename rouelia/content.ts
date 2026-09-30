@@ -111,7 +111,7 @@ export const hero = {
   heroPrizes: [
     "Soin offert",
     "Café offert",
-    "-10 % prochaine visite",
+    "-10 %",
     "Échantillon",
     "Dessert offert",
     "Brushing offert",
@@ -177,7 +177,7 @@ export const demo = {
       errorType: "Ce fichier n'est pas une image. Essayez un JPG, un PNG ou un SVG.",
       errorSize: "Cette image dépasse 5 Mo. Essayez une version plus légère.",
     },
-    palette: { label: "Couleurs", custom: "Couleur principale au choix" },
+    palette: { label: "Couleurs", custom: "Couleur principale au choix", customActive: "Couleur personnalisée" },
   },
 
   prizes: {
@@ -190,6 +190,16 @@ export const demo = {
     namePlaceholder: "Café offert",
     icon: "Image",
     iconUpload: "Photo du lot",
+    iconRemovePhoto: "Retirer la photo",
+    iconChoose: (name: string) => `Changer l'image du lot ${name}`,
+    iconPanel: "Choisissez une icône ou ajoutez une photo",
+    costSuffix: "€",
+    percentSuffix: "%",
+    percentSlider: (name: string) => `Chance de sortir pour ${name}`,
+    locked: "Bloqué",
+    lockShort: "Bloquer",
+    minReached: "Il faut au moins 3 lots : modifiez-en un plutôt que de le retirer.",
+    lockLimit: "Gardez au moins deux lots libres pour que les chances puissent s'ajuster.",
     cost: "Coût pour vous",
     percent: "Chance",
     newPrizeName: "Nouveau lot",
@@ -211,6 +221,11 @@ export const demo = {
 
   preview: {
     phoneLabel: "Aperçu de la roue sur le téléphone d'un client",
+    tagline: "Tentez votre chance : chaque case est un cadeau.",
+    test: "Tester comme un client",
+    testHint: "Vous verrez exactement ce que voit un client après avoir scanné le QR code.",
+    liveHint: "La roue se met à jour pendant que vous la réglez.",
+    loading: "Chargement de la démo",
     spin: "Tourner la roue",
     spinning: "La roue tourne",
     sound: { on: "Couper le son", off: "Activer le son" },
@@ -490,6 +505,7 @@ export const simulator = {
     perMonth: "par mois",
   },
   disclaimer: "Estimation indicative basée sur vos réglages, non garantie.",
+  loading: "Chargement du simulateur",
   method:
     "Calcul : clients par jour, fois jours d'ouverture, fois part qui joue, donne les parties. Parties fois part qui revient donne les retours. On ne garde que les vraies visites en plus, multipliées par votre panier et votre marge. On retire le coût des cadeaux retirés et le prix du pack.",
 };
@@ -530,9 +546,10 @@ export interface PilotResult {
  * Résultats des pilotes. Désactivés par défaut.
  * N'activer qu'avec des chiffres mesurés et l'accord écrit du commerçant.
  */
-export const pilots: { title: string; note: string; items: PilotResult[] } = {
+export const pilots: { title: string; note: string; googleLink: string; items: PilotResult[] } = {
   title: "Ce que la roue a donné chez nos premiers commerçants",
   note: "Chiffres mesurés dans Rouelia, publiés avec l'accord du commerçant.",
+  googleLink: "Voir la fiche Google",
   items: [
     {
       enabled: false,
@@ -566,7 +583,9 @@ export const pricing = {
   lead: "Tous les packs commencent par 14 jours d'essai gratuit, sans carte bancaire.",
   perMonth: "par mois",
   perDay: (amount: string) => `soit environ ${amount} par jour`,
-  compareToBasket: "Moins qu'un café par jour pour l'Essentiel.",
+  cover: (visits: number, basket: string, trade: string) =>
+    `Avec un panier moyen de ${basket} (${trade.toLowerCase()}), environ ${visits} ${visits > 1 ? "visites" : "visite"} en plus par mois suffisent à le couvrir.`,
+  coverNote: "Calcul sur la marge prudente du simulateur. Réglez vos propres chiffres plus bas.",
   choose: (name: string) => `Essayer ${name}`,
   packs: [
     {
@@ -649,6 +668,7 @@ export const pricing = {
     { feature: "Kit de bienvenue (chevalet offert), support prioritaire sous 24 h", values: [false, false, true] },
     { feature: "Sans mention « Propulsé par Rouelia », domaine personnalisé", values: [false, false, true] },
   ] as { feature: string; values: (boolean | string)[] }[],
+  featureColumn: "Fonction",
   included: "Inclus",
   notIncluded: "Non inclus",
 };
@@ -767,7 +787,7 @@ export const signup = {
   fields: {
     firstName: { label: "Prénom", autocomplete: "given-name" },
     email: { label: "E-mail", autocomplete: "email" },
-    phone: { label: "Téléphone", prefix: "+33", autocomplete: "tel-national", help: "Pour vous envoyer votre rapport et vous aider à démarrer." },
+    phone: { label: "Téléphone", prefix: "+33", placeholder: "6 12 34 56 78", autocomplete: "tel-national", help: "Pour vous envoyer votre rapport et vous aider à démarrer." },
     shopName: { label: "Nom de votre établissement", help: "Tel qu'il apparaît sur Google." },
     logo: { label: "Logo", none: "Je n'ai pas de logo" },
     pack: { label: "Pack choisi" },
@@ -775,7 +795,8 @@ export const signup = {
   consent:
     "J'accepte que Rouelia utilise ces informations pour créer mon compte d'essai et me contacter à ce sujet. Je peux retirer mon accord à tout moment en écrivant à bonjour@rouelia.fr.",
   info:
-    "Vos données servent uniquement à créer votre compte et à vous accompagner pendant l'essai. Elles ne sont ni vendues ni partagées. Détails dans notre politique de confidentialité.",
+    "Vos données servent uniquement à créer votre compte et à vous accompagner pendant l'essai. Elles ne sont ni vendues ni partagées.",
+  privacyLink: "Lire notre politique de confidentialité",
   errors: {
     firstName: "Indiquez votre prénom, c'est pour savoir comment vous appeler.",
     emailMissing: "Il nous faut votre e-mail pour vous envoyer l'accès.",
@@ -803,6 +824,7 @@ export const signup = {
 /* ------------------------------------------------------------------ */
 
 export const cookieBanner = {
+  label: "Choix des cookies",
   text:
     "Nous aimerions mesurer l'audience de ce site pour l'améliorer. Rien n'est déposé sans votre accord.",
   accept: "Accepter",
@@ -818,6 +840,115 @@ export const legal = {
   draftNotice:
     "Texte provisoire, à faire valider par un professionnel du droit avant publication.",
   back: "Retour à l'accueil",
+  updated: "Dernière mise à jour : à compléter lors de la publication.",
+  pages: {
+    mentions: {
+      title: "Mentions légales",
+      description: "Éditeur, hébergeur et contact du site Rouelia.",
+      sections: [
+        {
+          h: "Éditeur du site",
+          p: [
+            "Rouelia, [forme juridique et capital à compléter], immatriculée sous le numéro [SIREN à compléter], dont le siège est situé [adresse à compléter].",
+            "Directeur de la publication : Aymen [nom à compléter].",
+            "Contact : bonjour@rouelia.fr.",
+          ],
+        },
+        {
+          h: "Hébergement",
+          p: ["Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis. vercel.com."],
+        },
+        {
+          h: "Propriété intellectuelle",
+          p: [
+            "Les textes, visuels et le logotype Rouelia sont protégés. Toute reproduction sans accord écrit est interdite.",
+          ],
+        },
+      ],
+    },
+    confidentialite: {
+      title: "Politique de confidentialité",
+      description: "Comment Rouelia collecte et protège vos données.",
+      sections: [
+        {
+          h: "Qui est responsable de vos données",
+          p: ["Rouelia, joignable à bonjour@rouelia.fr, est responsable des traitements décrits ici."],
+        },
+        {
+          h: "La démo du site",
+          p: [
+            "La démo fonctionne entièrement dans votre navigateur. Le nom, les lots et le logo que vous saisissez restent sur votre appareil, dans le stockage local, pour que vous retrouviez votre roue. Rien n'est envoyé tant que vous ne créez pas de compte.",
+          ],
+        },
+        {
+          h: "L'inscription à l'essai",
+          p: [
+            "Nous collectons votre prénom, votre e-mail, votre téléphone, le nom de votre établissement, le pack choisi, la configuration de votre roue et la page d'où vous venez.",
+            "Finalité : créer votre compte d'essai et vous accompagner. Base légale : votre consentement, puis l'exécution du contrat si vous devenez client.",
+            "Durée de conservation : 3 ans après le dernier contact si vous ne devenez pas client [durée à valider].",
+          ],
+        },
+        {
+          h: "Les données de vos clients",
+          p: [
+            "Quand vos clients jouent, Rouelia agit comme sous-traitant pour votre compte. Ils ne sont recontactés que s'ils l'ont accepté, et chaque message contient un lien de désinscription.",
+          ],
+        },
+        {
+          h: "Cookies et mesure d'audience",
+          p: [
+            "Aucun traceur publicitaire. Une mesure d'audience ne peut être activée qu'après votre accord, et vous pouvez changer d'avis via le lien « Gérer les cookies » en bas de page.",
+          ],
+        },
+        {
+          h: "Vos droits",
+          p: [
+            "Vous pouvez accéder à vos données, les rectifier, les supprimer, vous opposer à leur traitement ou retirer votre consentement en écrivant à bonjour@rouelia.fr. Vous pouvez aussi saisir la CNIL (cnil.fr).",
+          ],
+        },
+      ],
+    },
+    cgv: {
+      title: "Conditions générales de vente",
+      description: "Conditions de l'abonnement Rouelia.",
+      sections: [
+        {
+          h: "Objet",
+          p: ["Les présentes conditions encadrent l'abonnement au service Rouelia par un professionnel."],
+        },
+        {
+          h: "Essai gratuit",
+          p: [
+            "Chaque pack commence par un essai gratuit de 14 jours, sans moyen de paiement. À la fin de l'essai, l'abonnement ne démarre que si vous ajoutez un moyen de paiement.",
+          ],
+        },
+        {
+          h: "Prix et paiement",
+          p: [
+            "Les prix sont indiqués hors taxes [à confirmer], par mois, sans engagement. Essentiel : 29 €. Croissance : 49 €. Premium : 89 €. L'installation sur place est facturée 49 €, ou 79 € pour un déplacement dédié, à Paris et en petite couronne.",
+          ],
+        },
+        {
+          h: "Résiliation et pause",
+          p: [
+            "Vous pouvez arrêter à tout moment depuis votre espace, sans frais. Le mois commencé reste dû [à valider]. Les cadeaux déjà gagnés par vos clients restent utilisables jusqu'à leur date limite.",
+          ],
+        },
+        {
+          h: "Règles du jeu et avis Google",
+          p: [
+            "La roue est gagnante à chaque partie. L'invitation à laisser un avis est facultative, identique pour tous et sans lien avec le cadeau. Le commerçant s'engage à ne pas modifier ce fonctionnement.",
+          ],
+        },
+        {
+          h: "Responsabilité",
+          p: [
+            "Le commerçant fixe ses lots et en assume le coût. Rouelia ne garantit aucun nombre d'avis, aucune note et aucun chiffre d'affaires.",
+          ],
+        },
+      ],
+    },
+  },
 };
 
 /* ------------------------------------------------------------------ */
@@ -827,4 +958,30 @@ export const legal = {
 export const scarcity = {
   enabled: false,
   text: "",
+};
+
+/* ------------------------------------------------------------------ */
+/* Petits libellés d'interface                                         */
+/* ------------------------------------------------------------------ */
+
+export const ui = {
+  tryDemo: "Essayer la démo",
+  step: (n: number) => `Étape ${n}`,
+  won: (prize: string) => `Gagné : ${prize}`,
+  illustrations: {
+    standTitle: "Tentez votre chance",
+    giftCode: "Code cadeau",
+    validated: "Validé en caisse",
+  },
+  packsLabel: "Inclus dans",
+  mainNav: "Navigation principale",
+  homeLink: "Rouelia, retour en haut de page",
+  legalNav: "Liens légaux",
+  close: "Fermer",
+};
+
+export const notFound = {
+  title: "Cette page n'existe pas",
+  text: "Le lien est peut-être ancien. La roue, elle, vous attend sur la page d'accueil.",
+  back: "Revenir à l'accueil",
 };

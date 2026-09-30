@@ -43,6 +43,8 @@ Je retiens la 2. Elle résume le mécanisme en une seule symétrie : le client g
 - **Le simulateur reprend le métier et le coût moyen choisis dans la démo** : le visiteur retrouve ses propres chiffres au lieu d'une valeur générique.
 - **Le calcul du simulateur tient compte de la marge et des visites vraiment en plus.** Un client qui revient chercher un café offert serait parfois revenu de toute façon. Compter 100 % des retours comme gain serait malhonnête. Les deux hypothèses sont visibles et modifiables.
 - **Aucune rareté affichée** : aucune n'est avérée à ce jour.
+- **Segments de taille égale, chances réelles affichées.** Des segments proportionnels rendraient illisibles les lots rares (2 %) sur téléphone. Les chances sont donc réglées et affichées dans les réglages, et le tirage les respecte exactement.
+- **Pas de Framer Motion.** Toutes les animations utiles (inertie de la roue, confettis, apparitions) tiennent en quelques lignes de CSS et de `requestAnimationFrame`. La bibliothèque aurait alourdi la page sans rien apporter de visible.
 
 ## 5. Tokens de design
 

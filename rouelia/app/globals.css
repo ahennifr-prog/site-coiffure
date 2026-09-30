@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+/* Tokens de design : voir DESIGN.md. Chaque token devient une variable CSS
+   et une classe utilitaire Tailwind (bg-tomette, text-ink, rounded-xl...). */
+@theme {
+  --color-cream: #FBF6EE;
+  --color-paper: #FFFFFF;
+  --color-ink: #1D1A16;
+  --color-ink-soft: #5E564E;
+  --color-line: #E8DFD2;
+  --color-tomette: #C4401F;
+  --color-tomette-deep: #A33317;
+  --color-tomette-soft: #F6D9CE;
+  --color-sauge: #2E6150;
+  --color-sauge-soft: #DCEBE3;
+  --color-sauge-light: #8FD3B0;
+  --color-safran: #F3B23C;
+  --color-safran-soft: #FCEBC8;
+  --color-night: #1D1A16;
+  --color-night-soft: #2B2621;
+  --color-danger: #A3261B;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-phone: 44px;
+
+  --shadow-sm: 0 1px 2px rgb(60 30 10 / 0.06), 0 1px 1px rgb(60 30 10 / 0.04);
+  --shadow-md: 0 8px 24px -8px rgb(60 30 10 / 0.18);
+  --shadow-lg: 0 24px 60px -20px rgb(60 30 10 / 0.3);
+  --shadow-wheel: 0 30px 60px -24px rgb(164 51 23 / 0.45);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-figtree), system-ui, sans-serif;
+}
+
+:root {
+  --section-y: clamp(64px, 10vw, 128px);
+  --nav-h: 64px;
+  --duration-fast: 180ms;
+  --duration-base: 320ms;
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-tomette-soft);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-tomette);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.font-display {
+  font-variation-settings: "SOFT" 100, "WONK" 0;
+  letter-spacing: -0.02em;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Rayures de store banne, motif signature. */
+.awning {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-tomette) 0 22px,
+    var(--color-cream) 22px 44px
+  );
+}
+.awning-soft {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-tomette-soft) 0 22px,
+    transparent 22px 44px
+  );
+}
+
+/* Apparition douce au défilement. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* Curseurs (input range) aux couleurs de la marque. */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+  --fill: 50%;
+}
+.range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--color-tomette) var(--fill), var(--color-line) var(--fill));
+}
+.range::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--color-tomette) var(--fill), var(--color-line) var(--fill));
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px;
+  height: 26px;
+  margin-top: -9px;
+  border-radius: 999px;
+  background: var(--color-paper);
+  border: 3px solid var(--color-tomette);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--color-paper);
+  border: 3px solid var(--color-tomette);
+}
+.range:active::-webkit-slider-thumb { transform: scale(1.12); }
+.range:focus-visible { outline: none; }
+.range:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--color-tomette); outline-offset: 3px; }
+.range:focus-visible::-moz-range-thumb { outline: 3px solid var(--color-tomette); outline-offset: 3px; }
+
+/* Accordéons natifs. */
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
+details[open] .chevron { transform: rotate(180deg); }
+.chevron { transition: transform var(--duration-base) var(--ease-out); }
+
+dialog::backdrop {
+  background: rgb(29 26 22 / 0.55);
+  backdrop-filter: blur(3px);
+}
+
+@keyframes idle-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes confetti-fall {
+  0% { transform: translate3d(0, -10px, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate3d(var(--dx), 340px, 0) rotate(var(--rot)); opacity: 0; }
+}
+@keyframes pop-in {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.pop-in { animation: pop-in 420ms var(--ease-out) both; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
