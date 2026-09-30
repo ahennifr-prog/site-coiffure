@@ -6,7 +6,7 @@ import { codeStatus } from "@/lib/dates";
 import type { Play } from "@/lib/types";
 import { api } from "./api";
 
-type Stats = { storage: "redis" | "memory"; total: Record<string, number>; perDay: ({ day: string } & Record<string, number>)[] };
+type Stats = { storage: "redis" | "netlify" | "memory"; total: Record<string, number>; perDay: ({ day: string } & Record<string, number>)[] };
 
 const euro = (v: number) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v);
 const pct = (a: number, b: number) => (b > 0 ? `${Math.round((a / b) * 100)} %` : "0 %");
@@ -54,7 +54,7 @@ export function Suivi() {
       {stats.storage === "memory" ? (
         <p className="flex gap-2 rounded-lg bg-alerte/15 p-3 text-sm font-semibold text-alerte">
           <TriangleAlert aria-hidden size={18} className="shrink-0" />
-          Base de données non connectée : les parties ne sont pas conservées. Branchez Upstash dans Vercel (voir le guide).
+          Base de données non connectée : les parties ne sont pas conservées. Vérifiez la mise en ligne sur Netlify (voir le guide DEPLOIEMENT.md).
         </p>
       ) : null}
 

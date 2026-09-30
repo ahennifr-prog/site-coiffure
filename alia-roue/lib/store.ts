@@ -1,3 +1,4 @@
+import { getStore } from "@netlify/blobs";
 import { Redis } from "@upstash/redis";
 
 /** Petit sous-ensemble de Redis utilisé par l'application. */
@@ -53,6 +54,94 @@ class UpstashKV implements KV {
   async mget<T>(keys: string[]) {
     if (keys.length === 0) return [];
     return (await this.r.mget<(T | null)[]>(...keys)) ?? [];
+  }
+}
+
+
+type Boxed = { v: unknown; exp?: number };
+
+/**
+ * Netlify Blobs : stockage intégré à Netlify, gratuit, sans configuration.
+ * Écritures conditionnelles (ETag) pour que les compteurs et les verrous restent justes
+ * même si deux clientes jouent au même moment.
+ */
+class BlobsKV implements KV {
+  private store() {
+    return getStore({ name: "alia", consistency: "strong" });
+  }
+  private async read(key: string): Promise<{ box: Boxed | null; etag?: string; exists: boolean }> {
+    const r = await this.store().getWithMetadata(key, { type: "json", consistency: "strong" });
+    if (!r) return { box: null, exists: false };
+    const box = r.data as Boxed;
+    if (box?.exp && box.exp < Date.now()) return { box: null, etag: r.etag, exists: true };
+    return { box, etag: r.etag, exists: true };
+  }
+  /** Écriture conditionnelle à la version lue ; sans version connue, écriture simple. */
+  private async writeOver(key: string, value: Boxed, etag: string | undefined, exists: boolean) {
+    if (etag) return (await this.store().setJSON(key, value, { onlyIfMatch: etag })).modified;
+    if (!exists) return (await this.store().setJSON(key, value, { onlyIfNew: true })).modified;
+    await this.store().setJSON(key, value);
+    return true;
+  }
+  /** Lecture, modification, écriture conditionnelle, avec quelques essais en cas de conflit. */
+  private async update(key: string, fn: (box: Boxed | null) => Boxed): Promise<Boxed> {
+    for (let i = 0; i < 8; i++) {
+      const { box, etag, exists } = await this.read(key);
+      const next = fn(box);
+      if (await this.writeOver(key, next, etag, exists)) return next;
+      await new Promise((r) => setTimeout(r, 20 + Math.random() * 60));
+    }
+    throw new Error(`Écriture impossible : ${key}`);
+  }
+  async get<T>(key: string) {
+    return ((await this.read(key)).box?.v as T) ?? null;
+  }
+  async set(key: string, value: unknown, opts: { ex?: number; nx?: boolean } = {}) {
+    const box: Boxed = { v: value, exp: opts.ex ? Date.now() + opts.ex * 1000 : undefined };
+    if (!opts.nx) {
+      await this.store().setJSON(key, box);
+      return true;
+    }
+    const first = await this.store().setJSON(key, box, { onlyIfNew: true });
+    if (first.modified) return true;
+    // La clé existe : on ne la remplace que si elle a expiré.
+    const { box: current, etag, exists } = await this.read(key);
+    if (current) return false;
+    return this.writeOver(key, box, etag, exists);
+  }
+  async del(key: string) {
+    await this.store().delete(key);
+  }
+  async hincrby(key: string, field: string, by: number) {
+    await this.update(key, (b) => {
+      const h = { ...((b?.v as Record<string, number>) ?? {}) };
+      h[field] = (h[field] ?? 0) + by;
+      return { v: h, exp: b?.exp };
+    });
+  }
+  async hgetall(key: string) {
+    return { ...(((await this.read(key)).box?.v as Record<string, number>) ?? {}) };
+  }
+  async expire(key: string, seconds: number) {
+    const { box } = await this.read(key);
+    if (box) await this.store().setJSON(key, { ...box, exp: Date.now() + seconds * 1000 });
+  }
+  /** Index trié : une entrée par membre, la clé encode le score à l'envers pour lister du plus récent au plus ancien. */
+  async zadd(key: string, score: number, member: string) {
+    const rev = String(9_999_999_999_999 - Math.round(score)).padStart(13, "0");
+    await this.store().setJSON(`z/${key}/${rev}~${member}`, { v: 1 });
+  }
+  async zrevrange(key: string, start: number, stop: number) {
+    const { blobs } = await this.store().list({ prefix: `z/${key}/` });
+    const members = blobs.map((b) => b.key).sort().map((k) => k.slice(k.indexOf("~") + 1));
+    return members.slice(start, stop === -1 ? undefined : stop + 1);
+  }
+  async incr(key: string, exSeconds: number) {
+    const next = await this.update(key, (b) => ({ v: ((b?.v as number) ?? 0) + 1, exp: b?.exp ?? Date.now() + exSeconds * 1000 }));
+    return next.v as number;
+  }
+  async mget<T>(keys: string[]) {
+    return Promise.all(keys.map((k) => this.get<T>(k)));
   }
 }
 
@@ -114,24 +203,37 @@ export class MemoryKV implements KV {
   }
 }
 
-const g = globalThis as unknown as { __aliaKV?: KV; __aliaKVKind?: "redis" | "memory" };
+type Kind = "redis" | "netlify" | "memory";
+const g = globalThis as unknown as { __aliaKV?: KV; __aliaKVKind?: Kind; netlifyBlobsContext?: unknown };
 
-/** Vercel + Upstash fournissent KV_REST_API_URL et KV_REST_API_TOKEN (ou UPSTASH_REDIS_REST_*). */
+function onNetlify(): boolean {
+  return !!(g.netlifyBlobsContext || process.env.NETLIFY_BLOBS_CONTEXT);
+}
+
+/**
+ * Choix du stockage :
+ * 1. Upstash Redis si ses variables sont présentes (KV_REST_API_* ou UPSTASH_REDIS_REST_*) ;
+ * 2. Netlify Blobs quand le site tourne sur Netlify ;
+ * 3. mémoire sinon (développement local, tests).
+ */
 export function kv(): KV {
-  if (g.__aliaKV) return g.__aliaKV;
+  if (g.__aliaKV && g.__aliaKVKind !== "memory") return g.__aliaKV;
   const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
   if (url && token) {
     g.__aliaKV = new UpstashKV(new Redis({ url, token }));
     g.__aliaKVKind = "redis";
-  } else {
+  } else if (onNetlify()) {
+    g.__aliaKV = new BlobsKV();
+    g.__aliaKVKind = "netlify";
+  } else if (!g.__aliaKV) {
     g.__aliaKV = new MemoryKV();
     g.__aliaKVKind = "memory";
   }
   return g.__aliaKV;
 }
 
-export function storageKind(): "redis" | "memory" {
+export function storageKind(): Kind {
   kv();
   return g.__aliaKVKind ?? "memory";
 }

@@ -1,0 +1,10 @@
+# Configuration Netlify. Dans Netlify, régler « Base directory » sur : alia-roue
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+# L'adaptateur Next.js de Netlify est ajouté automatiquement (@netlify/plugin-nextjs).
