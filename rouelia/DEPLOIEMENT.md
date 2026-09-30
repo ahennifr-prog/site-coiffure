@@ -12,6 +12,7 @@ Gratuit, sans badge, usage commercial autorisé. La base des inscriptions (D1) e
    | Nom du projet | `rouelia` |
    | Commande de build | `npx opennextjs-cloudflare build` |
    | Commande de déploiement | `npx opennextjs-cloudflare deploy` |
+   | Commande de version (branches de test) | `npx opennextjs-cloudflare upload` |
    | Répertoire racine (paramètres avancés, « Path ») | `rouelia` |
 4. **Créer et déployer**. Le premier déploiement prend 3 à 5 minutes.
 
@@ -19,7 +20,8 @@ Gratuit, sans badge, usage commercial autorisé. La base des inscriptions (D1) e
 Si le premier build échoue parce que le dossier `rouelia` est introuvable, le projet a pris la branche par défaut.
 1. Dans le Worker `rouelia` → **Paramètres → Build → Contrôle des branches** (Branch control).
 2. Branche de production : `claude/great-lovelace-lpyydk`, enregistrer.
-3. **Déploiements** → relancer le dernier build.
+3. « Réessayer » relance l'ancien build sur l'ancienne branche : il faut un nouveau commit sur
+   `claude/great-lovelace-lpyydk` (Claude peut en pousser un) pour déclencher un build sur la bonne branche.
 
 ## 3. Le mot de passe de l'espace admin
 1. Worker `rouelia` → **Paramètres → Variables et secrets → Ajouter**.
