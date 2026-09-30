@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/* Identité ALIA coiffure : noir, anthracite, argent chromé.
+   Le « peps » est réservé à la roue et aux moments de gain : framboise, lilas, rose. */
+@theme {
+  --color-noir: #0D0D0D;
+  --color-anthracite: #17181A;
+  --color-graphite: #232428;
+  --color-trait: #34363B;
+  --color-argent: #C9CDD3;
+  --color-blanc: #ECEEF1;
+  --color-gris: #9AA0A8;
+  --color-framboise: #E2336B;
+  --color-framboise-fonce: #B81E50;
+  --color-lilas: #A98BFF;
+  --color-rose: #F6B8CC;
+  --color-vert: #6FD3A4;
+  --color-alerte: #FF8A7A;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --font-display: var(--font-playfair), "Didot", Georgia, serif;
+  --font-script: var(--font-alex), "Snell Roundhand", cursive;
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-mono: var(--font-mono-dm), ui-monospace, monospace;
+}
+
+:root {
+  --chrome: linear-gradient(180deg, #ffffff 0%, #dfe2e6 30%, #8d939b 50%, #cfd3d8 68%, #f4f5f7 84%, #a4a9b0 100%);
+  color-scheme: dark;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--color-noir);
+  color: var(--color-blanc);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--color-lilas); color: var(--color-noir); }
+:focus-visible { outline: 3px solid var(--color-rose); outline-offset: 3px; border-radius: 8px; }
+
+.chrome-text {
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.chrome-sheen {
+  background: linear-gradient(100deg, #9aa0a8 0%, #e9ecef 22%, #ffffff 30%, #b9bec5 48%, #f4f5f7 66%, #a7adb5 84%, #dfe2e6 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: sheen 6s ease-in-out infinite;
+}
+@keyframes sheen { 0%, 100% { background-position: 0% 0; } 50% { background-position: 100% 0; } }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+@keyframes pop-in { 0% { transform: scale(0.92); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.pop-in { animation: pop-in 460ms var(--ease-out) both; }
+@keyframes rise { 0% { transform: translateY(18px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.rise { animation: rise 600ms var(--ease-out) both; }
+@keyframes confetti-fall {
+  0% { transform: translate3d(0, -20px, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate3d(var(--dx), 110vh, 0) rotate(var(--rot)); opacity: 0.2; }
+}
+@keyframes glow { 0%, 100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.06); } }
+.glow { animation: glow 5s ease-in-out infinite; }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgb(226 51 107 / 0.55); } 100% { box-shadow: 0 0 0 18px rgb(226 51 107 / 0); } }
+.pulse-ring { animation: pulse-ring 1.8s ease-out infinite; }
+
+.range { -webkit-appearance: none; appearance: none; width: 100%; height: 40px; background: transparent; cursor: pointer; --fill: 50%; }
+.range::-webkit-slider-runnable-track { height: 8px; border-radius: 999px; background: linear-gradient(to right, var(--color-framboise) var(--fill), var(--color-trait) var(--fill)); }
+.range::-moz-range-track { height: 8px; border-radius: 999px; background: linear-gradient(to right, var(--color-framboise) var(--fill), var(--color-trait) var(--fill)); }
+.range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; margin-top: -8px; border-radius: 999px; background: #fff; border: 3px solid var(--color-framboise); }
+.range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 999px; background: #fff; border: 3px solid var(--color-framboise); }
+.range:focus-visible { outline: none; }
+.range:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--color-rose); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
