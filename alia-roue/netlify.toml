@@ -1,4 +1,4 @@
-# Configuration Netlify. Dans Netlify, régler « Base directory » sur : alia-roue
+# Configuration Netlify. Dans Netlify, « Base directory » doit valoir : alia-roue
 [build]
   command = "npm run build"
   publish = ".next"
@@ -7,4 +7,7 @@
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
 
-# L'adaptateur Next.js de Netlify est ajouté automatiquement (@netlify/plugin-nextjs).
+# Adaptateur Next.js de Netlify, déclaré explicitement : sans lui, le site est publié
+# comme des fichiers statiques et toutes les pages répondent « Page not found ».
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
