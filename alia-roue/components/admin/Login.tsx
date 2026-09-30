@@ -35,7 +35,7 @@ export function Login({ configured }: { configured: boolean }) {
   return (
     <main className="flex min-h-svh items-center justify-center px-5">
       <form onSubmit={submit} className="w-full max-w-sm rounded-xl bg-anthracite p-7 ring-1 ring-trait">
-        <Logo />
+        <Logo className="mx-auto block" />
         <h1 className="mt-6 flex items-center gap-2 font-display text-2xl">
           <Lock aria-hidden size={20} className="text-rose" /> Espace gestion
         </h1>

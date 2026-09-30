@@ -301,7 +301,8 @@ export function Reglages() {
             }))}
             rimColor="#26272C"
             hubColor="#0D0D0D"
-            monogram="A"
+            logo="/logo-ac.png"
+              monogram="A"
             pointerColor="#ECEEF1"
             pointerDot="#E2336B"
             bulbColors={["#FFFFFF", "#F6B8CC"]}

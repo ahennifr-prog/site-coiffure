@@ -317,6 +317,7 @@ export function Game({ config }: { config: PublicConfig }) {
               segments={segments}
               rimColor="#26272C"
               hubColor="#0D0D0D"
+              logo="/logo-ac.png"
               monogram="A"
               pointerColor="#ECEEF1"
               pointerDot="#E2336B"

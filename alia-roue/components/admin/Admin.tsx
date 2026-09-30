@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BarChart3, LogOut, QrCode, Receipt, SlidersHorizontal } from "lucide-react";
-import { Logo } from "@/components/Logo";
+import { LogoMark } from "@/components/Logo";
 import { Caisse } from "./Caisse";
 import { QrTab } from "./QrTab";
 import { Reglages } from "./Reglages";
@@ -39,7 +39,7 @@ export function Admin() {
     <div className="min-h-svh pb-24 lg:pb-10">
       <header className="sticky top-0 z-20 border-b border-trait bg-noir/90 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-5">
-          <Logo size="sm" />
+          <LogoMark className="h-10" />
           <span className="hidden font-mono text-[11px] tracking-[0.16em] text-gris uppercase sm:inline">Gestion</span>
           <nav aria-label="Sections de la gestion" className="ml-auto hidden gap-1 lg:flex">
             {TABS.map(({ id, label, Icon }) => (

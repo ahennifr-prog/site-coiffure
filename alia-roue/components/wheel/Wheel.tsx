@@ -331,15 +331,18 @@ export const Wheel = forwardRef<WheelHandle, WheelProps>(function Wheel(
         {/* Moyeu */}
         <circle cx={CX} cy={CY} r={HUB} fill="#FFFFFF" filter={`url(#sh-${uid})`} />
         {logo ? (
-          <image
-            href={logo}
-            x={CX - HUB + 6}
-            y={CY - HUB + 6}
-            width={(HUB - 6) * 2}
-            height={(HUB - 6) * 2}
-            preserveAspectRatio="xMidYMid meet"
-            clipPath={`url(#hub-${uid})`}
-          />
+          <>
+            <circle cx={CX} cy={CY} r={HUB - 6} fill={hubColor} />
+            <image
+              href={logo}
+              x={CX - HUB + 13}
+              y={CY - HUB + 13}
+              width={(HUB - 13) * 2}
+              height={(HUB - 13) * 2}
+              preserveAspectRatio="xMidYMid meet"
+              clipPath={`url(#hub-${uid})`}
+            />
+          </>
         ) : (
           <>
             <circle cx={CX} cy={CY} r={HUB - 6} fill={hubColor} />
