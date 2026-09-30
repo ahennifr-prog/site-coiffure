@@ -282,7 +282,7 @@ export function Game({ config }: { config: PublicConfig }) {
       </p>
       {celebrate ? <Confetti /> : null}
 
-      <div className="relative mx-auto flex min-h-svh max-w-6xl flex-col px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-8 sm:px-8">
+      <div className="relative mx-auto flex min-h-svh max-w-6xl flex-col px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-24 sm:px-8 sm:pb-8">
         <header className="flex items-center justify-between">
           <Logo size="sm" />
           {step === "roue" || step === "gain" ? (
@@ -304,7 +304,11 @@ export function Game({ config }: { config: PublicConfig }) {
           {/* Roue : au-dessus sur téléphone, à droite sur ordinateur */}
           <div
             className={`relative mx-auto w-full transition-[max-width] duration-500 ease-(--ease-out) lg:order-2 lg:max-w-[560px] ${
-              wheelBig ? "max-w-[min(88vw,440px)]" : step === "infos" ? "max-w-[min(52vw,240px)]" : "hidden max-w-[240px] lg:block"
+              step === "accueil"
+                ? "max-w-[min(72vw,40svh,440px)] sm:max-w-[min(88vw,440px)]"
+                : wheelBig
+                  ? "max-w-[min(88vw,440px)]"
+                  : step === "infos" ? "max-w-[min(52vw,240px)]" : "hidden max-w-[240px] lg:block"
             }`}
           >
             <div aria-hidden className="absolute inset-[8%] rounded-full bg-framboise/40 blur-3xl" />
@@ -338,7 +342,7 @@ export function Game({ config }: { config: PublicConfig }) {
             {step === "accueil" ? (
               <div className="rise text-center lg:text-left">
                 <p className="font-mono text-xs tracking-[0.2em] text-rose uppercase">Jeu offert par le salon</p>
-                <h1 className="mt-3 font-display text-[2.6rem] leading-[1.05] sm:text-6xl">
+                <h1 className="mt-2 font-display text-[2.35rem] leading-[1.05] sm:mt-3 sm:text-6xl">
                   Tentez votre <em className="chrome-text pr-1">chance</em>
                 </h1>
                 <p className="mx-auto mt-4 max-w-md text-lg text-argent lg:mx-0">
@@ -353,7 +357,7 @@ export function Game({ config }: { config: PublicConfig }) {
                   type="button"
                   onClick={start}
                   hidden={!config.active}
-                  className="pulse-ring mt-7 inline-flex min-h-14 w-full max-w-sm items-center justify-center rounded-full bg-framboise px-8 text-lg font-semibold text-white transition-transform hover:bg-framboise-fonce active:scale-[0.98]"
+                  className="pulse-ring mt-5 inline-flex min-h-14 w-full max-w-sm items-center justify-center rounded-full bg-framboise px-8 text-lg font-semibold text-white transition-transform hover:bg-framboise-fonce active:scale-[0.98]"
                 >
                   Jouer
                 </button>
