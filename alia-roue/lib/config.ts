@@ -15,9 +15,8 @@ export const MIN_PRIZES = 3;
 export const MAX_PRIZES = 8;
 export const ICONS: PrizeIcon[] = ["cadeau", "pourcent", "goutte", "ciseaux", "etoile", "coeur", "couronne", "eclat"];
 
-/** Lien qui ouvre la fiche Google Maps du salon. À remplacer par le lien direct d'avis dans l'espace gestion. */
-export const DEFAULT_REVIEW_URL =
-  "https://www.google.com/maps/search/?api=1&query=ALIA+coiffure+17+avenue+du+G%C3%A9n%C3%A9ral+de+Gaulle+94500+Champigny-sur-Marne";
+/** Lien direct « Laisser un avis » de la fiche Google du salon (identifiant de lieu Google). */
+export const DEFAULT_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJV3ER3hoN5kcRXu6wMO8hfYI";
 
 export const DEFAULT_CONFIG: GameConfig = {
   active: true,

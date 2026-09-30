@@ -280,7 +280,7 @@ export function Reglages() {
           </label>
           <input id="avis" type="url" value={c.reviewUrl} onChange={(e) => set({ reviewUrl: e.target.value })} className="mt-1.5 min-h-12 w-full rounded-lg bg-noir px-4 text-sm ring-1 ring-trait outline-none focus:ring-2 focus:ring-rose" />
           <p className="mt-1.5 text-xs text-gris">
-            Pour le lien direct : sur Google, cherchez « ALIA coiffure », ouvrez votre fiche en étant connecté au compte du salon, cliquez sur « Demander des avis » et copiez le lien (il commence par g.page/r/). Par défaut, le lien ouvre la fiche du salon sur Google Maps.
+            Pour le lien direct : sur Google, cherchez « ALIA coiffure », ouvrez votre fiche en étant connecté au compte du salon, cliquez sur « Demander des avis » et copiez le lien (il commence par g.page/r/). Par défaut, le lien ouvre directement la fenêtre « Laisser un avis » du salon.
           </p>
           <label htmlFor="rdv" className="mt-4 block text-sm font-semibold">
             Lien de prise de rendez-vous
