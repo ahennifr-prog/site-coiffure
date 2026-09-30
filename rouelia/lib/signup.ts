@@ -40,6 +40,9 @@ export interface SignupPayload {
 }
 
 /** Enregistrement complet, prêt pour une base de données et pour Stripe. */
+export const SIGNUP_STATUSES = ["essai_en_attente", "essai_en_cours", "client", "perdu"] as const;
+export type SignupStatus = (typeof SIGNUP_STATUSES)[number];
+
 export interface SignupRecord {
   id: string;
   createdAt: string;
@@ -53,7 +56,7 @@ export interface SignupRecord {
   wheelConfig: WheelConfig | null;
   utm: Utm;
   consent: { accepted: true; date: string; text: string };
-  status: "essai_en_attente";
+  status: SignupStatus;
   trialStartedAt: string | null;
   firstPlayAt: string | null;
   stripeCustomerId: string | null;
@@ -174,7 +177,8 @@ export function buildRecord(
   };
 }
 
-const MAX_LOGO_CHARS = 7_000_000;
+/** Une ligne de base D1 est limitée à 2 Mo : au-delà, le logo n'est pas conservé (il sera redemandé). */
+const MAX_LOGO_CHARS = 1_500_000;
 
 function sanitizeWheel(v: unknown): WheelConfig | null {
   if (!v || typeof v !== "object") return null;

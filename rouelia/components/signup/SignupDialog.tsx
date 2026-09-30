@@ -62,6 +62,8 @@ export function SignupDialog() {
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [logoError, setLogoError] = useState<string | null>(null);
+  // Champ piège invisible pour les robots.
+  const [website, setWebsite] = useState("");
 
   // Ouverture : on reprend la roue et le pack choisis.
   useEffect(() => {
@@ -112,7 +114,7 @@ export function SignupDialog() {
       const res = await fetch("/api/inscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, website }),
       });
       if (!res.ok) throw new Error(String(res.status));
       setStatus("success");
@@ -290,6 +292,17 @@ export function SignupDialog() {
                 {fr(t.errors.server)}
               </p>
             ) : null}
+
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              className="absolute -left-[9999px] h-px w-px opacity-0"
+            />
 
             <button
               type="submit"

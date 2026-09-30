@@ -5,3 +5,6 @@ out
 next-env.d.ts
 .env*.local
 .captures
+.open-next
+.wrangler
+.dev.vars

@@ -741,7 +741,7 @@ export const faq = {
     },
     {
       q: "Que devient la liste de mes clients ?",
-      a: "Elle vous appartient. Les clients ne sont contactés que s'ils l'ont accepté, et chaque message contient un lien de désinscription. Les données sont hébergées en Europe et ne sont jamais revendues. Vous pouvez les exporter ou les supprimer quand vous voulez.",
+      a: "Elle vous appartient. Les clients ne sont contactés que s'ils l'ont accepté, et chaque message contient un lien de désinscription. Les données ne sont jamais revendues. Vous pouvez les exporter ou les supprimer quand vous voulez.",
     },
     {
       q: "Puis-je changer de pack ou arrêter quand je veux ?",
@@ -984,4 +984,43 @@ export const notFound = {
   title: "Cette page n'existe pas",
   text: "Le lien est peut-être ancien. La roue, elle, vous attend sur la page d'accueil.",
   back: "Revenir à l'accueil",
+};
+
+/* ------------------------------------------------------------------ */
+/* Espace admin (réservé à Aymen)                                      */
+/* ------------------------------------------------------------------ */
+
+export const admin = {
+  title: "Inscriptions",
+  login: {
+    title: "Espace admin",
+    password: "Mot de passe",
+    submit: "Se connecter",
+    show: "Afficher le mot de passe",
+    hide: "Masquer le mot de passe",
+    wrong: "Mot de passe incorrect.",
+    tooMany: "Trop d'essais. Patientez 15 minutes.",
+    notConfigured: "Le mot de passe n'est pas encore réglé sur l'hébergement (variable ADMIN_PASSWORD).",
+    failed: "La connexion a échoué. Réessayez.",
+  },
+  logout: "Se déconnecter",
+  refresh: "Actualiser",
+  export: "Exporter (Excel)",
+  search: "Rechercher : prénom, commerce, e-mail, téléphone",
+  loading: "Chargement des inscriptions",
+  empty: "Aucune inscription pour l'instant. Elles apparaîtront ici dès qu'un commerçant démarre son essai.",
+  noResult: "Aucun résultat.",
+  memoryWarning: "Base de données non connectée : les inscriptions ne sont pas conservées. Vérifiez la liaison D1 nommée DB (voir DEPLOIEMENT.md).",
+  counts: { total: "Inscriptions", pending: "Essais à ouvrir", active: "Essais en cours", clients: "Clients" },
+  statuses: { essai_en_attente: "Essai à ouvrir", essai_en_cours: "Essai en cours", client: "Client", perdu: "Perdu" },
+  statusLabel: "Statut",
+  wheel: "Roue configurée",
+  avgCost: "coût moyen par partie",
+  source: "Arrivé par",
+  direct: "Accès direct",
+  call: "Appeler",
+  mail: "Écrire",
+  remove: "Supprimer",
+  confirmRemove: (name: string) => `Supprimer définitivement l'inscription de ${name} ? Cette action est irréversible.`,
+  logo: "Logo envoyé",
 };

@@ -12,5 +12,6 @@
 ## Prochaines étapes quand on reprend
 1. Relire avec Aymen : mot du fondateur, photo, e-mail, domaine, hébergement des données, règle des 79 €.
 2. Brancher base de données, Stripe, e-mails (voir « Reste à brancher » dans README.md).
-3. Mettre en ligne sur Vercel (Root Directory : `rouelia`).
+3. Mise en ligne sur Cloudflare Workers préparée (voir DEPLOIEMENT.md) : inscriptions en base D1, espace `/admin`.
+   Choix de Cloudflare : gratuit, sans badge, usage commercial autorisé.
 4. Réutiliser l'expérience du pilote Alia Coiffure (`alia-roue/`) comme premier résultat réel une fois mesuré.

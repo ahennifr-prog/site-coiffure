@@ -13,7 +13,8 @@ npm run build && npm start
 BASE_URL=http://localhost:3000 npm run e2e   # parcours complet dans Chromium, captures dans .captures/
 ```
 
-Sur Vercel, régler « Root Directory » sur `rouelia`.
+Hébergement : Cloudflare Workers (adaptateur OpenNext, `wrangler.jsonc`). Voir `DEPLOIEMENT.md`.
+Tester le rendu Cloudflare en local : `npm run preview` (mot de passe admin dans `.dev.vars`).
 
 ## Où modifier quoi
 
@@ -45,7 +46,7 @@ Aucun défilement horizontal à 375 px. Aucune erreur console sur le parcours co
 
 ## Reste à brancher
 
-1. **Base de données** : enregistrer `SignupRecord` dans `app/api/inscription/route.ts` (Postgres, Supabase ou autre). La route journalise seulement pour l'instant.
+1. **Base de données** : fait. Les inscriptions sont enregistrées dans Cloudflare D1 (`lib/db.ts`) et consultables sur `/admin` (statut, suppression, export Excel).
 2. **Stripe** : créer le client à l'inscription (`stripeCustomerId`), puis l'abonnement à la fin de l'essai. Prix mensuels dans `content.ts`.
 3. **E-mails** : confirmation d'inscription au commerçant, alerte interne à chaque nouvelle inscription.
 4. **Saisie assistée Google Places** : `lib/places.ts` expose déjà `searchPlaces()` et le type `Establishment` ; ajouter une route `/api/places` côté serveur pour ne pas exposer la clé.

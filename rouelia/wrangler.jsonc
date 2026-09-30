@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Site Rouelia sur Cloudflare Workers (adaptateur OpenNext).
+  "name": "rouelia",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": { "enabled": true },
+  // Garde les variables réglées dans le tableau de bord Cloudflare lors des déploiements.
+  "keep_vars": true,
+  // Base des inscriptions. Sans database_id, Wrangler la crée automatiquement au premier déploiement.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "rouelia"
+    }
+  ]
+}
