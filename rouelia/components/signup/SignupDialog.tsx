@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { Check, ImagePlus, LoaderCircle, X } from "lucide-react";
-import { demo as demoText, pricing, signup as t } from "@/content";
-import { formatEuro, fr } from "@/lib/format";
+import { Check, Gift, ImagePlus, LoaderCircle, X } from "lucide-react";
+import { demo as demoText, offerWheel, pricing, signup as t, type PackId } from "@/content";
+import { formatDate, formatEuro, fr } from "@/lib/format";
+import { offerById, resolveOffer, type WonOffer } from "@/lib/offers";
 import { freeTextEstablishment } from "@/lib/places";
 import { validateSignup, type SignupErrorKey, type SignupField, type SignupPayload } from "@/lib/signup";
 import { useAppState } from "@/components/AppState";
@@ -46,6 +47,31 @@ function Field({
   );
 }
 
+/** Le cadeau de la roue d'offres, tel qu'il s'appliquera au pack choisi. */
+function OfferNotice({ offer, pack, onPack }: { offer: WonOffer; pack: PackId; onPack: (p: PackId) => void }) {
+  const r = resolveOffer(offer.id, pack);
+  const o = offerWheel.signup;
+  const label = offerById(r.id).label;
+  const upgrade = r.status === "needs_croissance" ? { text: o.essentiel, to: "croissance" as const, button: o.toCroissance }
+    : r.status === "needs_premium" ? { text: o.needsPremium, to: "premium" as const, button: o.toPremium }
+    : null;
+  return (
+    <div role="status" className={`rounded-lg p-3 text-sm ring-1 ${upgrade ? "bg-safran-soft ring-safran" : "bg-sauge/10 ring-sauge"}`}>
+      <p className="flex gap-2 font-semibold">
+        <Gift aria-hidden size={18} className="mt-0.5 shrink-0" />
+        <span>{fr(upgrade ? upgrade.text : r.substituted ? o.auditInPremium : o.applied(label))}</span>
+      </p>
+      {!upgrade && r.id === "installation" ? <p className="mt-1 pl-6.5 text-ink-soft">{fr(o.installationArea)}</p> : null}
+      <p className="mt-1 pl-6.5 text-ink-soft">{fr(o.code(offer.code, formatDate(new Date(offer.expiresAt))))}</p>
+      {upgrade ? (
+        <button type="button" onClick={() => onPack(upgrade.to)} className="mt-2 ml-6.5 inline-flex min-h-11 items-center rounded-full bg-ink px-4 font-semibold text-white">
+          {upgrade.button}
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 const inputClass =
   "min-h-12 w-full rounded-lg bg-cream px-4 ring-1 ring-line outline-none focus:ring-2 focus:ring-tomette aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-danger";
 
@@ -64,6 +90,7 @@ export function SignupDialog() {
   const [logoError, setLogoError] = useState<string | null>(null);
   // Champ piège invisible pour les robots.
   const [website, setWebsite] = useState("");
+  const [wonLabel, setWonLabel] = useState<string | null>(null);
 
   // Ouverture : on reprend la roue et le pack choisis.
   useEffect(() => {
@@ -114,9 +141,11 @@ export function SignupDialog() {
       const res = await fetch("/api/inscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload, website }),
+        body: JSON.stringify({ ...payload, offerToken: app.offer?.token ?? null, website }),
       });
       if (!res.ok) throw new Error(String(res.status));
+      const applied = app.offer ? resolveOffer(app.offer.id, pack) : null;
+      setWonLabel(applied?.status === "applied" ? offerById(applied.id).label : null);
       setStatus("success");
     } catch {
       setStatus("error");
@@ -161,6 +190,7 @@ export function SignupDialog() {
               {fr(t.success.title)}
             </h2>
             <p className="mt-3 text-ink-soft">{fr(t.success.text(firstName.trim()))}</p>
+            {wonLabel ? <p className="mt-2 font-semibold">{fr(offerWheel.signup.success(wonLabel))}</p> : null}
             <button
               type="button"
               onClick={app.closeSignup}
@@ -205,6 +235,8 @@ export function SignupDialog() {
                   </button>
                 ))}
               </div>
+
+              {app.offer ? <OfferNotice offer={app.offer} pack={pack} onPack={setPack} /> : null}
 
               <Field id={`${uid}-firstName`} label={t.fields.firstName.label} error={msg("firstName")}>
                 <input id={`${uid}-firstName`} value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete={t.fields.firstName.autocomplete} className={inputClass} {...aria("firstName")} />

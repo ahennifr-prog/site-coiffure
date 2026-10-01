@@ -40,5 +40,24 @@ Si le premier build échoue parce que le dossier `rouelia` est introuvable, le p
    nom de variable `DB`, base `rouelia`. Enregistrer.
 3. Ou envoyer l'identifiant de la base à Claude, qui l'ajoutera dans `wrangler.jsonc`.
 
-## Nom de domaine (plus tard)
-Worker `rouelia` → **Paramètres → Domaines et routes → Ajouter un domaine personnalisé** (ex. `rouelia.fr`).
+## Brancher rouelia.fr (à faire par Aymen, 10 minutes, puis jusqu'à 24 h de propagation)
+Le code est prêt : canonical, og:url, sitemap et JSON-LD pointent déjà sur `https://rouelia.fr`,
+`www.rouelia.fr` redirige vers `rouelia.fr`, et l'adresse `.workers.dev` est marquée « noindex ».
+
+1. **Mettre le domaine dans Cloudflare** : tableau de bord → **Ajouter un domaine** → `rouelia.fr` → offre **Free**.
+   - Domaine acheté chez Cloudflare : rien à faire, il y est déjà.
+   - Domaine acheté ailleurs (OVH, Gandi, IONOS…) : Cloudflare affiche deux serveurs de noms
+     (du type `xxx.ns.cloudflare.com`). Chez le registraire, remplacer les serveurs DNS par ces deux-là.
+     Attendre l'e-mail « rouelia.fr est actif » (souvent moins d'une heure).
+2. **Relier le domaine au site** : Worker `rouelia` → **Paramètres → Domaines et routes → Ajouter →
+   Domaine personnalisé** → `rouelia.fr`. Recommencer avec `www.rouelia.fr`. Cloudflare crée les DNS et le certificat.
+3. **Vérifier** : `https://rouelia.fr` affiche le site, `https://www.rouelia.fr` renvoie vers `https://rouelia.fr`.
+4. **Facultatif, une fois que tout marche** : dans **Domaines et routes**, désactiver l'adresse `workers.dev`.
+
+## Boîte bonjour@rouelia.fr
+- **Recevoir (gratuit)** : domaine `rouelia.fr` → **E-mail → Routage des e-mails** → activer (Cloudflare ajoute les DNS),
+  puis **Adresses personnalisées** : `bonjour` → transférer vers votre Gmail. Confirmer le lien reçu dans Gmail.
+- **Envoyer depuis bonjour@** : le routage ne fait que recevoir. Pour répondre avec cette adresse, il faut une vraie
+  boîte (Google Workspace, Zoho Mail, OVH…). Elle remplace alors le routage Cloudflare (une seule solution à la fois).
+- Plus tard, pour les e-mails automatiques du site (bienvenue, fin d'essai), un service d'envoi (Resend, Brevo)
+  demandera d'ajouter quelques DNS dans Cloudflare.

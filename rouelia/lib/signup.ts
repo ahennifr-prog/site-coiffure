@@ -1,4 +1,5 @@
-import type { PackId, PrizeIcon, TradeId } from "@/content";
+import type { OfferId, PackId, PrizeIcon, TradeId } from "@/content";
+import type { OfferStatus } from "@/lib/offers";
 import type { Establishment } from "@/lib/places";
 
 export const PACK_IDS: PackId[] = ["essentiel", "croissance", "premium"];
@@ -37,6 +38,20 @@ export interface SignupPayload {
   wheel: WheelConfig | null;
   utm: Utm;
   consent: { accepted: boolean; text: string };
+  /** Jeton signé du cadeau gagné sur la roue d'offres, s'il y en a un. */
+  offerToken?: string | null;
+}
+
+/** Cadeau de la roue d'offres rattaché à l'inscription. */
+export interface SignupOffer {
+  /** Cadeau tiré sur la roue. */
+  wonId: OfferId;
+  /** Cadeau à appliquer (l'audit devient l'installation en Premium). */
+  id: OfferId;
+  code: string;
+  wonAt: string;
+  expiresAt: string;
+  status: OfferStatus;
 }
 
 /** Enregistrement complet, prêt pour une base de données et pour Stripe. */
@@ -60,6 +75,7 @@ export interface SignupRecord {
   trialStartedAt: string | null;
   firstPlayAt: string | null;
   stripeCustomerId: string | null;
+  offer: SignupOffer | null;
 }
 
 export type SignupField = "firstName" | "email" | "phone" | "shopName" | "consent";
@@ -173,6 +189,7 @@ export function buildRecord(
       trialStartedAt: null,
       firstPlayAt: null,
       stripeCustomerId: null,
+      offer: null,
     },
   };
 }

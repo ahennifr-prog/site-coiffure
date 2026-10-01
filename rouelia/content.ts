@@ -55,6 +55,35 @@ export const brand = {
   area: "Paris et petite couronne",
 };
 
+/**
+ * Identité légale. Aymen exerce en entrepreneur individuel (micro-entreprise).
+ * Les champs vides s'affichent « à compléter » et gardent le bandeau d'alerte sur les pages légales.
+ */
+export const company = {
+  /** Nom et prénom de l'entrepreneur, suivis de la mention obligatoire « EI ». */
+  owner: "Aymen Henni",
+  form: "Entrepreneur individuel (EI), régime de la micro-entreprise",
+  tradeName: "Rouelia",
+  siren: "",
+  address: "",
+  publisher: "Aymen Henni",
+  /** Franchise en base de TVA (art. 293 B du CGI). */
+  vatExempt: true,
+  vatMention: "TVA non applicable, art. 293 B du CGI",
+  lastUpdate: "1er octobre 2026",
+};
+
+const missing = "[à compléter]";
+const siren = company.siren || missing;
+const address = company.address || missing;
+
+export const host = {
+  name: "Cloudflare, Inc.",
+  address: "101 Townsend St, San Francisco, CA 94107, États-Unis",
+  phone: "+1 650 319 8930",
+  site: "cloudflare.com",
+};
+
 export const seo = {
   title: "Rouelia : la roue à cadeaux qui fait revenir vos clients",
   description:
@@ -640,6 +669,7 @@ export const pricing = {
     ],
   },
   printNote: "Chevalets et flyers imprimés disponibles à part, sur demande.",
+  vatNote: company.vatExempt ? `Prix nets, sans TVA. ${company.vatMention}.` : "Prix hors taxes.",
   tableToggle: { open: "Comparer tous les détails", close: "Masquer le comparatif" },
   tableCaption: "Comparatif complet des packs Rouelia",
   /** Contenu du tableau complet. true = inclus, false = non inclus, texte = précision. */
@@ -755,6 +785,74 @@ export const faq = {
 };
 
 /* ------------------------------------------------------------------ */
+/* Roue d'offres Rouelia (dernière section)                            */
+/* 100 % gagnante. Cadeaux valables sur Croissance et Premium,         */
+/* jamais sur l'Essentiel. Logique dans lib/offers.ts.                 */
+/* ------------------------------------------------------------------ */
+
+export type OfferId =
+  | "essai_21"
+  | "installation"
+  | "flyers"
+  | "audit"
+  | "moitie_1er_mois"
+  | "premium_prix_croissance"
+  | "mois_offert";
+
+export interface Offer {
+  id: OfferId;
+  /** Nom complet, affiché après le tirage et à l'inscription. */
+  label: string;
+  /** Nom court dessiné sur la roue. */
+  short: string;
+  icon: PrizeIcon;
+  /** Chance de sortir, en pourcentage. Le total vaut 100. */
+  percent: number;
+}
+
+export const offerWheel = {
+  title: "Avant de partir, tournez la roue Rouelia.",
+  text: "Chaque case est un cadeau pour bien démarrer, valable sur les packs Croissance et Premium.",
+  wheelLabel: "Roue d'offres Rouelia",
+  spinHint: "Touchez la roue pour tenter votre chance",
+  spinning: "La roue tourne",
+  oneDraw: "Un seul tirage. Votre cadeau est gardé 7 jours sur cet appareil.",
+  won: "Gagné",
+  codeLabel: "Votre code",
+  activate: "Créez votre compte pour activer votre cadeau (valable 7 jours)",
+  validUntil: (date: string) => `Valable jusqu'au ${date}, sur Croissance et Premium.`,
+  cta: "Créer mon compte",
+  expired: "Votre cadeau a expiré. Vous pouvez retenter votre chance.",
+  error: "Le tirage n'a pas fonctionné. Vérifiez votre connexion et réessayez.",
+  chancesToggle: "Voir les chances de chaque cadeau",
+  chancesNote: "Le tirage est fait par notre serveur. Un cadeau par compte, non cumulable, non échangeable contre de l'argent.",
+  /** Durée de validité du cadeau, en jours. */
+  validityDays: 7,
+  codePrefix: "OFF",
+  offers: [
+    { id: "essai_21", label: "Essai prolongé à 21 jours", short: "Essai de 21 jours", icon: "etoile", percent: 28 },
+    { id: "installation", label: "Installation sur place offerte", short: "Installation offerte", icon: "main", percent: 24 },
+    { id: "flyers", label: "Flyers imprimés offerts", short: "Flyers offerts", icon: "carte", percent: 22 },
+    { id: "audit", label: "Audit de votre fiche Google offert", short: "Audit Google offert", icon: "feuille", percent: 17 },
+    { id: "moitie_1er_mois", label: "-50 % le premier mois", short: "-50 % le 1er mois", icon: "pourcent", percent: 5 },
+    { id: "premium_prix_croissance", label: "Premium au prix de Croissance le premier mois", short: "Premium au prix Croissance", icon: "coeur", percent: 3 },
+    { id: "mois_offert", label: "Premier mois offert", short: "1er mois offert", icon: "cadeau", percent: 1 },
+  ] as Offer[],
+  /** Textes de la fenêtre d'inscription selon le pack choisi. */
+  signup: {
+    applied: (label: string) => `Votre cadeau : ${label}. Il sera appliqué à votre compte.`,
+    code: (code: string, date: string) => `Code ${code}, valable jusqu'au ${date}.`,
+    essentiel: "Votre cadeau est valable sur Croissance et Premium. Passez à Croissance pour l'activer.",
+    toCroissance: "Passer à Croissance",
+    needsPremium: "Votre cadeau s'applique au pack Premium : vous le payez au prix de Croissance le premier mois. Passez à Premium pour l'activer.",
+    toPremium: "Passer à Premium",
+    auditInPremium: "L'audit de votre fiche Google est déjà inclus dans Premium. Votre cadeau devient : installation sur place offerte.",
+    installationArea: "Installation à Paris et en petite couronne.",
+    success: (label: string) => `Votre cadeau « ${label} » est enregistré avec votre compte.`,
+  },
+};
+
+/* ------------------------------------------------------------------ */
 /* Appel final et pied de page                                         */
 /* ------------------------------------------------------------------ */
 
@@ -837,10 +935,11 @@ export const cookieBanner = {
 /* ------------------------------------------------------------------ */
 
 export const legal = {
-  draftNotice:
-    "Texte provisoire, à faire valider par un professionnel du droit avant publication.",
+  /** Affiché tant qu'une information légale obligatoire manque. */
+  draftNotice: "Certaines informations légales sont encore à compléter (SIREN, adresse).",
+  complete: !!(company.siren && company.address),
   back: "Retour à l'accueil",
-  updated: "Dernière mise à jour : à compléter lors de la publication.",
+  updated: `Dernière mise à jour : ${company.lastUpdate}.`,
   pages: {
     mentions: {
       title: "Mentions légales",
@@ -849,20 +948,28 @@ export const legal = {
         {
           h: "Éditeur du site",
           p: [
-            "Rouelia, [forme juridique et capital à compléter], immatriculée sous le numéro [SIREN à compléter], dont le siège est situé [adresse à compléter].",
-            "Directeur de la publication : Aymen [nom à compléter].",
-            "Contact : bonjour@rouelia.fr.",
+            `Le site rouelia.fr est édité par ${company.owner}, ${company.form}, exerçant sous le nom commercial ${company.tradeName}.`,
+            `SIREN : ${siren}. Adresse : ${address}.`,
+            `${company.vatMention}.`,
+            `Directeur de la publication : ${company.publisher}.`,
+            `Contact : ${brand.email}.`,
           ],
         },
         {
           h: "Hébergement",
-          p: ["Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis. vercel.com."],
+          p: [
+            `Le site et la base des inscriptions sont hébergés par ${host.name}, ${host.address}. Téléphone : ${host.phone}. ${host.site}.`,
+          ],
         },
         {
           h: "Propriété intellectuelle",
           p: [
             "Les textes, visuels et le logotype Rouelia sont protégés. Toute reproduction sans accord écrit est interdite.",
           ],
+        },
+        {
+          h: "Données personnelles",
+          p: ["Le traitement de vos données est décrit dans notre politique de confidentialité."],
         },
       ],
     },
@@ -872,7 +979,9 @@ export const legal = {
       sections: [
         {
           h: "Qui est responsable de vos données",
-          p: ["Rouelia, joignable à bonjour@rouelia.fr, est responsable des traitements décrits ici."],
+          p: [
+            `${company.owner}, ${company.form}, exerçant sous le nom ${company.tradeName}, ${address}, joignable à ${brand.email}, est responsable des traitements décrits ici.`,
+          ],
         },
         {
           h: "La démo du site",
@@ -881,11 +990,24 @@ export const legal = {
           ],
         },
         {
+          h: "La roue d'offres",
+          p: [
+            "Le tirage est fait par notre serveur, sans aucune donnée personnelle. Le cadeau gagné et son code sont gardés 7 jours dans le stockage local de votre navigateur, puis effacés. Ils ne nous sont transmis que si vous créez un compte.",
+          ],
+        },
+        {
           h: "L'inscription à l'essai",
           p: [
-            "Nous collectons votre prénom, votre e-mail, votre téléphone, le nom de votre établissement, le pack choisi, la configuration de votre roue et la page d'où vous venez.",
+            "Nous collectons votre prénom, votre e-mail, votre téléphone, le nom de votre établissement, le pack choisi, la configuration de votre roue, le cadeau éventuellement gagné et la page d'où vous venez.",
             "Finalité : créer votre compte d'essai et vous accompagner. Base légale : votre consentement, puis l'exécution du contrat si vous devenez client.",
-            "Durée de conservation : 3 ans après le dernier contact si vous ne devenez pas client [durée à valider].",
+            "Durée de conservation : 3 ans après le dernier contact si vous ne devenez pas client. Si vous devenez client, pendant toute la durée de l'abonnement puis 5 ans. Les factures sont gardées 10 ans, comme l'exige la loi.",
+          ],
+        },
+        {
+          h: "Qui a accès à vos données",
+          p: [
+            `Seul ${company.owner} a accès à vos données. Elles ne sont ni vendues ni louées.`,
+            `Hébergement : ${host.name} (États-Unis) héberge le site et la base des inscriptions. Ce transfert hors de l'Union européenne est encadré par le cadre de protection des données UE et États-Unis (Data Privacy Framework) et par les clauses contractuelles types de la Commission européenne.`,
           ],
         },
         {
@@ -895,15 +1017,16 @@ export const legal = {
           ],
         },
         {
-          h: "Cookies et mesure d'audience",
+          h: "Cookies et stockage local",
           p: [
-            "Aucun traceur publicitaire. Une mesure d'audience ne peut être activée qu'après votre accord, et vous pouvez changer d'avis via le lien « Gérer les cookies » en bas de page.",
+            "Aucun traceur publicitaire. Le site garde dans votre navigateur votre choix sur les cookies, votre roue de démo et le cadeau de la roue d'offres : ces éléments servent seulement au fonctionnement du site et ne demandent pas d'accord.",
+            "Une mesure d'audience ne peut être activée qu'après votre accord. Vous pouvez changer d'avis à tout moment via le lien « Gérer les cookies » en bas de page.",
           ],
         },
         {
           h: "Vos droits",
           p: [
-            "Vous pouvez accéder à vos données, les rectifier, les supprimer, vous opposer à leur traitement ou retirer votre consentement en écrivant à bonjour@rouelia.fr. Vous pouvez aussi saisir la CNIL (cnil.fr).",
+            `Vous pouvez accéder à vos données, les rectifier, les supprimer, les récupérer, vous opposer à leur traitement ou retirer votre consentement en écrivant à ${brand.email}. Nous répondons sous un mois. Vous pouvez aussi saisir la CNIL (cnil.fr).`,
           ],
         },
       ],
@@ -914,7 +1037,9 @@ export const legal = {
       sections: [
         {
           h: "Objet",
-          p: ["Les présentes conditions encadrent l'abonnement au service Rouelia par un professionnel."],
+          p: [
+            `Les présentes conditions encadrent l'abonnement au service Rouelia, vendu par ${company.owner}, ${company.form} (SIREN : ${siren}), à des professionnels.`,
+          ],
         },
         {
           h: "Essai gratuit",
@@ -925,13 +1050,23 @@ export const legal = {
         {
           h: "Prix et paiement",
           p: [
-            "Les prix sont indiqués hors taxes [à confirmer], par mois, sans engagement. Essentiel : 29 €. Croissance : 49 €. Premium : 89 €. L'installation sur place est facturée 49 €, ou 79 € pour un déplacement dédié, à Paris et en petite couronne.",
+            `Les prix sont indiqués en euros, par mois, sans engagement. ${company.vatMention} : les prix affichés sont ceux que vous payez. Essentiel : 29 €. Croissance : 49 €. Premium : 89 €.`,
+            "L'installation sur place est facturée 49 €, ou 79 € si le déplacement est fait uniquement pour vous, à Paris et en petite couronne.",
+            "L'abonnement se paie chaque mois, d'avance. Une facture est émise pour chaque paiement.",
           ],
         },
         {
           h: "Résiliation et pause",
           p: [
-            "Vous pouvez arrêter à tout moment depuis votre espace, sans frais. Le mois commencé reste dû [à valider]. Les cadeaux déjà gagnés par vos clients restent utilisables jusqu'à leur date limite.",
+            "Vous pouvez arrêter à tout moment, sans frais ni préavis. L'arrêt prend effet à la fin du mois déjà payé, qui n'est pas remboursé. Les cadeaux déjà gagnés par vos clients restent utilisables jusqu'à leur date limite.",
+          ],
+        },
+        {
+          h: "Cadeaux de la roue d'offres Rouelia",
+          p: [
+            "La roue d'offres du site est gagnante à chaque tirage. Le cadeau est valable 7 jours, sur les packs Croissance et Premium uniquement, jamais sur l'Essentiel. Un seul cadeau par commerce, non cumulable et non échangeable contre de l'argent.",
+            "Les réductions (-50 %, Premium au prix de Croissance, premier mois offert) portent sur le premier mois payant, après l'essai. L'essai prolongé porte la durée de l'essai à 21 jours.",
+            "L'installation sur place offerte est réservée à Paris et à la petite couronne. Avec le pack Premium, qui inclut déjà l'audit de la fiche Google, le cadeau « audit offert » est remplacé par l'installation sur place offerte.",
           ],
         },
         {
@@ -944,6 +1079,12 @@ export const legal = {
           h: "Responsabilité",
           p: [
             "Le commerçant fixe ses lots et en assume le coût. Rouelia ne garantit aucun nombre d'avis, aucune note et aucun chiffre d'affaires.",
+          ],
+        },
+        {
+          h: "Droit applicable",
+          p: [
+            "Les présentes conditions sont soumises au droit français. En cas de désaccord, nous cherchons d'abord une solution amiable ; à défaut, le litige est porté devant les tribunaux compétents.",
           ],
         },
       ],
@@ -1023,4 +1164,14 @@ export const admin = {
   remove: "Supprimer",
   confirmRemove: (name: string) => `Supprimer définitivement l'inscription de ${name} ? Cette action est irréversible.`,
   logo: "Logo envoyé",
+  offer: {
+    title: "Cadeau de la roue",
+    status: {
+      applied: "À appliquer",
+      needs_croissance: "Non appliqué : pack Essentiel",
+      needs_premium: "Non appliqué : valable en Premium",
+    },
+    substituted: "audit remplacé par l'installation (Premium)",
+    until: (date: string) => `valable jusqu'au ${date}`,
+  },
 };

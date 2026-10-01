@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
+import { checkPayload, signPayload } from "@/lib/auth";
 import { saveSignup } from "@/lib/db";
+import { offerForSignup } from "@/lib/offers";
 import { buildRecord } from "@/lib/signup";
 
 /**
  * Inscription à l'essai gratuit.
  * Validation, puis enregistrement dans la base D1 de Cloudflare (mémoire en local).
+ * Le cadeau de la roue d'offres est vérifié et rattaché selon le pack choisi.
  * À brancher plus tard : création du client Stripe (stripeCustomerId), e-mail de bienvenue.
  */
 export async function POST(req: Request) {
@@ -25,10 +28,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, id: "ok" }, { status: 201 });
   }
 
-  const result = buildRecord(body, new Date(), crypto.randomUUID());
+  const now = new Date();
+  const result = buildRecord(body, now, crypto.randomUUID());
   if (!result.ok) {
     return NextResponse.json({ ok: false, errors: result.errors }, { status: 422 });
   }
+  // Cadeau de la roue d'offres : seul un jeton signé par le serveur et non expiré est pris en compte.
+  result.record.offer = offerForSignup((body as Record<string, unknown>).offerToken, result.record.pack, { sign: signPayload, check: checkPayload }, now);
 
   try {
     await saveSignup(result.record);

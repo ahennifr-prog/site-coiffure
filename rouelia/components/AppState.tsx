@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { palettes, trades, type PackId, type TradeId } from "@/content";
+import type { WonOffer } from "@/lib/offers";
 import type { Utm, WheelConfig } from "@/lib/signup";
 import {
   addPrize, averageCost, normalize, paletteFromPrimary, readableOn, removePrize, segmentColors,
@@ -45,10 +46,31 @@ interface AppState {
   openSignup: (pack?: PackId) => void;
   closeSignup: () => void;
   utm: Utm | null;
+  /** Cadeau gagné sur la roue d'offres, gardé 7 jours dans le navigateur. */
+  offer: WonOffer | null;
+  setOffer: (o: WonOffer | null) => void;
 }
 
 const Ctx = createContext<AppState | null>(null);
 const STORAGE_KEY = "rouelia-demo-v1";
+const OFFER_KEY = "rouelia-offre-v1";
+
+function readOffer(): WonOffer | null {
+  try {
+    const raw = localStorage.getItem(OFFER_KEY);
+    if (!raw) return null;
+    const o = JSON.parse(raw) as WonOffer;
+    if (!o?.token || !o.expiresAt) return null;
+    // Cadeau expiré : on l'oublie, le visiteur peut retenter sa chance.
+    if (new Date(o.expiresAt).getTime() < Date.now()) {
+      localStorage.removeItem(OFFER_KEY);
+      return null;
+    }
+    return o;
+  } catch {
+    return null;
+  }
+}
 
 function initialDemo(trade: TradeId = "coiffeur"): DemoState {
   const t = trades.find((x) => x.id === trade) ?? trades[0];
@@ -78,6 +100,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [demo, setDemo] = useState<DemoState>(() => initialDemo());
   const [signup, setSignup] = useState<{ open: boolean; pack: PackId }>({ open: false, pack: "croissance" });
   const [utm, setUtm] = useState<Utm | null>(null);
+  const [offer, setOfferState] = useState<WonOffer | null>(null);
   const loaded = useRef(false);
 
   // Reprend la roue du visiteur s'il revient sur la page (stockage local, jamais envoyé).
@@ -94,6 +117,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       /* stockage indisponible */
     }
     loaded.current = true;
+    setOfferState(readOffer());
 
     const q = new URLSearchParams(window.location.search);
     setUtm({
@@ -177,9 +201,19 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       openSignup: (pack) => setSignup((s) => ({ open: true, pack: pack ?? s.pack })),
       closeSignup: () => setSignup((s) => ({ ...s, open: false })),
       utm,
+      offer,
+      setOffer: (o) => {
+        setOfferState(o);
+        try {
+          if (o) localStorage.setItem(OFFER_KEY, JSON.stringify(o));
+          else localStorage.removeItem(OFFER_KEY);
+        } catch {
+          /* stockage indisponible : le cadeau vaut pour cette visite */
+        }
+      },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [demo, signup, utm, patch],
+    [demo, signup, utm, offer, patch],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

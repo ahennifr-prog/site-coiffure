@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Download, ImageIcon, LogOut, Mail, Phone, RotateCcw, Trash2, TriangleAlert } from "lucide-react";
+import { Download, Gift, ImageIcon, LogOut, Mail, Phone, RotateCcw, Trash2, TriangleAlert } from "lucide-react";
 import { admin, pricing, trades } from "@/content";
 import { formatEuroCents, fr } from "@/lib/format";
+import { offerSummary } from "@/lib/offers";
 import { SIGNUP_STATUSES, type SignupRecord, type SignupStatus } from "@/lib/signup";
 import { Logo } from "@/components/brand/Logo";
 
@@ -193,6 +194,15 @@ export function AdminDashboard() {
                       </p>
                       <p className="mt-1 text-ink-soft">{s.wheelConfig.prizes.map((p) => `${p.name} ${p.percent} %`).join(" · ")}</p>
                     </div>
+                  ) : null}
+                  {s.offer ? (
+                    <p className={`mt-3 flex gap-2 rounded-lg p-3 text-sm ${s.offer.status === "applied" ? "bg-sauge/10" : "bg-safran-soft"}`}>
+                      <Gift aria-hidden size={16} className="mt-0.5 shrink-0" />
+                      <span>
+                        <span className="font-semibold">{admin.offer.title} : </span>
+                        {fr(offerSummary(s.offer))}
+                      </span>
+                    </p>
                   ) : null}
                   <p className="mt-2 text-xs text-ink-soft">
                     {admin.source} : {[s.utm.source, s.utm.medium, s.utm.campaign].filter(Boolean).join(" / ") || s.utm.referrer || admin.direct}

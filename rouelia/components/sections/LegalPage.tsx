@@ -22,11 +22,13 @@ export function LegalPage({ page }: { page: keyof typeof legal.pages }) {
       </header>
       <main id="contenu" className="py-14 sm:py-20">
         <Container className="max-w-3xl">
-          <p role="note" className="flex gap-2 rounded-lg bg-safran-soft p-4 text-sm font-semibold ring-1 ring-safran">
-            <TriangleAlert aria-hidden size={18} className="mt-0.5 shrink-0" />
-            {fr(legal.draftNotice)}
-          </p>
-          <h1 className="mt-8 font-display text-4xl font-semibold sm:text-5xl">{fr(p.title)}</h1>
+          {!legal.complete ? (
+            <p role="note" className="mb-8 flex gap-2 rounded-lg bg-safran-soft p-4 text-sm font-semibold ring-1 ring-safran">
+              <TriangleAlert aria-hidden size={18} className="mt-0.5 shrink-0" />
+              {fr(legal.draftNotice)}
+            </p>
+          ) : null}
+          <h1 className=" font-display text-4xl font-semibold sm:text-5xl">{fr(p.title)}</h1>
           <p className="mt-2 text-sm text-ink-soft">{fr(legal.updated)}</p>
           {p.sections.map((s) => (
             <section key={s.h} className="mt-10">

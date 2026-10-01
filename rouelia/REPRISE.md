@@ -1,4 +1,4 @@
-# Point de reprise : Rouelia et ALIA coiffure (30 septembre 2026, soir)
+# Point de reprise : Rouelia et ALIA coiffure (mis à jour le 1er octobre 2026)
 
 Dépôt `ahennifr-prog/site-coiffure`, tout le travail est sur la branche **`claude/great-lovelace-lpyydk`**.
 Attention : la branche par défaut du dépôt est `claude/confident-pasteur-0plw48` et ne contient pas ces projets.
@@ -30,12 +30,37 @@ Le dépôt contient trois dossiers :
 - Chaque push sur la branche relance automatiquement le build Cloudflare.
 
 ### Questions en attente (réponses d'Aymen à intégrer)
-1. Mot du fondateur (`founder` dans `content.ts`) : texte écrit par Claude, à garder, modifier ou remplacer.
-2. Photo d'Aymen : le site affiche un grand « A » à la place (`founder.photo` vide).
-3. Contact : e-mail et téléphone à afficher (actuellement `bonjour@rouelia.fr`, peut-être inexistant).
-4. Installation sur place : confirmer « 49 €, ou 79 € si le déplacement est fait uniquement pour vous ».
-5. Nom de domaine : `rouelia.fr` acheté ou non ; si oui, le brancher (Worker → Paramètres → Domaines et routes).
-Déjà tranché : la mention « données hébergées en Europe » a été retirée de la FAQ (non garantie).
+1. SIREN et adresse (domiciliation ou personnelle) : `company.siren` et `company.address` dans `content.ts`.
+   Tant qu'ils sont vides, les pages légales affichent « [à compléter] » et un bandeau jaune.
+2. Franchise de TVA confirmée ? (`company.vatExempt`, appliquée par défaut pour une micro-entreprise.)
+3. Quantité de flyers offerts par la roue d'offres.
+4. Mot du fondateur (`founder`) : garder, modifier ou remplacer. Photo d'Aymen (`founder.photo`, un « A » à la place).
+5. Contact affiché : e-mail (`bonjour@rouelia.fr` une fois la boîte créée) et téléphone.
+6. Installation sur place : confirmer « 49 €, ou 79 € si le déplacement est fait uniquement pour vous ».
+7. Décision pour chaque fonction non codée (liste plus bas) : « bientôt » ou retirée.
+Déjà tranché : « données hébergées en Europe » retiré ; prix nets avec « TVA non applicable, art. 293 B du CGI » ;
+conservation 3 ans après le dernier contact pour les non clients ; arrêt effectif à la fin du mois payé, non remboursé.
+
+### Domaine rouelia.fr
+Côté code, c'est fait : canonical et og:url sur `https://rouelia.fr`, `www` redirigé, `.workers.dev` en noindex.
+Côté Aymen : mettre le domaine dans Cloudflare puis l'ajouter au Worker, et créer bonjour@ (voir `DEPLOIEMENT.md`).
+
+### Roue d'offres Rouelia (dernière section, fond orange)
+- 100 % gagnante. Chances : essai prolongé à 21 jours 28 %, installation sur place offerte 24 %, flyers imprimés
+  offerts 22 %, audit de la fiche Google offert 17 %, -50 % le premier mois 5 %, Premium au prix de Croissance le
+  premier mois 3 %, premier mois offert 1 %. Réglages dans `offerWheel` (`content.ts`), logique dans `lib/offers.ts`.
+- Tirage fait par le serveur (`/api/offre`), signé (HMAC avec `SESSION_SECRET`) : impossible d'inventer un cadeau.
+  Le cadeau, son code `OFF-XXXX` et le jeton sont gardés 7 jours dans le navigateur, puis la roue peut être relancée.
+- Après le tirage : code et « Créez votre compte pour activer votre cadeau (valable 7 jours) ». L'inscription envoie
+  le jeton, le serveur le vérifie et l'applique selon le pack :
+  - Essentiel : jamais appliqué, message « Votre cadeau est valable sur Croissance et Premium. Passez à Croissance
+    pour l'activer. » avec un bouton qui change le pack ;
+  - Premium et audit gagné : remplacé par l'installation sur place offerte (l'audit est inclus dans Premium) ;
+  - Premium au prix de Croissance gagné avec Croissance : invitation à passer en Premium.
+- Le cadeau apparaît dans `/admin` (« À appliquer » ou la raison du refus) et dans l'export. Il s'applique
+  à la main tant que Stripe n'est pas branché. Limite connue : en vidant son navigateur, on peut retirer ;
+  « un cadeau par commerce » se contrôle dans `/admin`.
+- Règles reprises dans les CGV (section « Cadeaux de la roue d'offres Rouelia »).
 
 ### Plus tard
 - Stripe (paiement à la fin de l'essai, `stripeCustomerId` prévu dans `SignupRecord`) et e-mails automatiques
@@ -47,6 +72,51 @@ Déjà tranché : la mention « données hébergées en Europe » a été retir�
 ### Vérifications à relancer après une modification
 `npm run check` (typage, tests, contrôle des textes : aucun tiret de ponctuation, emoji ou formule interdite),
 `npm run cf-build` (build Cloudflare), `npm run preview` (moteur Cloudflare local, mot de passe dans `.dev.vars`).
+
+## Promis sur le site mais pas encore codé (décision d'Aymen : « bientôt » ou retirer)
+Aujourd'hui, Rouelia est une vitrine avec démo, inscription et `/admin`. Le produit pour les commerçants n'existe
+pas encore en version multi-commerces. Le prototype qui marche est celui d'ALIA (`alia-roue/` : QR code, roue,
+code avec date limite, validation en caisse, suivi), pour un seul salon.
+- Roue réelle par commerçant (compte, QR code, jeu des clients, codes, validation en caisse) : à bâtir à partir d'ALIA.
+- Code cadeau envoyé par e-mail au client ; flyer PDF et QR code générés.
+- Rapport hebdomadaire (e-mail, WhatsApp ou SMS) avec une action à faire.
+- SMS inclus (50 ou 200 par mois) : rappels, relances, anniversaires.
+- Relances automatiques des cadeaux non retirés.
+- Réponses aux avis en un clic (rédaction par IA) ; analyse IA des avis ; alerte avis négatif.
+- Veille de 3 concurrents voisins.
+- Mise en route et ajustement des lots « par IA » (la démo propose des modèles par métier, pas d'IA).
+- Roues saisonnières programmées, roue de parrainage.
+- Actions Instagram et Facebook, lien de réservation après le jeu.
+- Statistiques par employé, lots pour heures creuses, suivi de la rentabilité.
+- Sans mention « Propulsé par Rouelia », domaine personnalisé.
+- Espace client : changer de pack, arrêter « en un clic », mettre en pause, exporter ou supprimer la liste de clients.
+Services humains déjà possibles sans code : visio de 30 minutes, installation, point mensuel, audit de fiche Google,
+refonte saisonnière, chevalet, support sous 24 h.
+
+## Vérification légale et technique (1er octobre 2026)
+- Mentions légales : complètes sauf SIREN et adresse. Hébergeur corrigé : Cloudflare, Inc. (et non Vercel).
+- Confidentialité : complète (responsable, finalités, durées, Cloudflare et transfert hors UE, stockage local,
+  droits). Manque l'adresse ; à compléter quand Stripe et un service d'e-mails seront ajoutés ; prévoir un accord
+  de sous-traitance (RGPD, art. 28) avec chaque commerçant avant de traiter les données de ses clients.
+- Cookies : bandeau conforme (Accepter et Refuser au même niveau, rien chargé avant accord, lien « Gérer les
+  cookies »). Aucune mesure d'audience branchée (`NEXT_PUBLIC_ANALYTICS_SRC` vide). À ajouter si on en branche une :
+  redemander le choix après 6 mois.
+- Paiement Stripe : rien n'est codé (seul le champ `stripeCustomerId` est prévu). Les CGV disent seulement
+  « paiement mensuel d'avance, une facture par paiement » : facturer à la main en attendant.
+- Espace client : n'existe pas. Le site promet pourtant « Vous arrêtez en un clic » (tarifs, FAQ) : à coder avec
+  Stripe (portail client Stripe) ou à reformuler.
+- E-mails automatiques (bienvenue, « on vous prévient avant la fin de l'essai ») : pas codés.
+
+## Pistes à creuser
+- Paiement annuel avec remise (par exemple deux mois offerts), à prévoir dans Stripe et dans la section tarifs.
+- Collecte des contacts clients avec consentement (case non cochée, lien de désinscription) et campagnes de retour
+  (SMS ou e-mail aux clients qui ne sont pas revenus).
+- Parrainage entre commerçants : un mois offert au parrain et au filleul. Il faudra un code de parrainage
+  à l'inscription et l'application dans Stripe.
+- Commerciaux à la commission : lien ou code par commercial (les UTM sont déjà enregistrés), suivi dans `/admin`,
+  contrat d'agent commercial.
+- Prospection par quartier avec démo en direct sur le téléphone du commerçant (la démo du site sert déjà à ça),
+  QR code de démo dédié et `utm_source` par quartier.
 
 ## ALIA coiffure (`alia-roue/`)
 

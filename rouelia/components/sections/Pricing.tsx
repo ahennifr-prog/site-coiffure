@@ -180,6 +180,7 @@ export function Pricing() {
         </details>
 
         <p className="mt-6 text-center text-sm text-ink-soft">{fr(pricing.printNote)}</p>
+        <p className="mt-1 text-center text-sm text-ink-soft">{fr(pricing.vatNote)}</p>
       </Container>
     </Section>
   );
