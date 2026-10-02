@@ -234,3 +234,14 @@ export function segmentColors(palette: readonly string[], count: number): string
   }
   return out;
 }
+
+/** Initiales d'un commerce pour le centre de la roue (« Salon Martine » donne « SM »). */
+export function monogramOf(name: string): string {
+  const words = name
+    .replace(/[^\p{L}\p{N} ]/gu, " ")
+    .split(" ")
+    .filter((w) => w.length > 1 && !["le", "la", "les", "de", "du", "des", "chez", "et", "au", "aux"].includes(w.toLowerCase()));
+  if (words.length === 0) return name.trim().charAt(0).toUpperCase() || "R";
+  if (words.length === 1) return words[0].charAt(0).toUpperCase();
+  return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+}

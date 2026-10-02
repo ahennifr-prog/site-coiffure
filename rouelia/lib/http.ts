@@ -19,3 +19,10 @@ export const json = (data: unknown, status = 200) => NextResponse.json(data, { s
 export async function requireAdmin(): Promise<NextResponse | null> {
   return (await isAdmin()) ? null : json({ ok: false, error: "non_connecte" }, 401);
 }
+
+/** Le commerce connecté à l'espace, ou une réponse 401. */
+export async function requireShop(): Promise<{ shop: import("@/lib/shops").Shop; denied: null } | { shop: null; denied: NextResponse }> {
+  const { currentShop } = await import("@/lib/espace");
+  const shop = await currentShop();
+  return shop ? { shop, denied: null } : { shop: null, denied: json({ ok: false, error: "non_connecte" }, 401) };
+}

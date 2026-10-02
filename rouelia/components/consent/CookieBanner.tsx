@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { cookieBanner } from "@/content";
 import { fr } from "@/lib/format";
@@ -34,10 +35,13 @@ export function CookieSettingsLink({ children, className }: { children: ReactNod
  */
 export function CookieBanner() {
   const [open, setOpen] = useState(false);
+  // Le jeu des commerces, l'espace commerçant et l'admin ne chargent aucune mesure d'audience.
+  const pathname = usePathname() ?? "";
+  const hidden = /^\/(j|espace|admin)(\/|$)/.test(pathname);
 
   useEffect(() => {
     if (readConsent() === null) setOpen(true);
-    else if (readConsent() === "accepted") loadAnalytics();
+    else if (readConsent() === "accepted" && !hidden) loadAnalytics();
     const onEvent = () => setOpen(true);
     window.addEventListener(EVENT, onEvent);
     return () => window.removeEventListener(EVENT, onEvent);
@@ -53,7 +57,7 @@ export function CookieBanner() {
     if (c === "accepted") loadAnalytics();
   }
 
-  if (!open) return null;
+  if (!open || hidden) return null;
   return (
     <div role="region" aria-label={cookieBanner.label} className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-xl bg-night p-4 text-cream shadow-lg sm:inset-x-6 sm:bottom-6 sm:p-5">
       <p className="text-[13px] leading-snug sm:text-sm">

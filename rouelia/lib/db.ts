@@ -2,7 +2,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { SignupRecord, SignupStatus } from "@/lib/signup";
 
 /** Sous-ensemble de l'API D1 de Cloudflare utilisé ici. */
-interface D1Statement {
+export interface D1Statement {
   bind(...values: unknown[]): D1Statement;
   run(): Promise<unknown>;
   all<T = Record<string, unknown>>(): Promise<{ results: T[] }>;
@@ -14,14 +14,43 @@ export interface D1Like {
 
 const g = globalThis as unknown as { __roueliaMemory?: SignupRecord[]; __roueliaSchema?: boolean; __roueliaTestDb?: D1Like | null };
 
-const SCHEMA = `CREATE TABLE IF NOT EXISTS signups (
+/** Tables créées au premier usage (inscriptions, commerces, parties, compteurs). */
+const SCHEMA = [
+  `CREATE TABLE IF NOT EXISTS signups (
   id TEXT PRIMARY KEY,
   created_at TEXT NOT NULL,
   email TEXT NOT NULL,
   pack TEXT NOT NULL,
   status TEXT NOT NULL,
   data TEXT NOT NULL
-)`;
+)`,
+  `CREATE TABLE IF NOT EXISTS shops (
+  id TEXT PRIMARY KEY,
+  slug TEXT NOT NULL UNIQUE,
+  email TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  data TEXT NOT NULL,
+  pwd_hash TEXT,
+  invite_hash TEXT,
+  invite_expires TEXT,
+  session_version INTEGER NOT NULL DEFAULT 1
+)`,
+  "CREATE INDEX IF NOT EXISTS shops_email ON shops (email)",
+  "CREATE TABLE IF NOT EXISTS shop_logos (shop_id TEXT PRIMARY KEY, data TEXT NOT NULL, updated_at TEXT NOT NULL)",
+  `CREATE TABLE IF NOT EXISTS plays (
+  code TEXT PRIMARY KEY,
+  shop_id TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  expires_on TEXT NOT NULL,
+  redeemed_at TEXT,
+  data TEXT NOT NULL
+)`,
+  "CREATE INDEX IF NOT EXISTS plays_shop ON plays (shop_id, created_at)",
+  "CREATE TABLE IF NOT EXISTS play_locks (shop_id TEXT NOT NULL, phone TEXT NOT NULL, code TEXT NOT NULL, until TEXT NOT NULL, PRIMARY KEY (shop_id, phone))",
+  "CREATE TABLE IF NOT EXISTS stats (shop_id TEXT NOT NULL, day TEXT NOT NULL, field TEXT NOT NULL, n INTEGER NOT NULL, PRIMARY KEY (shop_id, day, field))",
+  "CREATE TABLE IF NOT EXISTS rates (key TEXT PRIMARY KEY, win TEXT NOT NULL, n INTEGER NOT NULL)",
+];
 
 /** La base D1 liée sous le nom DB (voir wrangler.jsonc), ou null hors Cloudflare. */
 async function d1(): Promise<D1Like | null> {
@@ -37,9 +66,16 @@ async function d1(): Promise<D1Like | null> {
 async function ready(): Promise<D1Like | null> {
   const db = await d1();
   if (db && !g.__roueliaSchema) {
-    await db.prepare(SCHEMA).run();
+    for (const sql of SCHEMA) await db.prepare(sql).run();
     g.__roueliaSchema = true;
   }
+  return db;
+}
+
+/** Base prête à l'emploi. Le produit (commerces, parties) exige D1 : en local, `npm run dev` ou `npm run preview` la simulent. */
+export async function database(): Promise<D1Like> {
+  const db = await ready();
+  if (!db) throw new Error("Base D1 non liée (liaison DB)");
   return db;
 }
 
@@ -66,6 +102,26 @@ export async function listSignups(limit = 500): Promise<SignupRecord[]> {
   if (!db) return memory().slice(0, limit);
   const { results } = await db.prepare("SELECT data, status FROM signups ORDER BY created_at DESC LIMIT ?").bind(limit).all<{ data: string; status: string }>();
   return results.map((row) => ({ ...(JSON.parse(row.data) as SignupRecord), status: row.status as SignupStatus }));
+}
+
+/** Lecture d'une inscription. */
+export async function getSignup(id: string): Promise<SignupRecord | null> {
+  const db = await ready();
+  if (!db) return memory().find((x) => x.id === id) ?? null;
+  const row = await db.prepare("SELECT data, status FROM signups WHERE id = ?").bind(id).first<{ data: string; status: string }>();
+  return row ? { ...(JSON.parse(row.data) as SignupRecord), status: row.status as SignupStatus } : null;
+}
+
+/** Réécrit une inscription (statut et contenu). */
+export async function updateSignup(r: SignupRecord): Promise<void> {
+  const db = await ready();
+  if (!db) {
+    const list = memory();
+    const i = list.findIndex((x) => x.id === r.id);
+    if (i >= 0) list[i] = r;
+    return;
+  }
+  await db.prepare("UPDATE signups SET status = ?, data = ? WHERE id = ?").bind(r.status, JSON.stringify(r), r.id).run();
 }
 
 export async function setSignupStatus(id: string, status: SignupStatus): Promise<boolean> {

@@ -31,7 +31,7 @@ export function Monogram({ text, color, className = "" }: { text: string; color:
   );
 }
 
-function Confetti({ colors }: { colors: string[] }) {
+export function Confetti({ colors }: { colors: string[] }) {
   const bits = useMemo(
     () =>
       Array.from({ length: 26 }, (_, i) => ({

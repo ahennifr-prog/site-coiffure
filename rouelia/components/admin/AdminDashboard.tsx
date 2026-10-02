@@ -7,6 +7,7 @@ import { formatEuroCents, fr } from "@/lib/format";
 import { offerSummary } from "@/lib/offers";
 import { SIGNUP_STATUSES, type SignupRecord, type SignupStatus } from "@/lib/signup";
 import { Logo } from "@/components/brand/Logo";
+import { ShopPanel, type AdminShop } from "./ShopPanel";
 
 type Data = { storage: "d1" | "memory"; signups: SignupRecord[] };
 
@@ -29,6 +30,17 @@ export function AdminDashboard() {
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState(false);
   const [query, setQuery] = useState("");
+  const [shops, setShops] = useState<AdminShop[]>([]);
+
+  async function loadShops() {
+    try {
+      const res = await fetch("/api/admin/shops", { cache: "no-store" });
+      const d = await res.json();
+      if (d.ok) setShops(d.shops);
+    } catch {
+      /* commerces indisponibles : les inscriptions restent affichées */
+    }
+  }
 
   async function load() {
     setError(false);
@@ -44,6 +56,7 @@ export function AdminDashboard() {
   }
   useEffect(() => {
     load();
+    loadShops();
   }, []);
 
   async function setStatus(id: string, status: SignupStatus) {
@@ -87,7 +100,7 @@ export function AdminDashboard() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h1 className="font-display text-4xl font-semibold">{admin.title}</h1>
           <div className="flex gap-2">
-            <button type="button" onClick={load} className="inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold text-ink-soft ring-1 ring-line hover:bg-paper">
+            <button type="button" onClick={() => { load(); loadShops(); }} className="inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold text-ink-soft ring-1 ring-line hover:bg-paper">
               <RotateCcw aria-hidden size={16} /> {admin.refresh}
             </button>
             <a href="/api/admin/export" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white">
@@ -204,6 +217,14 @@ export function AdminDashboard() {
                       </span>
                     </p>
                   ) : null}
+                  <ShopPanel
+                    signup={s}
+                    shop={shops.find((x) => x.signupId === s.id)}
+                    onChange={() => {
+                      load();
+                      loadShops();
+                    }}
+                  />
                   <p className="mt-2 text-xs text-ink-soft">
                     {admin.source} : {[s.utm.source, s.utm.medium, s.utm.campaign].filter(Boolean).join(" / ") || s.utm.referrer || admin.direct}
                   </p>

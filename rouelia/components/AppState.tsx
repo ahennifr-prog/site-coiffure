@@ -5,9 +5,11 @@ import { palettes, trades, type PackId, type TradeId } from "@/content";
 import type { WonOffer } from "@/lib/offers";
 import type { Utm, WheelConfig } from "@/lib/signup";
 import {
-  addPrize, averageCost, normalize, paletteFromPrimary, readableOn, removePrize, segmentColors,
+  addPrize, averageCost, monogramOf, normalize, paletteFromPrimary, readableOn, removePrize, segmentColors,
   setPercent, withIds, type WheelPrize,
 } from "@/lib/wheel";
+
+export { monogramOf };
 
 export interface DemoState {
   shopName: string;
@@ -86,15 +88,6 @@ function initialDemo(trade: TradeId = "coiffeur"): DemoState {
   };
 }
 
-export function monogramOf(name: string): string {
-  const words = name
-    .replace(/[^\p{L}\p{N} ]/gu, " ")
-    .split(" ")
-    .filter((w) => w.length > 1 && !["le", "la", "les", "de", "du", "des", "chez", "et", "au", "aux"].includes(w.toLowerCase()));
-  if (words.length === 0) return name.trim().charAt(0).toUpperCase() || "R";
-  if (words.length === 1) return words[0].charAt(0).toUpperCase();
-  return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
-}
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
   const [demo, setDemo] = useState<DemoState>(() => initialDemo());

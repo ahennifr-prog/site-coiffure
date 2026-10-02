@@ -25,15 +25,19 @@ function sign(payload: string): string {
   return createHmac("sha256", secret() ?? "").update(payload).digest("base64url");
 }
 
-/** Signature HMAC d'un contenu quelconque (cadeaux de la roue d'offres). */
-export function signPayload(payload: string): string {
-  return createHmac("sha256", `offre:${secret() ?? "dev"}`).update(payload).digest("base64url");
+/** Signature HMAC d'un contenu, séparée par usage (cadeaux, sessions des commerçants). */
+export function signWith(purpose: string, payload: string): string {
+  return createHmac("sha256", `${purpose}:${secret() ?? "dev"}`).update(payload).digest("base64url");
 }
 
-export function checkPayload(payload: string, sig: string): boolean {
-  const expected = signPayload(payload);
+export function checkWith(purpose: string, payload: string, sig: string): boolean {
+  const expected = signWith(purpose, payload);
   return sig.length === expected.length && timingSafeEqual(Buffer.from(sig), Buffer.from(expected));
 }
+
+/** Cadeaux de la roue d'offres. */
+export const signPayload = (payload: string) => signWith("offre", payload);
+export const checkPayload = (payload: string, sig: string) => checkWith("offre", payload, sig);
 
 export function createSessionToken(now = Date.now()): string {
   const exp = String(now + MAX_AGE * 1000);

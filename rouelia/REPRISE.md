@@ -73,12 +73,31 @@ Côté Aymen : mettre le domaine dans Cloudflare puis l'ajouter au Worker, et cr
 `npm run check` (typage, tests, contrôle des textes : aucun tiret de ponctuation, emoji ou formule interdite),
 `npm run cf-build` (build Cloudflare), `npm run preview` (moteur Cloudflare local, mot de passe dans `.dev.vars`).
 
+## Étape 1 du produit : faite le 2 octobre 2026
+Le produit multi-commerces est en place dans le site Rouelia (même Worker, même base D1, tables créées seules).
+- **Aymen, dans `/admin`** : bouton « Ouvrir l'essai » sur une inscription. Il crée le commerce avec la roue de la
+  démo (lots, chances, couleurs), passe l'inscription en « Essai en cours », ouvre 14 jours d'essai (21 avec le
+  cadeau « essai prolongé ») et donne un lien d'invitation à envoyer (boutons WhatsApp, SMS, e-mail, copier).
+  Ensuite : offre du commerce (essai, client payant, pause), « Prolonger de 7 jours », nouveau lien
+  (sert aussi pour un mot de passe oublié). Passer en « Client » marque aussi l'inscription « Client ».
+- **Le commerçant, `/espace`** : lien d'invitation (valable 14 jours, une seule fois) pour choisir son mot de passe,
+  puis connexion par e-mail et mot de passe sur `/espace/connexion`. Onglets Caisse (chercher, valider, annuler un
+  code), Suivi (scans, parties, avis, retraits, coût, gros cadeaux, export Excel des clients), Roue (lots, chances,
+  gros cadeaux, validité, délai, rejouer, lien d'avis Google, réservation, coordonnées, couleurs, logo, aperçu) et
+  QR code (PNG, SVG, lien ; avertit tant que le site n'est pas sur rouelia.fr).
+- **Le client, `/j/nom-du-commerce`** : parcours d'ALIA aux couleurs du commerce (invitation neutre à l'avis avec
+  croix, prénom, téléphone, accord, case facultative pour recevoir des offres par SMS, roue, code avec date limite).
+  Tirage fait par le serveur, une partie par téléphone sur la période réglée, 60 parties par heure et par connexion.
+  Règlement et données sur `/j/nom-du-commerce/reglement`. Pages non indexées.
+- **Règles des packs** : fin d'essai sans passage en client, ou pause par Aymen : la roue affiche une pause, la
+  caisse continue de valider les codes déjà gagnés. Lien de réservation après le jeu en Croissance et Premium
+  seulement. Mention « Propulsé par Rouelia » sauf en Premium.
+- **Vérifier** : `npm run check` (64 tests), puis `npm run preview` et, dans un autre terminal,
+  `BASE=http://localhost:8787 ADMIN_PASSWORD=... npm run e2e-produit` (parcours complet dans un navigateur).
+- ALIA reste sur Netlify ; la bascule sur Rouelia se fera quand le domaine sera branché (recréer ses lots et son logo).
+
 ## Promis sur le site mais pas encore codé (décision d'Aymen : « bientôt » ou retirer)
-Aujourd'hui, Rouelia est une vitrine avec démo, inscription et `/admin`. Le produit pour les commerçants n'existe
-pas encore en version multi-commerces. Le prototype qui marche est celui d'ALIA (`alia-roue/` : QR code, roue,
-code avec date limite, validation en caisse, suivi), pour un seul salon.
-- Roue réelle par commerçant (compte, QR code, jeu des clients, codes, validation en caisse) : à bâtir à partir d'ALIA.
-- Code cadeau envoyé par e-mail au client ; flyer PDF et QR code générés.
+- Code cadeau envoyé par e-mail au client (aujourd'hui : à l'écran, capture conseillée) ; flyer PDF prêt à imprimer.
 - Rapport hebdomadaire (e-mail, WhatsApp ou SMS) avec une action à faire.
 - SMS inclus (50 ou 200 par mois) : rappels, relances, anniversaires.
 - Relances automatiques des cadeaux non retirés.
@@ -89,7 +108,8 @@ code avec date limite, validation en caisse, suivi), pour un seul salon.
 - Actions Instagram et Facebook, lien de réservation après le jeu.
 - Statistiques par employé, lots pour heures creuses, suivi de la rentabilité.
 - Sans mention « Propulsé par Rouelia », domaine personnalisé.
-- Espace client : changer de pack, arrêter « en un clic », mettre en pause, exporter ou supprimer la liste de clients.
+- Espace client, côté abonnement : changer de pack, arrêter « en un clic », payer (étape 2, Stripe). L'export de la
+  liste de clients existe ; la suppression d'un client se fait encore à la demande.
 Services humains déjà possibles sans code : visio de 30 minutes, installation, point mensuel, audit de fiche Google,
 refonte saisonnière, chevalet, support sous 24 h.
 

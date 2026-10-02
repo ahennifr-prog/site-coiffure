@@ -76,6 +76,8 @@ export interface SignupRecord {
   firstPlayAt: string | null;
   stripeCustomerId: string | null;
   offer: SignupOffer | null;
+  /** Commerce créé à l'ouverture de l'essai. */
+  shopId?: string | null;
 }
 
 export type SignupField = "firstName" | "email" | "phone" | "shopName" | "consent";
