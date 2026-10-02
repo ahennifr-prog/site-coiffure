@@ -49,7 +49,7 @@ export interface Trade {
 export const brand = {
   name: "Rouelia",
   url: "https://rouelia.fr",
-  email: "bonjour@rouelia.fr",
+  email: "contact@rouelia.fr",
   phone: "",
   founder: "Aymen",
   area: "Paris et petite couronne",
@@ -891,7 +891,7 @@ export const signup = {
     pack: { label: "Pack choisi" },
   },
   consent:
-    "J'accepte que Rouelia utilise ces informations pour créer mon compte d'essai et me contacter à ce sujet. Je peux retirer mon accord à tout moment en écrivant à bonjour@rouelia.fr.",
+    "J'accepte que Rouelia utilise ces informations pour créer mon compte d'essai et me contacter à ce sujet. Je peux retirer mon accord à tout moment en écrivant à contact@rouelia.fr.",
   info:
     "Vos données servent uniquement à créer votre compte et à vous accompagner pendant l'essai. Elles ne sont ni vendues ni partagées.",
   privacyLink: "Lire notre politique de confidentialité",

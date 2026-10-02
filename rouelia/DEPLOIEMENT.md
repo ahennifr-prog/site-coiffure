@@ -54,10 +54,10 @@ Le code est prêt : canonical, og:url, sitemap et JSON-LD pointent déjà sur `h
 3. **Vérifier** : `https://rouelia.fr` affiche le site, `https://www.rouelia.fr` renvoie vers `https://rouelia.fr`.
 4. **Facultatif, une fois que tout marche** : dans **Domaines et routes**, désactiver l'adresse `workers.dev`.
 
-## Boîte bonjour@rouelia.fr
+## Boîte contact@rouelia.fr
 - **Recevoir (gratuit)** : domaine `rouelia.fr` → **E-mail → Routage des e-mails** → activer (Cloudflare ajoute les DNS),
-  puis **Adresses personnalisées** : `bonjour` → transférer vers votre Gmail. Confirmer le lien reçu dans Gmail.
-- **Envoyer depuis bonjour@** : le routage ne fait que recevoir. Pour répondre avec cette adresse, il faut une vraie
+  puis **Adresses personnalisées** : `contact` → transférer vers votre Gmail. Confirmer le lien reçu dans Gmail.
+- **Envoyer depuis contact@** : le routage ne fait que recevoir. Pour répondre avec cette adresse, il faut une vraie
   boîte (Google Workspace, Zoho Mail, OVH…). Elle remplace alors le routage Cloudflare (une seule solution à la fois).
 - Plus tard, pour les e-mails automatiques du site (bienvenue, fin d'essai), un service d'envoi (Resend, Brevo)
   demandera d'ajouter quelques DNS dans Cloudflare.

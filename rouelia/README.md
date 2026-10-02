@@ -53,4 +53,4 @@ Aucun défilement horizontal à 375 px. Aucune erreur console sur le parcours co
 5. **Résultats des pilotes** : remplir `pilots.items` avec les chiffres mesurés, l'accord écrit et le lien de la fiche Google.
 6. **Mesure d'audience** : renseigner `NEXT_PUBLIC_ANALYTICS_SRC` (chargée uniquement après « Accepter »).
 7. **Pages légales** : faire valider les textes par un professionnel, compléter raison sociale, SIREN, adresse, durées de conservation, puis retirer l'avertissement.
-8. **À valider par Aymen** : le texte du fondateur (`founder` dans `content.ts`), sa photo, l'e-mail de contact `bonjour@rouelia.fr`, le domaine `rouelia.fr`, l'hébergement européen des données annoncé dans la FAQ, et l'interprétation « 79 € = déplacement fait uniquement pour vous ».
+8. **À valider par Aymen** : le texte du fondateur (`founder` dans `content.ts`), sa photo, le domaine `rouelia.fr`, l'hébergement européen des données annoncé dans la FAQ, et l'interprétation « 79 € = déplacement fait uniquement pour vous ».

@@ -35,7 +35,7 @@ Le dépôt contient trois dossiers :
 2. Franchise de TVA confirmée ? (`company.vatExempt`, appliquée par défaut pour une micro-entreprise.)
 3. Quantité de flyers offerts par la roue d'offres.
 4. Mot du fondateur (`founder`) : garder, modifier ou remplacer. Photo d'Aymen (`founder.photo`, un « A » à la place).
-5. Contact affiché : e-mail (`bonjour@rouelia.fr` une fois la boîte créée) et téléphone.
+5. Contact affiché : e-mail `contact@rouelia.fr` (choisi le 2 octobre) ; téléphone à confirmer.
 6. Installation sur place : confirmer « 49 €, ou 79 € si le déplacement est fait uniquement pour vous ».
 7. Décision pour chaque fonction non codée (liste plus bas) : « bientôt » ou retirée.
 Déjà tranché : « données hébergées en Europe » retiré ; prix nets avec « TVA non applicable, art. 293 B du CGI » ;
@@ -43,7 +43,7 @@ conservation 3 ans après le dernier contact pour les non clients ; arrêt effec
 
 ### Domaine rouelia.fr
 Côté code, c'est fait : canonical et og:url sur `https://rouelia.fr`, `www` redirigé, `.workers.dev` en noindex.
-Côté Aymen : mettre le domaine dans Cloudflare puis l'ajouter au Worker, et créer bonjour@ (voir `DEPLOIEMENT.md`).
+Côté Aymen : mettre le domaine dans Cloudflare puis l'ajouter au Worker, et créer contact@rouelia.fr (voir `DEPLOIEMENT.md`).
 
 ### Roue d'offres Rouelia (dernière section, fond orange)
 - 100 % gagnante. Chances : essai prolongé à 21 jours 28 %, installation sur place offerte 24 %, flyers imprimés
