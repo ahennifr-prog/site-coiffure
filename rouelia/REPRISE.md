@@ -1,4 +1,18 @@
-# Point de reprise : Rouelia et ALIA coiffure (mis à jour le 1er octobre 2026)
+# Point de reprise : Rouelia et ALIA coiffure (mis à jour le 3 octobre 2026, soir)
+
+## Où on en est en une minute
+- Site, admin, espace commerçant et jeu client en ligne sur `https://rouelia.fr` (Cloudflare Workers + D1).
+- Produit multi-commerces fait (étape 1), groupe 1 des fonctions des packs fait, e-mails Brevo codés (groupe 2).
+- Aymen est auto-entrepreneur, SIREN en attente (statut tout juste créé), Stripe en attente du SIREN.
+- **En cours au moment du /compact** :
+  1. Aymen lit les 9 e-mails et les 5 SMS proposés (images envoyées ; régénérer avec
+     `npx tsx scripts/apercu-emails.ts sortie.html`) et doit dire ce qu'il change.
+  2. Aymen doit poser le secret `BREVO_API_KEY` dans Cloudflare puis tester : inscription test (accusé + alerte),
+     « Ouvrir l'essai » (e-mail d'invitation), partie avec son e-mail (code reçu). Vérifier aussi que le build
+     Cloudflare passe avec la nouvelle entrée `worker.ts` (tâche du matin).
+  3. Aymen a annoncé « d'autres demandes » après le test Brevo.
+- Décisions récentes d'Aymen : case d'accord client raccourcie (fait) ; pas de QR code sur le ticket, la caisse
+  tape le code à la main ; flyer redessiné validé à montrer (store banne, roue, lots, 3 étapes).
 
 Dépôt `ahennifr-prog/site-coiffure`, tout le travail est sur la branche **`claude/great-lovelace-lpyydk`**.
 Attention : la branche par défaut du dépôt est `claude/confident-pasteur-0plw48` et ne contient pas ces projets.
@@ -19,11 +33,13 @@ Le dépôt contient trois dossiers :
   Netlify affiche un badge « Powered by Netlify ».
 
 ### En ligne
-- Cloudflare Workers, projet `rouelia`, adresse en `.workers.dev` (sous-domaine du compte Cloudflare d'Aymen).
+- Cloudflare Workers, projet `rouelia`, sur `https://rouelia.fr` (l'adresse `.workers.dev` marche encore, en noindex).
 - Réglages du build : commande `npx opennextjs-cloudflare build`, déploiement `npx opennextjs-cloudflare deploy`,
   commande de version `npx opennextjs-cloudflare upload`, répertoire racine `rouelia`,
   branche de production `claude/great-lovelace-lpyydk`.
-- Secrets Cloudflare réglés (type Secret) : `ADMIN_PASSWORD`, `SESSION_SECRET`. Ne jamais les écrire dans le dépôt.
+- Secrets Cloudflare réglés (type Secret) : `ADMIN_PASSWORD`, `SESSION_SECRET` ; `BREVO_API_KEY` à poser par Aymen.
+  Ne jamais les écrire dans le dépôt ni les demander dans le chat.
+- Entrée du Worker : `worker.ts` (reprend `.open-next/worker.js` + tâche planifiée `0 6 * * *` vers `/api/cron`).
 - Base D1 `rouelia` (liaison `DB`), créée automatiquement au déploiement ; la table `signups` se crée au premier usage.
 - Espace `/admin` validé par Aymen : liste des inscriptions, statut (essai à ouvrir, en cours, client, perdu),
   appel, e-mail, suppression, export Excel.
@@ -65,8 +81,8 @@ Les anciens enregistrements DNS d'IONOS (MX, SPF, autodiscover, _dmarc, _domainc
 - Règles reprises dans les CGV (section « Cadeaux de la roue d'offres Rouelia »).
 
 ### Plus tard
-- Stripe (paiement à la fin de l'essai, `stripeCustomerId` prévu dans `SignupRecord`) et e-mails automatiques
-  (bienvenue, alerte interne), quand les premiers commerçants passent en payant. Demande des comptes au nom d'Aymen.
+- Étape 2 Stripe (paiement à la fin de l'essai, portail client pour arrêter en un clic, application automatique des
+  cadeaux de la roue d'offres) : dès que le SIREN arrive ; possible avant en mode test.
 - Saisie assistée Google Places (`lib/places.ts` prêt).
 - Activer le bloc « Résultat d'un pilote » (`pilots` dans `content.ts`) avec les vrais chiffres d'ALIA coiffure,
   l'accord écrit de la gérante et le lien de sa fiche Google.
@@ -173,6 +189,9 @@ refonte saisonnière, chevalet, support sous 24 h.
   (même méthode que Rouelia, en remplaçant Netlify Blobs par D1 dans `lib/store.ts`).
 
 ## Pièges déjà rencontrés
+- L'aperçu HTML avec des cadres (iframe) ne s'affiche pas sur le téléphone d'Aymen : lui envoyer des images PNG.
+- Brevo : le bouton « Domaine embarqué » de Cloudflare = « Onboard domain » traduit ; Brevo propose une
+  « Clé API MCP » à laisser désactivée.
 - L'environnement de Claude ne peut joindre ni l'API Netlify ni l'API Cloudflare : les mises en ligne se font
   par import GitHub depuis le tableau de bord d'Aymen. Inutile de créer un jeton d'API pour Claude.
 - La traduction automatique du navigateur traduit les noms et commandes affichés (« construction de npx… »,
