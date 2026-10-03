@@ -46,7 +46,11 @@ Le code est prêt : canonical, og:url, sitemap et JSON-LD pointent déjà sur `h
 
 1. **Mettre le domaine dans Cloudflare** : tableau de bord → **Ajouter un domaine** → `rouelia.fr` → offre **Free**.
    - Domaine acheté chez Cloudflare : rien à faire, il y est déjà.
-   - Domaine acheté ailleurs (OVH, Gandi, IONOS…) : Cloudflare affiche deux serveurs de noms
+   - Domaine acheté chez IONOS (cas de rouelia.fr) : IONOS → **Domaines et SSL** → `rouelia.fr` → engrenage ou
+     « Serveurs de noms » → **Utiliser des serveurs de noms personnalisés** (ou « autres serveurs de noms »),
+     coller les deux serveurs donnés par Cloudflare, supprimer les autres, enregistrer. Si IONOS signale
+     **DNSSEC** actif, le désactiver d'abord.
+   - Domaine acheté ailleurs (OVH, Gandi…) : Cloudflare affiche deux serveurs de noms
      (du type `xxx.ns.cloudflare.com`). Chez le registraire, remplacer les serveurs DNS par ces deux-là.
      Attendre l'e-mail « rouelia.fr est actif » (souvent moins d'une heure).
 2. **Relier le domaine au site** : Worker `rouelia` → **Paramètres → Domaines et routes → Ajouter →
