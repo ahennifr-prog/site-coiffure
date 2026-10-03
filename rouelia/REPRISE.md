@@ -44,7 +44,8 @@ conservation 3 ans après le dernier contact pour les non clients ; arrêt effec
 ### Domaine rouelia.fr
 Branché le 3 octobre 2026 : domaine acheté chez IONOS, serveurs de noms passés chez Cloudflare, domaine relié au
 Worker. Le site et l'admin sont sur `https://rouelia.fr` (`/admin`, `/espace`, `/j/...`).
-Reste côté Aymen : la boîte contact@rouelia.fr (routage des e-mails Cloudflare, voir `DEPLOIEMENT.md`).
+Boîte contact@rouelia.fr en place (routage des e-mails Cloudflare vers la boîte personnelle d'Aymen, testé).
+Les anciens enregistrements DNS d'IONOS (MX, SPF, autodiscover, _dmarc, _domainconnect) ont été supprimés.
 
 ### Roue d'offres Rouelia (dernière section, fond orange)
 - 100 % gagnante. Chances : essai prolongé à 21 jours 28 %, installation sur place offerte 24 %, flyers imprimés
