@@ -13,6 +13,6 @@ export async function POST(req: Request, { params }: Ctx) {
   const r = await play(shop, body as Parameters<typeof play>[1], clientIp(req));
   if (!r.ok) return json(r, r.error === "rate" ? 429 : r.error === "inactive" ? 409 : 422);
   // Le téléphone complet n'est pas renvoyé au navigateur.
-  const { phone: _phone, consentText: _c, cost: _cost, ...visible } = r.play;
-  return json({ ok: true, already: r.already, prizeIndex: r.prizeIndex, play: visible });
+  const { phone: _phone, consentText: _c, cost: _cost, redeemedBy: _by, ...visible } = r.play;
+  return json({ ok: true, already: r.already, prizeIndex: r.prizeIndex, prizes: r.prizes, play: visible });
 }

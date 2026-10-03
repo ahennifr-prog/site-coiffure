@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
-import { codeStatus } from "@/lib/dates";
+import { pricing, type PackId } from "@/content";
+import { codeStatus, parisDay } from "@/lib/dates";
+import { packFeatures, type ShopSettings } from "@/lib/shop-config";
 import type { Play } from "@/lib/game";
 import { api, card } from "./api";
 
@@ -24,8 +26,10 @@ function Tile({ label, value, hint, accent }: { label: string; value: string; hi
 export function Suivi() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [plays, setPlays] = useState<Play[]>([]);
+  const [conf, setConf] = useState<{ settings: ShopSettings; pack: PackId } | null>(null);
 
   useEffect(() => {
+    api<{ settings: ShopSettings; pack: PackId }>("/api/espace/reglages").then((r) => r.ok && setConf({ settings: r.settings, pack: r.pack }));
     api<Stats>("/api/espace/stats").then((r) => r.ok && setStats(r));
     api<{ plays: Play[] }>("/api/espace/parties").then((r) => r.ok && setPlays(r.plays));
   }, []);
@@ -39,6 +43,24 @@ export function Suivi() {
   const gros = plays.filter((p) => p.big).length;
   const coutRetire = plays.filter((p) => p.redeemedAt).reduce((s, p) => s + p.cost, 0);
   const contacts = plays.filter((p) => p.marketing).length;
+  const f = conf ? packFeatures(conf.pack) : null;
+  const byEmployee = Object.entries(
+    plays.reduce<Record<string, number>>((acc, p) => {
+      if (p.redeemedAt) acc[p.redeemedBy || "Non précisé"] = (acc[p.redeemedBy || "Non précisé"] ?? 0) + 1;
+      return acc;
+    }, {}),
+  ).sort((a, b) => b[1] - a[1]);
+
+  // Rentabilité du mois en cours (Premium) : chaque cadeau retiré compte comme une visite.
+  const month = parisDay().slice(0, 7);
+  const monthRedeemed = plays.filter((p) => p.redeemedAt && parisDay(new Date(p.redeemedAt)).slice(0, 7) === month);
+  const basket = conf?.settings.profit.basket ?? 0;
+  const margin = (conf?.settings.profit.margin ?? 0) / 100;
+  const packPrice = pricing.packs.find((x) => x.id === conf?.pack)?.price ?? 0;
+  const revenue = monthRedeemed.length * basket;
+  const lotsCost = monthRedeemed.reduce((sum, p) => sum + p.cost, 0);
+  const balance = revenue * margin - lotsCost - packPrice;
+
   const max = Math.max(1, ...stats.perDay.map((d) => Math.max(d.visites ?? 0, d.parties ?? 0)));
 
   const byPrize = Object.values(
@@ -61,7 +83,56 @@ export function Suivi() {
         <Tile label="Gros cadeaux sortis" value={String(gros)} hint={`${pct(gros, plays.length)} des parties`} />
         <Tile label="Coût des cadeaux retirés" value={euro(coutRetire)} hint="D'après les coûts réglés" />
         <Tile label="Clients joignables par SMS" value={String(contacts)} hint="Ils l'ont accepté en jouant" />
+        {f?.referral && conf?.settings.referral.enabled ? (
+          <>
+            <Tile label="Amis venus grâce au parrainage" value={String(t.parrainages ?? 0)} hint="Amis invités qui ont retiré leur cadeau" />
+            <Tile label="Bonus de parrainage remis" value={String(t.bonus_retires ?? 0)} />
+          </>
+        ) : null}
       </div>
+
+      {f?.profit ? (
+        <section className={card}>
+          <h2 className="font-display text-xl font-semibold">Rentabilité ce mois-ci</h2>
+          {basket > 0 ? (
+            <>
+              <dl className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+                <div><dt className="text-ink-soft">Visites de retrait</dt><dd className="tabular font-display text-2xl font-semibold">{monthRedeemed.length}</dd></div>
+                <div><dt className="text-ink-soft">Chiffre d&apos;affaires estimé</dt><dd className="tabular font-display text-2xl font-semibold">{euro(revenue)}</dd></div>
+                <div><dt className="text-ink-soft">Coût des cadeaux et du pack</dt><dd className="tabular font-display text-2xl font-semibold">{euro(lotsCost + packPrice)}</dd></div>
+                <div><dt className="text-ink-soft">Solde estimé</dt><dd className={`tabular font-display text-2xl font-semibold ${balance >= 0 ? "text-sauge" : "text-danger"}`}>{euro(balance)}</dd></div>
+              </dl>
+              <p className="mt-3 text-xs text-ink-soft">
+                Estimation : chaque cadeau retiré compte comme une visite avec un panier de {euro(basket)}, dont {Math.round(margin * 100)} % vous reste. Certains clients seraient venus de toute façon : le vrai chiffre est sans doute plus bas. Réglez le panier et la marge dans l&apos;onglet Roue.
+              </p>
+            </>
+          ) : (
+            <p className="mt-2 text-sm text-ink-soft">Indiquez votre panier moyen et votre marge dans l&apos;onglet Roue pour voir ce que la roue vous rapporte.</p>
+          )}
+        </section>
+      ) : null}
+
+      {f?.employees && byEmployee.length ? (
+        <section className={card}>
+          <h2 className="font-display text-xl font-semibold">Retraits par employé</h2>
+          <table className="mt-3 w-full text-left text-sm">
+            <thead>
+              <tr className="text-xs text-ink-soft">
+                <th className="py-2 font-semibold">Employé</th>
+                <th className="py-2 text-right font-semibold">Cadeaux validés</th>
+              </tr>
+            </thead>
+            <tbody>
+              {byEmployee.map(([name, n]) => (
+                <tr key={name} className="border-t border-line">
+                  <td className="py-2.5">{name}</td>
+                  <td className="tabular py-2.5 text-right">{n}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      ) : null}
 
       <section className={card}>
         <h2 className="font-display text-xl font-semibold">14 derniers jours</h2>

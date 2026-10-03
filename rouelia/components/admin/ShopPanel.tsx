@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy, ExternalLink, KeyRound, LoaderCircle, MessageCircle, Store } from "lucide-react";
+import { pricing, type PackId } from "@/content";
 import { formatDay, parisDay } from "@/lib/dates";
 import type { ShopPlan } from "@/lib/shop-config";
 import type { SignupRecord } from "@/lib/signup";
@@ -13,6 +14,7 @@ export interface AdminShop {
   name: string;
   signupId: string | null;
   plan: ShopPlan;
+  pack: PackId;
   trialEndsAt: string;
   hasPassword: boolean;
   active: boolean;
@@ -92,6 +94,12 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
             <select id={`plan-${shop.id}`} value={shop.plan} disabled={busy} onChange={(e) => patch({ plan: e.target.value })} className="min-h-10 rounded-full bg-paper px-3 font-semibold ring-1 ring-line">
               {(Object.keys(PLAN_LABEL) as ShopPlan[]).map((p) => (
                 <option key={p} value={p}>{PLAN_LABEL[p]}</option>
+              ))}
+            </select>
+            <label className="sr-only" htmlFor={`pack-${shop.id}`}>Pack du commerce</label>
+            <select id={`pack-${shop.id}`} value={shop.pack} disabled={busy} onChange={(e) => patch({ pack: e.target.value })} className="min-h-10 rounded-full bg-paper px-3 font-semibold ring-1 ring-line">
+              {pricing.packs.map((p) => (
+                <option key={p.id} value={p.id}>Pack {p.name}</option>
               ))}
             </select>
             {shop.plan === "trial" ? (

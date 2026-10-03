@@ -33,3 +33,11 @@ export function codeStatus(p: { validFrom: string; expiresOn: string; redeemedAt
   if (today < p.validFrom) return "pas_encore";
   return "valable";
 }
+
+/** Jour, jour de la semaine (1 = lundi, 7 = dimanche) et heure « HH:MM » à Paris. */
+export function parisClock(d: Date = new Date()): { day: string; weekday: number; time: string } {
+  const parts = new Intl.DateTimeFormat("en-GB", { timeZone: TZ, weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(d);
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+  const weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(get("weekday")) + 1;
+  return { day: parisDay(d), weekday, time: `${get("hour")}:${get("minute")}` };
+}

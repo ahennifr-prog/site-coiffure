@@ -12,7 +12,7 @@ export async function GET() {
   const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const phone = (e164: string) => "0" + e164.replace("+33", "");
   const rows = [
-    ["Date", "Prénom", "Téléphone", "Accepte d'être recontacté", "Cadeau", "Gros cadeau", "Code", "Valable du", "Jusqu'au", "Statut", "Retiré le"],
+    ["Date", "Prénom", "Téléphone", "Accepte d'être recontacté", "Cadeau", "Gros cadeau", "Code", "Valable du", "Jusqu'au", "Statut", "Retiré le", "Validé par", "Invité par", "Roue"],
     ...plays.map((p) => [
       p.createdAt.slice(0, 16).replace("T", " "),
       p.firstName,
@@ -25,6 +25,9 @@ export async function GET() {
       formatDay(p.expiresOn),
       STATUS[codeStatus(p)],
       p.redeemedAt ? p.redeemedAt.slice(0, 16).replace("T", " ") : "",
+      p.redeemedBy ?? "",
+      p.referredBy ?? "",
+      p.wheelName ?? "",
     ]),
   ];
   const csv = "﻿" + rows.map((r) => r.map(esc).join(";")).join("\r\n");

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { Check, Copy, Download, ExternalLink, TriangleAlert } from "lucide-react";
+import { Check, Copy, Download, ExternalLink, Printer, TriangleAlert } from "lucide-react";
 import { card } from "./api";
 
 export function QrTab({ slug, name }: { slug: string; name: string }) {
@@ -57,6 +57,9 @@ export function QrTab({ slug, name }: { slug: string; name: string }) {
             >
               {copied ? <Check aria-hidden size={18} /> : <Copy aria-hidden size={18} />} {copied ? "Lien copié" : "Copier le lien"}
             </button>
+            <a href="/espace/flyer" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-ink px-5 font-semibold text-white">
+              <Printer aria-hidden size={18} /> Flyer et chevalet à imprimer
+            </a>
             <a href={`/j/${slug}`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-cream px-5 font-semibold ring-1 ring-line">
               <ExternalLink aria-hidden size={18} /> Voir ma roue
             </a>

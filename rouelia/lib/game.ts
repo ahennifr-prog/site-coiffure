@@ -1,6 +1,6 @@
 import { addDays, parisDay } from "@/lib/dates";
 import { database } from "@/lib/db";
-import { gameState, type Shop } from "@/lib/shops";
+import { activeWheel, gameState, packFeatures, publicPrizes, withDefaults, type Shop } from "@/lib/shops";
 import { normalizeFrenchPhone } from "@/lib/signup";
 import { pickWeighted } from "@/lib/wheel";
 
@@ -22,9 +22,18 @@ export interface Play {
   expiresOn: string;
   redeemedAt: string | null;
   consentText: string;
+  /** Roue qui a servi (habituelle, saison, heures creuses). */
+  wheelName?: string;
+  /** Prénom de l'employé qui a validé le retrait. */
+  redeemedBy?: string | null;
+  /** Code du client qui a invité celui-ci (parrainage). */
+  referredBy?: string | null;
+  /** Bonus de parrainage gagnés et pas encore retirés, et déjà retirés. */
+  bonusAvailable?: number;
+  bonusUsed?: number;
 }
 
-export const STAT_FIELDS = ["visites", "avis_ouverts", "avis_clics", "avis_fermes", "parties", "retraits", "deja_joue"] as const;
+export const STAT_FIELDS = ["visites", "avis_ouverts", "avis_clics", "avis_fermes", "parties", "retraits", "deja_joue", "parrainages", "bonus_retires"] as const;
 export type StatField = (typeof STAT_FIELDS)[number];
 
 const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
@@ -85,10 +94,8 @@ export async function stats(shopId: string, days = 14, now = new Date()) {
 
 export type PlayError = "inactive" | "firstName" | "phone" | "consent" | "rate";
 export type PlayResult =
-  | { ok: true; already: boolean; play: Play; prizeIndex: number }
+  | { ok: true; already: boolean; play: Play; prizeIndex: number; prizes: ReturnType<typeof publicPrizes> }
   | { ok: false; error: PlayError };
-
-const indexOf = (shop: Shop, prizeId: string) => Math.max(0, shop.settings.prizes.findIndex((p) => p.id === prizeId));
 
 async function playByCode(shopId: string, code: string): Promise<Play | null> {
   const db = await database();
@@ -98,7 +105,7 @@ async function playByCode(shopId: string, code: string): Promise<Play | null> {
 
 export async function play(
   shop: Shop,
-  input: { firstName: unknown; phone: unknown; consent: unknown; consentText: unknown; marketing?: unknown },
+  input: { firstName: unknown; phone: unknown; consent: unknown; consentText: unknown; marketing?: unknown; referrer?: unknown },
   ip: string,
   now = new Date(),
   rand: () => number = Math.random,
@@ -112,7 +119,11 @@ export async function play(
   if ((await hit(`jouer:${ip}`, now)) > 60) return { ok: false, error: "rate" };
 
   const db = await database();
-  const s = shop.settings;
+  const s = withDefaults(shop.settings);
+  // La roue en vigueur (saison, heures creuses) : le téléphone la reçoit pour tourner sur les bons segments.
+  const wheel = activeWheel(s, shop.pack, now);
+  const prizes = publicPrizes(wheel.prizes);
+  const indexOf = (prizeId: string) => Math.max(0, wheel.prizes.findIndex((p) => p.id === prizeId));
 
   // Une partie par numéro sur la période choisie : on renvoie le code déjà gagné.
   if (s.replayDays > 0) {
@@ -120,12 +131,19 @@ export async function play(
     const existing = lock ? await playByCode(shop.id, lock.code) : null;
     if (existing) {
       await track(shop.id, "deja_joue", 1, now);
-      return { ok: true, already: true, play: existing, prizeIndex: indexOf(shop, existing.prizeId) };
+      return { ok: true, already: true, play: existing, prizeIndex: indexOf(existing.prizeId), prizes };
     }
   }
 
-  const prizeIndex = pickWeighted(s.prizes, rand);
-  const prize = s.prizes[prizeIndex];
+  // Parrainage : le code d'un autre client du même commerce, avec un autre numéro.
+  let referredBy: string | null = null;
+  if (packFeatures(shop.pack).referral && s.referral.enabled && typeof input.referrer === "string" && input.referrer) {
+    const ref = await playByCode(shop.id, normalizeCode(input.referrer.slice(0, 20), shop.codePrefix));
+    if (ref && ref.phone !== phone) referredBy = ref.code;
+  }
+
+  const prizeIndex = pickWeighted(wheel.prizes, rand);
+  const prize = wheel.prizes[prizeIndex];
   const today = parisDay(now);
   const validFrom = addDays(today, s.delayDays);
   const p: Play = {
@@ -143,6 +161,11 @@ export async function play(
     expiresOn: addDays(validFrom, s.validityDays),
     redeemedAt: null,
     consentText: typeof input.consentText === "string" ? input.consentText.slice(0, 800) : "",
+    wheelName: wheel.name,
+    redeemedBy: null,
+    referredBy,
+    bonusAvailable: 0,
+    bonusUsed: 0,
   };
 
   // Code unique : on réessaie en cas de collision.
@@ -167,11 +190,11 @@ export async function play(
       await db.prepare("DELETE FROM plays WHERE code = ?").bind(p.code).run();
       const other = await db.prepare("SELECT code FROM play_locks WHERE shop_id = ? AND phone = ?").bind(shop.id, phone).first<{ code: string }>();
       const existing = other ? await playByCode(shop.id, other.code) : null;
-      if (existing) return { ok: true, already: true, play: existing, prizeIndex: indexOf(shop, existing.prizeId) };
+      if (existing) return { ok: true, already: true, play: existing, prizeIndex: indexOf(existing.prizeId), prizes };
     }
   }
   await track(shop.id, "parties", 1, now);
-  return { ok: true, already: false, play: p, prizeIndex };
+  return { ok: true, already: false, play: p, prizeIndex, prizes };
 }
 
 export async function findPlay(shop: Shop, input: string): Promise<Play | null> {
@@ -180,7 +203,9 @@ export async function findPlay(shop: Shop, input: string): Promise<Play | null> 
 
 export type RedeemError = "introuvable" | "deja" | "expire" | "pas_encore";
 
-export async function redeem(shop: Shop, input: string, now = new Date()): Promise<{ ok: true; play: Play } | { ok: false; error: RedeemError; play?: Play }> {
+const cleanName = (by: unknown) => (typeof by === "string" ? by.trim().slice(0, 30) : "") || null;
+
+export async function redeem(shop: Shop, input: string, now = new Date(), by?: unknown): Promise<{ ok: true; play: Play } | { ok: false; error: RedeemError; play?: Play }> {
   const p = await findPlay(shop, input);
   if (!p) return { ok: false, error: "introuvable" };
   if (p.redeemedAt) return { ok: false, error: "deja", play: p };
@@ -189,13 +214,38 @@ export async function redeem(shop: Shop, input: string, now = new Date()): Promi
   if (today < p.validFrom) return { ok: false, error: "pas_encore", play: p };
   const db = await database();
   // Validation atomique : deux téléphones qui valident en même temps ne comptent qu'un retrait.
+  const redeemedBy = cleanName(by);
   const done = await db
-    .prepare("UPDATE plays SET redeemed_at = ? WHERE shop_id = ? AND code = ? AND redeemed_at IS NULL RETURNING code")
-    .bind(now.toISOString(), shop.id, p.code)
+    .prepare("UPDATE plays SET redeemed_at = ?, data = json_set(data, '$.redeemedBy', ?) WHERE shop_id = ? AND code = ? AND redeemed_at IS NULL RETURNING code")
+    .bind(now.toISOString(), redeemedBy, shop.id, p.code)
     .first<{ code: string }>();
   if (!done) return { ok: false, error: "deja", play: (await playByCode(shop.id, p.code)) ?? p };
   await track(shop.id, "retraits", 1, now);
-  return { ok: true, play: { ...p, redeemedAt: now.toISOString() } };
+  // L'ami invité est venu retirer son cadeau : son parrain gagne un bonus.
+  if (p.referredBy) {
+    await db
+      .prepare("UPDATE plays SET data = json_set(data, '$.bonusAvailable', COALESCE(json_extract(data, '$.bonusAvailable'), 0) + 1) WHERE shop_id = ? AND code = ?")
+      .bind(shop.id, p.referredBy)
+      .run();
+    await track(shop.id, "parrainages", 1, now);
+  }
+  return { ok: true, play: { ...p, redeemedAt: now.toISOString(), redeemedBy } };
+}
+
+/** Retire un bonus de parrainage disponible sur le code d'un client. */
+export async function redeemBonus(shop: Shop, input: string, now = new Date(), by?: unknown): Promise<{ ok: true; play: Play } | { ok: false; error: "introuvable" | "aucun_bonus" }> {
+  const p = await findPlay(shop, input);
+  if (!p) return { ok: false, error: "introuvable" };
+  const db = await database();
+  const done = await db
+    .prepare(
+      "UPDATE plays SET data = json_set(data, '$.bonusAvailable', json_extract(data, '$.bonusAvailable') - 1, '$.bonusUsed', COALESCE(json_extract(data, '$.bonusUsed'), 0) + 1, '$.bonusLastBy', ?) WHERE shop_id = ? AND code = ? AND COALESCE(json_extract(data, '$.bonusAvailable'), 0) > 0 RETURNING code",
+    )
+    .bind(cleanName(by), shop.id, p.code)
+    .first();
+  if (!done) return { ok: false, error: "aucun_bonus" };
+  await track(shop.id, "bonus_retires", 1, now);
+  return { ok: true, play: (await playByCode(shop.id, p.code)) ?? p };
 }
 
 /** Annule un retrait fait par erreur. */
@@ -203,9 +253,22 @@ export async function unredeem(shop: Shop, input: string, now = new Date()): Pro
   const p = await findPlay(shop, input);
   if (!p || !p.redeemedAt) return p;
   const db = await database();
-  const done = await db.prepare("UPDATE plays SET redeemed_at = NULL WHERE shop_id = ? AND code = ? AND redeemed_at IS NOT NULL RETURNING code").bind(shop.id, p.code).first();
-  if (done) await track(shop.id, "retraits", -1, now);
-  return { ...p, redeemedAt: null };
+  const done = await db
+    .prepare("UPDATE plays SET redeemed_at = NULL, data = json_set(data, '$.redeemedBy', NULL) WHERE shop_id = ? AND code = ? AND redeemed_at IS NOT NULL RETURNING code")
+    .bind(shop.id, p.code)
+    .first();
+  if (done) {
+    await track(shop.id, "retraits", -1, now);
+    // Le bonus du parrain est repris s'il n'a pas encore été utilisé.
+    if (p.referredBy) {
+      const back = await db
+        .prepare("UPDATE plays SET data = json_set(data, '$.bonusAvailable', json_extract(data, '$.bonusAvailable') - 1) WHERE shop_id = ? AND code = ? AND COALESCE(json_extract(data, '$.bonusAvailable'), 0) > 0 RETURNING code")
+        .bind(shop.id, p.referredBy)
+        .first();
+      if (back) await track(shop.id, "parrainages", -1, now);
+    }
+  }
+  return { ...p, redeemedAt: null, redeemedBy: null };
 }
 
 /** Parties du commerce, les plus récentes d'abord. Supprime au passage celles expirées depuis plus d'un an. */

@@ -1,10 +1,10 @@
 import { json, readJson, requireShop } from "@/lib/http";
-import { sanitizeSettings, saveShop } from "@/lib/shops";
+import { sanitizeSettings, saveShop, withDefaults } from "@/lib/shops";
 
 export async function GET() {
   const { shop, denied } = await requireShop();
   if (denied) return denied;
-  return json({ ok: true, settings: shop.settings });
+  return json({ ok: true, settings: withDefaults(shop.settings), pack: shop.pack });
 }
 
 export async function PUT(req: Request) {

@@ -176,6 +176,87 @@ ok(await merchant.getByText(/Votre compte est en pause/).isVisible(), "bandeau d
 await card2.getByLabel("Offre du commerce").selectOption("active");
 await admin.waitForTimeout(800);
 
+
+// 9. Fonctions des packs : passage en Premium, puis parrainage, équipe, heures creuses, réseaux, rentabilité
+await card2.getByLabel("Pack du commerce").selectOption("premium");
+await admin.waitForTimeout(800);
+await merchant.goto(`${BASE}/espace`);
+await merchant.getByRole("button", { name: "Roue" }).last().click();
+await merchant.getByText("Les cadeaux", { exact: true }).waitFor();
+await merchant.getByRole("switch", { name: "Parrainage actif" }).click();
+await merchant.getByLabel("Bonus du parrain").fill("Café offert");
+await merchant.getByLabel("Prénom à ajouter").fill("Sonia");
+await merchant.getByRole("button", { name: "Ajouter", exact: true }).click();
+await merchant.getByLabel("Instagram (affiché après le jeu)").fill("https://www.instagram.com/exemple");
+await merchant.getByRole("button", { name: "Heures creuses" }).click();
+const sched = merchant.locator("li", { has: merchant.getByLabel("Nom de la roue") });
+await sched.getByLabel("Nom de la roue", { exact: true }).fill("Happy hour");
+for (const d of ["Lun", "Ven", "Sam", "Dim"]) await sched.getByRole("button", { name: d, exact: true }).click();
+await sched.getByLabel("De", { exact: true }).fill("00:00");
+await sched.getByLabel("À", { exact: true }).fill("23:59");
+await sched.locator('input[id*="-nom-"]').first().fill("Lot happy hour");
+await merchant.getByLabel("Panier moyen").fill("35");
+await merchant.getByRole("button", { name: "Enregistrer" }).click();
+await merchant.getByText("Enregistré. La roue est à jour pour vos clients.").waitFor();
+ok(true, "parrainage, équipe, Instagram, heures creuses et rentabilité enregistrés");
+await shot(merchant, "espace-roue-premium");
+
+const ctxF = await browser.newContext(mobile);
+const friend = await ctxF.newPage();
+watch(friend, "ami");
+await friend.goto(`${BASE}/j/${slug}?parrain=${code}`);
+await friend.getByText("Un ami vous a invité : à vous de jouer.").waitFor({ timeout: 5000 });
+ok(true, "page ouverte par un lien de parrainage");
+ok((await friend.getByText("Propulsé par Rouelia").count()) === 0, "pas de mention Rouelia en Premium");
+await friend.getByRole("button", { name: "Jouer" }).click();
+await friend.getByRole("dialog").getByRole("button", { name: "Fermer" }).click();
+await friend.getByLabel("Prénom", { exact: true }).fill("Nora");
+await friend.getByLabel("Téléphone", { exact: true }).fill("06 55 44 33 22");
+await friend.getByText(/J'accepte que .* enregistre mon prénom/).click();
+await friend.getByRole("button", { name: "Accéder à la roue" }).click();
+await friend.getByRole("button", { name: "Tourner la roue" }).last().click();
+await friend.getByRole("heading", { name: "Bravo Nora" }).waitFor({ timeout: 20000 });
+const code2 = (await friend.locator("p.font-mono").first().innerText()).trim();
+ok(await friend.getByRole("button", { name: "Inviter un ami" }).isVisible(), "invitation d'un ami après le jeu");
+ok(await friend.getByRole("link", { name: "Instagram" }).isVisible(), "lien Instagram après le jeu");
+await friend.waitForTimeout(800);
+await shot(friend, "jeu-gain-premium");
+const hh = await friend.request.post(`${BASE}/api/j/${slug}/jouer`, { data: { firstName: "Test", phone: "0677665544", consent: true, consentText: "x" } });
+const hhJson = await hh.json();
+ok(hhJson.play.wheelName === "Happy hour" && hhJson.prizes[0].name === "Lot happy hour", "la roue des heures creuses est en vigueur");
+
+await merchant.getByRole("button", { name: "Caisse" }).last().click();
+await merchant.getByLabel("Validé par").selectOption("Sonia");
+await merchant.getByLabel("Code cadeau").fill(code2);
+await merchant.getByRole("button", { name: "Vérifier le code" }).click();
+await merchant.getByText(`Invité par le client ${code}.`, { exact: false }).waitFor({ timeout: 5000 });
+ok(true, "la caisse montre le parrain");
+await merchant.getByRole("button", { name: "Valider le retrait" }).click();
+await merchant.getByText(/Cadeau validé : .* pour Nora\./).waitFor();
+await merchant.getByLabel("Code cadeau").fill(code);
+await merchant.getByRole("button", { name: "Vérifier le code" }).click();
+await merchant.getByText("Bonus de parrainage à remettre : Café offert").waitFor();
+await merchant.getByRole("button", { name: "Remettre le bonus" }).click();
+await merchant.getByText("Bonus de parrainage remis à Léa.").waitFor();
+ok(true, "bonus de parrainage remis au parrain");
+await shot(merchant, "espace-caisse-bonus");
+
+await merchant.getByRole("button", { name: "Suivi" }).last().click();
+await merchant.getByText("Retraits par employé").waitFor();
+ok(await merchant.getByRole("cell", { name: "Sonia" }).isVisible(), "statistiques par employé");
+ok(await merchant.getByText("Rentabilité ce mois-ci").isVisible(), "suivi de la rentabilité");
+ok((await merchant.getByText("Amis venus grâce au parrainage").locator("..").innerText()).includes("1"), "compteur de parrainages");
+await shot(merchant, "espace-suivi-premium");
+
+await merchant.goto(`${BASE}/espace/flyer`);
+await merchant.getByRole("img", { name: "" }).count();
+await merchant.getByRole("button", { name: "Imprimer" }).waitFor();
+ok(await merchant.getByText("Tentez votre chance").isVisible(), "flyer et chevalet à imprimer");
+await shot(merchant, "flyer-a5");
+await merchant.getByRole("radio", { name: "4 flyers A6 sur une feuille A4" }).click();
+ok((await merchant.getByText("Tentez votre chance").count()) === 4, "4 flyers A6 sur A4");
+await shot(merchant, "flyer-a6");
+
 console.log(errors.length ? `\nErreurs de console :\n${errors.join("\n")}` : "\nAucune erreur de console.");
 await browser.close();
 if (errors.length) process.exit(1);

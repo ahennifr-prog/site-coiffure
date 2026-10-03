@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { setTestDb } from "@/lib/db";
-import { findPlay, hit, listPlays, normalizeCode, play, redeem, stats, track, unredeem } from "@/lib/game";
+import { findPlay, hit, listPlays, normalizeCode, play, redeem, redeemBonus, stats, track, unredeem } from "@/lib/game";
 import { readShopSession, shopSessionToken } from "@/lib/espace";
 import {
-  bigTotal, codePrefixOf, createInvite, gameState, getShopBySlug, hashPassword, insertShop, login, publicShop,
+  activeWheel, bigTotal, codePrefixOf, packFeatures, createInvite, gameState, getShopBySlug, hashPassword, insertShop, login, publicShop,
   sanitizeSettings, setBigRate, setPassword, shopForInvite, shopFromSignup, slugify, uniqueSlug, verifyPassword, type Shop,
 } from "@/lib/shops";
 import { buildRecord, type SignupRecord } from "@/lib/signup";
@@ -190,5 +190,88 @@ describe("accès à l'espace", () => {
     expect(readShopSession(t, 1000)).toEqual({ shopId: "shop-1", version: 3 });
     expect(readShopSession(t.replace("shop-1", "shop-2"), 1000)).toBeNull();
     expect(readShopSession(t, Date.now() + 1e11)).toBeNull();
+  });
+});
+
+describe("roues programmées", () => {
+  const prizesB = [
+    { id: "a", name: "Bûche", detail: "", icon: "gateau" as const, big: false, cost: 2, percent: 50 },
+    { id: "b", name: "Chocolat", detail: "", icon: "cadeau" as const, big: false, cost: 1, percent: 30 },
+    { id: "c", name: "Coffret", detail: "", icon: "etoile" as const, big: true, cost: 9, percent: 20 },
+  ];
+  it("change de roue selon la date et les heures creuses, selon le pack", async () => {
+    const shop = await newShop();
+    const s = sanitizeSettings(
+      {
+        ...shop.settings,
+        schedules: [
+          { name: "Noël", kind: "dates", start: "2026-12-24", end: "2026-12-01", prizes: prizesB },
+          { name: "Creux", kind: "heures", days: [2, 3, 3, 9], from: "14:00", to: "17:00", prizes: prizesB.map((p) => ({ ...p, name: `${p.name} creux` })) },
+        ],
+      },
+      shop.settings,
+    );
+    expect(s.schedules[0]).toMatchObject({ start: "2026-12-01", end: "2026-12-24" });
+    expect(s.schedules[1].days).toEqual([2, 3]);
+    // Mardi 15 décembre 2026, 15 h à Paris = 14 h UTC.
+    const tuesday = new Date("2026-12-15T14:00:00Z");
+    expect(activeWheel(s, "premium", tuesday).name).toBe("Creux");
+    expect(activeWheel(s, "croissance", tuesday).name).toBe("Noël");
+    expect(activeWheel(s, "essentiel", tuesday).name).toBe("Roue habituelle");
+    expect(activeWheel(s, "premium", new Date("2026-12-15T17:00:00Z")).name).toBe("Noël");
+    expect(activeWheel(s, "premium", new Date("2027-01-05T14:00:00Z")).name).toBe("Creux");
+    const shop2 = { ...shop, pack: "croissance" as const, plan: "active" as const, settings: s };
+    const r = await play(shop2, input, "ip", tuesday, () => 0);
+    expect(r).toMatchObject({ ok: true, play: { prizeName: "Bûche", wheelName: "Noël" } });
+    if (r.ok) expect(r.prizes.map((p) => p.name)).toEqual(["Bûche", "Chocolat", "Coffret"]);
+  });
+});
+
+describe("parrainage et employés", () => {
+  it("donne un bonus au parrain quand l'ami retire son cadeau", async () => {
+    const base = await newShop();
+    const shop = { ...base, settings: sanitizeSettings({ ...base.settings, referral: { enabled: true, reward: "Café offert" }, delayDays: 0, employees: ["Sonia", " Sonia ", "Karim"] }, base.settings) };
+    expect(shop.settings.employees).toEqual(["Sonia", "Karim"]);
+    const parrain = await play(shop, input, "ip", now, () => 0.3);
+    if (!parrain.ok) throw new Error();
+    // Même numéro : pas de parrainage.
+    const self = await play(shop, { ...input, phone: "0611223344", referrer: parrain.play.code }, "ip", now);
+    expect(self.ok && self.already).toBe(true);
+    const ami = await play(shop, { ...input, firstName: "Ami", phone: "0699887766", referrer: parrain.play.code.slice(4) }, "ip", now);
+    if (!ami.ok) throw new Error();
+    expect(ami.play.referredBy).toBe(parrain.play.code);
+    expect(await redeemBonus(shop, parrain.play.code, now)).toEqual({ ok: false, error: "aucun_bonus" });
+    const r = await redeem(shop, ami.play.code, now, "Sonia");
+    expect(r).toMatchObject({ ok: true, play: { redeemedBy: "Sonia" } });
+    expect((await findPlay(shop, parrain.play.code))?.bonusAvailable).toBe(1);
+    const b = await redeemBonus(shop, parrain.play.code, now, "Karim");
+    expect(b).toMatchObject({ ok: true, play: { bonusAvailable: 0, bonusUsed: 1 } });
+    expect(await redeemBonus(shop, parrain.play.code, now)).toMatchObject({ ok: false });
+    expect((await stats(shop.id, 14, now)).total).toMatchObject({ parrainages: 1, bonus_retires: 1 });
+    // Sans le pack Croissance, pas de parrainage.
+    const ess = await play({ ...shop, pack: "essentiel" }, { ...input, phone: "0612121212", referrer: parrain.play.code }, "ip", now);
+    expect(ess.ok && ess.play.referredBy).toBeNull();
+  });
+
+  it("annuler le retrait de l'ami reprend le bonus non utilisé", async () => {
+    const base = await newShop();
+    const shop = { ...base, settings: sanitizeSettings({ ...base.settings, referral: { enabled: true, reward: "Café" }, delayDays: 0 }, base.settings) };
+    const parrain = await play(shop, input, "ip", now);
+    if (!parrain.ok) throw new Error();
+    const ami = await play(shop, { ...input, phone: "0699887766", referrer: parrain.play.code }, "ip", now);
+    if (!ami.ok) throw new Error();
+    await redeem(shop, ami.play.code, now);
+    expect((await unredeem(shop, ami.play.code, now))?.redeemedBy).toBeNull();
+    expect((await findPlay(shop, parrain.play.code))?.bonusAvailable).toBe(0);
+  });
+
+  it("garde les anciens réglages compatibles", async () => {
+    const shop = await newShop();
+    const old = { ...shop.settings } as Partial<typeof shop.settings>;
+    delete old.schedules;
+    delete old.referral;
+    expect(publicShop({ ...shop, settings: old as typeof shop.settings }).referral).toBeNull();
+    expect(packFeatures("essentiel")).toMatchObject({ seasons: false, offPeak: false, poweredBy: true });
+    expect(packFeatures("premium")).toMatchObject({ offPeak: true, profit: true, poweredBy: false });
   });
 });

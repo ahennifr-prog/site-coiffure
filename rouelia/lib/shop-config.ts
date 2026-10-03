@@ -1,5 +1,6 @@
 /** Commerces : types et règles pures, utilisables aussi dans le navigateur. */
 import { palettes, trades, type OfferId, type PackId, type PrizeIcon } from "@/content";
+import { parisClock } from "@/lib/dates";
 import type { SignupOffer, SignupRecord } from "@/lib/signup";
 import { distribute, mix, monogramOf, paletteFromPrimary, readableOn, roundToTotal, segmentColors } from "@/lib/wheel";
 import { prizeIconIds } from "@/components/wheel/icons";
@@ -21,6 +22,25 @@ export interface ShopPrize {
   percent: number;
 }
 
+/**
+ * Roue programmée : remplace la roue habituelle entre deux dates (roue saisonnière)
+ * ou sur des créneaux de la semaine (heures creuses).
+ */
+export interface WheelSchedule {
+  id: string;
+  name: string;
+  kind: "dates" | "heures";
+  /** Dates incluses, AAAA-MM-JJ (roue saisonnière). */
+  start: string;
+  end: string;
+  /** Jours de la semaine, 1 = lundi (heures creuses). */
+  days: number[];
+  /** Créneau « HH:MM », début inclus, fin exclue. */
+  from: string;
+  to: string;
+  prizes: ShopPrize[];
+}
+
 export interface ShopSettings {
   /** Le commerçant peut mettre son jeu en pause. */
   active: boolean;
@@ -37,6 +57,15 @@ export interface ShopSettings {
   validityDays: number;
   delayDays: number;
   replayDays: number;
+  schedules: WheelSchedule[];
+  /** Parrainage : le client invite un ami ; si l'ami retire son cadeau, le client reçoit un bonus. */
+  referral: { enabled: boolean; reward: string };
+  /** Prénoms de l'équipe, pour savoir qui valide en caisse. */
+  employees: string[];
+  instagramUrl: string;
+  facebookUrl: string;
+  /** Pour le suivi de la rentabilité : panier moyen (€) et part qui reste après achats (%). */
+  profit: { basket: number; margin: number };
 }
 
 /** trial : essai gratuit ; active : client payant ; paused : mis en pause par Rouelia. */
@@ -87,9 +116,14 @@ export function safeUrl(v: unknown): string {
 }
 
 /** Valide des réglages reçus de l'espace commerçant. La somme des chances est ramenée à 100. */
-export function sanitizeSettings(input: unknown, base: ShopSettings): ShopSettings {
-  const c = (input ?? {}) as Record<string, unknown>;
-  const raw = Array.isArray(c.prizes) ? c.prizes.slice(0, MAX_PRIZES) : base.prizes;
+const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+export const MAX_SCHEDULES = 6;
+export const MAX_EMPLOYEES = 20;
+
+/** Valide une liste de lots et ramène la somme des chances à 100. */
+export function sanitizePrizes(input: unknown, fallback: ShopPrize[]): ShopPrize[] {
+  const raw = Array.isArray(input) ? input.slice(0, MAX_PRIZES) : fallback;
   let prizes: ShopPrize[] = raw.map((p, i) => {
     const q = (p ?? {}) as Record<string, unknown>;
     return {
@@ -102,7 +136,7 @@ export function sanitizeSettings(input: unknown, base: ShopSettings): ShopSettin
       percent: Math.max(1, Number(q.percent) || 1),
     };
   });
-  if (prizes.length < MIN_PRIZES) prizes = base.prizes;
+  if (prizes.length < MIN_PRIZES) prizes = fallback.map((p) => ({ ...p }));
   const ids = new Set<string>();
   prizes.forEach((p, i) => {
     if (ids.has(p.id)) p.id = `${p.id}-${i}`;
@@ -110,25 +144,112 @@ export function sanitizeSettings(input: unknown, base: ShopSettings): ShopSettin
   });
   const sum = prizes.reduce((s, x) => s + x.percent, 0);
   const shares = roundToTotal(prizes.map((p) => (p.percent / sum) * 100), 100);
-  prizes = prizes.map((p, i) => ({ ...p, percent: shares[i] }));
+  return prizes.map((p, i) => ({ ...p, percent: shares[i] }));
+}
+
+function sanitizeSchedules(input: unknown, base: WheelSchedule[], prizes: ShopPrize[]): WheelSchedule[] {
+  if (!Array.isArray(input)) return base;
+  return input.slice(0, MAX_SCHEDULES).map((x, i) => {
+    const q = (x ?? {}) as Record<string, unknown>;
+    const kind = q.kind === "heures" ? "heures" : "dates";
+    const days = Array.isArray(q.days) ? [...new Set(q.days.map(Number).filter((d) => Number.isInteger(d) && d >= 1 && d <= 7))].sort() : [];
+    let start = typeof q.start === "string" && DAY_RE.test(q.start) ? q.start : "";
+    let end = typeof q.end === "string" && DAY_RE.test(q.end) ? q.end : "";
+    if (start && end && end < start) [start, end] = [end, start];
+    return {
+      id: str(q.id, 40) || `roue-${i + 1}`,
+      name: str(q.name, 40) || (kind === "heures" ? "Heures creuses" : "Roue de saison"),
+      kind,
+      start,
+      end,
+      days,
+      from: typeof q.from === "string" && TIME_RE.test(q.from) ? q.from : "14:00",
+      to: typeof q.to === "string" && TIME_RE.test(q.to) ? q.to : "17:00",
+      prizes: sanitizePrizes(q.prizes, prizes),
+    };
+  });
+}
+
+/** Valide des réglages reçus de l'espace commerçant. La somme des chances est ramenée à 100. */
+export function sanitizeSettings(input: unknown, base: ShopSettings): ShopSettings {
+  const c = (input ?? {}) as Record<string, unknown>;
+  const b = withDefaults(base);
+  const prizes = sanitizePrizes(c.prizes ?? b.prizes, b.prizes);
   const color = typeof c.primaryColor === "string" && /^#[0-9a-fA-F]{6}$/.test(c.primaryColor) ? c.primaryColor.toUpperCase() : null;
+  const referral = (c.referral ?? b.referral) as Record<string, unknown>;
+  const profit = (c.profit ?? b.profit) as Record<string, unknown>;
+  const employees = Array.isArray(c.employees) ? c.employees : b.employees;
 
   return {
-    active: c.active === undefined ? base.active : c.active === true,
-    name: str(c.name, 60) || base.name,
-    address: c.address === undefined ? base.address : str(c.address, 200),
-    phone: c.phone === undefined ? base.phone : str(c.phone, 30),
-    reviewUrl: c.reviewUrl === undefined ? base.reviewUrl : safeUrl(c.reviewUrl),
-    bookingUrl: c.bookingUrl === undefined ? base.bookingUrl : safeUrl(c.bookingUrl),
-    paletteId: palettes.some((p) => p.id === c.paletteId) ? (c.paletteId as string) : base.paletteId,
-    primaryColor: c.primaryColor === undefined ? base.primaryColor : color,
-    hasLogo: base.hasLogo,
-    logoVersion: base.logoVersion,
+    active: c.active === undefined ? b.active : c.active === true,
+    name: str(c.name, 60) || b.name,
+    address: c.address === undefined ? b.address : str(c.address, 200),
+    phone: c.phone === undefined ? b.phone : str(c.phone, 30),
+    reviewUrl: c.reviewUrl === undefined ? b.reviewUrl : safeUrl(c.reviewUrl),
+    bookingUrl: c.bookingUrl === undefined ? b.bookingUrl : safeUrl(c.bookingUrl),
+    paletteId: palettes.some((p) => p.id === c.paletteId) ? (c.paletteId as string) : b.paletteId,
+    primaryColor: c.primaryColor === undefined ? b.primaryColor : color,
+    hasLogo: b.hasLogo,
+    logoVersion: b.logoVersion,
     prizes,
-    validityDays: clampInt(c.validityDays, 1, 365, base.validityDays),
-    delayDays: clampInt(c.delayDays, 0, 30, base.delayDays),
-    replayDays: clampInt(c.replayDays, 0, 365, base.replayDays),
+    validityDays: clampInt(c.validityDays, 1, 365, b.validityDays),
+    delayDays: clampInt(c.delayDays, 0, 30, b.delayDays),
+    replayDays: clampInt(c.replayDays, 0, 365, b.replayDays),
+    schedules: sanitizeSchedules(c.schedules, b.schedules, prizes),
+    referral: { enabled: referral.enabled === true, reward: str(referral.reward, 60) || b.referral.reward },
+    employees: [...new Set(employees.map((e) => str(e, 30)).filter(Boolean))].slice(0, MAX_EMPLOYEES),
+    instagramUrl: c.instagramUrl === undefined ? b.instagramUrl : safeUrl(c.instagramUrl),
+    facebookUrl: c.facebookUrl === undefined ? b.facebookUrl : safeUrl(c.facebookUrl),
+    profit: {
+      basket: Math.max(0, Math.min(10000, Number(profit.basket) || 0)),
+      margin: clampInt(profit.margin, 0, 100, b.profit.margin),
+    },
   };
+}
+
+/** Complète les réglages enregistrés avant l'ajout d'une fonction. */
+export function withDefaults(s: ShopSettings): ShopSettings {
+  return {
+    ...s,
+    schedules: s.schedules ?? [],
+    referral: s.referral ?? { enabled: false, reward: "Un cadeau surprise" },
+    employees: s.employees ?? [],
+    instagramUrl: s.instagramUrl ?? "",
+    facebookUrl: s.facebookUrl ?? "",
+    profit: s.profit ?? { basket: 0, margin: 60 },
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* Fonctions par pack                                                  */
+/* ------------------------------------------------------------------ */
+
+/** Ce que chaque pack ouvre, selon le comparatif de la page Tarifs. */
+export function packFeatures(pack: PackId) {
+  const plus = pack !== "essentiel";
+  const premium = pack === "premium";
+  return {
+    booking: plus,
+    social: plus,
+    seasons: plus,
+    referral: plus,
+    employees: plus,
+    offPeak: premium,
+    profit: premium,
+    poweredBy: !premium,
+  };
+}
+
+/** Roue en vigueur à cet instant : heures creuses, puis roue de saison, sinon roue habituelle. */
+export function activeWheel(settings: ShopSettings, pack: PackId, now = new Date()): { id: string; name: string; prizes: ShopPrize[] } {
+  const s = withDefaults(settings);
+  const f = packFeatures(pack);
+  const { day, weekday, time } = parisClock(now);
+  const offPeak = f.offPeak && s.schedules.find((w) => w.kind === "heures" && w.days.includes(weekday) && w.from <= time && time < w.to);
+  if (offPeak) return offPeak;
+  const season = f.seasons && s.schedules.find((w) => w.kind === "dates" && w.start && w.end && w.start <= day && day <= w.end);
+  if (season) return season;
+  return { id: "base", name: "Roue habituelle", prizes: s.prizes };
 }
 
 export function bigTotal(prizes: Pick<ShopPrize, "big" | "percent">[]): number {
@@ -159,6 +280,8 @@ export function shopTheme(s: Pick<ShopSettings, "paletteId" | "primaryColor" | "
   const colors = segmentColors(base, s.prizes.length);
   const primary = s.primaryColor ?? (palette.id === "nuit" ? palette.colors[1] : palette.colors[0]);
   return {
+    /** Couleurs de base : la roue en déduit une couleur par segment, quel que soit le nombre de lots. */
+    base,
     colors,
     textColors: colors.map(readableOn),
     primary,
@@ -188,13 +311,15 @@ export function trialDaysLeft(shop: Pick<Shop, "trialEndsAt">, now = new Date())
 }
 
 /** Le lien de réservation après le jeu est réservé à Croissance et Premium. */
-export const hasBooking = (pack: PackId) => pack !== "essentiel";
+export const hasBooking = (pack: PackId) => packFeatures(pack).booking;
 /** La mention « Propulsé par Rouelia » disparaît en Premium. */
-export const showsPoweredBy = (pack: PackId) => pack !== "premium";
+export const showsPoweredBy = (pack: PackId) => packFeatures(pack).poweredBy;
 
 /** Partie publique, envoyée au téléphone du client. */
-export function publicShop(shop: Shop) {
-  const s = shop.settings;
+export function publicShop(shop: Shop, now = new Date()) {
+  const s = withDefaults(shop.settings);
+  const f = packFeatures(shop.pack);
+  const wheel = activeWheel(s, shop.pack, now);
   return {
     slug: shop.slug,
     name: s.name,
@@ -208,11 +333,16 @@ export function publicShop(shop: Shop) {
     delayDays: s.delayDays,
     replayDays: s.replayDays,
     state: gameState(shop),
-    theme: shopTheme(s),
-    prizes: s.prizes.map((p) => ({ id: p.id, name: p.name, icon: p.icon, big: p.big })),
+    theme: shopTheme({ ...s, prizes: wheel.prizes }),
+    prizes: publicPrizes(wheel.prizes),
+    instagramUrl: f.social ? s.instagramUrl : "",
+    facebookUrl: f.social ? s.facebookUrl : "",
+    referral: f.referral && s.referral.enabled ? s.referral.reward : null,
   };
 }
 export type PublicShop = ReturnType<typeof publicShop>;
+
+export const publicPrizes = (prizes: ShopPrize[]) => prizes.map((p) => ({ id: p.id, name: p.name, icon: p.icon, big: p.big }));
 
 /* ------------------------------------------------------------------ */
 /* Création depuis une inscription                                     */
@@ -278,6 +408,12 @@ export function shopFromSignup(r: SignupRecord, id: string, slug: string, now: D
       validityDays: 30,
       delayDays: 1,
       replayDays: 30,
+      schedules: [],
+      referral: { enabled: false, reward: "Un cadeau surprise" },
+      employees: [],
+      instagramUrl: "",
+      facebookUrl: "",
+      profit: { basket: trade.simulator.averageBasket, margin: Math.round(trade.simulator.grossMargin * 100) },
     },
   );
   const longTrial = r.offer?.status === "applied" && r.offer.id === ("essai_21" satisfies OfferId);

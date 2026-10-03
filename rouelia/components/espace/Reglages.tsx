@@ -1,19 +1,26 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, Crown, ImagePlus, LoaderCircle, Plus, Trash2 } from "lucide-react";
-import { palettes, type PackId, type PrizeIcon } from "@/content";
-import { averageCost, maxPercentFor, removePrize, setPercent, type WheelPrize } from "@/lib/wheel";
-import { formatEuroCents } from "@/lib/format";
-import { bigTotal, hasBooking, MAX_PRIZES, MIN_PRIZES, setBigRate, shopTheme, type ShopPrize, type ShopSettings } from "@/lib/shop-config";
+import { Check, ImagePlus, Lock, LoaderCircle, Plus, Trash2, X } from "lucide-react";
+import { palettes, pricing, type PackId } from "@/content";
+import { segmentColors } from "@/lib/wheel";
+import { bigTotal, MAX_EMPLOYEES, MAX_SCHEDULES, packFeatures, setBigRate, shopTheme, type ShopPrize, type ShopSettings, type WheelSchedule } from "@/lib/shop-config";
 import { Monogram } from "@/components/demo/PhoneScreen";
 import { readImage } from "@/components/demo/readImage";
 import { Wheel } from "@/components/wheel/Wheel";
-import { prizeIconIds, prizeIcons } from "@/components/wheel/icons";
 import { api, card, input } from "./api";
+import { PrizeList } from "./PrizeList";
 
-const asWheel = (p: ShopPrize[]) => p as unknown as WheelPrize[];
-const asPrizes = (p: WheelPrize[]) => p as unknown as ShopPrize[];
+const DAYS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+
+/** Fonction réservée à un pack supérieur. */
+function Locked({ packs }: { packs: string }) {
+  return (
+    <p className="mt-2 flex items-center gap-2 text-sm text-ink-soft">
+      <Lock aria-hidden size={14} /> Inclus dans {packs}. Pour changer de pack, écrivez-nous.
+    </p>
+  );
+}
 
 function NumberField({ id, label, value, onChange, min, max, suffix, help }: { id: string; label: string; value: number; onChange: (v: number) => void; min: number; max: number; suffix: string; help?: string }) {
   return (
@@ -81,12 +88,35 @@ export function Reglages({ slug, pack, onSaved }: { slug: string; pack: PackId; 
     setStatus("idle");
   };
   const setPrizes = (prizes: ShopPrize[]) => set({ prizes });
-  const updatePrize = (i: number, patch: Partial<ShopPrize>) => setPrizes(c.prizes.map((p, k) => (k === i ? { ...p, ...patch } : p)));
 
   const bigRate = bigTotal(c.prizes);
   const hasBoth = c.prizes.some((p) => p.big) && c.prizes.some((p) => !p.big);
   const theme = shopTheme(c);
-  const avg = averageCost(c.prizes);
+  const f = packFeatures(pack);
+  const plusPacks = `${pricing.packs[1].name} et ${pricing.packs[2].name}`;
+  const premiumPack = pricing.packs[2].name;
+
+  const setSchedule = (i: number, patch: Partial<WheelSchedule>) => set({ schedules: c.schedules.map((w, k) => (k === i ? { ...w, ...patch } : w)) });
+  function addSchedule(kind: WheelSchedule["kind"]) {
+    const id = `roue-${Date.now().toString(36)}`;
+    const today = new Date().toISOString().slice(0, 10);
+    set({
+      schedules: [
+        ...c.schedules,
+        {
+          id,
+          name: kind === "heures" ? "Heures creuses" : "Roue de saison",
+          kind,
+          start: today,
+          end: today,
+          days: kind === "heures" ? [2, 3, 4] : [],
+          from: "14:00",
+          to: "17:00",
+          prizes: c.prizes.map((p) => ({ ...p, id: `${id}-${p.id}` })),
+        },
+      ],
+    });
+  }
   const logoUrl = c.hasLogo ? `/api/j/${slug}/logo?v=${c.logoVersion}` : null;
 
   async function save() {
@@ -176,106 +206,88 @@ export function Reglages({ slug, pack, onSaved }: { slug: string; pack: PackId; 
             <p className="tabular text-sm font-semibold text-sauge">Total {c.prizes.reduce((s, p) => s + p.percent, 0)} %</p>
           </div>
           <p className="mt-1 text-sm text-ink-soft">Quand vous changez une chance, les autres s&apos;ajustent pour garder 100 %.</p>
-          <ul className="mt-4 space-y-3">
-            {c.prizes.map((p, i) => {
-              const max = maxPercentFor(asWheel(c.prizes), i);
-              return (
-                <li key={p.id} className="rounded-lg bg-cream p-3 ring-1 ring-line sm:p-4">
-                  <div className="flex items-center gap-2">
-                    <span aria-hidden className="h-9 w-2 shrink-0 rounded-full" style={{ background: theme.colors[i] }} />
-                    <label className="sr-only" htmlFor={`nom-${p.id}`}>Nom du cadeau</label>
-                    <input id={`nom-${p.id}`} value={p.name} maxLength={30} onChange={(e) => updatePrize(i, { name: e.target.value })} className="min-h-11 min-w-0 flex-1 rounded-lg bg-paper px-3 font-semibold ring-1 ring-line outline-none focus:ring-2 focus:ring-tomette" />
-                    <button
-                      type="button"
-                      aria-label={`Supprimer ${p.name}`}
-                      disabled={c.prizes.length <= MIN_PRIZES}
-                      onClick={() => setPrizes(asPrizes(removePrize(asWheel(c.prizes), i)))}
-                      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink-soft hover:text-danger disabled:opacity-30"
-                    >
-                      <Trash2 aria-hidden size={18} />
-                    </button>
-                  </div>
-                  <label className="sr-only" htmlFor={`detail-${p.id}`}>Précision affichée au client</label>
-                  <input
-                    id={`detail-${p.id}`}
-                    value={p.detail}
-                    maxLength={140}
-                    placeholder="Précision affichée au client (facultatif)"
-                    onChange={(e) => updatePrize(i, { detail: e.target.value })}
-                    className="mt-2 min-h-11 w-full rounded-lg bg-paper px-3 text-sm ring-1 ring-line outline-none focus:ring-2 focus:ring-tomette"
-                  />
-                  <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <div role="radiogroup" aria-label={`Type de ${p.name}`} className="inline-flex rounded-full bg-paper p-1 ring-1 ring-line">
-                      {([false, true] as const).map((big) => (
-                        <button
-                          key={String(big)}
-                          type="button"
-                          role="radio"
-                          aria-checked={p.big === big}
-                          onClick={() => updatePrize(i, { big })}
-                          className={`inline-flex min-h-9 items-center gap-1 rounded-full px-3 text-xs font-semibold ${p.big === big ? (big ? "bg-tomette text-white" : "bg-ink text-white") : "text-ink-soft"}`}
-                        >
-                          {big ? <Crown aria-hidden size={12} /> : null}
-                          {big ? "Gros" : "Petit"}
-                        </button>
-                      ))}
-                    </div>
-                    <label className="sr-only" htmlFor={`icone-${p.id}`}>Icône</label>
-                    <select id={`icone-${p.id}`} value={p.icon} onChange={(e) => updatePrize(i, { icon: e.target.value as PrizeIcon })} className="min-h-11 rounded-full bg-paper px-3 text-sm ring-1 ring-line">
-                      {prizeIconIds.map((ic) => (
-                        <option key={ic} value={ic}>{prizeIcons[ic].label}</option>
-                      ))}
-                    </select>
-                    <label className="inline-flex items-center gap-2 text-xs font-semibold text-ink-soft">
-                      Coût pour vous
-                      <input
-                        type="number"
-                        inputMode="decimal"
-                        min={0}
-                        step={0.1}
-                        value={p.cost}
-                        onChange={(e) => updatePrize(i, { cost: Math.max(0, Number(e.target.value) || 0) })}
-                        className="tabular min-h-11 w-20 rounded-lg bg-paper px-2 text-sm text-ink ring-1 ring-line"
-                      />
-                      €
-                    </label>
-                  </div>
-                  <div className="mt-2 flex items-center gap-3">
-                    <label htmlFor={`chance-${p.id}`} className="w-14 shrink-0 text-xs font-semibold text-ink-soft">Chance</label>
-                    <input
-                      id={`chance-${p.id}`}
-                      type="range"
-                      className="range"
-                      min={1}
-                      max={Math.max(1, max)}
-                      value={p.percent}
-                      aria-valuetext={`${p.percent} %`}
-                      style={{ ["--fill" as string]: `${((p.percent - 1) / Math.max(1, max - 1)) * 100}%` }}
-                      onChange={(e) => setPrizes(asPrizes(setPercent(asWheel(c.prizes), i, Number(e.target.value))))}
-                    />
-                    <span className="tabular w-12 shrink-0 text-right font-semibold">{p.percent} %</span>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-          <button
-            type="button"
-            disabled={c.prizes.length >= MAX_PRIZES}
-            onClick={() => {
-              const fair = Math.max(1, Math.round(100 / (c.prizes.length + 1)));
-              const next: ShopPrize[] = [...c.prizes, { id: `lot-${Date.now().toString(36)}`, name: "Nouveau cadeau", detail: "", icon: "cadeau", big: false, cost: 0, percent: fair }];
-              setPrizes(asPrizes(setPercent(asWheel(next), next.length - 1, fair)));
-            }}
-            className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-line font-semibold text-tomette-deep disabled:opacity-40"
-          >
-            <Plus aria-hidden size={18} /> Ajouter un cadeau
-          </button>
-          <p className="mt-2 text-xs text-ink-soft">De {MIN_PRIZES} à {MAX_PRIZES} cadeaux. Au-delà, la roue devient difficile à lire sur téléphone.</p>
-          <p className="mt-3 rounded-lg bg-cream p-3 text-sm">
-            <span className="font-semibold">Coût moyen par partie : {formatEuroCents(avg)}</span>
-            <span className="text-ink-soft"> (coût de chaque lot multiplié par sa chance de sortir)</span>
+          <PrizeList prizes={c.prizes} onChange={setPrizes} colors={theme.colors} />
+        </section>
+
+        <section className={card}>
+          <h2 className="font-display text-2xl font-semibold">Roues programmées</h2>
+          <p className="mt-1 text-sm text-ink-soft">
+            Une autre roue remplace la roue habituelle entre deux dates (Noël, soldes, fête des mères) ou sur des créneaux calmes de la semaine. Les heures creuses passent avant la roue de saison.
           </p>
+          {!f.seasons ? (
+            <Locked packs={plusPacks} />
+          ) : (
+            <>
+              <ul className="mt-4 space-y-4">
+                {c.schedules.map((w, i) => (
+                  <li key={w.id} className="rounded-lg bg-cream p-3 ring-1 ring-line sm:p-4">
+                    <div className="flex items-center gap-2">
+                      <label className="sr-only" htmlFor={`${w.id}-nom`}>Nom de la roue</label>
+                      <input id={`${w.id}-nom`} value={w.name} maxLength={40} onChange={(e) => setSchedule(i, { name: e.target.value })} className="min-h-11 min-w-0 flex-1 rounded-lg bg-paper px-3 font-semibold ring-1 ring-line outline-none focus:ring-2 focus:ring-tomette" />
+                      <span className="rounded-full bg-paper px-3 py-1 text-xs font-semibold ring-1 ring-line">{w.kind === "heures" ? "Heures creuses" : "Saison"}</span>
+                      <button type="button" aria-label={`Supprimer la roue ${w.name}`} onClick={() => set({ schedules: c.schedules.filter((_, k) => k !== i) })} className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink-soft hover:text-danger">
+                        <Trash2 aria-hidden size={18} />
+                      </button>
+                    </div>
+                    {w.kind === "dates" ? (
+                      <div className="mt-3 grid grid-cols-2 gap-3">
+                        <label className="text-sm font-semibold">
+                          Du
+                          <input type="date" value={w.start} onChange={(e) => setSchedule(i, { start: e.target.value })} className={`${input} mt-1`} />
+                        </label>
+                        <label className="text-sm font-semibold">
+                          Au (inclus)
+                          <input type="date" value={w.end} onChange={(e) => setSchedule(i, { end: e.target.value })} className={`${input} mt-1`} />
+                        </label>
+                      </div>
+                    ) : (
+                      <>
+                        <div role="group" aria-label="Jours" className="mt-3 flex flex-wrap gap-1.5">
+                          {DAYS.map((d, k) => {
+                            const on = w.days.includes(k + 1);
+                            return (
+                              <button
+                                key={d}
+                                type="button"
+                                aria-pressed={on}
+                                onClick={() => setSchedule(i, { days: on ? w.days.filter((x) => x !== k + 1) : [...w.days, k + 1].sort() })}
+                                className={`min-h-11 min-w-12 rounded-full px-3 text-sm font-semibold ring-1 ${on ? "bg-ink text-white ring-ink" : "bg-paper ring-line"}`}
+                              >
+                                {d}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div className="mt-3 grid grid-cols-2 gap-3">
+                          <label className="text-sm font-semibold">
+                            De
+                            <input type="time" value={w.from} onChange={(e) => setSchedule(i, { from: e.target.value })} className={`${input} mt-1`} />
+                          </label>
+                          <label className="text-sm font-semibold">
+                            À
+                            <input type="time" value={w.to} onChange={(e) => setSchedule(i, { to: e.target.value })} className={`${input} mt-1`} />
+                          </label>
+                        </div>
+                      </>
+                    )}
+                    <p className="mt-3 text-sm font-semibold">Cadeaux de cette roue</p>
+                    <PrizeList prizes={w.prizes} onChange={(prizes) => setSchedule(i, { prizes })} colors={segmentColors(theme.base, w.prizes.length)} idPrefix={`${w.id}-`} />
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button type="button" disabled={c.schedules.length >= MAX_SCHEDULES} onClick={() => addSchedule("dates")} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-cream px-4 text-sm font-semibold ring-1 ring-line disabled:opacity-40">
+                  <Plus aria-hidden size={16} /> Roue de saison
+                </button>
+                {f.offPeak ? (
+                  <button type="button" disabled={c.schedules.length >= MAX_SCHEDULES} onClick={() => addSchedule("heures")} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-cream px-4 text-sm font-semibold ring-1 ring-line disabled:opacity-40">
+                    <Plus aria-hidden size={16} /> Heures creuses
+                  </button>
+                ) : null}
+              </div>
+              {!f.offPeak ? <Locked packs={`${premiumPack} pour les heures creuses`} /> : null}
+            </>
+          )}
         </section>
 
         <section className={card}>
@@ -299,12 +311,98 @@ export function Reglages({ slug, pack, onSaved }: { slug: string; pack: PackId; 
               onChange={(v) => set({ reviewUrl: v })}
               help="Sur Google, ouvrez votre fiche en étant connecté au compte du commerce, cliquez sur « Demander des avis » et copiez le lien. Sans lien, l'invitation à laisser un avis n'apparaît pas."
             />
-            {hasBooking(pack) ? (
+            {f.booking ? (
               <TextField id="rdv" type="url" label="Lien de réservation (affiché après le jeu)" value={c.bookingUrl} placeholder="https://www.planity.com/..." onChange={(v) => set({ bookingUrl: v })} help="Facultatif : Planity, TheFork, votre site." />
             ) : (
-              <p className="text-sm text-ink-soft">Le lien de réservation après le jeu est inclus dans les packs Croissance et Premium.</p>
+              <Locked packs={`${plusPacks} pour le lien de réservation après le jeu`} />
+            )}
+            {f.social ? (
+              <>
+                <TextField id="instagram" type="url" label="Instagram (affiché après le jeu)" value={c.instagramUrl} placeholder="https://www.instagram.com/..." onChange={(v) => set({ instagramUrl: v })} />
+                <TextField id="facebook" type="url" label="Facebook (affiché après le jeu)" value={c.facebookUrl} placeholder="https://www.facebook.com/..." onChange={(v) => set({ facebookUrl: v })} />
+              </>
+            ) : (
+              <Locked packs={`${plusPacks} pour les liens Instagram et Facebook`} />
             )}
           </div>
+        </section>
+
+        <section className={card}>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="font-display text-2xl font-semibold">Parrainage</h2>
+              <p className="text-sm text-ink-soft">Après le jeu, le client peut inviter un ami. Si l&apos;ami vient retirer son cadeau, le client reçoit un bonus, remis en caisse sur son code.</p>
+            </div>
+            {f.referral ? (
+              <button
+                type="button"
+                role="switch"
+                aria-checked={c.referral.enabled}
+                aria-label="Parrainage actif"
+                onClick={() => set({ referral: { ...c.referral, enabled: !c.referral.enabled } })}
+                className={`relative h-8 w-14 shrink-0 rounded-full transition-colors ${c.referral.enabled ? "bg-sauge" : "bg-line"}`}
+              >
+                <span className={`absolute top-1 left-0 h-6 w-6 rounded-full bg-white shadow transition-transform ${c.referral.enabled ? "translate-x-7" : "translate-x-1"}`} />
+              </button>
+            ) : null}
+          </div>
+          {!f.referral ? (
+            <Locked packs={plusPacks} />
+          ) : c.referral.enabled ? (
+            <div className="mt-4">
+              <TextField id="bonus" label="Bonus du parrain" value={c.referral.reward} placeholder="Un café offert" onChange={(v) => set({ referral: { ...c.referral, reward: v } })} />
+            </div>
+          ) : null}
+        </section>
+
+        <section className={card}>
+          <h2 className="font-display text-2xl font-semibold">Équipe</h2>
+          <p className="mt-1 text-sm text-ink-soft">Ajoutez les prénoms de l&apos;équipe : en caisse, chacun choisit son prénom, et le Suivi montre qui valide les cadeaux.</p>
+          {!f.employees ? (
+            <Locked packs={plusPacks} />
+          ) : (
+            <>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {c.employees.map((e) => (
+                  <li key={e} className="inline-flex min-h-11 items-center gap-1 rounded-full bg-cream pl-4 text-sm font-semibold ring-1 ring-line">
+                    {e}
+                    <button type="button" aria-label={`Retirer ${e}`} onClick={() => set({ employees: c.employees.filter((x) => x !== e) })} className="inline-flex h-11 w-11 items-center justify-center rounded-full text-ink-soft hover:text-danger">
+                      <X aria-hidden size={16} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <form
+                className="mt-3 flex gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const field = (e.currentTarget.elements.namedItem("prenom") as HTMLInputElement);
+                  const name = field.value.trim().slice(0, 30);
+                  if (name && !c.employees.includes(name) && c.employees.length < MAX_EMPLOYEES) set({ employees: [...c.employees, name] });
+                  field.value = "";
+                }}
+              >
+                <label htmlFor="prenom-employe" className="sr-only">Prénom à ajouter</label>
+                <input id="prenom-employe" name="prenom" placeholder="Prénom" maxLength={30} className={`${input} min-w-0 flex-1`} />
+                <button type="submit" className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-ink px-4 font-semibold text-white">
+                  <Plus aria-hidden size={16} /> Ajouter
+                </button>
+              </form>
+            </>
+          )}
+        </section>
+
+        <section className={card}>
+          <h2 className="font-display text-2xl font-semibold">Rentabilité</h2>
+          <p className="mt-1 text-sm text-ink-soft">Pour estimer dans le Suivi ce que la roue vous rapporte chaque mois.</p>
+          {!f.profit ? (
+            <Locked packs={premiumPack} />
+          ) : (
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <NumberField id="panier" label="Panier moyen" value={c.profit.basket} min={0} max={10000} suffix="€" onChange={(v) => set({ profit: { ...c.profit, basket: v } })} />
+              <NumberField id="marge" label="Ce qui vous reste sur un panier" value={c.profit.margin} min={0} max={100} suffix="%" help="Après le coût des produits, hors loyer et salaires." onChange={(v) => set({ profit: { ...c.profit, margin: v } })} />
+            </div>
+          )}
         </section>
 
         <section className={card}>

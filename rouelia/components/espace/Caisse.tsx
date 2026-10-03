@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Check, Crown, LoaderCircle, RotateCcw, Search } from "lucide-react";
+import { Check, Crown, Gift, LoaderCircle, RotateCcw, Search, UserRound } from "lucide-react";
+import type { PackId } from "@/content";
+import { packFeatures, type ShopSettings } from "@/lib/shop-config";
 import { codeStatus, formatDateTime, formatDay } from "@/lib/dates";
 import type { Play } from "@/lib/game";
 import { api, card, input, STATUS_LABEL } from "./api";
@@ -20,6 +22,32 @@ export function Caisse({ codePrefix }: { codePrefix: string }) {
   const [busy, setBusy] = useState(false);
   const [plays, setPlays] = useState<Play[] | null>(null);
   const [query, setQuery] = useState("");
+  const [team, setTeam] = useState<string[]>([]);
+  const [reward, setReward] = useState<string | null>(null);
+  const [by, setBy] = useState("");
+
+  useEffect(() => {
+    api<{ settings: ShopSettings; pack: PackId }>("/api/espace/reglages").then((r) => {
+      if (!r.ok) return;
+      const f = packFeatures(r.pack);
+      if (f.employees) setTeam(r.settings.employees);
+      if (f.referral && r.settings.referral.enabled) setReward(r.settings.referral.reward);
+    });
+    try {
+      setBy(localStorage.getItem("rouelia-caisse-employe") ?? "");
+    } catch {
+      /* stockage indisponible */
+    }
+  }, []);
+
+  function chooseBy(name: string) {
+    setBy(name);
+    try {
+      localStorage.setItem("rouelia-caisse-employe", name);
+    } catch {
+      /* stockage indisponible */
+    }
+  }
 
   async function load() {
     const r = await api<{ plays: Play[] }>("/api/espace/parties");
@@ -48,13 +76,19 @@ export function Caisse({ codePrefix }: { codePrefix: string }) {
     }
   }
 
-  async function act(p: Play, action: "valider" | "annuler") {
+  async function act(p: Play, action: "valider" | "annuler" | "bonus") {
     setBusy(true);
-    const r = await api<{ play?: Play }>("/api/espace/caisse", { method: "POST", body: JSON.stringify({ code: p.code, action }) });
+    const r = await api<{ play?: Play }>("/api/espace/caisse", { method: "POST", body: JSON.stringify({ code: p.code, action, by: team.includes(by) ? by : null }) });
     setBusy(false);
     if (r.play) updateInList(r.play);
     if (r.ok) {
-      setMessage(action === "valider" ? { tone: "ok", text: `Cadeau validé : ${p.prizeName} pour ${p.firstName}.` } : { tone: "ok", text: "Retrait annulé : le code est de nouveau utilisable." });
+      setMessage(
+        action === "valider"
+          ? { tone: "ok", text: `Cadeau validé : ${p.prizeName} pour ${p.firstName}.` }
+          : action === "bonus"
+            ? { tone: "ok", text: `Bonus de parrainage remis à ${p.firstName}.` }
+            : { tone: "ok", text: "Retrait annulé : le code est de nouveau utilisable." },
+      );
       navigator.vibrate?.(40);
     } else {
       const texts: Record<string, string> = {
@@ -62,6 +96,7 @@ export function Caisse({ codePrefix }: { codePrefix: string }) {
         expire: "Ce code a expiré.",
         pas_encore: `Ce code n'est utilisable qu'à partir du ${r.play ? formatDay(r.play.validFrom) : "lendemain"}.`,
         introuvable: "Code introuvable.",
+        aucun_bonus: "Aucun bonus de parrainage disponible sur ce code.",
       };
       setMessage({ tone: "err", text: texts[r.error ?? ""] ?? "L'opération a échoué." });
     }
@@ -79,6 +114,19 @@ export function Caisse({ codePrefix }: { codePrefix: string }) {
       <section className={card}>
         <h2 className="font-display text-2xl font-semibold">Valider un cadeau</h2>
         <p className="mt-1 text-sm text-ink-soft">Tapez le code montré par le client.</p>
+        {team.length ? (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <label htmlFor="employe" className="inline-flex items-center gap-1.5 text-sm font-semibold">
+              <UserRound aria-hidden size={16} /> Validé par
+            </label>
+            <select id="employe" value={team.includes(by) ? by : ""} onChange={(e) => chooseBy(e.target.value)} className="min-h-11 rounded-full bg-cream px-3 text-sm font-semibold ring-1 ring-line">
+              <option value="">Choisir</option>
+              {team.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          </div>
+        ) : null}
         <form onSubmit={lookup} className="mt-4 flex gap-2">
           <label htmlFor="code" className="sr-only">Code cadeau</label>
           <input
@@ -116,6 +164,8 @@ export function Caisse({ codePrefix }: { codePrefix: string }) {
                 </p>
                 <p className="mt-1 text-xs text-ink-soft">
                   Gagné le {formatDateTime(found.createdAt)}. Valable du {formatDay(found.validFrom)} au {formatDay(found.expiresOn)}.
+                  {found.redeemedBy ? ` Validé par ${found.redeemedBy}.` : ""}
+                  {found.referredBy ? ` Invité par le client ${found.referredBy}.` : ""}
                 </p>
               </div>
               <StatusChip play={found} />
@@ -124,6 +174,18 @@ export function Caisse({ codePrefix }: { codePrefix: string }) {
               <button type="button" disabled={busy} onClick={() => act(found, "valider")} className="mt-4 flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-sauge font-semibold text-white disabled:opacity-60">
                 <Check aria-hidden size={20} strokeWidth={3} /> Valider le retrait
               </button>
+            ) : null}
+            {(found.bonusAvailable ?? 0) > 0 ? (
+              <div className="mt-4 rounded-lg bg-safran-soft p-3 ring-1 ring-safran">
+                <p className="flex gap-2 text-sm font-semibold">
+                  <Gift aria-hidden size={16} className="mt-0.5 shrink-0" />
+                  Bonus de parrainage à remettre : {reward ?? "le bonus prévu"}
+                  {(found.bonusAvailable ?? 0) > 1 ? ` (${found.bonusAvailable} amis venus)` : ""}
+                </p>
+                <button type="button" disabled={busy} onClick={() => act(found, "bonus")} className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white disabled:opacity-60">
+                  <Check aria-hidden size={16} /> Remettre le bonus
+                </button>
+              </div>
             ) : null}
             {found.redeemedAt ? (
               <button type="button" disabled={busy} onClick={() => act(found, "annuler")} className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink-soft underline underline-offset-4">

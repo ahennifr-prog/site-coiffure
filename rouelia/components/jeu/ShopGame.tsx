@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { CalendarCheck, Check, Copy, Crown, LoaderCircle, MapPin, Phone, Star, Volume2, VolumeX, X } from "lucide-react";
+import { CalendarCheck, Check, Copy, Crown, Gift, LoaderCircle, MapPin, Phone, Share2, Star, Volume2, VolumeX, X } from "lucide-react";
 import { reviewPrompt } from "@/content";
 import { formatDay, parisDay } from "@/lib/dates";
 import { fr } from "@/lib/format";
 import type { PublicShop } from "@/lib/shop-config";
 import { normalizeFrenchPhone } from "@/lib/signup";
+import { readableOn, segmentColors } from "@/lib/wheel";
 import { Confetti, Monogram } from "@/components/demo/PhoneScreen";
 import { Wheel, type WheelHandle } from "@/components/wheel/Wheel";
 
@@ -27,6 +28,56 @@ interface ClientPlay {
 const consentText = (name: string) =>
   `J'accepte que ${name} enregistre mon prénom et mon numéro pour retrouver mon cadeau en caisse et limiter le jeu à une participation par personne. Ces données ne sont ni revendues ni utilisées pour de la publicité.`;
 const marketingText = (name: string) => `J'accepte de recevoir des offres de ${name} par SMS. Je peux me désinscrire à tout moment. (Facultatif)`;
+
+/** Invitation d'un ami : le lien porte le code du client. */
+function Referral({ play, shop }: { play: ClientPlay; shop: PublicShop }) {
+  const [done, setDone] = useState(false);
+  if (!shop.referral || play.redeemedAt) return null;
+  const url = `${window.location.origin}/j/${shop.slug}?parrain=${encodeURIComponent(play.code)}`;
+  const text = `Je viens de gagner un cadeau chez ${shop.name}. Tente ta chance toi aussi, chaque case est gagnante :`;
+  async function share() {
+    try {
+      if (navigator.share) await navigator.share({ title: shop.name, text, url });
+      else await navigator.clipboard.writeText(`${text} ${url}`);
+      setDone(true);
+    } catch {
+      /* partage annulé */
+    }
+  }
+  return (
+    <div className="mt-5 rounded-xl bg-paper p-4 ring-1 ring-line">
+      <p className="flex gap-2 font-semibold">
+        <Gift aria-hidden size={18} className="mt-0.5 shrink-0" />
+        <span>Invitez un ami : s&apos;il vient retirer son cadeau, vous recevez en plus : {shop.referral}.</span>
+      </p>
+      <p className="mt-1 pl-6.5 text-sm text-ink-soft">Montrez votre code en caisse pour retirer ce bonus.</p>
+      <button type="button" onClick={share} className="mt-3 ml-6.5 inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white">
+        {done ? <Check aria-hidden size={16} /> : <Share2 aria-hidden size={16} />} {done ? "Lien partagé" : "Inviter un ami"}
+      </button>
+    </div>
+  );
+}
+
+function Social({ shop }: { shop: PublicShop }) {
+  if (!shop.instagramUrl && !shop.facebookUrl) return null;
+  return (
+    <div className="mt-5 text-center">
+      <p className="text-sm font-semibold">Suivez {shop.name}</p>
+      <div className="mt-2 flex justify-center gap-2">
+        {shop.instagramUrl ? (
+          <a href={shop.instagramUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center rounded-full bg-paper px-5 text-sm font-semibold ring-1 ring-line">
+            Instagram
+          </a>
+        ) : null}
+        {shop.facebookUrl ? (
+          <a href={shop.facebookUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center rounded-full bg-paper px-5 text-sm font-semibold ring-1 ring-line">
+            Facebook
+          </a>
+        ) : null}
+      </div>
+    </div>
+  );
+}
 
 function Ticket({ play, shop }: { play: ClientPlay; shop: PublicShop }) {
   const [copied, setCopied] = useState(false);
@@ -90,6 +141,8 @@ function Ticket({ play, shop }: { play: ClientPlay; shop: PublicShop }) {
           Prendre rendez-vous
         </a>
       ) : null}
+      <Referral play={play} shop={shop} />
+      <Social shop={shop} />
     </div>
   );
 }
@@ -116,10 +169,13 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
   const spinRef = useRef<HTMLButtonElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const storageKey = `rouelia-cadeau-${shop.slug}`;
-  const { primary, onPrimary, colors, textColors, monogram } = shop.theme;
+  const { primary, onPrimary, monogram } = shop.theme;
   const open = shop.state === "ouvert";
-
-  const segments = shop.prizes.map((p, i) => ({ label: p.name, color: colors[i], textColor: textColors[i], icon: p.icon }));
+  // La roue du moment peut changer (saison, heures creuses) : le serveur renvoie la bonne au moment de jouer.
+  const [prizes, setPrizes] = useState(shop.prizes);
+  const [referrer, setReferrer] = useState<string | null>(null);
+  const colors = segmentColors(shop.theme.base, prizes.length);
+  const segments = prizes.map((p, i) => ({ label: p.name, color: colors[i], textColor: readableOn(colors[i]), icon: p.icon }));
 
   function send(type: string) {
     fetch(`/api/j/${shop.slug}/evenement`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type }), keepalive: true }).catch(() => {});
@@ -134,6 +190,8 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
     } catch {
       send("visites");
     }
+    const ref = new URLSearchParams(window.location.search).get("parrain");
+    if (ref && shop.referral) setReferrer(ref.slice(0, 20));
     try {
       const raw = localStorage.getItem(storageKey);
       if (raw) {
@@ -196,7 +254,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
       const res = await fetch(`/api/j/${shop.slug}/jouer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, phone, consent, marketing, consentText: consentText(shop.name) + (marketing ? ` ${marketingText(shop.name)}` : "") }),
+        body: JSON.stringify({ firstName, phone, consent, marketing, referrer, consentText: consentText(shop.name) + (marketing ? ` ${marketingText(shop.name)}` : "") }),
       });
       const data = await res.json();
       if (!data.ok) {
@@ -214,6 +272,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
       } catch {
         /* stockage indisponible */
       }
+      if (Array.isArray(data.prizes) && data.prizes.length) setPrizes(data.prizes);
       setResult({ play: data.play, prizeIndex: data.prizeIndex });
       setStep(data.already ? "deja" : "roue");
     } catch {
@@ -295,7 +354,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
               rimColor={shop.theme.rim}
               idle={step === "accueil" || step === "infos"}
               sound={sound}
-              label={`Roue des cadeaux de ${shop.name} : ${shop.prizes.map((p) => p.name).join(", ")}`}
+              label={`Roue des cadeaux de ${shop.name} : ${prizes.map((p) => p.name).join(", ")}`}
               className="relative w-full"
             />
             {step === "roue" ? (
@@ -311,6 +370,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                 <p className="mx-auto mt-4 max-w-md text-lg text-ink-soft lg:mx-0">
                   Chaque case de la roue est un cadeau, à utiliser lors de votre prochaine visite.
                 </p>
+                {referrer ? <p className="mx-auto mt-3 max-w-md font-semibold lg:mx-0">Un ami vous a invité : à vous de jouer.</p> : null}
                 {!open ? (
                   <p role="status" className="mx-auto mt-6 max-w-sm rounded-xl bg-paper p-4 font-medium ring-1 ring-line lg:mx-0">
                     Le jeu est en pause pour le moment. Revenez très bientôt.

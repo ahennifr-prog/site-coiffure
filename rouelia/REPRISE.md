@@ -92,22 +92,33 @@ Le produit multi-commerces est en place dans le site Rouelia (même Worker, mêm
 - **Règles des packs** : fin d'essai sans passage en client, ou pause par Aymen : la roue affiche une pause, la
   caisse continue de valider les codes déjà gagnés. Lien de réservation après le jeu en Croissance et Premium
   seulement. Mention « Propulsé par Rouelia » sauf en Premium.
-- **Vérifier** : `npm run check` (64 tests), puis `npm run preview` et, dans un autre terminal,
+- **Vérifier** : `npm run check` (68 tests), puis `npm run preview` et, dans un autre terminal,
   `BASE=http://localhost:8787 ADMIN_PASSWORD=... npm run e2e-produit` (parcours complet dans un navigateur).
 - ALIA reste sur Netlify ; la bascule sur Rouelia se fera quand le domaine sera branché (recréer ses lots et son logo).
 
-## Promis sur le site mais pas encore codé (décision d'Aymen : « bientôt » ou retirer)
-- Code cadeau envoyé par e-mail au client (aujourd'hui : à l'écran, capture conseillée) ; flyer PDF prêt à imprimer.
-- Rapport hebdomadaire (e-mail, WhatsApp ou SMS) avec une action à faire.
-- SMS inclus (50 ou 200 par mois) : rappels, relances, anniversaires.
-- Relances automatiques des cadeaux non retirés.
-- Réponses aux avis en un clic (rédaction par IA) ; analyse IA des avis ; alerte avis négatif.
-- Veille de 3 concurrents voisins.
-- Mise en route et ajustement des lots « par IA » (la démo propose des modèles par métier, pas d'IA).
-- Roues saisonnières programmées, roue de parrainage.
-- Actions Instagram et Facebook, lien de réservation après le jeu.
-- Statistiques par employé, lots pour heures creuses, suivi de la rentabilité.
-- Sans mention « Propulsé par Rouelia », domaine personnalisé.
+## Groupe 1 des fonctions promises : fait le 3 octobre 2026
+Tout est réglable dans l'onglet Roue de l'espace, avec les droits du pack (cadenas sinon) ; Aymen change le pack
+d'un commerce dans `/admin`.
+- Flyer et chevalet à imprimer (`/espace/flyer`) : chevalet A5 ou 4 flyers A6 sur A4, impression ou PDF. Tous packs.
+- Roues saisonnières programmées (entre deux dates) : Croissance et Premium.
+- Lots pour heures creuses (jours et créneau, priorité sur la saison) : Premium.
+- Parrainage : le client partage un lien ; quand l'ami retire son cadeau, le parrain a un bonus remis en caisse
+  sur son code. Croissance et Premium.
+- Statistiques par employé (prénom choisi en caisse, tableau dans le Suivi) : Croissance et Premium.
+- Liens Instagram et Facebook après le jeu : Croissance et Premium.
+- Suivi de la rentabilité du mois (panier moyen et marge réglés dans l'onglet Roue) : Premium.
+- Déjà faits à l'étape 1 : lien de réservation après le jeu, mention « Propulsé par Rouelia » retirée en Premium.
+
+## Promis sur le site mais pas encore codé (groupes 2 à 6, comptes à créer par Aymen)
+- Groupe 2, e-mails (compte Brevo) : code cadeau par e-mail au client, relances avant la date limite, rapport
+  hebdomadaire, bienvenue et fin d'essai, mot de passe oublié automatique.
+- Groupe 3, SMS (Brevo, payant à l'envoi) : 50 ou 200 SMS par mois, rappels, relances, anniversaires, rapport SMS.
+- Groupe 4, Google : veille de 3 concurrents (clé Places) ; alerte avis négatif, réponses aux avis, audit
+  (accès API Business Profile, demande à faire tôt, validation par Google en plusieurs semaines).
+- Groupe 5, IA (clé API Anthropic) : réponses aux avis en un clic, analyse des avis, mise en route et ajustement
+  des lots « par IA ».
+- Groupe 6, WhatsApp (compte vérifié par Meta, demande le SIREN) : rapport par WhatsApp.
+- Domaine personnalisé (Premium) : sur demande, réglé à la main par Aymen dans Cloudflare.
 - Espace client, côté abonnement : changer de pack, arrêter « en un clic », payer (étape 2, Stripe). L'export de la
   liste de clients existe ; la suppression d'un client se fait encore à la demande.
 Services humains déjà possibles sans code : visio de 30 minutes, installation, point mensuel, audit de fiche Google,
