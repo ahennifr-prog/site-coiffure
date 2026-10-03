@@ -1,7 +1,7 @@
 import { addDays, parisDay } from "@/lib/dates";
 import { database } from "@/lib/db";
 import { activeWheel, gameState, packFeatures, publicPrizes, withDefaults, type Shop } from "@/lib/shops";
-import { normalizeFrenchPhone } from "@/lib/signup";
+import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
 import { pickWeighted } from "@/lib/wheel";
 
 /** Une partie jouée par un client, avec son code cadeau. */
@@ -16,6 +16,9 @@ export interface Play {
   phone: string;
   /** Le client accepte d'être recontacté par le commerce. */
   marketing: boolean;
+  /** E-mail facultatif : code envoyé et un rappel avant la date limite. */
+  email?: string | null;
+  reminderSent?: boolean;
   createdAt: string;
   /** Dates au format AAAA-MM-JJ, heure de Paris. */
   validFrom: string;
@@ -92,7 +95,7 @@ export async function stats(shopId: string, days = 14, now = new Date()) {
 /* Parties                                                             */
 /* ------------------------------------------------------------------ */
 
-export type PlayError = "inactive" | "firstName" | "phone" | "consent" | "rate";
+export type PlayError = "inactive" | "firstName" | "phone" | "consent" | "rate" | "email";
 export type PlayResult =
   | { ok: true; already: boolean; play: Play; prizeIndex: number; prizes: ReturnType<typeof publicPrizes> }
   | { ok: false; error: PlayError };
@@ -105,7 +108,7 @@ async function playByCode(shopId: string, code: string): Promise<Play | null> {
 
 export async function play(
   shop: Shop,
-  input: { firstName: unknown; phone: unknown; consent: unknown; consentText: unknown; marketing?: unknown; referrer?: unknown },
+  input: { firstName: unknown; phone: unknown; consent: unknown; consentText: unknown; marketing?: unknown; referrer?: unknown; email?: unknown },
   ip: string,
   now = new Date(),
   rand: () => number = Math.random,
@@ -116,6 +119,8 @@ export async function play(
   const phone = typeof input.phone === "string" ? normalizeFrenchPhone(input.phone) : null;
   if (!phone) return { ok: false, error: "phone" };
   if (input.consent !== true) return { ok: false, error: "consent" };
+  const rawEmail = typeof input.email === "string" ? input.email.trim().toLowerCase() : "";
+  if (rawEmail && !isEmail(rawEmail)) return { ok: false, error: "email" };
   if ((await hit(`jouer:${ip}`, now)) > 60) return { ok: false, error: "rate" };
 
   const db = await database();
@@ -156,6 +161,8 @@ export async function play(
     firstName,
     phone,
     marketing: input.marketing === true,
+    email: rawEmail || null,
+    reminderSent: false,
     createdAt: now.toISOString(),
     validFrom,
     expiresOn: addDays(validFrom, s.validityDays),
@@ -280,4 +287,40 @@ export async function listPlays(shop: Shop, limit = 2000, now = new Date()): Pro
     .bind(shop.id, limit)
     .all<{ data: string; redeemed_at: string | null }>();
   return results.map((r) => ({ ...(JSON.parse(r.data) as Play), redeemedAt: r.redeemed_at }));
+}
+
+/** Cadeaux à rappeler par e-mail : non retirés, avec e-mail, qui expirent le jour donné. */
+export async function playsToRemind(expiresOn: string): Promise<{ shopId: string; play: Play }[]> {
+  const db = await database();
+  const { results } = await db
+    .prepare(
+      "SELECT shop_id, data FROM plays WHERE expires_on = ? AND redeemed_at IS NULL AND json_extract(data, '$.email') IS NOT NULL AND COALESCE(json_extract(data, '$.reminderSent'), 0) = 0 LIMIT 2000",
+    )
+    .bind(expiresOn)
+    .all<{ shop_id: string; data: string }>();
+  return results.map((r) => ({ shopId: r.shop_id, play: JSON.parse(r.data) as Play }));
+}
+
+export async function markReminded(shopId: string, code: string): Promise<void> {
+  const db = await database();
+  await db.prepare("UPDATE plays SET data = json_set(data, '$.reminderSent', json('true')) WHERE shop_id = ? AND code = ?").bind(shopId, code).run();
+}
+
+/** Chiffres d'une période pour le rapport hebdomadaire (jours AAAA-MM-JJ inclus). */
+export async function periodNumbers(shopId: string, from: string, to: string, today: string) {
+  const db = await database();
+  const { results } = await db.prepare("SELECT field, SUM(n) AS n FROM stats WHERE shop_id = ? AND day >= ? AND day <= ? GROUP BY field").bind(shopId, from, to).all<{ field: string; n: number }>();
+  const t = Object.fromEntries(results.map((r) => [r.field, Number(r.n)])) as Record<string, number>;
+  const pending = await db
+    .prepare("SELECT COUNT(*) AS n, SUM(CASE WHEN expires_on <= ? THEN 1 ELSE 0 END) AS soon FROM plays WHERE shop_id = ? AND redeemed_at IS NULL AND expires_on >= ?")
+    .bind(addDays(today, 7), shopId, today)
+    .first<{ n: number; soon: number | null }>();
+  return {
+    visites: t.visites ?? 0,
+    parties: t.parties ?? 0,
+    avisClics: t.avis_clics ?? 0,
+    retraits: t.retraits ?? 0,
+    enAttente: Number(pending?.n ?? 0),
+    expirentBientot: Number(pending?.soon ?? 0),
+  };
 }

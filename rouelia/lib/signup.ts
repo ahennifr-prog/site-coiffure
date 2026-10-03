@@ -91,6 +91,7 @@ export type SignupErrorKey =
   | "consent";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+export const isEmail = (v: string) => v.length <= 200 && EMAIL_RE.test(v);
 
 /**
  * Normalise un numéro français au format international +33XXXXXXXXX.

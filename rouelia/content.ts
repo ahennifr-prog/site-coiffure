@@ -1008,6 +1008,7 @@ export const legal = {
           p: [
             `Seul ${company.owner} a accès à vos données. Elles ne sont ni vendues ni louées.`,
             `Hébergement : ${host.name} (États-Unis) héberge le site et la base des inscriptions. Ce transfert hors de l'Union européenne est encadré par le cadre de protection des données UE et États-Unis (Data Privacy Framework) et par les clauses contractuelles types de la Commission européenne.`,
+            "Envoi des e-mails : Brevo (Sendinblue SAS, 106 boulevard Haussmann, 75008 Paris, France) envoie les e-mails du service : accusé de réception, accès à votre espace, fin d'essai, rapport hebdomadaire, et pour vos clients le code gagné et son rappel.",
           ],
         },
         {

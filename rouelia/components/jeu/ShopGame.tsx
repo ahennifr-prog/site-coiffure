@@ -25,8 +25,9 @@ interface ClientPlay {
   redeemedAt: string | null;
 }
 
-const consentText = (name: string) =>
-  `J'accepte que ${name} enregistre mon prénom et mon numéro pour retrouver mon cadeau en caisse et limiter le jeu à une participation par personne. Ces données ne sont ni revendues ni utilisées pour de la publicité.`;
+const consentText = (name: string, withEmail = false) =>
+  `J'accepte que ${name} enregistre mon prénom et mon numéro${withEmail ? ", et mon e-mail pour m'envoyer mon code et un rappel avant la date limite," : ""} pour retrouver mon cadeau en caisse et limiter le jeu à une participation par personne. Ces données ne sont ni revendues ni utilisées pour de la publicité.`;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const marketingText = (name: string) => `J'accepte de recevoir des offres de ${name} par SMS. Je peux me désinscrire à tout moment. (Facultatif)`;
 
 /** Invitation d'un ami : le lien porte le code du client. */
@@ -154,6 +155,8 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
   const [marketing, setMarketing] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailed, setEmailed] = useState(false);
   const [tried, setTried] = useState(false);
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -232,20 +235,22 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
   }
 
   const phoneOk = !!normalizeFrenchPhone(phone);
+  const emailOk = !email.trim() || EMAIL_RE.test(email.trim());
   const errors = tried
     ? {
+        email: emailOk ? null : "Cet e-mail semble incomplet. Vérifiez le @ et le point, ou laissez le champ vide.",
         firstName: firstName.trim() ? null : "Indiquez votre prénom.",
         phone: phone.trim() ? (phoneOk ? null : "Ce numéro ne semble pas complet. Exemple : 06 12 34 56 78.") : "Indiquez votre numéro de téléphone.",
         consent: consent ? null : "Cochez la case pour participer.",
       }
-    : { firstName: null, phone: null, consent: null };
+    : { firstName: null, phone: null, consent: null, email: null };
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setTried(true);
     setServerError(null);
-    if (!firstName.trim() || !phoneOk || !consent) {
-      const id = !firstName.trim() ? "prenom" : !phoneOk ? "tel" : "accord";
+    if (!firstName.trim() || !phoneOk || !emailOk || !consent) {
+      const id = !firstName.trim() ? "prenom" : !phoneOk ? "tel" : !emailOk ? "email" : "accord";
       document.getElementById(id)?.focus();
       return;
     }
@@ -254,7 +259,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
       const res = await fetch(`/api/j/${shop.slug}/jouer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, phone, consent, marketing, referrer, consentText: consentText(shop.name) + (marketing ? ` ${marketingText(shop.name)}` : "") }),
+        body: JSON.stringify({ firstName, phone, email: email.trim(), consent, marketing, referrer, consentText: consentText(shop.name, !!email.trim()) + (marketing ? ` ${marketingText(shop.name)}` : "") }),
       });
       const data = await res.json();
       if (!data.ok) {
@@ -273,6 +278,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
         /* stockage indisponible */
       }
       if (Array.isArray(data.prizes) && data.prizes.length) setPrizes(data.prizes);
+      setEmailed(data.emailed === true);
       setResult({ play: data.play, prizeIndex: data.prizeIndex });
       setStep(data.already ? "deja" : "roue");
     } catch {
@@ -443,6 +449,25 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                     {errors.phone ? <p id="tel-err" className="mt-1 text-sm font-medium text-danger">{errors.phone}</p> : null}
                   </div>
                   <div>
+                    <label htmlFor="email" className="block text-sm font-semibold">E-mail (facultatif)</label>
+                    <input
+                      id="email"
+                      type="email"
+                      inputMode="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="email"
+                      aria-invalid={!!errors.email}
+                      aria-describedby={errors.email ? "email-err" : "email-aide"}
+                      className="mt-1.5 min-h-13 w-full rounded-lg bg-cream px-4 text-lg ring-1 ring-line outline-none focus:ring-2 focus:ring-ink aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-danger"
+                    />
+                    {errors.email ? (
+                      <p id="email-err" className="mt-1 text-sm font-medium text-danger">{errors.email}</p>
+                    ) : (
+                      <p id="email-aide" className="mt-1 text-xs text-ink-soft">Pour recevoir votre code et un rappel avant la date limite.</p>
+                    )}
+                  </div>
+                  <div>
                     <label className="flex cursor-pointer gap-3 text-sm text-ink-soft">
                       <input
                         id="accord"
@@ -453,7 +478,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                         aria-describedby={errors.consent ? "accord-err" : undefined}
                         className="mt-0.5 h-5 w-5 shrink-0 accent-ink"
                       />
-                      <span>{consentText(shop.name)}</span>
+                      <span>{consentText(shop.name, !!email.trim())}</span>
                     </label>
                     {errors.consent ? <p id="accord-err" className="mt-1 text-sm font-medium text-danger">{errors.consent}</p> : null}
                   </div>
@@ -501,6 +526,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                 </h1>
                 <p className="mt-2 mb-5 text-center text-ink-soft lg:text-left">
                   {step === "gain" ? "Voici votre cadeau." : `Une participation par personne${replay}. Voici le cadeau que vous avez gagné.`}
+                  {step === "gain" && emailed ? " Il vous a aussi été envoyé par e-mail." : ""}
                 </p>
                 <Ticket play={result.play} shop={shop} />
               </div>

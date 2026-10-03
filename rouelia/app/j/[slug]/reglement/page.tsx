@@ -33,8 +33,9 @@ export default async function Reglement({ params }: { params: Promise<{ slug: st
       "Vos données",
       [
         `${c.name} enregistre votre prénom et votre numéro de téléphone pour retrouver votre cadeau et limiter le jeu à une participation par personne. Base légale : votre consentement. Si vous l'avez accepté, ${c.name} peut aussi vous envoyer ses offres par SMS ; vous pouvez vous désinscrire à tout moment.`,
+        "Si vous indiquez votre e-mail (facultatif), il sert uniquement à vous envoyer votre code et un seul rappel avant la date limite.",
         "Ces données ne sont ni revendues, ni utilisées pour de la publicité par des tiers. Elles sont supprimées automatiquement un an après la fin de validité du cadeau.",
-        `Le jeu est fourni par Rouelia, qui héberge ces données pour le compte de ${c.name} (hébergement Cloudflare).`,
+        `Le jeu est fourni par Rouelia, qui héberge ces données pour le compte de ${c.name} (hébergement Cloudflare, envoi des e-mails par Brevo).`,
         `Pour consulter, corriger ou supprimer vos données, ${contact}. Vous pouvez aussi saisir la CNIL (cnil.fr).`,
       ],
     ],

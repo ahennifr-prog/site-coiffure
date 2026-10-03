@@ -12,6 +12,24 @@ export function Connexion() {
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [forgot, setForgot] = useState<"no" | "form" | "sent">("no");
+
+  async function sendReset() {
+    if (!email.trim()) {
+      setError("Indiquez votre e-mail ci-dessus, puis touchez à nouveau « Mot de passe oublié ».");
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/espace/oubli", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
+      if (res.status === 429) setError("Trop de demandes. Patientez une heure ou écrivez-nous.");
+      else setForgot("sent");
+    } catch {
+      setError("La connexion a échoué. Vérifiez le réseau et réessayez.");
+    }
+    setBusy(false);
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -49,8 +67,17 @@ export function Connexion() {
         <button type="submit" disabled={busy} className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-tomette font-semibold text-white hover:bg-tomette-deep disabled:opacity-70">
           {busy ? <LoaderCircle aria-hidden size={18} className="animate-spin" /> : null} Se connecter
         </button>
-        <p className="mt-5 text-sm text-ink-soft">
-          Mot de passe oublié ? Écrivez à <a href={`mailto:${brand.email}`} className="font-semibold underline underline-offset-2">{brand.email}</a>, on vous envoie un nouveau lien.
+        {forgot === "sent" ? (
+          <p role="status" className="mt-5 rounded-lg bg-sauge-soft p-3 text-sm font-semibold text-sauge">
+            Si un compte existe pour cette adresse, un lien pour choisir un nouveau mot de passe vient de lui être envoyé.
+          </p>
+        ) : (
+          <button type="button" onClick={sendReset} disabled={busy} className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4">
+            Mot de passe oublié
+          </button>
+        )}
+        <p className="mt-2 text-sm text-ink-soft">
+          Un souci ? Écrivez à <a href={`mailto:${brand.email}`} className="font-semibold underline underline-offset-2">{brand.email}</a>.
         </p>
       </form>
     </main>

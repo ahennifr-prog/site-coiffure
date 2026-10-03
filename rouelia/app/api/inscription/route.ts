@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { checkPayload, signPayload } from "@/lib/auth";
 import { saveSignup } from "@/lib/db";
-import { offerForSignup } from "@/lib/offers";
+import { sendMail } from "@/lib/mail";
+import { signupAlertMail, signupConfirmMail } from "@/lib/mail-templates";
+import { offerById, offerForSignup } from "@/lib/offers";
+import { pricing } from "@/content";
 import { buildRecord } from "@/lib/signup";
 
 /**
@@ -43,5 +46,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "storage" }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, id: result.record.id }, { status: 201 });
+  // Accusé de réception au commerçant et alerte interne (sans effet si Brevo n'est pas branché).
+  const r = result.record;
+  await Promise.all([
+    sendMail(signupConfirmMail({ email: r.email, firstName: r.firstName, shopName: r.shopName })),
+    sendMail(
+      signupAlertMail({
+        firstName: r.firstName,
+        shopName: r.shopName,
+        email: r.email,
+        phone: r.phone,
+        pack: pricing.packs.find((p) => p.id === r.pack)?.name ?? r.pack,
+        offer: r.offer ? `${offerById(r.offer.id).label} (${r.offer.status === "applied" ? "à appliquer" : "non applicable à ce pack"})` : null,
+      }),
+    ),
+  ]);
+
+  return NextResponse.json({ ok: true, id: r.id }, { status: 201 });
 }

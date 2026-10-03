@@ -1,8 +1,9 @@
 import { getSignup, updateSignup } from "@/lib/db";
 import { json, readJson, requireAdmin } from "@/lib/http";
+import { sendInvite, sendReset } from "@/lib/notify";
 import { PACK_IDS } from "@/lib/signup";
 import type { PackId } from "@/content";
-import { createInvite, getShop, saveShop, SHOP_PLANS, type ShopPlan } from "@/lib/shops";
+import { createInvite, getShop, listShops, saveShop, SHOP_PLANS, type ShopPlan } from "@/lib/shops";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -12,7 +13,10 @@ export async function POST(_req: Request, { params }: Ctx) {
   if (denied) return denied;
   const shop = await getShop((await params).id);
   if (!shop) return json({ ok: false, error: "introuvable" }, 404);
-  return json({ ok: true, token: await createInvite(shop.id), slug: shop.slug });
+  const token = await createInvite(shop.id);
+  const activated = (await listShops()).find((s) => s.id === shop.id)?.hasPassword;
+  const emailed = (await (activated ? sendReset(shop, token) : sendInvite(shop, token))).ok;
+  return json({ ok: true, token, slug: shop.slug, emailed });
 }
 
 /** Change l'offre (essai, client payant, pause) ou le pack. Prolonge l'essai si demandé. */

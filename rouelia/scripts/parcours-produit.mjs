@@ -158,6 +158,9 @@ const anonPage = await anon.newPage();
 await anonPage.goto(`${BASE}/espace`);
 ok(anonPage.url().endsWith("/espace/connexion"), "espace renvoie vers la connexion");
 await anonPage.getByLabel("E-mail").fill(email);
+await anonPage.getByRole("button", { name: "Mot de passe oublié" }).click();
+await anonPage.getByText(/Si un compte existe pour cette adresse/).waitFor();
+ok(true, "mot de passe oublié");
 await anonPage.getByLabel("Mot de passe", { exact: true }).fill("motdepasse-test");
 await anonPage.getByRole("button", { name: "Se connecter" }).click();
 await anonPage.waitForURL(/\/espace$/);
@@ -212,6 +215,12 @@ await friend.getByRole("button", { name: "Jouer" }).click();
 await friend.getByRole("dialog").getByRole("button", { name: "Fermer" }).click();
 await friend.getByLabel("Prénom", { exact: true }).fill("Nora");
 await friend.getByLabel("Téléphone", { exact: true }).fill("06 55 44 33 22");
+await friend.getByLabel("E-mail (facultatif)").fill("pas-un-mail");
+await friend.getByText(/J'accepte que .* enregistre mon prénom/).click();
+await friend.getByRole("button", { name: "Accéder à la roue" }).click();
+ok(await friend.getByText(/Cet e-mail semble incomplet/).isVisible(), "e-mail client invalide signalé");
+await friend.getByLabel("E-mail (facultatif)").fill("nora@exemple.fr");
+await friend.getByText(/J'accepte que .* enregistre mon prénom/).click();
 await friend.getByText(/J'accepte que .* enregistre mon prénom/).click();
 await friend.getByRole("button", { name: "Accéder à la roue" }).click();
 await friend.getByRole("button", { name: "Tourner la roue" }).last().click();
@@ -256,6 +265,14 @@ await shot(merchant, "flyer-a5");
 await merchant.getByRole("radio", { name: "4 flyers A6 sur une feuille A4" }).click();
 ok((await merchant.getByText("Tentez votre chance").count()) === 4, "4 flyers A6 sur A4");
 await shot(merchant, "flyer-a6");
+
+// 10. Tâche quotidienne : protégée par le secret, et elle tourne sans erreur
+const cronNo = await admin.request.post(`${BASE}/api/cron`);
+ok(cronNo.status() === 401, "tâche quotidienne fermée sans secret");
+if (process.env.SESSION_SECRET) {
+  const cron = await admin.request.post(`${BASE}/api/cron`, { headers: { "x-cron-secret": process.env.SESSION_SECRET } });
+  ok(cron.status() === 200 && (await cron.json()).ok === true, "tâche quotidienne exécutée");
+}
 
 console.log(errors.length ? `\nErreurs de console :\n${errors.join("\n")}` : "\nAucune erreur de console.");
 await browser.close();

@@ -1,5 +1,6 @@
 import { play } from "@/lib/game";
 import { clientIp, json, readJson } from "@/lib/http";
+import { sendClientCode } from "@/lib/notify";
 import { getShopBySlug } from "@/lib/shops";
 
 type Ctx = { params: Promise<{ slug: string }> };
@@ -12,7 +13,9 @@ export async function POST(req: Request, { params }: Ctx) {
   if (!body) return json({ ok: false, error: "invalide" }, 400);
   const r = await play(shop, body as Parameters<typeof play>[1], clientIp(req));
   if (!r.ok) return json(r, r.error === "rate" ? 429 : r.error === "inactive" ? 409 : 422);
+  // Le code part aussi par e-mail si le client l'a demandé (une erreur d'envoi ne bloque pas la partie).
+  const emailed = !r.already && r.play.email ? (await sendClientCode(shop, r.play)).ok : false;
   // Le téléphone complet n'est pas renvoyé au navigateur.
-  const { phone: _phone, consentText: _c, cost: _cost, redeemedBy: _by, ...visible } = r.play;
-  return json({ ok: true, already: r.already, prizeIndex: r.prizeIndex, prizes: r.prizes, play: visible });
+  const { phone: _phone, consentText: _c, cost: _cost, redeemedBy: _by, email: _email, ...visible } = r.play;
+  return json({ ok: true, already: r.already, prizeIndex: r.prizeIndex, prizes: r.prizes, play: visible, emailed });
 }

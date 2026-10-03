@@ -1,5 +1,6 @@
 import { getSignup, updateSignup } from "@/lib/db";
 import { json, readJson, requireAdmin } from "@/lib/http";
+import { sendInvite } from "@/lib/notify";
 import { createInvite, getShop, insertShop, listShops, shopFromSignup, slugify, uniqueSlug } from "@/lib/shops";
 
 export async function GET() {
@@ -22,5 +23,7 @@ export async function POST(req: Request) {
   await insertShop(shop);
   await updateSignup({ ...signup, shopId: shop.id, status: "essai_en_cours", trialStartedAt: now.toISOString() });
   const token = await createInvite(shop.id, now);
-  return json({ ok: true, shopId: shop.id, slug: shop.slug, token });
+  // Le lien part aussi par e-mail au commerçant quand Brevo est branché.
+  const emailed = (await sendInvite(shop, token)).ok;
+  return json({ ok: true, shopId: shop.id, slug: shop.slug, token, emailed });
 }

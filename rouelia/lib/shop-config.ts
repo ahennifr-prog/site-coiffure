@@ -87,6 +87,8 @@ export interface Shop {
   offer: SignupOffer | null;
   codePrefix: string;
   settings: ShopSettings;
+  /** E-mails automatiques déjà envoyés (dates AAAA-MM-JJ), pour ne jamais les doubler. */
+  mails?: { trialSoon?: string; trialEnded?: string; weekly?: string };
 }
 
 
@@ -230,6 +232,8 @@ export function packFeatures(pack: PackId) {
   const premium = pack === "premium";
   return {
     booking: plus,
+    /** Rappel par e-mail avant la date limite des cadeaux non retirés. */
+    reminders: plus,
     social: plus,
     seasons: plus,
     referral: plus,

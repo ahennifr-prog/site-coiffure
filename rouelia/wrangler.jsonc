@@ -2,7 +2,8 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   // Site Rouelia sur Cloudflare Workers (adaptateur OpenNext).
   "name": "rouelia",
-  "main": ".open-next/worker.js",
+  // worker.ts reprend le site (.open-next/worker.js) et ajoute la tâche planifiée du matin.
+  "main": "worker.ts",
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
@@ -10,6 +11,8 @@
     "binding": "ASSETS"
   },
   "observability": { "enabled": true },
+  // Chaque jour à 6 h UTC (7 h ou 8 h à Paris) : rappels clients, fins d'essai, rapport du lundi.
+  "triggers": { "crons": ["0 6 * * *"] },
   // Garde les variables réglées dans le tableau de bord Cloudflare lors des déploiements.
   "keep_vars": true,
   // Base des inscriptions. Sans database_id, Wrangler la crée automatiquement au premier déploiement.

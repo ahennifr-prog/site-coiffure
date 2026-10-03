@@ -28,6 +28,16 @@ Si le premier build échoue parce que le dossier `rouelia` est introuvable, le p
 2. Type **Secret**, nom `ADMIN_PASSWORD`, valeur : votre mot de passe. Enregistrer (déployer).
 3. Ajouter aussi un secret `SESSION_SECRET` avec la longue suite de caractères donnée par Claude.
 
+## 3 bis. Les e-mails (Brevo)
+1. Brevo : domaine `rouelia.fr` authentifié (fait le 3 octobre 2026), téléphone vérifié.
+2. Brevo → Paramètres → **SMTP et API** → **Clés API** → générer une clé `rouelia-site`.
+3. Worker `rouelia` → **Paramètres → Variables et secrets → Ajouter** : type **Secret**, nom `BREVO_API_KEY`.
+4. Si Brevo a les « IP autorisées » activées, les désactiver (les adresses de Cloudflare changent).
+Sans cette clé, le site marche normalement mais n'envoie aucun e-mail.
+
+La tâche du matin (rappels clients, fins d'essai, rapport du lundi) tourne chaque jour à 6 h UTC grâce au
+déclencheur `triggers.crons` de `wrangler.jsonc` ; elle apparaît dans le Worker → **Paramètres → Déclencheurs**.
+
 ## 4. Vérifier
 1. Ouvrir l'adresse donnée par Cloudflare (`https://rouelia.<votre-sous-domaine>.workers.dev`).
 2. Faire une inscription test (bouton « Créer ma roue », puis choisir un pack).

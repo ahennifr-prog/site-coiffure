@@ -94,7 +94,7 @@ Le produit multi-commerces est en place dans le site Rouelia (même Worker, mêm
 - **Règles des packs** : fin d'essai sans passage en client, ou pause par Aymen : la roue affiche une pause, la
   caisse continue de valider les codes déjà gagnés. Lien de réservation après le jeu en Croissance et Premium
   seulement. Mention « Propulsé par Rouelia » sauf en Premium.
-- **Vérifier** : `npm run check` (68 tests), puis `npm run preview` et, dans un autre terminal,
+- **Vérifier** : `npm run check` (76 tests), puis `npm run preview` et, dans un autre terminal,
   `BASE=http://localhost:8787 ADMIN_PASSWORD=... npm run e2e-produit` (parcours complet dans un navigateur).
 - ALIA reste sur Netlify ; la bascule sur Rouelia se fera quand le domaine sera branché (recréer ses lots et son logo).
 
@@ -111,9 +111,17 @@ d'un commerce dans `/admin`.
 - Suivi de la rentabilité du mois (panier moyen et marge réglés dans l'onglet Roue) : Premium.
 - Déjà faits à l'étape 1 : lien de réservation après le jeu, mention « Propulsé par Rouelia » retirée en Premium.
 
-## Promis sur le site mais pas encore codé (groupes 2 à 6, comptes à créer par Aymen)
-- Groupe 2, e-mails (compte Brevo) : code cadeau par e-mail au client, relances avant la date limite, rapport
-  hebdomadaire, bienvenue et fin d'essai, mot de passe oublié automatique.
+## Groupe 2, e-mails : codé le 3 octobre 2026 (Brevo, expéditeur contact@rouelia.fr)
+- Client : champ e-mail facultatif sur la page du jeu ; code envoyé au nom du commerce (réponse au commerçant) ;
+  un seul rappel 3 jours avant la date limite (Croissance et Premium).
+- Commerçant : lien d'invitation envoyé tout seul à l'ouverture de l'essai et au « nouveau lien » ; mot de passe
+  oublié sur `/espace/connexion` ; fin d'essai 3 jours avant puis le jour même ; rapport du lundi avec une action.
+- Aymen : accusé de réception à chaque inscription et alerte interne sur contact@rouelia.fr.
+- Tâche du matin : `worker.ts` (entrée du Worker) appelle `/api/cron` à 6 h UTC (`wrangler.jsonc`), protégée
+  par `SESSION_SECRET`. Sans `BREVO_API_KEY`, rien n'est envoyé et rien ne casse.
+- À tester en réel par Aymen une fois la clé posée : inscription test, ouverture d'essai, partie avec un e-mail.
+
+## Promis sur le site mais pas encore codé (groupes 3 à 6, comptes à créer par Aymen)
 - Groupe 3, SMS (Brevo, payant à l'envoi) : 50 ou 200 SMS par mois, rappels, relances, anniversaires, rapport SMS.
 - Groupe 4, Google : veille de 3 concurrents (clé Places) ; alerte avis négatif, réponses aux avis, audit
   (accès API Business Profile, demande à faire tôt, validation par Google en plusieurs semaines).

@@ -28,6 +28,7 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
   const [link, setLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [emailed, setEmailed] = useState(false);
 
   const inviteUrl = (token: string) => `${window.location.origin}/espace/invitation#${token}`;
 
@@ -51,6 +52,7 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
     const d = await call("/api/admin/shops", { method: "POST", body: JSON.stringify({ signupId: signup.id }) });
     if (d) {
       setLink(inviteUrl(d.token));
+      setEmailed(d.emailed === true);
       onChange();
     }
   }
@@ -58,7 +60,10 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
   async function newLink() {
     if (!shop) return;
     const d = await call(`/api/admin/shops/${shop.id}`, { method: "POST" });
-    if (d) setLink(inviteUrl(d.token));
+    if (d) {
+      setLink(inviteUrl(d.token));
+      setEmailed(d.emailed === true);
+    }
   }
 
   async function patch(body: object) {
@@ -118,6 +123,9 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
         <div className="mt-3 rounded-lg bg-paper p-3 ring-1 ring-sauge">
           <p className="font-semibold">Lien à envoyer à {signup.firstName} (valable 14 jours, une seule utilisation)</p>
           <p className="mt-1 font-mono text-xs break-all">{link}</p>
+          <p className="mt-1 text-xs font-semibold text-ink-soft">
+            {emailed ? `Envoyé automatiquement par e-mail à ${signup.email}.` : "Pas d'envoi automatique (Brevo non branché) : envoyez-le avec un des boutons."}
+          </p>
           <div className="mt-2 flex flex-wrap gap-2">
             <button
               type="button"
