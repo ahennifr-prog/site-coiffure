@@ -25,10 +25,11 @@ interface ClientPlay {
   redeemedAt: string | null;
 }
 
+/** Texte court de l'accord ; le détail est dans le règlement (lien juste en dessous). */
 const consentText = (name: string, withEmail = false) =>
-  `J'accepte que ${name} enregistre mon prénom et mon numéro${withEmail ? ", et mon e-mail pour m'envoyer mon code et un rappel avant la date limite," : ""} pour retrouver mon cadeau en caisse et limiter le jeu à une participation par personne. Ces données ne sont ni revendues ni utilisées pour de la publicité.`;
+  `J'accepte que ${name} garde ces informations pour mon cadeau${withEmail ? " (et l'envoyer par e-mail)" : ""} et pour limiter le jeu à une partie par personne. Jamais revendues.`;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const marketingText = (name: string) => `J'accepte de recevoir des offres de ${name} par SMS. Je peux me désinscrire à tout moment. (Facultatif)`;
+const marketingText = (name: string) => `Recevoir les offres de ${name} par SMS (facultatif, désinscription à tout moment).`;
 
 /** Invitation d'un ami : le lien porte le code du client. */
 function Referral({ play, shop }: { play: ClientPlay; shop: PublicShop }) {
@@ -480,6 +481,9 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                       />
                       <span>{consentText(shop.name, !!email.trim())}</span>
                     </label>
+                    <Link href={`/j/${shop.slug}/reglement`} target="_blank" className="mt-1 ml-8 inline-block text-xs font-semibold text-ink-soft underline underline-offset-2">
+                      Règlement et données
+                    </Link>
                     {errors.consent ? <p id="accord-err" className="mt-1 text-sm font-medium text-danger">{errors.consent}</p> : null}
                   </div>
                   <label className="flex cursor-pointer gap-3 text-sm text-ink-soft">

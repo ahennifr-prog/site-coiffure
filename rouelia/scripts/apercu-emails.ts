@@ -29,7 +29,7 @@ const sms: [string, string, string][] = [
   ["Client", "3 jours avant la date limite (cadeau pas retiré)", "Salon Martine : Léa, votre Soin profond offert expire le 03/11. Code SAL-7K4M2. On vous attend !"],
   ["Client qui a accepté les offres", "Le jour de son anniversaire (si date donnée en jouant)", "Salon Martine vous souhaite un joyeux anniversaire Léa ! -10 % sur votre prochaine visite ce mois-ci. STOP au 36xxx"],
   ["Client qui a accepté les offres", "Campagne de retour : pas revenu depuis 60 jours", "Salon Martine : Léa, cela fait un moment ! Un nouveau tour de roue vous attend en boutique. STOP au 36xxx"],
-  ["Commerçant (Croissance, Premium)", "Chaque lundi, à la place ou en plus de l'e-mail", "Rouelia, votre semaine : 41 parties, 9 cadeaux retirés, 5 expirent bientôt. Action : rappelez-le aux habitués. rouelia.fr/espace"],
+  ["Commerçant (Croissance, Premium)", "Chaque lundi, à la place ou en plus de l'e-mail", "Rouelia, votre semaine : 41 parties, 9 cadeaux retirés, 5 expirent sous 7 jours. Action : rappelez-le aux habitués. rouelia.fr/espace"],
 ];
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -55,7 +55,7 @@ iframe{width:100%;height:560px;border:0;display:block}
 <h1>Aperçu des messages Rouelia</h1>
 <p class="lead">Exemples avec un commerce fictif, Salon Martine, et une cliente, Léa. Les e-mails sont générés par le vrai code du site. Les SMS sont des propositions à valider : ils ne sont pas encore codés (groupe 3).</p>
 <h2>E-mails (codés, partent dès que la clé Brevo est en place)</h2>
-${mails.map(([who, when, m]) => `<div class="card"><div class="meta"><span class="tag">${esc(who)}</span>${esc(when)}<b>Objet : ${esc(m.subject)}</b>Expéditeur : ${esc(m.fromName ?? "Rouelia")} &lt;contact@rouelia.fr&gt;${m.replyTo ? `, réponses vers ${esc(m.replyTo)}` : ""}</div><iframe title="${esc(m.subject)}" srcdoc="${esc(m.html)}"></iframe></div>`).join("\n")}
+${mails.map(([who, when, m]) => `<div class="card"><div class="meta"><span class="tag">${esc(who)}</span>${esc(when)}<b>Objet : ${esc(m.subject)}</b>Expéditeur : ${esc(m.fromName ?? "Rouelia")} &lt;contact@rouelia.fr&gt;${m.replyTo ? `, réponses vers ${esc(m.replyTo)}` : ""}</div><div class="mail">${m.html.replace(/^[\s\S]*?<body[^>]*>/, "").replace(/<\/body>[\s\S]*$/, "")}</div></div>`).join("\n")}
 <h2>SMS (propositions, pas encore codés)</h2>
 <p class="note">Un SMS fait 160 caractères. Les lettres comme « ê », « ç » ou « ô » le font passer à 70 caractères et doublent le prix : je les évite autant que possible. Les SMS publicitaires (anniversaire, campagne de retour) ne partent qu'aux clients qui ont coché « recevoir des offres », jamais le dimanche ni la nuit, avec la mention STOP obligatoire (le numéro exact sera celui donné par Brevo).</p>
 ${sms.map(([who, when, t]) => `<div class="card"><div class="meta"><span class="tag">${esc(who)}</span>${esc(when)}</div><div class="sms"><div class="bubble">${esc(t)}</div><div class="small">${smsLen(t)}</div></div></div>`).join("\n")}
