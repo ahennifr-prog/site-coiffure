@@ -91,6 +91,17 @@ Les anciens enregistrements DNS d'IONOS (MX, SPF, autodiscover, _dmarc, _domainc
 `npm run check` (typage, tests, contrôle des textes : aucun tiret de ponctuation, emoji ou formule interdite),
 `npm run cf-build` (build Cloudflare), `npm run preview` (moteur Cloudflare local, mot de passe dans `.dev.vars`).
 
+## Audit vitesse et SEO : 3 octobre 2026 (nuit)
+- Mesuré sur un build local (le réseau de Claude ne joint pas rouelia.fr). Lighthouse bureau : 100 partout.
+  Mobile : performance 91 à 95, accessibilité, bonnes pratiques et SEO 100. Le LCP simulé (environ 3 s) vient du
+  temps d'exécution de React et Next.js sur un téléphone lent simulé ; mesuré réellement, le texte du hero
+  s'affiche en 0,23 s. Essayés sans gain et annulés : CSS intégré (`inlineCss`), police Fraunces sans préchargement.
+- Corrigé (invisible) : canonique et og:url posés page par page (`lib/seo.ts`). Avant, la 404 et les pages non
+  indexées (`/espace`, `/j/...`) déclaraient l'accueil comme canonique, la 404 avait deux balises robots
+  contradictoires, et les pages légales partageaient l'adresse de l'accueil en og:url.
+- À décider par Aymen (changement visible) : alléger Fraunces (axe `opsz` retiré : 121 Ko vers 62 Ko, lettres des
+  grands titres un peu moins contrastées) ; charger la roue d'offres et le simulateur seulement à l'approche.
+
 ## Étape 1 du produit : faite le 2 octobre 2026
 Le produit multi-commerces est en place dans le site Rouelia (même Worker, même base D1, tables créées seules).
 - **Aymen, dans `/admin`** : bouton « Ouvrir l'essai » sur une inscription. Il crée le commerce avec la roue de la

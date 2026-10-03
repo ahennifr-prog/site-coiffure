@@ -3,6 +3,7 @@ import { Figtree, Fraunces } from "next/font/google";
 import "./globals.css";
 import { brand, seo } from "@/content";
 import { ldString, organizationJsonLd } from "@/lib/jsonld";
+import { baseOpenGraph } from "@/lib/seo";
 import { AppStateProvider } from "@/components/AppState";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { SignupMount } from "@/components/signup/SignupMount";
@@ -24,17 +25,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(brand.url),
   title: { default: seo.title, template: `%s | ${brand.name}` },
   description: seo.description,
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: seo.locale,
-    url: "/",
-    siteName: brand.name,
-    title: seo.ogTitle,
-    description: seo.ogDescription,
-  },
+  openGraph: baseOpenGraph,
   twitter: { card: "summary_large_image", title: seo.ogTitle, description: seo.ogDescription },
-  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {

@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { indexedPage } from "@/lib/seo";
 import { faqJsonLd, ldString, softwareJsonLd } from "@/lib/jsonld";
 import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
@@ -12,6 +14,8 @@ import { Support } from "@/components/sections/Support";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
+
+export const metadata: Metadata = indexedPage("/");
 
 export default function Home() {
   return (
