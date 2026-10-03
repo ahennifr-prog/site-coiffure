@@ -12,19 +12,67 @@ interface FlyerShop {
   name: string;
   primary: string;
   onPrimary: string;
+  rim: string;
   monogram: string;
   logoUrl: string | null;
   poweredBy: boolean;
+  /** Couleurs des segments et noms des lots de la roue. */
+  colors: string[];
+  prizes: string[];
+}
+
+/** Petite roue décorative aux couleurs du commerce. */
+function MiniWheel({ colors, rim, size }: { colors: string[]; rim: string; size: string }) {
+  const n = Math.max(3, colors.length);
+  const r = 46;
+  const wedge = (i: number) => {
+    const a0 = (i / n) * 2 * Math.PI;
+    const a1 = ((i + 1) / n) * 2 * Math.PI;
+    const p = (a: number) => `${50 + r * Math.sin(a)} ${54 - r * Math.cos(a)}`;
+    return `M50 54 L${p(a0)} A${r} ${r} 0 0 1 ${p(a1)} Z`;
+  };
+  return (
+    <svg viewBox="0 0 100 106" style={{ width: size, height: "auto" }} aria-hidden>
+      <circle cx="50" cy="54" r="50" fill={rim} />
+      {Array.from({ length: n }, (_, i) => (
+        <path key={i} d={wedge(i)} fill={colors[i % colors.length]} stroke="#FFFFFF" strokeWidth="0.8" />
+      ))}
+      {Array.from({ length: 16 }, (_, i) => {
+        const a = (i / 16) * 2 * Math.PI;
+        return <circle key={i} cx={50 + 48 * Math.sin(a)} cy={54 - 48 * Math.cos(a)} r="1.2" fill="#FFFFFF" />;
+      })}
+      <circle cx="50" cy="54" r="9" fill="#FFFFFF" />
+      <circle cx="50" cy="54" r="5" fill={rim} />
+      <path d="M43 0 H57 L50 14 Z" fill="#1D1A16" />
+    </svg>
+  );
+}
+
+/** Store banne à festons, aux couleurs du commerce. */
+function Awning({ color, height }: { color: string; height: string }) {
+  return (
+    <svg viewBox="0 0 440 44" preserveAspectRatio="none" style={{ width: "100%", height, display: "block" }} aria-hidden>
+      <defs>
+        <pattern id="flyer-stripes" width="44" height="44" patternUnits="userSpaceOnUse">
+          <rect width="22" height="44" fill={color} />
+          <rect x="22" width="22" height="44" fill="#FFFFFF" />
+        </pattern>
+      </defs>
+      <path fill="url(#flyer-stripes)" d={`M0 0 H440 V30 ${Array.from({ length: 10 }, (_, i) => `A22 14 0 0 1 ${440 - (i + 1) * 44} 30`).join(" ")} Z`} />
+    </svg>
+  );
 }
 
 /** Une carte : un chevalet A5, ou un flyer A6 (même dessin, plus petit). */
 function Card({ shop, svg, size }: { shop: FlyerShop; svg: string; size: Format }) {
   const k = size === "a5" ? 1 : 0.71;
   const mm = (v: number) => `${v * k}mm`;
+  const steps = ["Scannez le QR code", "Tournez la roue", "Revenez profiter de votre cadeau"];
   return (
-    <div className="flex flex-col items-center overflow-hidden bg-white text-center text-ink" style={{ width: size === "a5" ? "148mm" : "105mm", height: size === "a5" ? "210mm" : "148.5mm" }}>
-      <div className="flex w-full flex-col items-center" style={{ background: shop.primary, color: shop.onPrimary, padding: `${mm(9)} ${mm(10)} ${mm(7)}` }}>
-        <span className="inline-flex items-center justify-center overflow-hidden rounded-full bg-white ring-4 ring-white" style={{ width: mm(22), height: mm(22) }}>
+    <div className="relative flex flex-col items-center overflow-hidden bg-white text-center text-ink" style={{ width: size === "a5" ? "148mm" : "105mm", height: size === "a5" ? "210mm" : "148.5mm" }}>
+      <Awning color={shop.primary} height={mm(13)} />
+      <div className="flex items-center justify-center" style={{ gap: mm(3), marginTop: mm(5) }}>
+        <span className="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-white" style={{ width: mm(13), height: mm(13), boxShadow: `0 0 0 ${mm(0.6)} ${shop.primary}` }}>
           {shop.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={shop.logoUrl} alt="" className="h-full w-full object-contain" />
@@ -32,15 +80,50 @@ function Card({ shop, svg, size }: { shop: FlyerShop; svg: string; size: Format 
             <Monogram text={shop.monogram} color={shop.primary} className="h-full w-full" />
           )}
         </span>
-        <p className="font-display font-semibold" style={{ fontSize: mm(6), marginTop: mm(3) }}>{shop.name}</p>
-        <p className="font-display leading-none font-semibold" style={{ fontSize: mm(13), marginTop: mm(4) }}>Tentez votre chance</p>
+        <p className="font-display font-semibold" style={{ fontSize: mm(6.2) }}>{shop.name}</p>
       </div>
-      <p className="font-semibold" style={{ fontSize: mm(4.6), margin: `${mm(6)} ${mm(12)} 0`, lineHeight: 1.3 }}>
-        Scannez, tournez la roue : chaque case est un cadeau à utiliser lors de votre prochaine visite.
+      <p className="font-display leading-none font-semibold" style={{ fontSize: mm(14), marginTop: mm(5) }}>Tentez votre chance</p>
+      <p className="inline-block rounded-full font-bold tracking-wide uppercase" style={{ background: shop.primary, color: shop.onPrimary, fontSize: mm(3.6), padding: `${mm(1.4)} ${mm(4)}`, marginTop: mm(3.5) }}>
+        100 % gagnant : chaque case est un cadeau
       </p>
-      <div className="[&_svg]:h-full [&_svg]:w-full" style={{ width: mm(78), height: mm(78), marginTop: mm(5) }} dangerouslySetInnerHTML={{ __html: svg }} />
-      <p className="mt-auto text-ink-soft" style={{ fontSize: mm(3.4), padding: `0 ${mm(10)} ${mm(7)}` }}>
-        Jeu gratuit, sans obligation d&apos;achat. Une participation par personne.
+
+      <div className="flex items-center justify-center" style={{ gap: mm(5), marginTop: mm(7) }}>
+        <div className="flex flex-col items-center">
+          <span className="rounded-t-lg font-bold uppercase" style={{ background: "#1D1A16", color: "#FFFFFF", fontSize: mm(3), padding: `${mm(0.8)} ${mm(3)}`, letterSpacing: "0.08em" }}>
+            Scannez-moi
+          </span>
+          <div className="rounded-xl bg-white [&_svg]:h-full [&_svg]:w-full" style={{ width: mm(52), height: mm(52), padding: mm(2), border: `${mm(0.8)} solid #1D1A16` }} dangerouslySetInnerHTML={{ __html: svg }} />
+        </div>
+        <MiniWheel colors={shop.colors} rim={shop.rim} size={mm(40)} />
+      </div>
+
+      {shop.prizes.length ? (
+        <div style={{ marginTop: mm(6), padding: `0 ${mm(9)}` }}>
+          <p className="font-bold uppercase" style={{ fontSize: mm(3), letterSpacing: "0.12em", color: "#5E564E" }}>À gagner</p>
+          <div className="flex flex-wrap justify-center" style={{ gap: mm(1.6), marginTop: mm(1.8) }}>
+            {shop.prizes.slice(0, 5).map((p, i) => (
+              <span key={p} className="inline-flex items-center rounded-full font-semibold" style={{ gap: mm(1.4), fontSize: mm(3.3), padding: `${mm(0.9)} ${mm(2.6)} ${mm(0.9)} ${mm(1.6)}`, border: `${mm(0.35)} solid #E8DFD2`, background: "#FBF6EE" }}>
+                <span aria-hidden className="inline-block rounded-full" style={{ width: mm(3), height: mm(3), background: shop.colors[i % shop.colors.length], boxShadow: "inset 0 0 0 1px rgba(29,26,22,0.25)" }} />
+                {p}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      <ol className="flex justify-center" style={{ gap: mm(4), marginTop: mm(8), padding: `0 ${mm(8)}` }}>
+        {steps.map((t, i) => (
+          <li key={t} className="flex flex-1 flex-col items-center" style={{ gap: mm(1.2) }}>
+            <span className="inline-flex items-center justify-center rounded-full font-bold" style={{ width: mm(7), height: mm(7), fontSize: mm(3.6), background: shop.primary, color: shop.onPrimary }}>
+              {i + 1}
+            </span>
+            <span className="font-semibold leading-tight" style={{ fontSize: mm(3.2) }}>{t}</span>
+          </li>
+        ))}
+      </ol>
+
+      <p className="mt-auto text-ink-soft" style={{ fontSize: mm(2.7), padding: `0 ${mm(10)} ${mm(5)}`, lineHeight: 1.35 }}>
+        Jeu gratuit, sans obligation d&apos;achat. Une participation par personne. Pas d&apos;application à installer.
         {shop.poweredBy ? <><br />Propulsé par Rouelia</> : null}
       </p>
     </div>

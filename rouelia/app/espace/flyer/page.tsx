@@ -13,7 +13,18 @@ export default async function Page() {
   const p = publicShop(shop);
   return (
     <Flyer
-      shop={{ slug: p.slug, name: p.name, primary: p.theme.primary, onPrimary: p.theme.onPrimary, monogram: p.theme.monogram, logoUrl: p.logoUrl, poweredBy: p.poweredBy }}
+      shop={{
+        slug: p.slug,
+        name: p.name,
+        primary: p.theme.primary,
+        onPrimary: p.theme.onPrimary,
+        rim: p.theme.rim,
+        monogram: p.theme.monogram,
+        logoUrl: p.logoUrl,
+        poweredBy: p.poweredBy,
+        colors: p.theme.colors,
+        prizes: p.prizes.map((x) => x.name),
+      }}
     />
   );
 }
