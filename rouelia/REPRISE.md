@@ -42,8 +42,9 @@ Déjà tranché : « données hébergées en Europe » retiré ; prix nets avec 
 conservation 3 ans après le dernier contact pour les non clients ; arrêt effectif à la fin du mois payé, non remboursé.
 
 ### Domaine rouelia.fr
-Côté code, c'est fait : canonical et og:url sur `https://rouelia.fr`, `www` redirigé, `.workers.dev` en noindex.
-Côté Aymen : mettre le domaine dans Cloudflare puis l'ajouter au Worker, et créer contact@rouelia.fr (voir `DEPLOIEMENT.md`).
+Branché le 3 octobre 2026 : domaine acheté chez IONOS, serveurs de noms passés chez Cloudflare, domaine relié au
+Worker. Le site et l'admin sont sur `https://rouelia.fr` (`/admin`, `/espace`, `/j/...`).
+Reste côté Aymen : la boîte contact@rouelia.fr (routage des e-mails Cloudflare, voir `DEPLOIEMENT.md`).
 
 ### Roue d'offres Rouelia (dernière section, fond orange)
 - 100 % gagnante. Chances : essai prolongé à 21 jours 28 %, installation sur place offerte 24 %, flyers imprimés
