@@ -250,3 +250,17 @@ refonte saisonnière, chevalet, support sous 24 h.
   « coiffure de chantier », « ADMIN_MOT DE PASSE ») : les vraies valeurs sont correctes, ne pas retaper la traduction.
 - Sur Cloudflare, « Réessayer » relance l'ancien build sur l'ancienne branche : pousser un commit pour un nouveau build.
 - Tuer un processus avec `pkill -f "<motif>"` peut interrompre le shell de Claude si le motif figure dans la commande.
+
+## Refonte de la page d'accueil (4 octobre 2026, validée et en ligne)
+- Sections, dans l'ordre : haut de page, vidéo, bandeau de cadeaux, démo, « Comment ça marche » (timeline
+  épinglée au scroll), fondateur (Enzo, nom d'usage d'Aymen ; photo `public/enzo.jpg`), tarifs, FAQ (5 questions),
+  roue d'offres finale. Retirées : Problème, Fonctions, Accompagnement, Simulateur (le calcul reste dans
+  `lib/simulator.ts`, utilisé par les tarifs et l'espace).
+- Vidéo : `public/video/` (MP4 H.264 et WebM, horizontale et verticale, aperçus, sous-titres `rouelia.vtt`),
+  chargée seulement au clic (`components/sections/VideoShowcase.tsx`). Pour la remplacer, ré-encoder depuis
+  `rouelia-video/` (voir son README) avec les mêmes noms de fichiers.
+- Effets : `components/ui/ScrollFx.tsx` (variables --p, --enter, --scroll, --doc ; titres mot à mot via
+  `SectionTitle`), styles en fin de `app/globals.css`. Désactivés si l'utilisateur limite les animations.
+- Démo : 4 lots par défaut (`starterPrizes` dans `lib/wheel.ts`). Tarifs : 2 points masqués par pack (« Voir plus »),
+  ligne « Rentable dès 3 clients qui reviennent par mois » (même exemple que la vidéo).
+- Pages légales inchangées (éditeur : Aymen Henni). « Prêt en 5 minutes » aligné entre site et vidéo.
