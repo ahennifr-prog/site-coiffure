@@ -256,11 +256,16 @@ refonte saisonnière, chevalet, support sous 24 h.
   épinglée au scroll), fondateur (Enzo, nom d'usage d'Aymen ; photo `public/enzo.jpg`), tarifs, FAQ (5 questions),
   roue d'offres finale. Retirées : Problème, Fonctions, Accompagnement, Simulateur (le calcul reste dans
   `lib/simulator.ts`, utilisé par les tarifs et l'espace).
-- Vidéo : `public/video/` (MP4 H.264 et WebM, horizontale et verticale, aperçus, sous-titres `rouelia.vtt`),
+- Vidéo : `public/video/` (horizontale seulement, MP4 H.264 et WebM, aperçu ; ni sous-titres ni durée, à la demande d'Aymen),
   chargée seulement au clic (`components/sections/VideoShowcase.tsx`). Pour la remplacer, ré-encoder depuis
   `rouelia-video/` (voir son README) avec les mêmes noms de fichiers.
-- Effets : `components/ui/ScrollFx.tsx` (variables --p, --enter, --scroll, --doc ; titres mot à mot via
-  `SectionTitle`), styles en fin de `app/globals.css`. Désactivés si l'utilisateur limite les animations.
+- Effets : `components/ui/ScrollFx.tsx`, attribut `data-fx` (parallax + data-depth, grow, rise, rail, progress) ;
+  chaque effet écrit la transformation de son seul élément. Ne JAMAIS remettre de variables CSS posées
+  sur la page entière à chaque image : sur iPhone, ça saturait Safari (écrans blancs, retours en arrière).
+  Titres mot à mot via `SectionTitle` (data-split). Désactivés si l'utilisateur limite les animations.
+- Timeline : épinglée sur ordinateur seulement ; rail au défilement sur téléphone (Safari gère mal l'épinglage).
+- Démo : chargée juste après la page, hauteur réservée dans `DemoSection.tsx` (à ajuster si la démo change
+  beaucoup de hauteur) : Safari ne compense pas les décalages de mise en page.
 - Démo : 4 lots par défaut (`starterPrizes` dans `lib/wheel.ts`). Tarifs : 2 points masqués par pack (« Voir plus »),
   ligne « Rentable dès 3 clients qui reviennent par mois » (même exemple que la vidéo).
 - Pages légales inchangées (éditeur : Aymen Henni). « Prêt en 5 minutes » aligné entre site et vidéo.
