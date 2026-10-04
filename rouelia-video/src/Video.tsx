@@ -3,7 +3,7 @@ import { AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame
 import timing from "./timing.json";
 import { SCENES } from "./scenes";
 import { fontCss } from "./theme";
-import { clamp, ease, easeIn } from "./components";
+import { clamp, ease, easeIn, Horizontal, STAGE } from "./components";
 
 const OVERLAP = 8;
 
@@ -42,10 +42,11 @@ function LightFx({ cuts }: { cuts: number[] }) {
   );
 }
 
-export function RoueliaVideo() {
+export function RoueliaVideo({ horizontal = false }: { horizontal?: boolean }) {
   const entries = Object.entries(timing.scenes) as [keyof typeof SCENES, number[]][];
   const hasAudio = getStaticFiles().some((f) => f.name === "audio/mix.wav");
   return (
+    <Horizontal.Provider value={horizontal}>
     <AbsoluteFill style={{ background: "#FBF6EE" }}>
       <style>{fontCss}</style>
       {entries.map(([id, [from, to]], k) => {
@@ -54,7 +55,13 @@ export function RoueliaVideo() {
         return (
           <Sequence key={id} from={from} durationInFrames={len + (k === entries.length - 1 ? 0 : OVERLAP)} name={id}>
             <Shell len={len} first={k === 0} last={k === entries.length - 1}>
-              <Scene />
+              {horizontal ? (
+                <div style={{ position: "absolute", left: STAGE.left, top: -STAGE.cropTop * STAGE.scale, width: 1080, height: 1920, transform: `scale(${STAGE.scale})`, transformOrigin: "0 0" }}>
+                  <Scene />
+                </div>
+              ) : (
+                <Scene />
+              )}
             </Shell>
           </Sequence>
         );
@@ -62,5 +69,6 @@ export function RoueliaVideo() {
       <LightFx cuts={entries.slice(1).map(([, [from]]) => from)} />
       {hasAudio ? <Audio src={staticFile("audio/mix.wav")} /> : null}
     </AbsoluteFill>
+    </Horizontal.Provider>
   );
 }

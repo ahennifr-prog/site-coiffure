@@ -4,14 +4,19 @@ import { C, display, sans, SHOPS, type Shop } from "./theme";
 import spin from "./spin.json";
 import ev from "./events.json";
 import {
-  Awning, Background, Card, clamp, Confetti, ease, easeIn, Finger, landingRotation, Logo, Phone, QR, ShopBadge, Star, StepBadge, useProgress, useSpring, Wheel, Words,
+  Horizontal, STAGE, stageX, stageY, useBleed, Awning, Background, Card, clamp, Confetti, ease, easeIn, Finger, landingRotation, Logo, Phone, QR, ShopBadge, Star, StepBadge, useProgress, useSpring, Wheel, Words,
 } from "./components";
 
 const W = 1080;
 
 /** Zone de titre en haut de l'écran. */
 function Headline({ children, top = 150 }: { children: React.ReactNode; top?: number }) {
-  return <div style={{ position: "absolute", top, left: 0, right: 0, display: "flex", justifyContent: "center" }}>{children}</div>;
+  const wide = React.useContext(Horizontal);
+  if (!wide) return <div style={{ position: "absolute", top, left: 0, right: 0, display: "flex", justifyContent: "center" }}>{children}</div>;
+  // En 16:9 : titre en grand, aligné à gauche, centré verticalement dans la colonne de gauche.
+  const width = 880 / STAGE.scale;
+  const big = React.Children.map(children, (c) => (React.isValidElement<{ size?: number }>(c) ? React.cloneElement(c as React.ReactElement<Record<string, unknown>>, { width, align: "left", size: Math.round((c.props.size ?? 92) * 1.5) }) : c));
+  return <div style={{ position: "absolute", left: stageX(90), width, top: stageY(540), transform: "translateY(-50%)", display: "flex" }}>{big}</div>;
 }
 
 /** Position de la roue de jeu (images locales de la scène « roue »). Partagée avec le son. */
@@ -128,6 +133,7 @@ function ShopPhoto({ shop, start, local, opacity }: { shop: Shop; start: number;
 /** Fin de la scène : les cinq commerces en mosaïque. */
 function ShopMosaic({ at }: { at: number }) {
   const f = useCurrentFrame();
+  const wide = React.useContext(Horizontal);
   const spots = [
     { x: 60, y: 470 }, { x: 390, y: 430 }, { x: 720, y: 470 }, { x: 225, y: 960 }, { x: 555, y: 960 },
   ];
@@ -150,9 +156,15 @@ function ShopMosaic({ at }: { at: number }) {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1500, display: "flex", justifyContent: "center" }}>
-        <Words text="Un client de passage devient un habitué" at={at + 8} step={4} size={84} accent={["habitué"]} />
-      </div>
+      {wide ? (
+        <Headline>
+          <Words text="Un client de passage devient un habitué" at={at + 8} step={4} size={84} accent={["habitué"]} />
+        </Headline>
+      ) : (
+        <div style={{ position: "absolute", left: 0, right: 0, top: 1500, display: "flex", justifyContent: "center" }}>
+          <Words text="Un client de passage devient un habitué" at={at + 8} step={4} size={84} accent={["habitué"]} />
+        </div>
+      )}
     </>
   );
 }
@@ -174,15 +186,16 @@ export function Shops() {
   const chip = useSpring(start + 3, { damping: 12, stiffness: 150 });
   const tag = useSpring(start + 2, { damping: 13 });
   const tilt = Math.sin(f / 22) * 2.5;
-  const bgPhoto = (src: string, o: number) => <Img src={staticFile(src)} style={{ position: "absolute", inset: -80, width: 1240, height: 2080, objectFit: "cover", filter: "blur(40px) saturate(1.2)", opacity: o }} />;
+  const bleed = useBleed();
+  const bgPhoto = (src: string, o: number) => <Img src={staticFile(src)} style={{ position: "absolute", left: -80, top: -80, width: "calc(100% + 160px)", height: "calc(100% + 160px)", objectFit: "cover", filter: "blur(40px) saturate(1.2)", opacity: o }} />;
   return (
     <AbsoluteFill>
       {/* fond : la photo floutée, éclaircie */}
-      <AbsoluteFill style={{ overflow: "hidden", background: C.cream }}>
+      <div style={{ position: "absolute", ...bleed, overflow: "hidden", background: C.cream }}>
         {prev && fade < 1 ? bgPhoto(prev.photo.src, 1) : null}
         {bgPhoto(shop.photo.src, fade * (1 - out))}
         <AbsoluteFill style={{ background: `rgba(251,246,238,${0.62 + out * 0.2})` }} />
-      </AbsoluteFill>
+      </div>
       {!mosaic ? (
         <Headline top={150}>
           <Words key={n} text={SHOP_WORDS[n]} at={start} step={2} size={SHOP_WORDS[n].length > 20 ? 84 : 110} accent={[SHOP_WORDS[n].split(" ").slice(-1)[0]]} />
@@ -664,6 +677,7 @@ export function Boucle() {
 
 export function Cta() {
   const f = useCurrentFrame();
+  const wide = React.useContext(Horizontal);
   const logo = useSpring(2, { damping: 11, stiffness: 120 });
   const btn = useSpring(ev.ctaButton, { damping: 10 });
   const pulse = f > ev.ctaButton + 17 ? 1 + Math.sin((f - ev.ctaButton - 17) / 6) * 0.03 : 1;
@@ -671,20 +685,20 @@ export function Cta() {
   return (
     <AbsoluteFill>
       <Background tint="#F6D9CE" floor={false} />
-      <div style={{ position: "absolute", left: -40, right: -40, top: -20 - (1 - aw) * 200 }}>
-        <Awning width={1160} height={150} id="aw-cta" />
+      <div style={{ position: "absolute", left: wide ? stageX(-40) : -40, top: (wide ? stageY(-30) : -20) - (1 - aw) * 200 }}>
+        <Awning width={wide ? (2000 / STAGE.scale) : 1160} height={150} id="aw-cta" />
       </div>
       <div style={{ position: "absolute", left: (W - 1300) / 2, top: 1100, opacity: 0.12 }}>
         <Wheel size={1300} colors={[C.tomette, C.cream, C.safran, C.sauge]} prizes={["", "", "", "", "", "", "", ""]} rotation={f * 1.2} pointer={false} />
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 360, display: "flex", justifyContent: "center", transform: `scale(${logo})` }}>
-        <Logo size={190} spin={f * 3} />
+      <div style={{ position: "absolute", left: wide ? stageX(90) : 0, right: wide ? undefined : 0, top: wide ? stageY(170) : 360, display: "flex", justifyContent: wide ? "flex-start" : "center", transform: `scale(${logo})`, transformOrigin: wide ? "left center" : "center" }}>
+        <Logo size={wide ? 250 : 190} spin={f * 3} />
       </div>
-      <div style={{ position: "absolute", top: 610, left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
-        <Words text="Vos clients gagnent un cadeau…" at={ev.ctaLine1[0]} step={ev.ctaLine1[1]} size={84} width={1000} accent={["cadeau…"]} />
-        <Words text="vous, leur prochaine visite." at={ev.ctaLine2[0]} step={ev.ctaLine2[1]} size={84} width={1000} accent={["prochaine", "visite."]} />
+      <div style={{ position: "absolute", top: wide ? stageY(420) : 610, left: wide ? stageX(90) : 0, right: wide ? undefined : 0, display: "flex", flexDirection: "column", alignItems: wide ? "flex-start" : "center", gap: 18 }}>
+        <Words text="Vos clients gagnent un cadeau…" at={ev.ctaLine1[0]} step={ev.ctaLine1[1]} size={wide ? 124 : 84} width={wide ? 880 / STAGE.scale : 1000} align={wide ? "left" : "center"} accent={["cadeau…"]} />
+        <Words text="vous, leur prochaine visite." at={ev.ctaLine2[0]} step={ev.ctaLine2[1]} size={wide ? 124 : 84} width={wide ? 880 / STAGE.scale : 1000} align={wide ? "left" : "center"} accent={["prochaine", "visite."]} />
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1060, display: "flex", flexDirection: "column", alignItems: "center", gap: 30, transform: `scale(${btn * pulse})`, opacity: Math.min(1, btn * 1.4) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: wide ? 760 : 1060, display: "flex", flexDirection: "column", alignItems: "center", gap: 30, transform: `scale(${btn * pulse * (wide ? 1.25 : 1)})`, opacity: Math.min(1, btn * 1.4) }}>
         <div style={{ background: C.tomette, color: "#fff", borderRadius: 999, padding: "34px 70px", fontFamily: sans, fontWeight: 800, fontSize: 60, boxShadow: "0 30px 60px rgba(196,64,31,0.4)" }}>Essai gratuit 14 jours</div>
         <div style={{ fontFamily: display, fontWeight: 700, fontSize: 96, color: C.ink }}>rouelia.fr</div>
         <div style={{ display: "flex", alignItems: "center", gap: 14, background: "#fff", borderRadius: 999, padding: "14px 34px", boxShadow: "0 16px 34px rgba(60,30,10,0.14)", fontFamily: sans, fontWeight: 800, fontSize: 42, color: C.sauge }}>

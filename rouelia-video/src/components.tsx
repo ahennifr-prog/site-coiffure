@@ -31,6 +31,25 @@ export function readable(hex: string): string {
 }
 
 /* ------------------------------------------------------------------ */
+/* Format horizontal                                                   */
+/* ------------------------------------------------------------------ */
+
+/**
+ * En 16:9, chaque scène verticale (1080 × 1920) devient une « scène » à droite de l'écran,
+ * recadrée sous la zone de titre, et le titre passe en grand dans la colonne de gauche.
+ */
+export const Horizontal = React.createContext(false);
+export const STAGE = { cropTop: 300, scale: 1080 / 1620, left: 1080 };
+/** Convertit une position de l'écran horizontal (1920 × 1080) en coordonnées de scène. */
+export const stageX = (x: number) => (x - STAGE.left) / STAGE.scale;
+export const stageY = (y: number) => y / STAGE.scale + STAGE.cropTop;
+/** Boîte d'un fond plein cadre : la scène en vertical, tout l'écran en horizontal. */
+export function useBleed(): React.CSSProperties {
+  const wide = React.useContext(Horizontal);
+  return wide ? { left: stageX(-40), right: 1080 - stageX(1960), top: stageY(-40), bottom: 1920 - stageY(1120) } : { inset: 0 };
+}
+
+/* ------------------------------------------------------------------ */
 /* Fond                                                                */
 /* ------------------------------------------------------------------ */
 
@@ -38,8 +57,9 @@ export function readable(hex: string): string {
 export function Background({ tint = C.soft, floor = true }: { tint?: string; floor?: boolean }) {
   const frame = useCurrentFrame();
   const t = frame / 30;
+  const box = useBleed();
   return (
-    <div style={{ position: "absolute", inset: 0, background: C.cream, overflow: "hidden" }}>
+    <div style={{ position: "absolute", ...box, background: C.cream, overflow: "hidden" }}>
       <div style={{ position: "absolute", width: 1100, height: 1100, borderRadius: "50%", background: tint, filter: "blur(120px)", opacity: 0.75, left: -300 + Math.sin(t * 0.6) * 120, top: -260 + Math.cos(t * 0.5) * 90 }} />
       <div style={{ position: "absolute", width: 900, height: 900, borderRadius: "50%", background: "#FCE7B8", filter: "blur(130px)", opacity: 0.6, right: -320 + Math.cos(t * 0.7) * 110, bottom: -200 + Math.sin(t * 0.4) * 120 }} />
       {floor ? (
