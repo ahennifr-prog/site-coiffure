@@ -16,8 +16,8 @@ anullsrc=r=48000:cl=stereo,atrim=0:0.4567[s2];
 [s0][p1][s1][p2][s2][p3]concat=n=6:v=0:a=1[v]" -map "[v]" -ar 48000 public/audio/voice.wav
 ffmpeg -loglevel error -y -i public/audio/music.wav -i public/audio/sfx.wav -i public/audio/voice.wav -filter_complex "
 [2:a]highpass=f=70,acompressor=threshold=0.12:ratio=3:attack=5:release=120:makeup=1.4,apad=whole_dur=60,asplit=2[v][key];
-[0:a]volume=0.7[m];
+[0:a]volume=0.42[m];
 [m][key]sidechaincompress=threshold=0.03:ratio=8:attack=15:release=350[md];
-[1:a]volume=0.7[s];
+[1:a]volume=1.0[s];
 [md][s][v]amix=inputs=3:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11[out]" -map "[out]" -ar 48000 public/audio/mix.wav
 echo "Mix écrit : public/audio/mix.wav"

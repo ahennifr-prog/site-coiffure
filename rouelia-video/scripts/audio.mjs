@@ -236,12 +236,21 @@ function hit(t0, g = 0.5) {
   add(sfx, t0, 0.6, (t) => Math.sin(TAU * (42 + 90 * Math.exp(-t / 0.05)) * t) * env(t, 0.002, 0.22) + f(rnd(), 1800, 0.6).band * env(t, 0.0005, 0.015) * 1.2, g);
 }
 
-// Transitions entre scènes : whoosh, clic de souris au moment de la coupe, impact grave.
+/** Petit « blip » numérique, net et brillant, pour les transitions. */
+function blip(t0, g = 0.3) {
+  add(sfx, t0, 0.16, (t) => {
+    const fq = 1300 + 1500 * Math.min(1, t / 0.05);
+    return Math.sin(TAU * fq * t + 0.8 * Math.sin(TAU * fq * 2.01 * t)) * env(t, 0.002, 0.045);
+  }, g, 0.15);
+}
+
+// Transitions entre scènes : whoosh, clic de souris au moment de la coupe, blip, impact grave.
 Object.entries(S).forEach(([id, [from]], k) => {
   if (k === 0) return;
   whoosh(fr(from) - 0.2, 0.42, 0.5);
-  click(fr(from) + 0.02, 0.7);
-  hit(fr(from) + 0.02, 0.35);
+  click(fr(from) + 0.02, 0.8);
+  blip(fr(from) + 0.05, 0.22);
+  hit(fr(from) + 0.02, 0.3);
 });
 hit(dropT, 0.6);
 
