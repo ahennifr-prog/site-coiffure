@@ -47,7 +47,7 @@
 }
 
 :root {
-  --section-y: clamp(64px, 10vw, 128px);
+  --section-y: clamp(96px, 13vw, 184px);
   --nav-h: 64px;
   --duration-fast: 180ms;
   --duration-base: 320ms;
@@ -120,19 +120,66 @@ body {
   );
 }
 
-/* Apparition douce au défilement. */
+/* Apparition au défilement : montée, mise au point et léger relief. */
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  transform: perspective(900px) translate3d(0, 28px, 0) rotateX(6deg) scale(0.985);
+  filter: blur(6px);
+  transform-origin: 50% 100%;
+  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out), filter 900ms var(--ease-out);
 }
 .reveal.is-visible {
   opacity: 1;
   transform: none;
+  filter: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; }
+  .reveal { opacity: 1; transform: none; filter: none; }
 }
+
+/* Grain de papier très léger sur tout le site : casse l'aspect « à plat ». */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Relief au survol : la carte suit le pointeur (variables posées par <Tilt>). */
+.tilt {
+  transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 500ms var(--ease-out);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt.is-tracking { transition-duration: 120ms; }
+
+/* Lueur qui suit le pointeur sur les tuiles sombres. */
+.glow {
+  position: relative;
+  isolation: isolate;
+}
+.glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgb(243 178 60 / 0.16), transparent 60%);
+  transition: opacity 400ms var(--ease-out);
+}
+.glow:hover::before { opacity: 1; }
+
+/* Étiquettes qui flottent autour de la roue du haut de page. */
+@keyframes float-y {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--r, 0deg)); }
+  50% { transform: translate3d(0, -10px, 0) rotate(var(--r, 0deg)); }
+}
+.float { animation: float-y 6s ease-in-out infinite; }
 
 /* Curseurs (input range) aux couleurs de la marque. */
 .range {

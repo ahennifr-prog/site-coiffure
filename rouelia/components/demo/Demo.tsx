@@ -24,7 +24,7 @@ function useIsDesktop() {
 function Card({ step, title, children }: { step: number; title: string; children: ReactNode }) {
   const id = useId();
   return (
-    <section aria-labelledby={id} className="rounded-xl bg-paper p-5 shadow-sm ring-1 ring-line sm:p-6">
+    <section aria-labelledby={id} className="rounded-[24px] bg-paper p-6 shadow-sm ring-1 ring-line/70 sm:p-8">
       <h3 id={id} className="flex items-center gap-3 text-lg font-bold">
         <span aria-hidden className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-tomette text-sm text-white">
           {step}

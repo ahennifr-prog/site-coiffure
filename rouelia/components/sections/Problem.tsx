@@ -8,29 +8,28 @@ export function Problem() {
   return (
     <Section labelledBy="probleme-title" className="bg-paper">
       <Container>
-        <div className="max-w-3xl">
+        <div className="max-w-2xl">
           <Eyebrow>{problem.eyebrow}</Eyebrow>
           <SectionTitle id="probleme-title">{problem.title}</SectionTitle>
         </div>
-        <ol className="mt-12 grid gap-5 md:grid-cols-3">
+        <ol className="mt-16 grid gap-12 md:mt-24 md:grid-cols-3 md:gap-10">
           {problem.pains.map((p, i) => (
             <li key={p.title}>
-              <Reveal delay={i * 90} className="h-full">
-                <article className="flex h-full flex-col rounded-xl bg-cream p-6 ring-1 ring-line sm:p-7">
-                  <span aria-hidden className="font-display text-5xl leading-none font-semibold text-tomette">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-5 text-xl font-bold text-balance">{fr(p.title)}</h3>
-                  <p className="mt-3 text-ink-soft">{fr(p.text)}</p>
-                </article>
+              <Reveal delay={i * 120}>
+                <span aria-hidden className="block font-display text-[5.5rem] leading-none font-semibold tracking-[-0.04em] text-transparent [-webkit-text-stroke:1.5px_var(--color-tomette)]">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span aria-hidden className="mt-6 block h-px w-full bg-line" />
+                <h3 className="mt-6 text-xl font-bold text-balance">{fr(p.title)}</h3>
+                <p className="mt-2 text-ink-soft">{fr(p.text)}</p>
               </Reveal>
             </li>
           ))}
         </ol>
-        <p className="mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 text-lg font-medium">
+        <p className="mt-20 flex flex-wrap items-center gap-x-3 gap-y-2 text-lg font-medium">
           {fr(problem.transition)}
-          <a href="#demo" className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-tomette-deep underline-offset-4 hover:underline">
-            {ui.tryDemo} <ArrowRight aria-hidden size={18} />
+          <a href="#demo" className="group inline-flex min-h-11 items-center gap-1.5 font-semibold text-tomette-deep">
+            {ui.tryDemo} <ArrowRight aria-hidden size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
           </a>
         </p>
       </Container>

@@ -38,7 +38,7 @@ export function Eyebrow({ children, tone = "tomette" }: { children: string; tone
 
 export function SectionTitle({ id, children, className = "" }: { id?: string; children: string; className?: string }) {
   return (
-    <h2 id={id} className={`font-display text-[2rem] leading-[1.1] font-semibold text-balance sm:text-5xl ${className}`}>
+    <h2 id={id} className={`font-display text-[1.9rem] leading-[1.08] font-semibold tracking-[-0.025em] text-balance sm:text-[2.6rem] lg:text-[2.9rem] ${className}`}>
       {fr(children)}
     </h2>
   );

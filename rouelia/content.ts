@@ -51,7 +51,7 @@ export const brand = {
   url: "https://rouelia.fr",
   email: "contact@rouelia.fr",
   phone: "",
-  founder: "Aymen",
+  founder: "Enzo",
   area: "Paris et petite couronne",
 };
 
@@ -128,13 +128,10 @@ export const hero = {
     "Une roue sur le comptoir. Des clients qui reviennent.",
     "Un QR code, une roue, et une bonne raison de revenir chez vous.",
   ],
-  lead:
-    "Un QR code sur votre comptoir. Le client tourne la roue en quelques secondes, gagne à tous les coups, et revient retirer son cadeau. Vous choisissez les lots et vous savez ce que ça coûte.",
-  reassurance: [
-    "14 jours d'essai, sans carte bancaire",
-    "Chaque segment est un cadeau",
-    "Vous fixez le coût de chaque lot",
-  ],
+  lead: "Un QR code sur le comptoir. Une roue où chaque client gagne. Un cadeau qui le fait revenir.",
+  reassurance: ["14 jours gratuits", "Sans carte bancaire", "100 % gagnant"],
+  /** Étiquettes décoratives qui flottent autour de la roue. */
+  floating: ["Brushing offert", "Café offert", "-10 % sur la coupe"],
   wheelLabel: "Exemple de roue Rouelia",
   spinHint: "Touchez la roue pour la faire tourner",
   heroPrizes: [
@@ -154,26 +151,14 @@ export const hero = {
 /* ------------------------------------------------------------------ */
 
 export const problem = {
-  eyebrow: "Ce qu'on voit derrière le comptoir",
-  title: "Vos clients sont contents. Ça ne se voit nulle part.",
+  eyebrow: "Derrière le comptoir",
+  title: "Vos clients sont contents. Personne ne le sait.",
   pains: [
-    {
-      title: "Le voisin a plus d'avis que vous",
-      text:
-        "Avant de pousser une porte, on regarde les étoiles et le nombre d'avis sur Google. Le salon d'en face n'est pas forcément meilleur. Il a juste pensé à demander.",
-    },
-    {
-      title: "Des habitués qui oublient de revenir",
-      text:
-        "Un client satisfait ne revient pas toujours. Pas par déception : il a une vie, un autre commerce sur son trajet, et rien qui lui rappelle votre adresse.",
-    },
-    {
-      title: "Des promos dont on ignore le résultat",
-      text:
-        "Flyers, remises, cartes à tamponner. Vous dépensez, mais impossible de dire qui est revenu grâce à quoi, ni combien ça vous a coûté.",
-    },
+    { title: "Moins d'avis que le voisin", text: "Il n'est pas meilleur. Il a juste demandé." },
+    { title: "Des habitués qui oublient", text: "Rien ne leur rappelle votre adresse." },
+    { title: "Des promos à l'aveugle", text: "Vous payez, sans savoir qui revient." },
   ],
-  transition: "Le plus simple, c'est de voir la roue avec vos propres lots.",
+  transition: "Le plus parlant : la roue, avec vos lots.",
 };
 
 /* ------------------------------------------------------------------ */
@@ -183,8 +168,7 @@ export const problem = {
 export const demo = {
   eyebrow: "Démo gratuite, sans inscription",
   title: "Réglez votre roue. Tournez-la comme un client.",
-  lead:
-    "Rien n'est envoyé tant que vous ne créez pas de compte. Votre roue est gardée pour l'essai.",
+  lead: "Rien n'est envoyé sans compte. Votre roue est gardée pour l'essai.",
 
   steps: {
     identity: "Votre commerce",
@@ -412,25 +396,13 @@ export const trades: Trade[] = [
 /* ------------------------------------------------------------------ */
 
 export const howItWorks = {
-  eyebrow: "Côté client, 20 secondes",
-  title: "Ce qui se passe entre le comptoir et la prochaine visite",
+  eyebrow: "Côté cliente, 20 secondes",
+  title: "Sa coupe est finie. Voilà comment elle revient.",
   steps: [
-    {
-      title: "Il scanne",
-      text: "Un chevalet sur le comptoir, un QR code. Pas d'application à installer.",
-    },
-    {
-      title: "On l'invite à donner son avis",
-      text: "Une fenêtre neutre, facultative, qu'il ferme d'un geste. La roue tourne dans tous les cas.",
-    },
-    {
-      title: "Il tourne et il gagne",
-      text: "Tous les segments sont des cadeaux. Il reçoit un code et une date limite.",
-    },
-    {
-      title: "Il revient le retirer",
-      text: "Il montre son code, vous le validez en caisse. Vous savez qui est revenu et quand.",
-    },
+    { title: "Elle scanne", text: "Le QR code sur votre comptoir. Aucune appli à installer." },
+    { title: "Un avis, si elle veut", text: "Une invitation neutre, qu'elle peut fermer. La roue tourne quand même." },
+    { title: "Elle tourne, elle gagne", text: "Chaque case est un cadeau. Elle repart avec un code et une date." },
+    { title: "Elle revient le chercher", text: "Vous validez son code en caisse. Vous savez qu'elle est revenue." },
   ],
   transition: "Et pendant ce temps, Rouelia travaille pour vous.",
 };
@@ -441,43 +413,12 @@ export const howItWorks = {
 
 export const features = {
   eyebrow: "Au-delà de la roue",
-  title: "Le travail que vous n'avez pas le temps de faire",
+  title: "Le travail que vous n'avez pas le temps de faire.",
   items: [
-    {
-      title: "Les relances, sans y penser",
-      text: "Un client n'a pas retiré son cadeau ? Il reçoit un rappel avant la date limite.",
-      packs: "Croissance et Premium",
-    },
-    {
-      title: "Validation en caisse",
-      text: "Le client montre son code, vous le validez en un geste. Pas de ticket à garder, et chaque code ne sert qu'une fois.",
-      packs: "Tous les packs",
-    },
-    {
-      title: "Répondre aux avis en un clic",
-      text: "Une réponse polie et personnalisée vous est proposée. Vous relisez, vous publiez.",
-      packs: "Croissance et Premium",
-    },
-    {
-      title: "Un rapport chaque semaine",
-      text: "Parties jouées, cadeaux retirés, avis reçus. Et une action simple à faire la semaine suivante.",
-      packs: "Tous les packs",
-    },
-    {
-      title: "Un œil sur les voisins",
-      text: "La note et le nombre d'avis de trois concurrents proches, suivis chaque semaine.",
-      packs: "Premium",
-    },
-    {
-      title: "En route en 2 minutes",
-      text: "Donnez votre métier, on vous propose des lots et des chances raisonnables. Vous ajustez.",
-      packs: "Tous les packs",
-    },
-    {
-      title: "Installation chez vous",
-      text: "À Paris et en petite couronne, on vient poser le QR code et former l'équipe.",
-      packs: "En option",
-    },
+    { title: "Les relances", text: "Un rappel part avant que le cadeau expire.", packs: "Croissance et Premium" },
+    { title: "Les réponses aux avis", text: "L'IA rédige. Vous relisez, vous publiez.", packs: "Croissance et Premium" },
+    { title: "Le rapport du lundi", text: "Parties, retours, avis. Et une action à faire.", packs: "Tous les packs" },
+    { title: "La veille des voisins", text: "Leur note et leurs avis, chaque semaine.", packs: "Premium" },
   ],
 };
 
@@ -490,8 +431,7 @@ export const features = {
 export const simulator = {
   eyebrow: "Vos chiffres, pas les nôtres",
   title: "Est-ce que ça se rembourse chez vous ?",
-  lead:
-    "Réglez selon votre commerce. Les hypothèses sont prudentes et toutes modifiables.",
+  lead: "Vos chiffres, des hypothèses prudentes, tout est modifiable.",
   defaults: {
     /** Jours d'ouverture par mois. */
     openDaysPerMonth: 26,
@@ -545,17 +485,15 @@ export const simulator = {
 
 export const founder = {
   eyebrow: "Qui est derrière Rouelia",
-  // À relire et personnaliser par Aymen : ce texte doit rester le sien.
   title: "Je viens installer la roue moi-même.",
   text: [
-    "Je m'appelle Aymen. Je passe mes journées chez des commerçants, et j'entends toujours la même chose : les clients sont contents, mais ils ne le disent pas, et ils ne reviennent pas assez souvent.",
-    "J'ai créé Rouelia pour que ce soit simple : un QR code, un cadeau que vous choisissez, et des chiffres clairs sur ce que ça vous rapporte.",
-    "À Paris et en petite couronne, je viens le poser moi-même et je forme votre équipe.",
+    "Je m'appelle Enzo. Chez les commerçants, j'entends toujours la même chose : les clients sont contents, mais ils ne reviennent pas assez.",
+    "Rouelia rend ça simple. À Paris et en petite couronne, je la pose chez vous.",
   ],
-  signature: "Aymen, fondateur de Rouelia",
-  photoAlt: "Aymen, fondateur de Rouelia",
+  signature: "Enzo, fondateur de Rouelia",
+  photoAlt: "Portrait d'Enzo, fondateur de Rouelia",
   /** Chemin de la photo dans /public. Vide tant qu'elle n'est pas fournie. */
-  photo: "",
+  photo: "/enzo.jpg",
 };
 
 export interface PilotResult {
@@ -609,7 +547,7 @@ export interface Pack {
 export const pricing = {
   eyebrow: "Tarifs",
   title: "Un prix fixe par mois. Pas d'engagement.",
-  lead: "Tous les packs commencent par 14 jours d'essai gratuit, sans carte bancaire.",
+  lead: "14 jours gratuits sur chaque pack. Sans carte bancaire.",
   perMonth: "par mois",
   perDay: (amount: string) => `soit environ ${amount} par jour`,
   cover: (visits: number, basket: string, trade: string) =>
@@ -621,7 +559,7 @@ export const pricing = {
       id: "essentiel",
       name: "Essentiel",
       price: 29,
-      tagline: "La roue, le QR code et les cadeaux à retirer.",
+      tagline: "La roue, le QR code, les cadeaux.",
       highlights: [
         "Roue 100 % gagnante, lots et chances à votre main",
         "QR code et flyer PDF prêts à imprimer",
@@ -635,7 +573,7 @@ export const pricing = {
       name: "Croissance",
       price: 49,
       badge: "Le plus choisi",
-      tagline: "Pour faire revenir, et répondre aux avis sans y passer la soirée.",
+      tagline: "Faire revenir, et répondre aux avis sans y passer la soirée.",
       highlights: [
         "Tout l'Essentiel",
         "Relances automatiques des cadeaux non retirés",
@@ -649,7 +587,7 @@ export const pricing = {
       id: "premium",
       name: "Premium",
       price: 89,
-      tagline: "On s'occupe de tout, et on surveille les voisins.",
+      tagline: "On s'occupe de tout. Et on surveille les voisins.",
       highlights: [
         "Tout Croissance, réponses aux avis illimitées",
         "200 SMS par mois",
@@ -709,25 +647,15 @@ export const pricing = {
 
 export const support = {
   eyebrow: "Accompagnement",
-  title: "Seul, avec nous en visio, ou avec nous au comptoir",
+  title: "Seul, en visio ou au comptoir.",
   options: [
-    {
-      title: "En ligne, par vous",
-      price: "Gratuit",
-      text: "Deux minutes pour créer la roue, imprimer le QR code et le poser. Un guide pas à pas vous accompagne.",
-      packs: "Tous les packs",
-    },
-    {
-      title: "En visio",
-      price: "Offerte",
-      text: "30 minutes avec nous pour régler les lots, les chances et les relances selon votre commerce.",
-      packs: "Croissance et Premium",
-    },
+    { title: "En ligne, par vous", price: "Gratuit", text: "Deux minutes, un guide pas à pas.", packs: "Tous les packs" },
+    { title: "En visio", price: "Offerte", text: "30 minutes pour régler vos lots avec nous.", packs: "Croissance et Premium" },
     {
       title: "Sur place",
       price: "49 €",
       priceNote: "79 € si le déplacement est fait uniquement pour vous",
-      text: "On vient chez vous, on pose le QR code au bon endroit et on montre à l'équipe comment valider un cadeau.",
+      text: "On pose le QR code et on forme l'équipe.",
       packs: "Paris et petite couronne",
     },
   ],
@@ -743,43 +671,23 @@ export const faq = {
   items: [
     {
       q: "La roue est-elle vraiment 100 % gagnante ?",
-      a: "Oui. Chaque segment est un cadeau que vous avez choisi. Il n'existe pas de case « perdu ». Vous réglez les chances de chaque lot, et le total fait toujours 100 %.",
-    },
-    {
-      q: "Comment le client retire-t-il son cadeau ?",
-      a: "Il reçoit un code unique et une date limite, à l'écran et par e-mail. À sa prochaine visite, il montre le code et vous le validez en caisse depuis votre téléphone. Un code ne sert qu'une fois.",
+      a: "Oui. Chaque case est un cadeau que vous choisissez. Il n'y a aucune case perdante.",
     },
     {
       q: "Le cadeau est-il donné en échange d'un avis ?",
-      a: "Non. La roue tourne dans tous les cas. L'invitation à laisser un avis Google est facultative, le client peut la fermer d'un geste, et le lien est le même pour tout le monde. C'est ce que demandent les règles de Google, et c'est aussi plus honnête.",
+      a: "Non. La roue tourne dans tous les cas. L'avis reste facultatif, comme l'exigent les règles de Google.",
     },
     {
-      q: "Combien coûtent les cadeaux et comment je garde la main ?",
-      a: "Vous fixez chaque lot, son coût et sa chance de sortir. Rouelia calcule en direct ce que vous coûte une partie en moyenne. Pour un café à 40 centimes qui sort une fois sur trois, c'est quelques centimes par joueur. Vous pouvez tout modifier à tout moment.",
+      q: "Combien me coûtent les cadeaux ?",
+      a: "Ce que vous décidez. Vous fixez chaque lot et sa chance, et Rouelia affiche en direct le coût moyen d'une partie.",
     },
     {
-      q: "Et si un client laisse un mauvais avis ?",
-      a: "Ça peut arriver, et c'est normal : le lien est le même pour tous, on ne trie personne. C'est pour ça qu'il y a l'alerte avis négatif en Premium et les réponses en un clic en Croissance et Premium. Un avis négatif bien répondu rassure souvent plus qu'il ne fait fuir.",
+      q: "Faut-il du matériel ?",
+      a: "Non. Un QR code imprimé suffit. Vos clients jouent sur leur téléphone, sans appli.",
     },
     {
-      q: "Comment se passe l'essai de 14 jours et que se passe-t-il à la fin ?",
-      a: "Vous créez votre compte sans carte bancaire et vous utilisez tout le pack choisi pendant 14 jours. Avant la fin, on vous prévient. Si vous continuez, vous ajoutez un moyen de paiement. Sinon, rien n'est prélevé et les cadeaux déjà gagnés restent valables.",
-    },
-    {
-      q: "Faut-il du matériel ou une installation ?",
-      a: "Non. Un QR code imprimé suffit, sur un chevalet, la vitrine ou le ticket de caisse. Vos clients jouent sur leur téléphone, sans application. Vous validez les cadeaux sur le vôtre.",
-    },
-    {
-      q: "Que devient la liste de mes clients ?",
-      a: "Elle vous appartient. Les clients ne sont contactés que s'ils l'ont accepté, et chaque message contient un lien de désinscription. Les données ne sont jamais revendues. Vous pouvez les exporter ou les supprimer quand vous voulez.",
-    },
-    {
-      q: "Puis-je changer de pack ou arrêter quand je veux ?",
-      a: "Oui. Le changement de pack prend effet tout de suite. L'arrêt se fait en un clic dans votre espace, sans préavis ni frais.",
-    },
-    {
-      q: "Comment se passe l'installation sur place ?",
-      a: "À Paris et en petite couronne, on fixe un créneau hors de votre rush. On vient avec le QR code, on choisit avec vous le meilleur emplacement et on montre à l'équipe comment valider un cadeau. Comptez 30 minutes. C'est 49 €, ou 79 € si le déplacement est fait uniquement pour vous.",
+      q: "Et après les 14 jours d'essai ?",
+      a: "Vous continuez en ajoutant un moyen de paiement, ou vous arrêtez. Rien n'est prélevé sans votre accord, et vous pouvez arrêter en un clic.",
     },
   ],
 };
@@ -812,7 +720,7 @@ export interface Offer {
 
 export const offerWheel = {
   title: "Avant de partir, tournez la roue Rouelia.",
-  text: "Chaque case est un cadeau pour bien démarrer, valable sur les packs Croissance et Premium.",
+  text: "Chaque case est un cadeau pour démarrer, valable sur Croissance et Premium.",
   wheelLabel: "Roue d'offres Rouelia",
   spinHint: "Touchez la roue pour tenter votre chance",
   spinning: "La roue tourne",
@@ -858,7 +766,7 @@ export const offerWheel = {
 
 export const finalCta = {
   title: "Votre roue est à deux minutes d'ici.",
-  text: "Réglez vos lots, testez-la comme un client, et posez le QR code dès demain.",
+  text: "Réglez vos lots, testez, posez le QR code demain.",
   button: cta.primary,
   note: "14 jours gratuits, sans carte bancaire.",
 };

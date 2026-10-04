@@ -3,18 +3,21 @@ import { founder, pilots } from "@/content";
 import { fr } from "@/lib/format";
 import { Container, Eyebrow, Section, SectionTitle } from "@/components/ui/Section";
 import { ExternalLink } from "lucide-react";
+import { Tilt } from "@/components/ui/Tilt";
 
 function Portrait() {
   if (founder.photo) {
     return (
-      <Image
-        src={founder.photo}
-        alt={founder.photoAlt}
-        width={320}
-        height={400}
-        className="h-full w-full rounded-xl object-cover"
-        sizes="(min-width: 1024px) 320px, 60vw"
-      />
+      <Tilt max={5}>
+        <div className="relative">
+          <div aria-hidden className="absolute -inset-3 -z-10 translate-x-5 translate-y-5 rounded-[32px] bg-tomette-soft" />
+          <div className="relative overflow-hidden rounded-[28px] shadow-lg">
+            <Image src={founder.photo} alt={founder.photoAlt} width={800} height={1000} className="aspect-[4/5] h-full w-full object-cover" sizes="(min-width: 1024px) 360px, 70vw" />
+            <div aria-hidden className="awning absolute inset-x-0 top-0 h-3 opacity-95" />
+            <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/35 to-transparent" />
+          </div>
+        </div>
+      </Tilt>
     );
   }
   // Emplacement prévu pour la photo : un portrait graphique en attendant.
@@ -22,7 +25,7 @@ function Portrait() {
     <div role="img" aria-label={founder.photoAlt} className="relative flex aspect-[4/5] w-full items-end overflow-hidden rounded-xl bg-tomette">
       <div aria-hidden className="awning absolute inset-x-0 top-0 h-10 opacity-90" />
       <span aria-hidden className="absolute inset-0 flex items-center justify-center font-display text-[9rem] leading-none font-semibold text-cream/95">
-        A
+        {founder.signature.charAt(0)}
       </span>
     </div>
   );
@@ -67,19 +70,19 @@ export function Founder() {
   return (
     <Section labelledBy="fondateur-title">
       <Container>
-        <div className="grid items-center gap-10 md:grid-cols-[minmax(0,320px)_1fr] lg:gap-16">
-          <div className="mx-auto w-3/5 max-w-[320px] md:w-full">
+        <div className="grid items-center gap-14 md:grid-cols-[minmax(0,360px)_1fr] lg:gap-24">
+          <div className="mx-auto w-[70%] max-w-[360px] md:w-full">
             <Portrait />
           </div>
           <div>
             <Eyebrow>{founder.eyebrow}</Eyebrow>
             <SectionTitle id="fondateur-title">{founder.title}</SectionTitle>
-            <div className="mt-6 max-w-2xl space-y-4 text-lg text-ink-soft">
+            <div className="mt-8 max-w-xl space-y-4 text-lg text-ink-soft">
               {founder.text.map((t) => (
                 <p key={t}>{fr(t)}</p>
               ))}
             </div>
-            <p className="mt-6 font-display text-xl font-semibold italic">{fr(founder.signature)}</p>
+            <p className="mt-8 inline-flex items-center gap-3 font-display text-xl font-semibold italic"><span aria-hidden className="h-px w-10 bg-tomette" />{fr(founder.signature)}</p>
           </div>
         </div>
         <PilotResults />

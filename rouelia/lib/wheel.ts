@@ -21,6 +21,21 @@ export function withIds(prizes: Prize[]): WheelPrize[] {
   return prizes.map((p) => ({ ...p, id: prizeId() }));
 }
 
+/**
+ * Roue de départ de la démo : les lots les plus fréquents, plus le plus rare (le « gros lot »),
+ * dans l'ordre du modèle, avec des chances remises à 100 %.
+ */
+export function starterPrizes(prizes: Prize[], count = 4): Prize[] {
+  if (prizes.length <= count) return prizes;
+  const byChance = prizes.map((p, i) => ({ p, i })).sort((a, b) => b.p.percent - a.p.percent || a.i - b.i);
+  const rarest = byChance[byChance.length - 1];
+  const keep = new Set([...byChance.slice(0, count - 1).map((x) => x.i), rarest.i]);
+  const kept = prizes.filter((_, i) => keep.has(i));
+  const total = sumPercents(kept);
+  const rounded = roundToTotal(kept.map((p) => (p.percent * 100) / total), 100);
+  return kept.map((p, i) => ({ ...p, percent: rounded[i] }));
+}
+
 export function sumPercents(prizes: Pick<Prize, "percent">[]): number {
   return prizes.reduce((s, p) => s + p.percent, 0);
 }

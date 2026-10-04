@@ -35,7 +35,7 @@ function PrizeRow({ index }: { index: number }) {
   }
 
   return (
-    <li className="rounded-lg bg-cream p-3 ring-1 ring-line sm:p-4">
+    <li className="rounded-2xl bg-cream/70 p-4 ring-1 ring-line/70 transition-shadow hover:shadow-md sm:p-5">
       <div className="flex items-center gap-2">
         <button
           type="button"
@@ -247,7 +247,7 @@ export function PrizeEditor() {
         <p className="text-sm font-semibold text-ink-soft">{t.prizes.count(n)}</p>
         <p className="text-xs font-medium text-sauge">{fr(t.prizes.noLoser)}</p>
       </div>
-      <ul className="mt-3 space-y-3">
+      <ul className="mt-4 space-y-4">
         {app.demo.prizes.map((p, i) => (
           <PrizeRow key={p.id} index={i} />
         ))}
@@ -256,7 +256,7 @@ export function PrizeEditor() {
         type="button"
         onClick={() => canAdd && app.addNewPrize(t.prizes.newPrizeName)}
         aria-disabled={!canAdd}
-        className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-line font-semibold text-tomette-deep hover:border-tomette hover:bg-paper aria-disabled:cursor-not-allowed aria-disabled:text-ink-soft aria-disabled:hover:border-line"
+        className="mt-4 flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-line font-semibold transition-colors text-tomette-deep hover:border-tomette hover:bg-paper aria-disabled:cursor-not-allowed aria-disabled:text-ink-soft aria-disabled:hover:border-line"
       >
         <Plus aria-hidden size={18} /> {t.prizes.add}
       </button>

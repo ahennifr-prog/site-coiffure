@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { trades } from "@/content";
 import {
   addPrize, averageCost, distribute, generateCode, maxPercentFor, normalize, pickWeighted,
-  removePrize, roundToTotal, segmentAt, setPercent, sumPercents, targetRotation, withIds,
+  removePrize, roundToTotal, segmentAt, setPercent, starterPrizes, sumPercents, targetRotation, withIds,
   type WheelPrize,
 } from "@/lib/wheel";
 
@@ -148,5 +148,17 @@ describe("code cadeau", () => {
   it("a le format ROU-XXXX sans caractères ambigus", () => {
     const rand = seeded(9);
     for (let i = 0; i < 200; i++) expect(generateCode("ROU", rand)).toMatch(/^ROU-[2-9A-HJKMNP-Z]{4}$/);
+  });
+});
+
+describe("starterPrizes", () => {
+  it("garde 4 lots, dont le plus rare, et remet les chances à 100 %", () => {
+    for (const t of trades) {
+      const s = starterPrizes(t.prizes);
+      expect(s.length).toBe(Math.min(4, t.prizes.length));
+      expect(sumPercents(s)).toBe(100);
+      const rarest = [...t.prizes].sort((a, b) => a.percent - b.percent)[0];
+      expect(s.some((p) => p.name === rarest.name)).toBe(true);
+    }
   });
 });

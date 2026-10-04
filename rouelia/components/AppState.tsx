@@ -6,7 +6,7 @@ import type { WonOffer } from "@/lib/offers";
 import type { Utm, WheelConfig } from "@/lib/signup";
 import {
   addPrize, averageCost, monogramOf, normalize, paletteFromPrimary, readableOn, removePrize, segmentColors,
-  setPercent, withIds, type WheelPrize,
+  setPercent, starterPrizes, withIds, type WheelPrize,
 } from "@/lib/wheel";
 
 export { monogramOf };
@@ -83,7 +83,7 @@ function initialDemo(trade: TradeId = "coiffeur"): DemoState {
     primaryColor: null,
     logo: null,
     noLogo: false,
-    prizes: withIds(t.prizes),
+    prizes: withIds(starterPrizes(t.prizes)),
     touched: false,
   };
 }
@@ -157,7 +157,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       setTrade: (t) =>
         patch(() => {
           const tr = trades.find((x) => x.id === t) ?? trades[0];
-          return { trade: tr.id, prizes: withIds(tr.prizes) };
+          return { trade: tr.id, prizes: withIds(starterPrizes(tr.prizes)) };
         }),
       setPalette: (id) => patch({ paletteId: id, primaryColor: null }),
       setPrimaryColor: (hex) => patch({ primaryColor: hex.toUpperCase() }),
