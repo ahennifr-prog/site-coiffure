@@ -82,6 +82,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 ::selection {
@@ -225,6 +226,7 @@ dialog::backdrop {
 /* ------------------------------------------------------------------ */
 /* Effets au défilement (pilotés par <ScrollFx>, page d'accueil)       */
 /* Sans .fx-on (animations limitées, ou script absent), tout est fixe. */
+/* Les transformations sont écrites par ScrollFx sur chaque élément.   */
 /* ------------------------------------------------------------------ */
 
 /* Titres qui montent mot à mot, derrière un masque. */
@@ -237,28 +239,9 @@ dialog::backdrop {
 }
 .fx-on .split.is-in .w > span { transform: none; }
 
-/* La vidéo s'agrandit en arrivant à l'écran. */
-.fx-on .fx-grow {
-  transform: scale(calc(0.88 + 0.12 * var(--enter, 1)));
-  transform-origin: 50% 0%;
-}
-
-/* Profondeur : l'élément défile plus lentement ou plus vite que la page. */
-.fx-on .fx-parallax { transform: translate3d(0, calc((var(--p, 0.5) - 0.5) * var(--depth, -120px)), 0); }
-
-/* Mots qui s'allument un à un pendant la lecture. */
-.fx-on .fx-fill .w { opacity: clamp(0.16, calc(var(--enter, 1) * (var(--n, 10) + 3) - var(--i, 0) - 2), 1); }
-
-/* Le bloc final remonte doucement en arrivant. */
-.fx-on .fx-curtain { transform: translate3d(0, calc((1 - var(--enter, 1)) * 60px), 0); }
-
 /* Bandeau des avantages, en défilement continu et léger. */
 @keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
 .marquee-track { display: flex; width: max-content; animation: marquee 32s linear infinite; }
 
-/* Rail de la timeline sur téléphone : il se remplit pendant la traversée de l'écran. */
-.tl-fill { height: calc(100% - 16px); }
-.fx-on .tl-fill { height: calc(clamp(0, (var(--p, 0) - 0.18) * 1.9, 1) * (100% - 16px)); }
-
-/* Fil d'avancement en haut de page. */
-.fx-progress { transform-origin: 0 50%; transform: scaleX(var(--doc, 0)); }
+/* Rail de la timeline sur téléphone : rempli par <ScrollFx> ; plein sans animation. */
+.fx-on .tl-fill { transform: scaleY(0); }

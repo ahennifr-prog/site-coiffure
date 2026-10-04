@@ -86,21 +86,7 @@ export function OfferWheel() {
         )}
       </div>
 
-      <details className="mt-3 w-full max-w-[440px] text-sm text-white">
-        <summary className="flex min-h-11 cursor-pointer items-center justify-center font-semibold underline underline-offset-4">
-          {offerWheel.chancesToggle}
-        </summary>
-        <ul className="mt-2 space-y-1 rounded-lg bg-black/15 p-4">
-          {offerWheel.offers.map((o) => (
-            <li key={o.id} className="flex justify-between gap-4">
-              <span>{fr(o.label)}</span>
-              <span className="font-semibold tabular-nums">{fr(`${o.percent} %`)}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-2 text-center text-white/90">{fr(offerWheel.chancesNote)}</p>
-        <p className="mt-1 text-center text-white/90">{fr(offerWheel.oneDraw)}</p>
-      </details>
+      <p className="mt-3 max-w-[440px] text-center text-xs text-white/85">{fr(offerWheel.rules)}</p>
     </div>
   );
 }

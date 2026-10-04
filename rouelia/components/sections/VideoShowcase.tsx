@@ -36,8 +36,8 @@ export function VideoShowcase() {
           <Eyebrow>{video.eyebrow}</Eyebrow>
           <SectionTitle id="video-title">{video.title}</SectionTitle>
         </div>
-        <div className="mt-12" data-fx>
-          <div className="fx-grow relative mx-auto aspect-video w-full overflow-hidden rounded-[14px] bg-night shadow-lg ring-1 ring-black/5 sm:rounded-[24px]">
+        <div className="mt-12" data-fx="grow">
+          <div className="relative origin-top mx-auto aspect-video w-full overflow-hidden rounded-[14px] bg-night shadow-lg ring-1 ring-black/5 sm:rounded-[24px]">
             {playing ? (
               <video
                 ref={ref}

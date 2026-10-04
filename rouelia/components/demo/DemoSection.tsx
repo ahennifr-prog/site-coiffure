@@ -25,11 +25,16 @@ const DemoInner = dynamic(() => import("./Demo"), {
   loading: () => <Skeleton label={demo.preview.loading} blocks={[300, 330, 900, 220]} side={700} />,
 });
 
-/** La démo ne se charge qu'à l'approche : la page d'accueil reste légère. */
+/**
+ * La démo se charge juste après la page (pas au premier affichage), et sa place est réservée
+ * à sa hauteur réelle : quand elle arrive, rien ne bouge plus bas (Safari ne compense pas les décalages).
+ */
 export function DemoLazy() {
   return (
-    <WhenVisible fallback={<Skeleton label={demo.preview.loading} blocks={[300, 330, 900, 220]} side={700} />}>
-      <DemoInner />
-    </WhenVisible>
+    <div className="min-h-[3210px] sm:min-h-[2885px] md:min-h-[2750px] lg:min-h-[2440px] xl:min-h-[2330px]">
+      <WhenVisible margin="4000px" fallback={<Skeleton label={demo.preview.loading} blocks={[300, 330, 900, 220]} side={700} />}>
+        <DemoInner />
+      </WhenVisible>
+    </div>
   );
 }

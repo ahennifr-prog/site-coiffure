@@ -7,7 +7,7 @@ import { OfferWheel } from "./OfferWheel";
 
 export function FinalCta() {
   return (
-    <section aria-labelledby="final-title" data-fx className="fx-curtain relative overflow-hidden bg-tomette pb-20 text-white">
+    <section aria-labelledby="final-title" data-fx="rise" className="relative overflow-hidden bg-tomette pb-20 text-white">
       <Awning className="h-10 w-full" stripe="#A33317" base="#FBF6EE" />
       <Container className="grid items-center gap-14 pt-20 pb-6 lg:grid-cols-[1.2fr_1fr]">
         <div>

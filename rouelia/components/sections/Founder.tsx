@@ -71,7 +71,7 @@ export function Founder() {
     <Section labelledBy="fondateur-title">
       <Container>
         <div className="grid items-center gap-14 md:grid-cols-[minmax(0,360px)_1fr] lg:gap-24">
-          <div data-fx className="fx-parallax mx-auto w-[70%] max-w-[360px] md:w-full" style={{ ["--depth" as string]: "-90px" }}>
+          <div data-fx="parallax" data-depth="-90" className="mx-auto w-[70%] max-w-[360px] md:w-full">
             <Portrait />
           </div>
           <div>

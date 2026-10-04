@@ -643,7 +643,6 @@ export const offerWheel = {
   wheelLabel: "Roue d'offres Rouelia",
   spinHint: "Touchez la roue pour tenter votre chance",
   spinning: "La roue tourne",
-  oneDraw: "Un seul tirage. Votre cadeau est gardé 7 jours sur cet appareil.",
   won: "Gagné",
   codeLabel: "Votre code",
   activate: "Créez votre compte pour activer votre cadeau (valable 7 jours)",
@@ -651,8 +650,7 @@ export const offerWheel = {
   cta: "Créer mon compte",
   expired: "Votre cadeau a expiré. Vous pouvez retenter votre chance.",
   error: "Le tirage n'a pas fonctionné. Vérifiez votre connexion et réessayez.",
-  chancesToggle: "Voir les chances de chaque cadeau",
-  chancesNote: "Le tirage est fait par notre serveur. Un cadeau par compte, non cumulable, non échangeable contre de l'argent.",
+  rules: "Un seul tirage, gardé 7 jours sur cet appareil. Un cadeau par compte, non cumulable, non échangeable contre de l'argent.",
   /** Durée de validité du cadeau, en jours. */
   validityDays: 7,
   codePrefix: "OFF",

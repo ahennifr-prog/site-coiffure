@@ -37,7 +37,7 @@ export function Hero() {
           </h1>
         </div>
 
-        <div data-fx className="fx-parallax relative mx-auto w-full max-w-[330px] sm:max-w-[440px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:max-w-[500px]" style={{ ["--depth" as string]: "-140px" }}>
+        <div data-fx="parallax" data-depth="-140" className="relative mx-auto w-full max-w-[330px] sm:max-w-[440px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:max-w-[500px]">
           <Tilt max={6}>
             <div aria-hidden className="absolute inset-x-4 top-8 bottom-12 rounded-[44px] bg-paper/80 shadow-lg ring-1 ring-line/70 sm:top-10 [@media(hover:hover)]:[transform:translateZ(-40px)]" />
             <Awning className="relative mx-auto h-7 w-[calc(100%-0.5rem)] drop-shadow-sm sm:h-9" />

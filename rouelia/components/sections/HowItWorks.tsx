@@ -104,9 +104,10 @@ export function HowItWorks() {
       <div className="py-(--section-y) lg:hidden">
         <Container>
           {heading("fonctionnement-title")}
-          <ol data-fx className="relative mt-14 space-y-14">
-            <span aria-hidden className="absolute top-2 bottom-2 left-[15px] w-0.5 rounded-full bg-line" />
-            <span aria-hidden className="tl-fill absolute top-2 left-[15px] w-0.5 rounded-full bg-tomette" />
+          <ol className="relative mt-14 space-y-14">
+            <span aria-hidden data-fx="rail" className="absolute top-2 bottom-2 left-[15px] w-0.5 rounded-full bg-line">
+              <span className="tl-fill absolute inset-0 origin-top rounded-full bg-tomette" />
+            </span>
             {howItWorks.steps.map((s, i) => {
               const Art = stepArts[i];
               return (

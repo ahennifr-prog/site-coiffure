@@ -23,7 +23,7 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldString(faqJsonLd()) }} />
       <script dangerouslySetInnerHTML={{ __html: fxBoot }} />
       <ScrollFx />
-      <div aria-hidden className="fx-progress fixed inset-x-0 top-0 z-[70] h-[3px] bg-tomette" />
+      <div aria-hidden data-fx="progress" className="fixed inset-x-0 top-0 z-[70] h-[3px] origin-left bg-tomette" style={{ transform: "scaleX(0)" }} />
       <Nav />
       <main id="contenu">
         <Hero />
