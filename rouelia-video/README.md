@@ -45,3 +45,16 @@ Matcha Bar, Studio Pilates, La Boutique.
 4. Mixer voix (accélérée), musique (baissée sous la voix) et bruitages ; rendre la verticale.
 5. Version horizontale 16:9 (composition `horizontal`, mêmes scènes réorganisées).
 Higgsfield (compte gratuit, environ 7 crédits) : la génération d'images demande un abonnement payant.
+
+## État au 4 octobre 2026 (fin de journée)
+- **Verticale validée par Aymen : v5** (`npx remotion render vertical out/rouelia-vertical-v5.mp4`), 46,3 s.
+- **Horizontale 16:9** : composition `horizontal` (même minutage, même son). Chaque scène verticale est
+  recadrée à droite (`STAGE` dans `src/components.tsx`), le titre passe en grand dans la colonne de gauche
+  (`Headline`), les fonds débordent sur tout l'écran (`useBleed`). L'écran de fin a sa propre mise en page.
+- **Voix** : `public/audio/voice-raw.mp3` (prise principale) et `public/audio/voice-end.mp3` (fin : « Rouelia.
+  Vos clients gagnent un cadeau… vous, leur prochaine visite. Essayez gratuitement pendant quatorze jours,
+  sur rouelia point f r. »), toutes deux hors dépôt, sur le Drive d'Aymen (« Voixrouelia », « Voixfin »).
+  `scripts/mix.sh` remonte la voix : accroche à vitesse naturelle, deux pauses, puis le reste à +7 %.
+  Attention : la prise principale commence à parler dès 0 s (ne pas se fier au premier « silence_end »).
+- **Son** : bruitages devant la musique, pas de whoosh aux coupes (jugé lassant), clic discret à la place.
+- `npm run audio` refait musique, bruitages et mix ; puis rendu de chaque composition.
