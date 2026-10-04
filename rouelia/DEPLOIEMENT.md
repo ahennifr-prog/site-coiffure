@@ -44,6 +44,13 @@ Les produits (Essentiel, Croissance, Premium) et les réductions des cadeaux se 
    `STRIPE_WEBHOOK_SECRET`. Pour passer du test au réel, remplacer les deux valeurs.
 7. Essai : espace commerçant → « Garder ma roue après l'essai » → carte `4242 4242 4242 4242`, date future, code 123.
 
+## 3 quater. Les réponses aux avis par IA (Claude)
+1. https://console.anthropic.com : créer un compte (entreprise Rouelia), ajouter un moyen de paiement et quelques
+   euros de crédit (une réponse coûte environ 1 centime avec Claude Sonnet 5.5).
+2. **API Keys → Create Key**, nom `rouelia-site`. Copier la clé (elle commence par `sk-ant-`).
+3. Cloudflare, Worker `rouelia` → **Variables et secrets** : secret `ANTHROPIC_API_KEY`.
+Sans cette clé, l'onglet Avis de l'espace indique que la fonction arrive bientôt.
+
 ## 3 bis. Les e-mails (Brevo)
 1. Brevo : domaine `rouelia.fr` authentifié (fait le 3 octobre 2026), téléphone vérifié.
 2. Brevo → Paramètres → **SMTP et API** → **Clés API** → générer une clé `rouelia-site`.

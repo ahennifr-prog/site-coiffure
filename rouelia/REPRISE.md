@@ -173,12 +173,28 @@ d'un commerce dans `/admin`.
 - **À faire par Aymen** : `DEPLOIEMENT.md`, section 3 ter (bac à sable, clés, webhook, portail, pied de facture,
   secrets `STRIPE_SECRET_KEY` et `STRIPE_WEBHOOK_SECRET`). Sans clés, rien ne change (e-mail prérempli).
 
+## Réponses aux avis par IA : codé le 4 octobre 2026 (version 1)
+- Onglet « Avis » de l'espace : le commerçant colle l'avis (note, prénom, texte) et peut ajouter « Votre version » ;
+  Claude Sonnet 5.5 (choix d'Aymen, `lib/reviews.ts`) propose deux réponses modifiables, bouton Copier et lien vers
+  les avis Google. Rien n'est publié automatiquement.
+- Ton unique qui s'adapte à l'avis (choix d'Aymen) ; réglages vous ou tu, longueur courte ou normale, signature
+  (par défaut « L'équipe d'... »). Règles par note, interdits (inventer, contredire, promettre, parler de la roue
+  ou d'un cadeau), réponse dans la langue de l'avis, contenu de l'avis traité comme une information.
+- Quota : 30 réponses par mois en Croissance, illimité en Premium (garde-fou de 40 par heure), aucune en Essentiel
+  (bouton vers les packs). Compteur `avis_ia` dans la table `stats`.
+- Repli automatique côté Anthropic (`fallbacks: "default"`) si le modèle refuse par excès de prudence.
+- **À faire par Aymen** : clé `ANTHROPIC_API_KEY` (`DEPLOIEMENT.md`, section 3 quater).
+- Version 2 (plus tard) : import automatique des avis, publication et alerte avis négatif par l'API Google Business
+  Profile. Une seule demande d'accès, faite par Aymen pour le projet Google Cloud de Rouelia ; chaque commerçant
+  connecte ensuite sa fiche d'un clic (« Se connecter avec Google »). Conditions de Google pour la demande : être
+  propriétaire ou gérant d'une fiche validée, active depuis au moins 60 jours, avec un site web.
+
 ## Promis sur le site mais pas encore codé (groupes 3 à 6, comptes à créer par Aymen)
 - Groupe 3, SMS (Brevo, payant à l'envoi) : 50 ou 200 SMS par mois, rappels, relances, anniversaires, rapport SMS.
 - Groupe 4, Google : veille de 3 concurrents (clé Places) ; alerte avis négatif, réponses aux avis, audit
   (accès API Business Profile, demande à faire tôt, validation par Google en plusieurs semaines).
-- Groupe 5, IA (clé API Anthropic) : réponses aux avis en un clic, analyse des avis, mise en route et ajustement
-  des lots « par IA ».
+- Groupe 5, IA (clé API Anthropic) : réponses aux avis faites (voir plus haut) ; restent l'analyse des avis,
+  la mise en route et l'ajustement des lots « par IA ».
 - Groupe 6, WhatsApp (compte vérifié par Meta, demande le SIREN) : rapport par WhatsApp.
 - Domaine personnalisé (Premium) : sur demande, réglé à la main par Aymen dans Cloudflare.
 - Espace client, côté abonnement : changer de pack, arrêter « en un clic », payer (étape 2, Stripe). L'export de la

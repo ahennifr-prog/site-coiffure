@@ -36,7 +36,7 @@ export interface Play {
   bonusUsed?: number;
 }
 
-export const STAT_FIELDS = ["visites", "avis_ouverts", "avis_clics", "avis_fermes", "parties", "retraits", "deja_joue", "parrainages", "bonus_retires"] as const;
+export const STAT_FIELDS = ["visites", "avis_ouverts", "avis_clics", "avis_fermes", "parties", "retraits", "deja_joue", "parrainages", "bonus_retires", "avis_ia"] as const;
 export type StatField = (typeof STAT_FIELDS)[number];
 
 const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";

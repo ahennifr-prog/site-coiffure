@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BarChart3, CreditCard, ExternalLink, Gift, Info, LogOut, QrCode, Receipt, SlidersHorizontal, TriangleAlert } from "lucide-react";
+import { BarChart3, CreditCard, ExternalLink, Gift, Info, LogOut, MessageSquareText, QrCode, Receipt, SlidersHorizontal, TriangleAlert } from "lucide-react";
 import { brand, offerWheel, pricing, type OfferId, type PackId } from "@/content";
 import { formatDay } from "@/lib/dates";
 import type { GameState, ShopSettings } from "@/lib/shop-config";
 import { Logo } from "@/components/brand/Logo";
+import { Avis } from "./Avis";
 import { Caisse } from "./Caisse";
 import { QrTab } from "./QrTab";
 import { Reglages } from "./Reglages";
@@ -15,6 +16,7 @@ const TABS = [
   { id: "caisse", label: "Caisse", Icon: Receipt },
   { id: "suivi", label: "Suivi", Icon: BarChart3 },
   { id: "roue", label: "Roue", Icon: SlidersHorizontal },
+  { id: "avis", label: "Avis", Icon: MessageSquareText },
   { id: "qr", label: "QR code", Icon: QrCode },
 ] as const;
 type Tab = (typeof TABS)[number]["id"];
@@ -137,10 +139,11 @@ export function Espace(props: EspaceProps) {
         {tab === "caisse" ? <Caisse codePrefix={props.codePrefix} /> : null}
         {tab === "suivi" ? <Suivi /> : null}
         {tab === "roue" ? <Reglages slug={props.slug} pack={props.pack} onSaved={(s: ShopSettings) => setName(s.name)} /> : null}
+        {tab === "avis" ? <Avis name={name} /> : null}
         {tab === "qr" ? <QrTab slug={props.slug} name={name} /> : null}
       </main>
 
-      <nav aria-label="Sections de l'espace" className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-t border-line bg-paper/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
+      <nav aria-label="Sections de l'espace" className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-5 border-t border-line bg-paper/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
         {TABS.map(({ id, label, Icon }) => (
           <button
             key={id}

@@ -66,6 +66,14 @@ export interface ShopSettings {
   facebookUrl: string;
   /** Pour le suivi de la rentabilité : panier moyen (€) et part qui reste après achats (%). */
   profit: { basket: number; margin: number };
+  /** Réponses aux avis par IA : vouvoiement, signature, longueur. */
+  reviews: ReviewSettings;
+}
+
+export interface ReviewSettings {
+  formal: boolean;
+  signature: string;
+  length: "courte" | "normale";
 }
 
 /** trial : essai gratuit ; active : client payant ; paused : mis en pause par Rouelia. */
@@ -182,6 +190,7 @@ export function sanitizeSettings(input: unknown, base: ShopSettings): ShopSettin
   const color = typeof c.primaryColor === "string" && /^#[0-9a-fA-F]{6}$/.test(c.primaryColor) ? c.primaryColor.toUpperCase() : null;
   const referral = (c.referral ?? b.referral) as Record<string, unknown>;
   const profit = (c.profit ?? b.profit) as Record<string, unknown>;
+  const reviews = (c.reviews ?? b.reviews) as Record<string, unknown>;
   const employees = Array.isArray(c.employees) ? c.employees : b.employees;
 
   return {
@@ -208,6 +217,11 @@ export function sanitizeSettings(input: unknown, base: ShopSettings): ShopSettin
       basket: Math.max(0, Math.min(10000, Number(profit.basket) || 0)),
       margin: clampInt(profit.margin, 0, 100, b.profit.margin),
     },
+    reviews: {
+      formal: reviews.formal === undefined ? b.reviews.formal : reviews.formal !== false,
+      signature: reviews.signature === undefined ? b.reviews.signature : str(reviews.signature, 80),
+      length: reviews.length === "courte" || reviews.length === "normale" ? reviews.length : b.reviews.length,
+    },
   };
 }
 
@@ -221,6 +235,7 @@ export function withDefaults(s: ShopSettings): ShopSettings {
     instagramUrl: s.instagramUrl ?? "",
     facebookUrl: s.facebookUrl ?? "",
     profit: s.profit ?? { basket: 0, margin: 60 },
+    reviews: s.reviews ?? { formal: true, signature: "", length: "normale" },
   };
 }
 
@@ -242,6 +257,8 @@ export function packFeatures(pack: PackId) {
     employees: plus,
     offPeak: premium,
     profit: premium,
+    /** Réponses aux avis par IA par mois (null : illimité). */
+    reviewReplies: premium ? null : plus ? 30 : 0,
     poweredBy: !premium,
   };
 }
@@ -420,6 +437,7 @@ export function shopFromSignup(r: SignupRecord, id: string, slug: string, now: D
       instagramUrl: "",
       facebookUrl: "",
       profit: { basket: trade.simulator.averageBasket, margin: Math.round(trade.simulator.grossMargin * 100) },
+      reviews: { formal: true, signature: "", length: "normale" },
     },
   );
   const longTrial = r.offer?.status === "applied" && r.offer.id === ("essai_21" satisfies OfferId);
