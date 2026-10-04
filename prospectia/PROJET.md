@@ -12,7 +12,8 @@
 |---|---|---|
 | Activité | Prospection B2B par IA | ✅ validé |
 | Ambition produit | À terme un **logiciel (SaaS)** | ✅ validé |
-| Chemin vers le SaaS | Service + moteur IA maison / GoHighLevel en marque blanche / SaaS direct avec Claude Code (voir §9) | ⏳ en réflexion |
+| Chemin vers le SaaS | **Service + moteur IA maison construit avec Claude Code** ; le même moteur devient le SaaS (bêta entre les mois 4 et 6). Voir `OFFRE.md` et `MOTEUR-IA.md` | ✅ validé |
+| Emploi actuel | À côté de l'emploi ; **pas de clause d'exclusivité** | ✅ vérifié |
 | Facturation | **Abonnement mensuel + garantie de résultat** (un mois offert si l'objectif de RDV n'est pas atteint) | ✅ validé |
 | Cible de départ | À valider par entretiens (kit à préparer plus tard) | ⏳ plus tard |
 | Associés | **SAS à 2 associés** : toi opérationnel et président, et un **associé investisseur** (apport de capital, non opérationnel) | ✅ validé |
@@ -65,6 +66,9 @@ pour des outils.
 ---
 
 ## 3. L'offre
+
+> ⚠️ **Première ébauche, remplacée par `OFFRE.md`** : service à 1 490 € / mois avec
+> garantie, et App SaaS de 99 à 499 € / mois.
 
 | Formule | Contenu | Prix indicatif HT |
 |---|---|---|
@@ -306,19 +310,23 @@ personnelle ; associé investisseur à moins de 10 k€ ; **objectif : plus de 3
 | SaaS à 99 € / mois | environ 250 clients |
 | **Mix réaliste en année 3** | 6 à 8 clients du service (environ 170 k€) et 40 clients SaaS à 300 € (environ 145 k€) |
 
-### Trajectoire recommandée
+### Trajectoire retenue : le SaaS entre les mois 4 et 6
 
-| Phase | Statut | Objectif |
-|---|---|---|
-| **Mois 0 à 3** | à côté de l'emploi | SAS créée, outil interne construit avec Claude Code, **2 clients pilotes** à prix réduit |
-| **Mois 3 à 12** | à côté de l'emploi | 4 ou 5 clients à environ 2 000 € / mois (environ 8 à 10 k€ de revenu mensuel récurrent) ; démission quand ce revenu couvre ton salaire et 3 mois de charges |
-| **Année 2** | temps plein | 8 à 10 clients du service ; ouverture du moteur en SaaS à des clients bêta ; premier freelance ou SDR |
-| **Année 3** | | **plus de 300 k€** : service et SaaS |
+| Phase | Objectif |
+|---|---|
+| **Mois 0 à 2** | SAS créée ; moteur construit avec Claude Code (étapes ① à ⑥) ; **2 clients pilotes** du service |
+| **Mois 3** | Moteur complet ; clients 3 et 4 du service ; première étude de cas |
+| **Mois 4** | **Version SaaS** : inscription, Stripe, quotas ; ouverture de la bêta |
+| **Mois 5 et 6** | 10 clients bêta de l'App, 4 clients du service : **environ 7 k€ de revenu mensuel récurrent** |
+| **Mois 6 à 12** | Montée en puissance de l'App ; démission quand le revenu mensuel récurrent couvre ton salaire et 3 mois de charges |
+| **Années 2 et 3** | **Plus de 300 k€** : environ 8 clients du service et environ 120 clients de l'App |
+
+Les détails sont dans `OFFRE.md` (prix, garantie) et `MOTEUR-IA.md` (fonctionnement et
+plan de construction).
 
 ### À vérifier tout de suite (emploi actuel)
 
-- [ ] **Clause d'exclusivité** dans ton contrat de travail : elle peut t'interdire
-      d'exercer une autre activité, même le soir.
+- [x] **Clause d'exclusivité** : aucune dans ton contrat.
 - [ ] **Obligation de loyauté** : pas de concurrence avec ton employeur, et pas
       d'utilisation de son matériel ni de ses clients.
 - [ ] Comme tu es salarié, **ne pas te rémunérer comme président** au début : pas de
