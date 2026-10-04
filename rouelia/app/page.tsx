@@ -5,7 +5,6 @@ import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
 import { DemoBlock } from "@/components/sections/DemoBlock";
 import { HowItWorks } from "@/components/sections/HowItWorks";
-import { SimulatorBlock } from "@/components/sections/SimulatorBlock";
 import { Founder } from "@/components/sections/Founder";
 import { Pricing } from "@/components/sections/Pricing";
 import { Faq } from "@/components/sections/Faq";
@@ -32,7 +31,6 @@ export default function Home() {
         <Marquee />
         <DemoBlock />
         <HowItWorks />
-        <SimulatorBlock />
         <Founder />
         <Pricing />
         <Faq />

@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { demo, simulator } from "@/content";
+import { demo } from "@/content";
 import { WhenVisible } from "@/components/ui/WhenVisible";
 
 function Skeleton({ label, blocks, side }: { label: string; blocks: number[]; side: number }) {
@@ -25,24 +25,11 @@ const DemoInner = dynamic(() => import("./Demo"), {
   loading: () => <Skeleton label={demo.preview.loading} blocks={[300, 330, 900, 220]} side={700} />,
 });
 
-const SimulatorInner = dynamic(() => import("@/components/simulator/Simulator").then((m) => m.Simulator), {
-  ssr: false,
-  loading: () => <Skeleton label={simulator.loading} blocks={[640]} side={560} />,
-});
-
-/** La démo et le simulateur ne se chargent qu'à l'approche : la page d'accueil reste légère. */
+/** La démo ne se charge qu'à l'approche : la page d'accueil reste légère. */
 export function DemoLazy() {
   return (
     <WhenVisible fallback={<Skeleton label={demo.preview.loading} blocks={[300, 330, 900, 220]} side={700} />}>
       <DemoInner />
-    </WhenVisible>
-  );
-}
-
-export function SimulatorLazy() {
-  return (
-    <WhenVisible fallback={<Skeleton label={simulator.loading} blocks={[640]} side={560} />}>
-      <SimulatorInner />
     </WhenVisible>
   );
 }

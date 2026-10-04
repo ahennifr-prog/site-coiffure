@@ -245,7 +245,6 @@ export function PrizeEditor() {
     <div>
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold text-ink-soft">{t.prizes.count(n)}</p>
-        <p className="text-xs font-medium text-sauge">{fr(t.prizes.noLoser)}</p>
       </div>
       <ul className="mt-4 space-y-4">
         {app.demo.prizes.map((p, i) => (

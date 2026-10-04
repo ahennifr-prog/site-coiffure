@@ -109,7 +109,6 @@ export const nav = {
   links: [
     { href: "#demo", label: "Démo" },
     { href: "#fonctionnement", label: "Comment ça marche" },
-    { href: "#simulateur", label: "Rentabilité" },
     { href: "#tarifs", label: "Tarifs" },
     { href: "#faq", label: "Questions" },
   ],
@@ -181,7 +180,6 @@ export const marquee = ["Brushing offert", "Café offert", "Mochi offert", "Séa
 export const demo = {
   eyebrow: "Démo gratuite, sans inscription",
   title: "Réglez votre roue. Tournez-la comme un client.",
-  lead: "Rien n'est envoyé sans compte. Votre roue est gardée pour l'essai.",
 
   steps: {
     identity: "Votre commerce",
@@ -190,16 +188,16 @@ export const demo = {
   },
 
   fields: {
-    name: { label: "Nom du commerce", placeholder: "Chez Martine", help: "Il s'affiche sur la roue et sur l'écran de gain." },
-    trade: { label: "Votre métier", help: "On charge des lots adaptés. Vous pourrez tout changer." },
+    name: { label: "Nom du commerce", placeholder: "Chez Martine" },
+    trade: { label: "Votre métier" },
     logo: {
       label: "Logo",
       upload: "Choisir une image",
       replace: "Changer",
       remove: "Retirer le logo",
       none: "Je n'ai pas de logo",
-      noneHelp: "On crée un visuel à partir du nom de votre commerce.",
-      privacy: "Votre image reste sur votre téléphone. Elle n'est envoyée que si vous créez un compte.",
+      noneHelp: "On crée un visuel avec le nom de votre commerce.",
+      privacy: "Votre image reste sur votre téléphone.",
       errorType: "Ce fichier n'est pas une image. Essayez un JPG, un PNG ou un SVG.",
       errorSize: "Cette image dépasse 5 Mo. Essayez une version plus légère.",
     },
@@ -230,16 +228,14 @@ export const demo = {
     percent: "Chance",
     newPrizeName: "Nouveau lot",
     total: "Total des chances",
-    totalHint: "Toujours 100 %. Quand vous changez un lot, les autres s'ajustent.",
-    noLoser: "Aucune case perdante : chaque segment est un cadeau.",
+    totalHint: "Les autres lots s'ajustent tout seuls.",
     lock: (name: string) => `Bloquer la chance de ${name}`,
     unlock: (name: string) => `Débloquer la chance de ${name}`,
   },
 
   cost: {
     label: "Coût moyen par partie",
-    explain:
-      "C'est ce que vous coûte un joueur en moyenne : le coût de chaque lot multiplié par sa chance de sortir.",
+    explain: "Ce que vous coûte un joueur, en moyenne.",
     ok: "Raisonnable pour un cadeau qui fait revenir un client.",
     warning: (threshold: string) =>
       `Au-dessus de ${threshold} par partie. C'est possible, mais baissez la chance des gros lots si vous voulez garder la main.`,
@@ -249,8 +245,8 @@ export const demo = {
     phoneLabel: "Aperçu de la roue sur le téléphone d'un client",
     tagline: "Tentez votre chance : chaque case est un cadeau.",
     test: "Tester comme un client",
-    testHint: "Vous verrez exactement ce que voit un client après avoir scanné le QR code.",
-    liveHint: "La roue se met à jour pendant que vous la réglez.",
+    testHint: "Exactement ce que voit un client après le scan.",
+    liveHint: "La roue suit vos réglages en direct.",
     loading: "Chargement de la démo",
     spin: "Tourner la roue",
     spinning: "La roue tourne",
@@ -264,7 +260,7 @@ export const demo = {
     prizes: "Lots",
     cost: "Coût moyen par partie",
     cta: "Choisir mon pack et démarrer l'essai",
-    kept: "Votre roue sera déjà configurée à l'ouverture de votre compte.",
+    kept: "Elle vous attend dans votre compte.",
   },
 
   /** Seuil de l'alerte douce sur le coût moyen par partie, en euros. */
@@ -421,63 +417,6 @@ export const howItWorks = {
 };
 
 /* ------------------------------------------------------------------ */
-/* Simulateur de rentabilité                                           */
-/* Valeurs par défaut prudentes. Ce ne sont PAS des moyennes observées.*/
-/* À remplacer par des chiffres mesurés dès que des pilotes existent.  */
-/* ------------------------------------------------------------------ */
-
-export const simulator = {
-  eyebrow: "Vos chiffres, pas les nôtres",
-  title: "Est-ce que ça se rembourse chez vous ?",
-  lead: "Vos chiffres, des hypothèses prudentes, tout est modifiable.",
-  defaults: {
-    /** Jours d'ouverture par mois. */
-    openDaysPerMonth: 26,
-    /** Part des clients qui jouent. */
-    playRate: 0.2,
-    /** Part des gagnants qui reviennent retirer leur cadeau. */
-    redeemRate: 0.3,
-    /** Part des retours qui sont de vraies visites en plus. */
-    incrementalRate: 0.4,
-  },
-  inputs: {
-    trade: "Votre métier",
-    clientsPerDay: "Clients par jour",
-    averageBasket: "Panier moyen",
-    playRate: "Clients qui jouent",
-    redeemRate: "Gagnants qui reviennent retirer leur cadeau",
-    pack: "Pack",
-  },
-  advanced: {
-    toggle: "Voir et modifier toutes les hypothèses",
-    openDaysPerMonth: "Jours d'ouverture par mois",
-    incrementalRate: "Retours qui sont de vraies visites en plus",
-    incrementalHelp:
-      "Certains clients seraient revenus de toute façon. On ne compte que les visites que la roue a provoquées.",
-    grossMargin: "Ce qui vous reste sur un panier",
-    grossMarginHelp: "Après le coût des produits, hors loyer et salaires.",
-    lotCost: "Coût moyen d'un cadeau retiré",
-    lotCostHelp: "Repris de votre roue si vous l'avez réglée dans la démo.",
-  },
-  outputs: {
-    plays: "Parties par mois",
-    returns: "Clients qui reviennent",
-    extraRevenue: "Chiffre d'affaires en plus",
-    extraMargin: "Dont marge",
-    lotsCost: "Coût des cadeaux",
-    packCost: "Coût du pack",
-    balance: "Solde estimé par mois",
-    positive: "Ça se rembourse avec vos réglages.",
-    negative: "Avec ces réglages, ça ne se rembourse pas encore. Essayez des lots moins chers ou un autre pack.",
-    perMonth: "par mois",
-  },
-  disclaimer: "Estimation indicative basée sur vos réglages, non garantie.",
-  loading: "Chargement du simulateur",
-  method:
-    "Calcul : clients par jour, fois jours d'ouverture, fois part qui joue, donne les parties. Parties fois part qui revient donne les retours. On ne garde que les vraies visites en plus, multipliées par votre panier et votre marge. On retire le coût des cadeaux retirés et le prix du pack.",
-};
-
-/* ------------------------------------------------------------------ */
 /* Preuve sociale                                                      */
 /* ------------------------------------------------------------------ */
 
@@ -548,9 +487,9 @@ export const pricing = {
   lead: "14 jours gratuits sur chaque pack. Sans carte bancaire.",
   perMonth: "par mois",
   perDay: (amount: string) => `soit environ ${amount} par jour`,
-  cover: (visits: number, basket: string, trade: string) =>
-    `Avec un panier moyen de ${basket} (${trade.toLowerCase()}), environ ${visits} ${visits > 1 ? "visites" : "visite"} en plus par mois suffisent à le couvrir.`,
-  coverNote: "Calcul sur la marge prudente du simulateur. Réglez vos propres chiffres plus bas.",
+  /** La ligne de rentabilité, reprise de la vidéo. Calcul : lib/simulator.ts (visitsToCoverPack). */
+  profit: "Rentable dès 3 clients qui reviennent par mois.",
+  profitNote: "Exemple : salon de coiffure, panier moyen 35 €, pack Croissance.",
   choose: (name: string) => `Essayer ${name}`,
   more: "Voir plus",
   less: "Voir moins",
@@ -603,7 +542,6 @@ export const pricing = {
   guarantee: {
     title: "Vous ne prenez aucun risque",
     items: [
-      "14 jours d'essai gratuit, sans carte bancaire.",
       "Vous arrêtez en un clic, sans appeler personne.",
       "Si vous mettez votre compte en pause, les cadeaux déjà gagnés restent valables pour vos clients.",
     ],

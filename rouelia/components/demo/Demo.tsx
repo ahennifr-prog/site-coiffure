@@ -51,17 +51,13 @@ function Identity() {
         placeholder={t.fields.name.placeholder}
         maxLength={40}
         autoComplete="organization"
-        aria-describedby={`${uid}-name-help`}
         className="mt-2 min-h-12 w-full rounded-lg bg-cream px-4 text-lg font-semibold ring-1 ring-line outline-none placeholder:font-normal placeholder:text-ink-soft focus:ring-2 focus:ring-tomette"
       />
-      <p id={`${uid}-name-help`} className="mt-1.5 text-xs text-ink-soft">
-        {fr(t.fields.name.help)}
-      </p>
 
       <p id={`${uid}-trade`} className="mt-5 text-sm font-semibold">
         {t.fields.trade.label}
       </p>
-      <div role="radiogroup" aria-labelledby={`${uid}-trade`} aria-describedby={`${uid}-trade-help`} className="mt-2 flex flex-wrap gap-2">
+      <div role="radiogroup" aria-labelledby={`${uid}-trade`} className="mt-2 flex flex-wrap gap-2">
         {trades.map((tr) => {
           const on = app.demo.trade === tr.id;
           return (
@@ -80,9 +76,6 @@ function Identity() {
           );
         })}
       </div>
-      <p id={`${uid}-trade-help`} className="mt-1.5 text-xs text-ink-soft">
-        {fr(t.fields.trade.help)}
-      </p>
     </Card>
   );
 }

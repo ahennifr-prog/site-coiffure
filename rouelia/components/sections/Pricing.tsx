@@ -2,9 +2,9 @@
 
 import { useId, useState } from "react";
 import { Check, ChevronDown, Minus, ShieldCheck } from "lucide-react";
-import { pricing, trades } from "@/content";
+import { pricing } from "@/content";
 import { formatPrice, fr } from "@/lib/format";
-import { pricePerDay, visitsToCoverPack } from "@/lib/simulator";
+import { pricePerDay } from "@/lib/simulator";
 import { Button } from "@/components/ui/Button";
 import { Container, Eyebrow, Section, SectionTitle } from "@/components/ui/Section";
 import { useAppState } from "@/components/AppState";
@@ -66,8 +66,7 @@ function PackHighlights({ items, featured }: { items: string[]; featured: boolea
 }
 
 export function Pricing() {
-  const { openSignup, demo } = useAppState();
-  const trade = trades.find((t) => t.id === demo.trade) ?? trades[0];
+  const { openSignup } = useAppState();
 
   return (
     <Section id="tarifs" labelledBy="tarifs-title" className="bg-paper">
@@ -76,12 +75,15 @@ export function Pricing() {
           <Eyebrow>{pricing.eyebrow}</Eyebrow>
           <SectionTitle id="tarifs-title">{pricing.title}</SectionTitle>
           <p className="mt-4 text-lg text-ink-soft">{fr(pricing.lead)}</p>
+          <p className="mt-6 inline-flex flex-wrap items-baseline justify-center gap-x-2 rounded-full bg-sauge-soft px-5 py-2.5 font-semibold text-sauge">
+            {fr(pricing.profit)}
+            <span className="text-xs font-medium text-ink-soft">{fr(pricing.profitNote)}</span>
+          </p>
         </div>
 
         <ul className="mt-12 grid items-stretch gap-5 lg:grid-cols-3">
           {pricing.packs.map((p) => {
             const featured = !!p.badge;
-            const visits = visitsToCoverPack(p.price, trade.simulator.averageBasket, trade.simulator.grossMargin);
             return (
               <li
                 key={p.id}
@@ -114,17 +116,11 @@ export function Pricing() {
                   >
                     {pricing.choose(p.name)}
                   </Button>
-                  {Number.isFinite(visits) ? (
-                    <p className={`mt-3 text-center text-xs ${featured ? "text-cream/80" : "text-ink-soft"}`}>
-                      {fr(pricing.cover(visits, formatPrice(trade.simulator.averageBasket), trade.label))}
-                    </p>
-                  ) : null}
                 </div>
               </li>
             );
           })}
         </ul>
-        <p className="mt-4 text-center text-xs text-ink-soft">{fr(pricing.coverNote)}</p>
 
         <div className="mt-10 grid gap-6 rounded-xl bg-sauge-soft p-6 sm:p-8 md:grid-cols-[auto_1fr] md:items-center">
           <span aria-hidden className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-sauge text-white">
