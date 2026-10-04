@@ -152,6 +152,10 @@ d'un commerce dans `/admin`.
   bouton « Je continue » qui ouvre une réponse préremplie. Roue jamais jouée : conseils, appel de 10 minutes et
   prolongation proposés. Décision d'Aymen : ne jamais proposer le pack Essentiel en fin d'essai. Lien cliquable
   vers rouelia.fr en bas de chaque e-mail Rouelia.
+- Dernière relance 4 jours après la fin de l'essai (une seule fois, seulement si l'e-mail de fin est parti et dans
+  les 10 jours) : cadeaux encore en attente, parties perdues par semaine, prix ; roue jamais jouée : relance de
+  l'essai proposée. Prolonger un essai dans `/admin` relance les e-mails de fin pour la nouvelle date.
+  Plus de rapport du lundi pour un essai terminé.
 - Chevalet et flyers : impression corrigée le 4 octobre (bandeau cookies masqué, marge de sécurité de 6 mm).
 
 ## Stripe : codé le 4 octobre 2026

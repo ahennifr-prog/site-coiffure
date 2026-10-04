@@ -4,7 +4,7 @@
  */
 import { writeFileSync } from "node:fs";
 import {
-  clientCodeMail, clientReminderMail, merchantInviteMail, merchantResetMail, merchantTrialMail, merchantWeeklyMail,
+  clientCodeMail, clientReminderMail, merchantInviteMail, merchantResetMail, merchantTrialLastMail, merchantTrialMail, merchantWeeklyMail,
   signupAlertMail, signupConfirmMail,
 } from "../lib/mail-templates";
 import type { Mail } from "../lib/mail";
@@ -27,6 +27,8 @@ const mails: [string, string, Mail][] = [
   ["Commerçant", "3 jours avant la fin de l'essai, la roue n'a pas encore été jouée", merchantTrialMail({ ...trial, daysLeft: 3, daysUsed: 11, results: { parties: 0, retraits: 0, avisClics: 0, enAttente: 0 } })],
   ["Commerçant", "Le jour de la fin de l'essai, la roue a tourné", merchantTrialMail({ ...trial, daysLeft: 0, daysUsed: 14, results: { parties: 58, retraits: 14, avisClics: 17, enAttente: 31 } })],
   ["Commerçant", "Le jour de la fin de l'essai, la roue n'a pas été jouée", merchantTrialMail({ ...trial, daysLeft: 0, daysUsed: 14, results: { parties: 0, retraits: 0, avisClics: 0, enAttente: 0 } })],
+  ["Commerçant", "4 jours après la fin de l'essai, sans réponse, la roue avait tourné", merchantTrialLastMail({ ...trial, daysLeft: -4, daysUsed: 14, results: { parties: 58, retraits: 14, avisClics: 17, enAttente: 31 } })],
+  ["Commerçant", "4 jours après la fin de l'essai, sans réponse, la roue n'avait pas été jouée", merchantTrialLastMail({ ...trial, daysLeft: -4, daysUsed: 14, results: { parties: 0, retraits: 0, avisClics: 0, enAttente: 0 } })],
   ["Commerçant", "Chaque lundi matin", merchantWeeklyMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine", numbers: { visites: 64, parties: 41, avisClics: 12, retraits: 9, enAttente: 23, expirentBientot: 5 } })],
   ["Commerçant qui s'inscrit", "Juste après l'inscription sur rouelia.fr", signupConfirmMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine" })],
   ["Vous (contact@rouelia.fr)", "À chaque inscription", signupAlertMail({ firstName: "Martine", shopName: "Salon Martine", email: "martine@salon.fr", phone: "+33612345678", pack: "Croissance", offer: "Essai prolongé à 21 jours (à appliquer)" })],

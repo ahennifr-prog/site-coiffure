@@ -303,6 +303,49 @@ export function merchantTrialMail(p: TrialMailInput): Mail {
   };
 }
 
+/** Dernière relance, quelques jours après la fin de l'essai, pour qui n'a pas répondu. */
+export function merchantTrialLastMail(p: TrialMailInput): Mail {
+  const r = p.results;
+  const played = r.parties > 0;
+  const footer = `C'est notre dernier message à ce sujet. Vos réglages restent gardés si vous changez d'avis. ${brand.name}, ${brand.url.replace("https://", "")}.`;
+  let subject: string;
+  let title: string;
+  let paragraphs: string[];
+  let button: { label: string; url: string };
+  if (played) {
+    const perWeek = Math.max(1, Math.round((r.parties / Math.max(1, p.daysUsed)) * 7));
+    subject = r.enAttente > 0 ? `${p.firstName}, ${plural(r.enAttente, "client a", "clients ont")} encore un cadeau à venir chercher` : `${p.firstName}, votre roue vous attend`;
+    title = "Vos clients reviennent encore";
+    paragraphs = [
+      `Bonjour ${p.firstName},`,
+      r.enAttente > 0
+        ? `La roue de ${p.shopName} est en pause depuis quelques jours, mais elle travaille encore pour vous : ${plural(r.enAttente, "client a", "clients ont")} toujours un cadeau à venir chercher. C'est l'effet de la roue, et il va s'éteindre avec ces derniers cadeaux.`
+        : `La roue de ${p.shopName} est en pause depuis quelques jours.`,
+      `Les nouveaux clients, eux, ne peuvent plus jouer. Pendant votre essai, la roue tournait environ ${plural(perWeek, "fois", "fois")} par semaine : autant de raisons de revenir qui ne sont plus données.`,
+      priceLine(p),
+    ];
+    if (p.offerLabel) paragraphs.push(`Votre cadeau de la roue Rouelia tient toujours : ${p.offerLabel}.`);
+    button = { label: "Relancer ma roue", url: continueLink(p) };
+  } else {
+    subject = `${p.firstName}, on relance votre essai ?`;
+    title = "On relance votre essai ?";
+    paragraphs = [
+      `Bonjour ${p.firstName},`,
+      `Votre essai s'est terminé avant que la roue de ${p.shopName} ait pu tourner. C'est dommage : vous n'avez pas vu ce qu'elle peut faire pour vous.`,
+      `Nous vous proposons de relancer votre essai gratuitement, avec un appel de dix minutes pour la mettre en place ensemble. Il suffit de répondre à cet e-mail.`,
+    ];
+    button = { label: "Je veux relancer mon essai", url: `mailto:${brand.email}?subject=${encodeURIComponent(`Relancer mon essai (${p.shopName})`)}` };
+  }
+  return {
+    to: { email: p.email, name: p.firstName },
+    subject,
+    tags: ["essai"],
+    replyTo: brand.email,
+    html: layout({ color: TOMETTE, onColor: "#FFFFFF", title, paragraphs, button, footer }),
+    text: text([...paragraphs, `${button.label} : ${button.url.startsWith("mailto:") ? "répondez à cet e-mail" : button.url}`, footer]),
+  };
+}
+
 export interface WeeklyNumbers {
   visites: number;
   parties: number;

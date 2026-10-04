@@ -33,6 +33,8 @@ export async function PATCH(req: Request, { params }: Ctx) {
   if (Number.isInteger(extend) && extend > 0 && extend <= 60) {
     const base = Math.max(Date.now(), new Date(shop.trialEndsAt).getTime());
     next.trialEndsAt = new Date(base + extend * 86_400_000).toISOString();
+    // Nouvelle date de fin : les e-mails de fin d'essai repartiront pour elle.
+    if (next.mails) next.mails = { weekly: next.mails.weekly };
   }
   await saveShop(next);
   // Un commerce qui passe client est aussi marqué « Client » dans les inscriptions.

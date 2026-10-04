@@ -6,7 +6,7 @@ import { sendMail } from "@/lib/mail";
 import { offerById } from "@/lib/offers";
 import { stripeReady } from "@/lib/stripe";
 import {
-  clientCodeMail, clientReminderMail, merchantInviteMail, merchantResetMail, merchantTrialMail, merchantWeeklyMail,
+  clientCodeMail, clientReminderMail, merchantInviteMail, merchantResetMail, merchantTrialLastMail, merchantTrialMail, merchantWeeklyMail,
 } from "@/lib/mail-templates";
 import { getShop, listShops, packFeatures, saveShop, shopTheme, withDefaults, type Shop } from "@/lib/shops";
 
@@ -35,7 +35,7 @@ async function trialMailInput(shop: Shop, pack: Pack, daysLeft: number, trialEnd
     shopName: s.name,
     daysLeft,
     trialEnd,
-    daysUsed: Math.max(1, Math.round((Date.parse(today) - Date.parse(start)) / 86_400_000)),
+    daysUsed: Math.max(1, Math.round((Date.parse(today < trialEnd ? today : trialEnd) - Date.parse(start)) / 86_400_000)),
     packName: pack.name,
     price: pack.price,
     results: { parties: n.parties, retraits: n.retraits, avisClics: n.avisClics, enAttente: n.enAttente },
@@ -61,6 +61,9 @@ export async function sendReset(shop: Shop, token: string) {
 
 const REMIND_DAYS_BEFORE = 3;
 const TRIAL_WARNING_DAYS = 3;
+/** Dernière relance, quelques jours après la fin de l'essai (pas au-delà de LAST_CALL_MAX_DAYS, pour les vieux comptes). */
+const LAST_CALL_DAYS = 4;
+const LAST_CALL_MAX_DAYS = 10;
 
 /**
  * Tâche quotidienne (le matin) :
@@ -97,13 +100,23 @@ export async function runDaily(now = new Date()) {
     let changed = false;
     const pack = pricing.packs.find((p) => p.id === shop.pack) ?? pricing.packs[0];
 
-    // 2. Fin d'essai : 3 jours avant, puis le jour où elle est atteinte
+    // 2. Fin d'essai : 3 jours avant, le jour où elle est atteinte, puis une dernière relance 4 jours après
     if (shop.plan === "trial") {
       const end = parisDay(new Date(shop.trialEndsAt));
       const daysLeft = Math.round((Date.parse(end) - Date.parse(today)) / 86_400_000);
-      const kind = daysLeft <= 0 ? "trialEnded" : daysLeft <= TRIAL_WARNING_DAYS ? "trialSoon" : null;
+      const kind =
+        daysLeft <= -LAST_CALL_DAYS
+          ? mails.trialEnded && daysLeft >= -LAST_CALL_MAX_DAYS
+            ? "trialLast"
+            : null
+          : daysLeft <= 0
+            ? "trialEnded"
+            : daysLeft <= TRIAL_WARNING_DAYS
+              ? "trialSoon"
+              : null;
       if (kind && !mails[kind]) {
-        const r = await sendMail(merchantTrialMail(await trialMailInput(shop, pack, daysLeft, end, today)));
+        const input = await trialMailInput(shop, pack, daysLeft, end, today);
+        const r = await sendMail(kind === "trialLast" ? merchantTrialLastMail(input) : merchantTrialMail(input));
         if (r.ok) {
           mails[kind] = today;
           changed = true;
@@ -113,7 +126,9 @@ export async function runDaily(now = new Date()) {
     }
 
     // 3. Rapport hebdomadaire du lundi, pour les commerces en activité
-    if (monday && shop.plan !== "paused" && mails.weekly !== today) {
+    // (pas pour un essai terminé : la roue est en pause, les relances de fin d'essai suffisent)
+    const trialOver = shop.plan === "trial" && Date.parse(parisDay(new Date(shop.trialEndsAt))) < Date.parse(today);
+    if (monday && shop.plan !== "paused" && !trialOver && mails.weekly !== today) {
       const numbers = await periodNumbers(shop.id, addDays(today, -7), addDays(today, -1), today);
       const r = await sendMail(merchantWeeklyMail({ email: shop.email, firstName: shop.firstName, shopName: shop.settings.name, numbers }));
       if (r.ok) {

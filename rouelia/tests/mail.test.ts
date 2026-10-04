@@ -92,6 +92,16 @@ describe("tâche quotidienne", () => {
     // Roue jamais jouée : on propose de l'aide, puis de relancer l'essai.
     expect(sent.map((m) => m.subject)).toEqual(["Martine, votre roue n'a pas encore tourné : on vous aide ?", "Martine, on prolonge votre essai ?"]);
     expect((await getShop("shop-1"))?.mails).toMatchObject({ trialSoon: "2026-10-13", trialEnded: "2026-10-16" });
+    // Dernière relance 4 jours après la fin, une seule fois.
+    expect((await runDaily(new Date("2026-10-19T07:00:00Z"))).essais).toBe(0);
+    expect((await runDaily(new Date("2026-10-20T07:00:00Z"))).essais).toBe(1);
+    expect((await runDaily(new Date("2026-10-21T07:00:00Z"))).essais).toBe(0);
+    expect(sent[2].subject).toBe("Martine, on relance votre essai ?");
+  });
+
+  it("pas de dernière relance pour un vieux compte jamais prévenu", async () => {
+    await newShop(); // essai jusqu'au 16 octobre
+    expect((await runDaily(new Date("2026-10-30T07:00:00Z"))).essais).toBe(0);
   });
 
   it("fin d'essai : montre les vrais résultats, le cadeau et un lien pour continuer", async () => {
@@ -112,6 +122,9 @@ describe("tâche quotidienne", () => {
     expect(sent[1].text).not.toContain("Essentiel");
     expect(sent[1].html).toContain('<a href="https://rouelia.fr" style="color:#5E564E">rouelia.fr</a>');
     expect(sent[1].html).toContain("contact@rouelia.fr");
+    await runDaily(new Date("2026-10-20T07:00:00Z"));
+    expect(sent[2].subject).toBe("Martine, 1 client a encore un cadeau à venir chercher");
+    expect(sent[2].text).toContain("dernier message");
   });
 
   it("envoie le rapport le lundi, une fois", async () => {

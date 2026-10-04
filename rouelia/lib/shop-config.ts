@@ -90,7 +90,7 @@ export interface Shop {
   /** Abonnement Stripe, une fois le paiement fait. */
   stripe?: import("@/lib/stripe").ShopStripe;
   /** E-mails automatiques déjà envoyés (dates AAAA-MM-JJ), pour ne jamais les doubler. */
-  mails?: { trialSoon?: string; trialEnded?: string; weekly?: string };
+  mails?: { trialSoon?: string; trialEnded?: string; trialLast?: string; weekly?: string };
 }
 
 
