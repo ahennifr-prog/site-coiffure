@@ -59,7 +59,7 @@ export function CookieBanner() {
 
   if (!open || hidden) return null;
   return (
-    <div role="region" aria-label={cookieBanner.label} className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-xl bg-night p-4 text-cream shadow-lg sm:inset-x-6 sm:bottom-6 sm:p-5">
+    <div role="region" aria-label={cookieBanner.label} className="fixed inset-x-3 bottom-3 z-50 print:hidden mx-auto max-w-xl rounded-xl bg-night p-4 text-cream shadow-lg sm:inset-x-6 sm:bottom-6 sm:p-5">
       <p className="text-[13px] leading-snug sm:text-sm">
         {fr(cookieBanner.text)}{" "}
         <Link href="/confidentialite" className="font-semibold text-white underline underline-offset-4">

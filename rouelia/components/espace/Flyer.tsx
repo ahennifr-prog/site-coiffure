@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import QRCode from "qrcode";
 import { ArrowLeft, Printer, TriangleAlert } from "lucide-react";
 import { Monogram } from "@/components/demo/PhoneScreen";
 
 type Format = "a5" | "a6";
+
+const PRINT_MARGIN_MM = 6;
+/** Réduction à l'impression pour que la feuille (A5, ou A4 de 4 flyers) tienne dans la marge de sécurité. */
+function printZoom(format: Format): number {
+  const [w, h] = format === "a5" ? [148, 210] : [210, 297];
+  const m = 2 * PRINT_MARGIN_MM;
+  return Math.floor(Math.min((w - m) / w, (h - m) / h) * 1000) / 1000;
+}
 
 interface FlyerShop {
   slug: string;
@@ -152,8 +160,12 @@ export function Flyer({ shop }: { shop: FlyerShop }) {
   }, [shop.slug]);
 
   return (
-    <div className="min-h-svh bg-cream print:bg-white">
-      <style>{`@page { size: ${format === "a5" ? "A5" : "A4"} portrait; margin: 0; } @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`}</style>
+    <div className="min-h-svh bg-cream print:min-h-0 print:bg-white">
+      {/* Marge de sécurité : les imprimantes de bureau n'impriment pas les derniers millimètres de la feuille.
+          La feuille est réduite pour tenir dedans ; le zoom d'aperçu ne s'applique qu'à l'écran. */}
+      <style>{`@page { size: ${format === "a5" ? "A5" : "A4"} portrait; margin: ${PRINT_MARGIN_MM}mm; }
+        @media screen { .flyer-sheet { zoom: var(--preview-zoom); } }
+        @media print { html, body { background: #FFFFFF; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .flyer-sheet { zoom: ${printZoom(format)}; } }`}</style>
       <div className="mx-auto max-w-3xl px-5 py-6 print:hidden">
         <a href="/espace#qr" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold">
           <ArrowLeft aria-hidden size={16} /> Retour à l&apos;espace
@@ -183,7 +195,7 @@ export function Flyer({ shop }: { shop: FlyerShop }) {
         </div>
       </div>
       <div className="pb-10 print:pb-0">
-        <div className="mx-auto w-fit shadow-lg ring-1 ring-line print:shadow-none print:ring-0 print:[zoom:1]" style={{ zoom }}>
+        <div className="flyer-sheet mx-auto w-fit shadow-lg ring-1 ring-line print:shadow-none print:ring-0" style={{ "--preview-zoom": zoom } as CSSProperties}>
           {svg ? (
             format === "a5" ? (
               <Card shop={shop} svg={svg} size="a5" />
