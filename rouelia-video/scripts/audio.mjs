@@ -230,17 +230,26 @@ function crash(t0, g = 0.4) {
   add(sfx, t0, 2.5, (t) => f(rnd(), 7000, 0.6).high * env(t, 0.002, 0.7), g);
 }
 
-// Transitions entre scènes.
+/** Impact grave (coup de basse) avec attaque claquante, pour ponctuer les coupes. */
+function hit(t0, g = 0.5) {
+  const f = svf();
+  add(sfx, t0, 0.6, (t) => Math.sin(TAU * (42 + 90 * Math.exp(-t / 0.05)) * t) * env(t, 0.002, 0.22) + f(rnd(), 1800, 0.6).band * env(t, 0.0005, 0.015) * 1.2, g);
+}
+
+// Transitions entre scènes : whoosh, clic de souris au moment de la coupe, impact grave.
 Object.entries(S).forEach(([id, [from]], k) => {
   if (k === 0) return;
-  whoosh(fr(from) - 0.18, 0.42, 0.42);
+  whoosh(fr(from) - 0.2, 0.42, 0.5);
+  click(fr(from) + 0.02, 0.7);
+  hit(fr(from) + 0.02, 0.35);
 });
+hit(dropT, 0.6);
 
 // 1. Accroche : store qui tombe, porte qui se ferme, mots qui claquent.
 whoosh(at("hook", ev.hookDrop), 0.3, 0.4, false);
 thud(at("hook", ev.hookDrop + 10), 0.55);
 thud(at("hook", 62), 0.35);
-[6, 10, 14, 18, 22, 26].forEach((f) => pop(at("hook", f), 0.18, 700));
+[4, 7, 10, 13, 16, 19].forEach((f) => pop(at("hook", f + 2), 0.2, 700));
 // 2. C'est simple : pop de la roue et du logo.
 pop(at("simple", 4), 0.5, 1200);
 bell(at("simple", 20), note(86), 0.25, 0.4);
