@@ -3,6 +3,7 @@ import { brand, pricing } from "@/content";
 import { addDays, parisClock, parisDay } from "@/lib/dates";
 import { markReminded, periodNumbers, playsToRemind, type Play } from "@/lib/game";
 import { sendMail } from "@/lib/mail";
+import { offerById } from "@/lib/offers";
 import {
   clientCodeMail, clientReminderMail, merchantInviteMail, merchantResetMail, merchantTrialMail, merchantWeeklyMail,
 } from "@/lib/mail-templates";
@@ -14,6 +15,34 @@ function shopInfo(shop: Shop) {
   const s = withDefaults(shop.settings);
   const theme = shopTheme(s);
   return { name: s.name, address: s.address, color: theme.primary, onColor: theme.onPrimary, replyTo: shop.email, gameUrl: `${brand.url}/j/${shop.slug}` };
+}
+
+type Pack = (typeof pricing.packs)[number];
+
+/** Cadeaux de la roue d'offres qui comptent encore au moment de payer (l'essai prolongé est déjà consommé). */
+const OFFERS_FOR_SUBSCRIPTION = new Set(["installation", "flyers", "audit", "moitie_1er_mois", "premium_prix_croissance", "mois_offert"]);
+
+/** Données de l'e-mail de fin d'essai : les vrais résultats du commerce depuis le début de l'essai. */
+async function trialMailInput(shop: Shop, pack: Pack, daysLeft: number, trialEnd: string, today: string) {
+  const start = parisDay(new Date(shop.createdAt));
+  const n = await periodNumbers(shop.id, start, today, today);
+  const s = withDefaults(shop.settings);
+  const offer = shop.offer && shop.offer.status === "applied" && OFFERS_FOR_SUBSCRIPTION.has(shop.offer.id) ? offerById(shop.offer.id).label : null;
+  const cheapest = pricing.packs[0];
+  return {
+    email: shop.email,
+    firstName: shop.firstName,
+    shopName: s.name,
+    daysLeft,
+    trialEnd,
+    daysUsed: Math.max(1, Math.round((Date.parse(today) - Date.parse(start)) / 86_400_000)),
+    packName: pack.name,
+    price: pack.price,
+    results: { parties: n.parties, retraits: n.retraits, avisClics: n.avisClics, enAttente: n.enAttente },
+    offerLabel: offer,
+    profit: s.profit.basket > 0 ? { basket: s.profit.basket, margin: s.profit.margin / 100 } : null,
+    cheaper: cheapest.id !== pack.id && cheapest.price < pack.price ? { name: cheapest.name, price: cheapest.price } : null,
+  };
 }
 
 /** Code gagné, envoyé au client qui a donné son e-mail. */
@@ -74,7 +103,7 @@ export async function runDaily(now = new Date()) {
       const daysLeft = Math.round((Date.parse(end) - Date.parse(today)) / 86_400_000);
       const kind = daysLeft <= 0 ? "trialEnded" : daysLeft <= TRIAL_WARNING_DAYS ? "trialSoon" : null;
       if (kind && !mails[kind]) {
-        const r = await sendMail(merchantTrialMail({ email: shop.email, firstName: shop.firstName, shopName: shop.settings.name, daysLeft, trialEnd: end, packName: pack.name, price: pack.price }));
+        const r = await sendMail(merchantTrialMail(await trialMailInput(shop, pack, daysLeft, end, today)));
         if (r.ok) {
           mails[kind] = today;
           changed = true;

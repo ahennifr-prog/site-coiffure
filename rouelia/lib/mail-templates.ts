@@ -1,6 +1,7 @@
 /** Modèles d'e-mails : HTML simple (styles en ligne, lisible partout) et version texte. */
 import { brand } from "@/content";
 import { formatDay } from "@/lib/dates";
+import { formatEuro, formatEuroCents } from "@/lib/format";
 import type { Mail } from "@/lib/mail";
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -14,7 +15,19 @@ interface Layout {
   /** Encadré mis en avant, par exemple un code. */
   highlight?: { label: string; value: string };
   button?: { label: string; url: string };
+  /** Chiffres mis en avant, deux par ligne. */
+  stats?: { value: string; label: string }[];
+  /** Lien discret sous le bouton. */
+  link?: { label: string; url: string };
   footer: string;
+}
+
+function statsTable(stats: { value: string; label: string }[]): string {
+  const cell = (x: { value: string; label: string }) =>
+    `<td width="50%" style="padding:6px;vertical-align:top"><div style="background:#FBF6EE;border-radius:12px;padding:12px 14px"><div style="font-family:Georgia,serif;font-size:28px;font-weight:bold;color:#1D1A16">${esc(x.value)}</div><div style="font-size:13px;line-height:1.35;color:#5E564E">${esc(x.label)}</div></div></td>`;
+  const rows: string[] = [];
+  for (let i = 0; i < stats.length; i += 2) rows.push(`<tr>${cell(stats[i])}${stats[i + 1] ? cell(stats[i + 1]) : "<td></td>"}</tr>`);
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 -6px 12px">${rows.join("")}</table>`;
 }
 
 function layout(l: Layout): string {
@@ -24,9 +37,11 @@ function layout(l: Layout): string {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FFFFFF;border-radius:16px;overflow:hidden;border:1px solid #E8DFD2">
 <tr><td style="background:${l.color};color:${l.onColor};padding:22px 26px;font-size:24px;font-weight:bold;font-family:Georgia,serif">${esc(l.title)}</td></tr>
 <tr><td style="padding:24px 26px 8px">
-${l.paragraphs.map(p).join("\n")}
+${l.paragraphs.slice(0, l.stats ? 2 : undefined).map(p).join("\n")}
+${l.stats ? statsTable(l.stats) + "\n" + l.paragraphs.slice(2).map(p).join("\n") : ""}
 ${l.highlight ? `<div style="margin:6px 0 18px;padding:14px 16px;border:2px dashed #E8DFD2;border-radius:12px"><div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#5E564E">${esc(l.highlight.label)}</div><div style="font-family:'Courier New',monospace;font-size:26px;font-weight:bold;letter-spacing:2px;color:#1D1A16">${esc(l.highlight.value)}</div></div>` : ""}
 ${l.button ? `<p style="margin:6px 0 22px"><a href="${esc(l.button.url)}" style="display:inline-block;background:#1D1A16;color:#FFFFFF;text-decoration:none;font-weight:bold;padding:13px 22px;border-radius:999px">${esc(l.button.label)}</a></p>` : ""}
+${l.link ? `<p style="margin:-8px 0 22px;font-size:14px"><a href="${esc(l.link.url)}" style="color:#5E564E">${esc(l.link.label)}</a></p>` : ""}
 </td></tr>
 <tr><td style="padding:14px 26px 22px;font-size:12px;line-height:1.5;color:#5E564E;border-top:1px solid #E8DFD2">${esc(l.footer)}</td></tr>
 </table></td></tr></table></body></html>`;
@@ -143,28 +158,143 @@ export function merchantResetMail(p: { email: string; firstName: string; link: s
   };
 }
 
-export function merchantTrialMail(p: { email: string; firstName: string; shopName: string; daysLeft: number; trialEnd: string; packName: string; price: number }): Mail {
+export interface TrialResults {
+  parties: number;
+  retraits: number;
+  avisClics: number;
+  enAttente: number;
+}
+
+export interface TrialMailInput {
+  email: string;
+  firstName: string;
+  shopName: string;
+  daysLeft: number;
+  trialEnd: string;
+  /** Jours d'essai déjà écoulés. */
+  daysUsed: number;
+  packName: string;
+  price: number;
+  results: TrialResults;
+  /** Cadeau de la roue d'offres qui s'applique à l'abonnement (libellé), s'il y en a un. */
+  offerLabel?: string | null;
+  /** Panier moyen (€) et part qui reste (0 à 1), si le commerçant les a réglés. */
+  profit?: { basket: number; margin: number } | null;
+  /** Pack moins cher à proposer à qui hésite (absent si le commerçant est déjà sur le moins cher). */
+  cheaper?: { name: string; price: number } | null;
+}
+
+const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`;
+
+/** Lien « répondre » prérempli : le commerçant n'a qu'à envoyer. */
+function continueLink(p: TrialMailInput, packName = p.packName) {
+  const subject = `Je continue avec ${packName} (${p.shopName})`;
+  const body = `Bonjour,\n\nJe souhaite continuer avec le pack ${packName} pour ${p.shopName}.\n\n${p.firstName}`;
+  return `mailto:${brand.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+/** Ce que coûte l'abonnement, comparé à ce que la roue a déjà rapporté quand on peut l'estimer. */
+function priceLine(p: TrialMailInput): string {
+  const perDay = formatEuroCents(Math.round(((p.price * 12) / 365) * 20) / 20);
+  const b = p.profit;
+  if (b && b.basket > 0 && b.margin > 0) {
+    const perVisit = b.basket * b.margin;
+    const needed = Math.ceil(p.price / perVisit);
+    const earned = Math.round(p.results.retraits * perVisit);
+    const base = `Le pack ${p.packName} coûte ${p.price} € par mois, soit ${perDay} par jour. Avec votre panier moyen de ${formatEuro(b.basket)}, ${plural(needed, "client qui revient", "clients qui reviennent")} dans le mois ${needed > 1 ? "suffisent" : "suffit"} à le rembourser.`;
+    return p.results.retraits > 0 ? `${base} Pendant l'essai, les visites déjà revenues représentent environ ${formatEuro(earned)} de marge.` : base;
+  }
+  return `Le pack ${p.packName} coûte ${p.price} € par mois, soit ${perDay} par jour, sans engagement. Quelques clients qui reviennent dans le mois suffisent à le rembourser.`;
+}
+
+function resultStats(r: TrialResults) {
+  return [
+    { value: String(r.parties), label: r.parties > 1 ? "parties jouées" : "partie jouée" },
+    { value: String(r.retraits), label: r.retraits > 1 ? "clients déjà revenus chercher leur cadeau" : "client déjà revenu chercher son cadeau" },
+    { value: String(r.avisClics), label: r.avisClics > 1 ? "clics vers vos avis Google" : "clic vers vos avis Google" },
+    { value: String(r.enAttente), label: r.enAttente > 1 ? "cadeaux en attente, autant de visites à venir" : "cadeau en attente, une visite à venir" },
+  ];
+}
+
+export function merchantTrialMail(p: TrialMailInput): Mail {
   const ended = p.daysLeft <= 0;
+  const played = p.results.parties > 0;
+  const r = p.results;
+  const offer = p.offerLabel ? `Et votre cadeau de la roue Rouelia vous attend : ${p.offerLabel}. Il s'applique dès que vous continuez.` : null;
+  const freeFooter = `Sans réponse de votre part, la roue ${ended ? "reste" : "se mettra"} en pause et rien ne vous sera facturé. Les cadeaux déjà gagnés restent valables en caisse.`;
+  const footer = `${freeFooter} ${brand.name}, ${brand.url.replace("https://", "")}.`;
+  const results = { label: "Voir tous mes résultats", url: `${brand.url}/espace#suivi` };
+
+  let subject: string;
+  let title: string;
+  let paragraphs: string[];
+  let button: { label: string; url: string };
+  let link: { label: string; url: string } | undefined = results;
+
+  if (!ended && played) {
+    subject = `${p.firstName}, ${plural(r.parties, "client a", "clients ont")} déjà joué chez ${p.shopName}`;
+    title = "Votre roue tourne déjà";
+    paragraphs = [
+      `Bonjour ${p.firstName},`,
+      `En ${plural(p.daysUsed, "jour", "jours")} d'essai, voici ce que la roue a fait pour ${p.shopName} :`,
+      r.enAttente > 0
+        ? `Ces ${plural(r.enAttente, "cadeau en attente, c'est un client qui a", "cadeaux en attente, ce sont autant de clients qui ont")} une bonne raison de repasser dans les semaines qui viennent. C'est exactement ce que la roue est faite pour produire, et elle ne fait que commencer.`
+        : `C'est un bon début, et la roue prend tout son sens avec le temps : plus elle tourne, plus vos clients ont une raison de revenir.`,
+      priceLine(p),
+      `Votre essai se termine le ${formatDay(p.trialEnd)}. Pour que vos clients continuent de jouer sans interruption, cliquez ci-dessous et envoyez le message : on s'occupe du reste. Sans engagement, vous arrêtez quand vous voulez.`,
+    ];
+    button = { label: `Je continue avec ${p.packName}`, url: continueLink(p) };
+  } else if (!ended) {
+    subject = `${p.firstName}, votre roue n'a pas encore tourné : on vous aide ?`;
+    title = `Encore ${plural(p.daysLeft, "jour", "jours")} pour la lancer`;
+    paragraphs = [
+      `Bonjour ${p.firstName},`,
+      `Votre essai se termine le ${formatDay(p.trialEnd)} et la roue de ${p.shopName} n'a pas encore été jouée. C'est presque toujours une question d'emplacement : le QR code doit se voir au moment où le client paie.`,
+      `Trois gestes qui font la différence : posez le chevalet juste à côté de la caisse, proposez la roue à chaque client en lui rendant la monnaie, et jouez une fois vous-même pour pouvoir la montrer.`,
+      `Répondez à cet e-mail : on vous appelle dix minutes pour la mettre en place avec vous, et on prolonge votre essai le temps de voir les premiers résultats.`,
+    ];
+    button = { label: "Imprimer mon chevalet", url: `${brand.url}/espace/flyer` };
+    link = undefined;
+  } else if (played) {
+    subject = `La roue de ${p.shopName} est en pause`;
+    title = "Votre roue est en pause";
+    paragraphs = [
+      `Bonjour ${p.firstName},`,
+      `Votre essai est terminé. Depuis ce matin, les clients qui scannent votre QR code voient un message de pause : ils repartent sans cadeau, et sans raison particulière de revenir. Pendant l'essai, voici ce que la roue avait fait :`,
+      `La bonne nouvelle : rien n'est perdu. Vos lots, vos réglages et le QR code déjà imprimé restent les mêmes. Un clic ci-dessous, vous envoyez le message, et la roue repart dans la journée.`,
+      priceLine(p),
+    ];
+    if (offer) paragraphs.push(offer);
+    if (p.cheaper) paragraphs.push(`Vous préférez commencer plus petit ? Le pack ${p.cheaper.name}, à ${p.cheaper.price} € par mois, garde la roue, le QR code et les cadeaux à retirer. Répondez simplement « ${p.cheaper.name} ».`);
+    button = { label: "Relancer ma roue", url: continueLink(p) };
+  } else {
+    subject = `${p.firstName}, on prolonge votre essai ?`;
+    title = "Votre essai n'a pas eu le temps de faire ses preuves";
+    paragraphs = [
+      `Bonjour ${p.firstName},`,
+      `Votre essai est terminé, mais la roue de ${p.shopName} n'a pas encore été jouée : vous n'avez donc pas pu voir ce qu'elle vaut. Ce serait dommage d'en rester là.`,
+      `Répondez à cet e-mail : on vous appelle dix minutes pour la mettre en place avec vous et on relance votre essai pour quelques jours, sans rien vous facturer.`,
+    ];
+    button = { label: "Je veux relancer mon essai", url: `mailto:${brand.email}?subject=${encodeURIComponent(`Relancer mon essai (${p.shopName})`)}` };
+    link = undefined;
+  }
+  if (offer && !ended) paragraphs.push(offer);
+
+  const stats = played ? resultStats(r) : undefined;
   return {
     to: { email: p.email, name: p.firstName },
-    subject: ended ? "Votre essai Rouelia est terminé" : `Votre essai Rouelia se termine dans ${p.daysLeft} jours`,
+    subject,
     tags: ["essai"],
     replyTo: brand.email,
-    ...rouelia(
-      ended ? "Votre essai est terminé" : "Votre essai se termine bientôt",
-      ended
-        ? [
-            `Bonjour ${p.firstName},`,
-            `L'essai gratuit de ${p.shopName} est terminé : la roue affiche maintenant un message de pause à vos clients. Les cadeaux déjà gagnés restent valables en caisse.`,
-            `Pour continuer avec le pack ${p.packName} (${p.price} € par mois, sans engagement), répondez simplement à cet e-mail.`,
-          ]
-        : [
-            `Bonjour ${p.firstName},`,
-            `L'essai gratuit de ${p.shopName} se termine le ${formatDay(p.trialEnd)}.`,
-            `Pour continuer avec le pack ${p.packName} (${p.price} € par mois, sans engagement), répondez simplement à cet e-mail. Sinon, la roue se mettra en pause et rien ne vous sera facturé.`,
-          ],
-      { label: "Ouvrir mon espace", url: `${brand.url}/espace` },
-    ),
+    html: layout({ color: TOMETTE, onColor: "#FFFFFF", title, paragraphs, stats, button, link, footer }),
+    text: text([
+      ...paragraphs.slice(0, 2),
+      stats && stats.map((x) => `${x.value} ${x.label}`).join("\n"),
+      ...paragraphs.slice(2),
+      `${button.label} : ${button.url.startsWith("mailto:") ? `répondez à cet e-mail` : button.url}`,
+      link && `${link.label} : ${link.url}`,
+      footer,
+    ]),
   };
 }
 

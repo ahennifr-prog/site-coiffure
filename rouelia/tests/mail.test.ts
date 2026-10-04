@@ -89,8 +89,27 @@ describe("tâche quotidienne", () => {
     expect((await runDaily(new Date("2026-10-14T07:00:00Z"))).essais).toBe(0);
     expect((await runDaily(new Date("2026-10-16T07:00:00Z"))).essais).toBe(1);
     expect((await runDaily(new Date("2026-10-17T07:00:00Z"))).essais).toBe(0);
-    expect(sent.map((m) => m.subject)).toEqual(["Votre essai Rouelia se termine dans 3 jours", "Votre essai Rouelia est terminé"]);
+    // Roue jamais jouée : on propose de l'aide, puis de relancer l'essai.
+    expect(sent.map((m) => m.subject)).toEqual(["Martine, votre roue n'a pas encore tourné : on vous aide ?", "Martine, on prolonge votre essai ?"]);
     expect((await getShop("shop-1"))?.mails).toMatchObject({ trialSoon: "2026-10-13", trialEnded: "2026-10-16" });
+  });
+
+  it("fin d'essai : montre les vrais résultats, le cadeau et un lien pour continuer", async () => {
+    const shop = await newShop({ offer: { wonId: "installation", id: "installation", code: "OFF-AAAA", wonAt: now.toISOString(), expiresAt: now.toISOString(), status: "applied" } });
+    await track("shop-1", "parties", 7, new Date("2026-10-05T10:00:00Z"));
+    await track("shop-1", "retraits", 2, new Date("2026-10-06T10:00:00Z"));
+    await play(shop, { firstName: "Léa", phone: "0611223344", consent: true, consentText: "" }, "ip", now);
+    sent.length = 0;
+    await runDaily(new Date("2026-10-13T07:00:00Z"));
+    const m = sent[0];
+    expect(m.subject).toBe("Martine, 8 clients ont déjà joué chez Salon Martine");
+    expect(m.text).toContain("8 parties jouées");
+    expect(m.text).toContain("2 clients déjà revenus chercher leur cadeau");
+    expect(m.text).toContain("Installation sur place offerte");
+    expect(m.html).toContain("mailto:contact@rouelia.fr?subject=Je%20continue%20avec%20Croissance");
+    await runDaily(new Date("2026-10-16T07:00:00Z"));
+    expect(sent[1].subject).toBe("La roue de Salon Martine est en pause");
+    expect(sent[1].text).toContain("pack Essentiel, à 29 €");
   });
 
   it("envoie le rapport le lundi, une fois", async () => {

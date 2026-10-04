@@ -12,13 +12,21 @@ import type { Mail } from "../lib/mail";
 const shop = { name: "Salon Martine", address: "12 rue des Lilas, 94500 Champigny-sur-Marne", color: "#E7B4A6", onColor: "#1D1A16", replyTo: "martine@salon.fr", gameUrl: "https://rouelia.fr/j/salon-martine" };
 const play = { firstName: "Léa", prizeName: "Soin profond offert", prizeDetail: "Un soin offert avec votre prochaine coupe.", code: "SAL-7K4M2", validFrom: "2026-10-04", expiresOn: "2026-11-03" };
 
+const trial = {
+  email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine", trialEnd: "2026-10-17", packName: "Croissance", price: 49,
+  results: { parties: 41, retraits: 9, avisClics: 12, enAttente: 23 },
+  offerLabel: "Installation sur place offerte", profit: { basket: 35, margin: 0.6 }, cheaper: { name: "Essentiel", price: 29 },
+};
+
 const mails: [string, string, Mail][] = [
   ["Client du commerce", "Juste après la partie, s'il a donné son e-mail", clientCodeMail(shop, play, "lea@exemple.fr", "2026-10-03")],
   ["Client du commerce", "3 jours avant la date limite, cadeau pas encore retiré (Croissance, Premium), une seule fois", clientReminderMail(shop, play, "lea@exemple.fr", "2026-10-31")],
   ["Commerçant", "Quand vous ouvrez son essai dans /admin", merchantInviteMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine", link: "https://rouelia.fr/espace/invitation#exemple", trialEnd: "2026-10-17" })],
   ["Commerçant", "Mot de passe oublié", merchantResetMail({ email: "martine@salon.fr", firstName: "Martine", link: "https://rouelia.fr/espace/invitation#exemple" })],
-  ["Commerçant", "3 jours avant la fin de l'essai", merchantTrialMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine", daysLeft: 3, trialEnd: "2026-10-17", packName: "Croissance", price: 49 })],
-  ["Commerçant", "Le jour de la fin de l'essai", merchantTrialMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine", daysLeft: 0, trialEnd: "2026-10-17", packName: "Croissance", price: 49 })],
+  ["Commerçant", "3 jours avant la fin de l'essai, la roue a tourné", merchantTrialMail({ ...trial, daysLeft: 3, daysUsed: 11 })],
+  ["Commerçant", "3 jours avant la fin de l'essai, la roue n'a pas encore été jouée", merchantTrialMail({ ...trial, daysLeft: 3, daysUsed: 11, results: { parties: 0, retraits: 0, avisClics: 0, enAttente: 0 } })],
+  ["Commerçant", "Le jour de la fin de l'essai, la roue a tourné", merchantTrialMail({ ...trial, daysLeft: 0, daysUsed: 14, results: { parties: 58, retraits: 14, avisClics: 17, enAttente: 31 } })],
+  ["Commerçant", "Le jour de la fin de l'essai, la roue n'a pas été jouée", merchantTrialMail({ ...trial, daysLeft: 0, daysUsed: 14, results: { parties: 0, retraits: 0, avisClics: 0, enAttente: 0 } })],
   ["Commerçant", "Chaque lundi matin", merchantWeeklyMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine", numbers: { visites: 64, parties: 41, avisClics: 12, retraits: 9, enAttente: 23, expirentBientot: 5 } })],
   ["Commerçant qui s'inscrit", "Juste après l'inscription sur rouelia.fr", signupConfirmMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine" })],
   ["Vous (contact@rouelia.fr)", "À chaque inscription", signupAlertMail({ firstName: "Martine", shopName: "Salon Martine", email: "martine@salon.fr", phone: "+33612345678", pack: "Croissance", offer: "Essai prolongé à 21 jours (à appliquer)" })],
