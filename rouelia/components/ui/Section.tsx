@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { fr } from "@/lib/format";
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
@@ -36,10 +36,38 @@ export function Eyebrow({ children, tone = "tomette" }: { children: string; tone
   );
 }
 
-export function SectionTitle({ id, children, className = "" }: { id?: string; children: string; className?: string }) {
+/** Découpe un texte en mots masqués pour l'apparition mot à mot (.split, .fx-fill). */
+export function Words({ text, offset = 0 }: { text: string; offset?: number }) {
+  const words = fr(text).split(" ");
   return (
-    <h2 id={id} className={`font-display text-[1.9rem] leading-[1.08] font-semibold tracking-[-0.025em] text-balance sm:text-[2.6rem] lg:text-[2.9rem] ${className}`}>
-      {fr(children)}
+    <>
+      {words.map((w, i) => (
+        <Fragment key={i}>
+          <span className="w" style={{ ["--i" as string]: i + offset }}>
+            <span>{w}</span>
+          </span>
+          {i < words.length - 1 ? " " : null}
+        </Fragment>
+      ))}
+    </>
+  );
+}
+
+/**
+ * Titre de section. Par défaut, les mots montent un à un à l'arrivée (.split).
+ * Avec `fill`, ils s'allument au fil du défilement (.fx-fill), pour les phrases à lire.
+ */
+export function SectionTitle({ id, children, className = "", fill = false }: { id?: string; children: string; className?: string; fill?: boolean }) {
+  const base = "font-display text-[1.9rem] leading-[1.08] font-semibold tracking-[-0.025em] text-balance sm:text-[2.6rem] lg:text-[2.9rem]";
+  if (fill)
+    return (
+      <h2 id={id} data-fx className={`fx-fill ${base} ${className}`} style={{ ["--n" as string]: fr(children).split(" ").length }}>
+        <Words text={children} />
+      </h2>
+    );
+  return (
+    <h2 id={id} data-split className={`split ${base} ${className}`}>
+      <Words text={children} />
     </h2>
   );
 }

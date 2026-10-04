@@ -1,5 +1,6 @@
 "use client";
 
+import { useId, useState } from "react";
 import { Check, ChevronDown, Minus, ShieldCheck } from "lucide-react";
 import { pricing, trades } from "@/content";
 import { formatPrice, fr } from "@/lib/format";
@@ -24,6 +25,44 @@ function Cell({ v }: { v: boolean | string }) {
       </span>
     );
   return <span className="text-sm font-medium">{fr(v)}</span>;
+}
+
+/** Points clés d'un pack : les premiers visibles, le reste derrière « Voir plus ». */
+function PackHighlights({ items, featured }: { items: string[]; featured: boolean }) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  const visible = Math.max(3, items.length - pricing.hiddenHighlights);
+  const hidden = items.length - visible;
+  const row = (h: string) => (
+    <li key={h} className="flex gap-2.5">
+      <Check aria-hidden size={18} strokeWidth={3} className={`mt-0.5 shrink-0 ${featured ? "text-safran" : "text-sauge"}`} />
+      <span>{fr(h)}</span>
+    </li>
+  );
+  return (
+    <div className="mt-6">
+      <ul className="space-y-3">{items.slice(0, visible).map(row)}</ul>
+      {hidden > 0 ? (
+        <>
+          <div id={id} className={`grid transition-[grid-template-rows,opacity] duration-500 ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+            <ul className="space-y-3 overflow-hidden pt-3" aria-hidden={!open}>
+              {items.slice(visible).map(row)}
+            </ul>
+          </div>
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls={id}
+            onClick={() => setOpen((o) => !o)}
+            className={`mt-3 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline ${featured ? "text-safran" : "text-tomette-deep"}`}
+          >
+            {open ? pricing.less : `${pricing.more} (${hidden})`}
+            <ChevronDown aria-hidden size={16} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+          </button>
+        </>
+      ) : null}
+    </div>
+  );
 }
 
 export function Pricing() {
@@ -64,14 +103,7 @@ export function Pricing() {
                 <p className={`mt-1 text-sm font-semibold ${featured ? "text-safran" : "text-tomette-deep"}`}>
                   {fr(pricing.perDay(formatPrice(pricePerDay(p.price))))}
                 </p>
-                <ul className="mt-6 space-y-3">
-                  {p.highlights.map((h) => (
-                    <li key={h} className="flex gap-2.5">
-                      <Check aria-hidden size={18} strokeWidth={3} className={`mt-0.5 shrink-0 ${featured ? "text-safran" : "text-sauge"}`} />
-                      <span>{fr(h)}</span>
-                    </li>
-                  ))}
-                </ul>
+                <PackHighlights items={p.highlights} featured={featured} />
                 <div className="mt-auto pt-8">
                   <Button
                     size="lg"

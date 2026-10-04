@@ -8,15 +8,15 @@ export function Problem() {
   return (
     <Section labelledBy="probleme-title" className="bg-paper">
       <Container>
-        <div className="max-w-2xl">
+        <div className="max-w-4xl">
           <Eyebrow>{problem.eyebrow}</Eyebrow>
-          <SectionTitle id="probleme-title">{problem.title}</SectionTitle>
+          <SectionTitle id="probleme-title" fill className="sm:text-[3.4rem] lg:text-[4rem]">{problem.title}</SectionTitle>
         </div>
         <ol className="mt-16 grid gap-12 md:mt-24 md:grid-cols-3 md:gap-10">
           {problem.pains.map((p, i) => (
             <li key={p.title}>
               <Reveal delay={i * 120}>
-                <span aria-hidden className="block font-display text-[5.5rem] leading-none font-semibold tracking-[-0.04em] text-transparent [-webkit-text-stroke:1.5px_var(--color-tomette)]">
+                <span aria-hidden data-fx className="fx-parallax block font-display text-[5.5rem] leading-none font-semibold tracking-[-0.04em] text-transparent [-webkit-text-stroke:1.5px_var(--color-tomette)]" style={{ ["--depth" as string]: `${-50 - i * 45}px` }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span aria-hidden className="mt-6 block h-px w-full bg-line" />

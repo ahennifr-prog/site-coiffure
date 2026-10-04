@@ -22,7 +22,7 @@ export function Features() {
           {features.items.map((f, i) => {
             const Icon = icons[i % icons.length];
             return (
-              <li key={f.title} className={spans[i]}>
+              <li key={f.title} data-fx className={`fx-parallax ${spans[i]}`} style={{ ["--depth" as string]: `${[-30, -70, -50, -90][i]}px` }}>
                 <Reveal delay={(i % 2) * 120} className="h-full">
                   <GlowTile className="flex h-full min-h-56 flex-col rounded-[24px] bg-night-soft p-7 ring-1 ring-white/10 transition-transform duration-500 hover:-translate-y-1 sm:p-8">
                     <span aria-hidden className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-tomette text-white shadow-[0_10px_30px_-8px_rgb(196_64_31/0.7)]">

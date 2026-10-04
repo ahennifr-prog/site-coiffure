@@ -1,8 +1,8 @@
-import { Gift } from "lucide-react";
+import { Gift, PlayCircle } from "lucide-react";
 import { cta, hero } from "@/content";
 import { fr } from "@/lib/format";
 import { ButtonLink } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Section";
+import { Container, Words } from "@/components/ui/Section";
 import { Awning } from "@/components/brand/Awning";
 import { Tilt } from "@/components/ui/Tilt";
 import { HeroWheel } from "./HeroWheel";
@@ -29,13 +29,15 @@ export function Hero() {
             <span aria-hidden className="h-px w-8 bg-tomette" />
             {fr(hero.eyebrow)}
           </p>
-          <h1 id="hero-title" className="font-display text-[2.15rem] leading-[1.04] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-[3.35rem]">
-            {fr(first)}.{" "}
-            <span className="text-tomette-deep italic">{fr(second)}</span>
+          <h1 id="hero-title" data-split className="split font-display text-[2.15rem] leading-[1.04] font-semibold tracking-[-0.03em] text-balance sm:text-5xl lg:text-[3.35rem]">
+            <Words text={`${first}.`} />{" "}
+            <span className="text-tomette-deep italic">
+              <Words text={second} offset={first.split(" ").length} />
+            </span>
           </h1>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[330px] sm:max-w-[440px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:max-w-[500px]">
+        <div data-fx className="fx-parallax relative mx-auto w-full max-w-[330px] sm:max-w-[440px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:max-w-[500px]" style={{ ["--depth" as string]: "-140px" }}>
           <Tilt max={6}>
             <div aria-hidden className="absolute inset-x-4 top-8 bottom-12 rounded-[44px] bg-paper/70 shadow-lg ring-1 ring-line/70 backdrop-blur-sm sm:top-10" style={{ transform: "translateZ(-40px)" }} />
             <Awning className="relative mx-auto h-7 w-[calc(100%-0.5rem)] drop-shadow-sm sm:h-9" />
@@ -65,8 +67,8 @@ export function Hero() {
             <ButtonLink href="#demo" size="lg">
               {cta.primary}
             </ButtonLink>
-            <ButtonLink href="#tarifs" variant="ghost" className="self-center sm:self-auto">
-              {cta.secondary}
+            <ButtonLink href="#video" variant="ghost" className="self-center sm:self-auto">
+              <PlayCircle aria-hidden size={20} /> {cta.video}
             </ButtonLink>
           </div>
           <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-ink-soft">

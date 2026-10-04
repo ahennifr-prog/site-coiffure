@@ -90,7 +90,7 @@ export const seo = {
     "Un QR code sur votre comptoir, une roue où chaque client gagne un cadeau à retirer à sa prochaine visite. Vous réglez les lots et leur coût. Essai gratuit de 14 jours.",
   ogTitle: "Vos clients gagnent un cadeau. Vous gagnez leur prochaine visite.",
   ogDescription:
-    "La roue à cadeaux 100 % gagnante pour les coiffeurs, restaurants, instituts, boulangeries et bars. Créez la vôtre en 2 minutes.",
+    "La roue à cadeaux 100 % gagnante pour les coiffeurs, restaurants, instituts, boulangeries et bars. Prête en 5 minutes.",
   locale: "fr_FR",
 };
 
@@ -101,6 +101,7 @@ export const seo = {
 export const cta = {
   primary: "Créer ma roue",
   secondary: "Voir les tarifs",
+  video: "Voir la vidéo, 45 s",
   trial: "Démarrer l'essai gratuit",
 };
 
@@ -147,8 +148,31 @@ export const hero = {
 };
 
 /* ------------------------------------------------------------------ */
+/* Vidéo de présentation                                               */
+/* ------------------------------------------------------------------ */
+
+export const video = {
+  eyebrow: "En 45 secondes",
+  title: "Rouelia, vu par vos clients.",
+  play: "Lancer la vidéo de présentation, avec le son",
+  duration: "45 s",
+  sound: "Avec le son",
+  captions: "Sous-titres",
+  replay: "Revoir",
+  endTitle: "À vous de jouer.",
+  endNote: "14 jours gratuits, sans carte bancaire.",
+  /** Fichiers dans /public/video. */
+  wide: { mp4: "/video/rouelia-16x9.mp4", webm: "/video/rouelia-16x9.webm", poster: "/video/apercu-16x9.jpg" },
+  tall: { mp4: "/video/rouelia-9x16.mp4", webm: "/video/rouelia-9x16.webm", poster: "/video/apercu-9x16.jpg" },
+  track: "/video/rouelia.vtt",
+};
+
+/* ------------------------------------------------------------------ */
 /* Le problème                                                         */
 /* ------------------------------------------------------------------ */
+
+/** Bandeau de cadeaux qui défile entre deux sections. */
+export const marquee = ["Brushing offert", "Café offert", "Mochi offert", "Séance offerte", "-10 % sur la coupe", "Dessert offert", "Matcha latte offert", "-20 % sur l'achat", "Croissant offert"];
 
 export const problem = {
   eyebrow: "Derrière le comptoir",
@@ -554,6 +578,10 @@ export const pricing = {
     `Avec un panier moyen de ${basket} (${trade.toLowerCase()}), environ ${visits} ${visits > 1 ? "visites" : "visite"} en plus par mois suffisent à le couvrir.`,
   coverNote: "Calcul sur la marge prudente du simulateur. Réglez vos propres chiffres plus bas.",
   choose: (name: string) => `Essayer ${name}`,
+  more: "Voir plus",
+  less: "Voir moins",
+  /** Nombre de points masqués par défaut sur chaque pack (dépliables avec « Voir plus »). */
+  hiddenHighlights: 2,
   packs: [
     {
       id: "essentiel",
@@ -616,7 +644,7 @@ export const pricing = {
     { feature: "Cadeaux à retirer avec date limite, validation en caisse par code", values: [true, true, true] },
     { feature: "Code du cadeau envoyé", values: ["Par e-mail", "Par e-mail", "Par e-mail"] },
     { feature: "Modèles par métier, calculateur de coût des lots", values: [true, true, true] },
-    { feature: "Mise en route en 2 minutes par IA", values: [true, true, true] },
+    { feature: "Mise en route guidée par IA", values: [true, true, true] },
     { feature: "Mise en route en ligne par vous", values: ["Gratuite", "Gratuite", "Gratuite"] },
     { feature: "Visio de configuration de 30 minutes", values: [false, "Offerte", "Offerte"] },
     { feature: "Installation sur place (Paris et petite couronne)", values: ["49 € (79 € si déplacement dédié)", "49 € (79 € si déplacement dédié)", "49 € (79 € si déplacement dédié)"] },
@@ -649,7 +677,7 @@ export const support = {
   eyebrow: "Accompagnement",
   title: "Seul, en visio ou au comptoir.",
   options: [
-    { title: "En ligne, par vous", price: "Gratuit", text: "Deux minutes, un guide pas à pas.", packs: "Tous les packs" },
+    { title: "En ligne, par vous", price: "Gratuit", text: "Prêt en 5 minutes, avec un guide pas à pas.", packs: "Tous les packs" },
     { title: "En visio", price: "Offerte", text: "30 minutes pour régler vos lots avec nous.", packs: "Croissance et Premium" },
     {
       title: "Sur place",

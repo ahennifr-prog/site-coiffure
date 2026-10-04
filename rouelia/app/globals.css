@@ -250,3 +250,42 @@ dialog::backdrop {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
+
+/* ------------------------------------------------------------------ */
+/* Effets au défilement (pilotés par <ScrollFx>, page d'accueil)       */
+/* Sans .fx-on (animations limitées, ou script absent), tout est fixe. */
+/* ------------------------------------------------------------------ */
+
+/* Titres qui montent mot à mot, derrière un masque. */
+.split .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+.split .w > span { display: inline-block; }
+.fx-on .split .w > span {
+  transform: translate3d(0, 108%, 0) rotate(4deg);
+  transition: transform 1000ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 55ms);
+}
+.fx-on .split.is-in .w > span { transform: none; }
+
+/* La vidéo s'agrandit en arrivant à l'écran. */
+.fx-on .fx-grow {
+  transform: perspective(1600px) rotateX(calc((1 - var(--enter, 1)) * 14deg)) scale(calc(0.84 + 0.16 * var(--enter, 1)));
+  border-radius: calc(20px + (1 - var(--enter, 1)) * 36px);
+  transform-origin: 50% 0%;
+}
+
+/* Profondeur : l'élément défile plus lentement ou plus vite que la page. */
+.fx-on .fx-parallax { transform: translate3d(0, calc((var(--p, 0.5) - 0.5) * var(--depth, -120px)), 0); }
+
+/* Mots qui s'allument un à un pendant la lecture. */
+.fx-on .fx-fill .w { opacity: clamp(0.16, calc(var(--enter, 1) * (var(--n, 10) + 3) - var(--i, 0) - 2), 1); }
+
+/* Rideau : le bloc final s'ouvre du centre vers les bords. */
+.fx-on .fx-curtain { clip-path: inset(0 calc((1 - var(--enter, 1)) * 7%) round calc((1 - var(--enter, 1)) * 64px)); }
+
+/* Bandeau qui défile, accéléré par le scroll. */
+@keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
+.marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+.fx-on .marquee-shift { transform: translate3d(calc((var(--p, 0.5) - 0.5) * -36%), 0, 0); }
+
+/* Fil d'avancement en haut de page. */
+.fx-progress { transform-origin: 0 50%; transform: scaleX(var(--doc, 0)); }

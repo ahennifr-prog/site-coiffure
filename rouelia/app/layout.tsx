@@ -37,7 +37,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${fraunces.variable} ${figtree.variable}`}>
+    <html lang="fr" className={`${fraunces.variable} ${figtree.variable}`} suppressHydrationWarning>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldString(organizationJsonLd()) }} />
         <AppStateProvider>
