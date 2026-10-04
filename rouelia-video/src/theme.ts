@@ -31,14 +31,20 @@ export interface Shop {
   logo?: string;
   monogram: string;
   bg: string;
+  /** Cadeau mis en avant (dit par la voix off). */
+  featured: string;
+  /** Photo plein cadre : point focal (fractions) et zoom. */
+  photo: { src: string; aspect: number; fx: number; fy: number; z: number };
 }
 
+const MOCHI = { src: "photos/mochi.jpg", aspect: 1672 / 941 };
+
 export const SHOPS: Shop[] = [
-  { name: "ALIA coiffure", short: "Coiffure", colors: ["#1D1A16", "#E9C9B9", "#B5835A", "#FBF6EE"], rim: "#1D1A16", hub: "#1D1A16", prizes: ["Brushing offert", "Soin profond", "-10 % coupe", "Masque offert", "Échantillon", "Produit offert"], logo: "logo-ac.png", monogram: "AC", bg: "#F3E6DE" },
-  { name: "Sushi Kai", short: "Restaurant", colors: ["#B8272E", "#F4EDE4", "#111111", "#D9A441"], rim: "#111111", hub: "#B8272E", prizes: ["Mochi offert", "Edamame", "-10 %", "Thé vert", "Maki offert", "Dessert"], monogram: "K", bg: "#F4E3DF" },
-  { name: "Matcha Bar", short: "Coffee shop", colors: ["#5B8C3E", "#DDE8C8", "#2F4A24", "#F5F1E6"], rim: "#2F4A24", hub: "#5B8C3E", prizes: ["Matcha latte", "Cookie", "-15 %", "Taille XL", "Topping", "Mochi"], monogram: "M", bg: "#E6EEDB" },
-  { name: "Studio Pilates", short: "Pilates", colors: ["#E8B4B8", "#F7EDE6", "#C98A8F", "#6E5A5C"], rim: "#6E5A5C", hub: "#C98A8F", prizes: ["Séance offerte", "Chaussettes", "-20 % carte", "Boisson", "Cours duo", "Serviette"], monogram: "P", bg: "#F6E4E5" },
-  { name: "La Boutique", short: "Commerce", colors: ["#22324A", "#E9DCC3", "#C79A4B", "#FFFFFF"], rim: "#22324A", hub: "#C79A4B", prizes: ["-10 % achat", "Tote bag", "Paquet cadeau", "Accessoire", "-5 €", "Surprise"], monogram: "B", bg: "#E4E7EC" },
+  { name: "ALIA coiffure", short: "Coiffure", colors: ["#1D1A16", "#E9C9B9", "#B5835A", "#FBF6EE"], rim: "#1D1A16", hub: "#1D1A16", prizes: ["Brushing offert", "Soin profond", "-10 % coupe", "Masque offert", "Échantillon", "Produit offert"], logo: "logo-ac.png", monogram: "AC", bg: "#F3E6DE", featured: "Brushing offert", photo: { src: "photos/alia-brushing.jpg", aspect: 1828 / 1055, fx: 0.5, fy: 0.45, z: 1 } },
+  { name: "Sushi Kai", short: "Restaurant", colors: ["#B8272E", "#F4EDE4", "#111111", "#D9A441"], rim: "#111111", hub: "#B8272E", prizes: ["Mochi offert", "Edamame", "-10 %", "Thé vert", "Maki offert", "Dessert"], monogram: "K", bg: "#F4E3DF", featured: "Mochi offert", photo: { ...MOCHI, fx: 0.48, fy: 0.6, z: 1.05 } },
+  { name: "Matcha Bar", short: "Coffee shop", colors: ["#5B8C3E", "#DDE8C8", "#2F4A24", "#F5F1E6"], rim: "#2F4A24", hub: "#5B8C3E", prizes: ["Matcha latte", "Cookie", "-15 %", "Taille XL", "Topping", "Mochi"], monogram: "M", bg: "#E6EEDB", featured: "Matcha latte", photo: { ...MOCHI, fx: 0.78, fy: 0.3, z: 1.75 } },
+  { name: "Studio Pilates", short: "Pilates", colors: ["#E8B4B8", "#F7EDE6", "#C98A8F", "#6E5A5C"], rim: "#6E5A5C", hub: "#C98A8F", prizes: ["Séance offerte", "Chaussettes", "-20 % carte", "Boisson", "Cours duo", "Serviette"], monogram: "P", bg: "#F6E4E5", featured: "Séance offerte", photo: { src: "photos/pilates.jpg", aspect: 1672 / 941, fx: 0.5, fy: 0.4, z: 1 } },
+  { name: "La Boutique", short: "Commerce", colors: ["#22324A", "#E9DCC3", "#C79A4B", "#FFFFFF"], rim: "#22324A", hub: "#C79A4B", prizes: ["-20 % achat", "Tote bag", "Paquet cadeau", "Accessoire", "-5 €", "Surprise"], monogram: "B", bg: "#E4E7EC", featured: "-20 % achat", photo: { src: "photos/boutique.jpg", aspect: 1672 / 941, fx: 0.45, fy: 0.6, z: 1 } },
 ];
 
 export const ROUELIA_WHEEL = {

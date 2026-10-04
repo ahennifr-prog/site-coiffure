@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, interpolateColors, staticFile, useCurrentFrame } from "remotion";
-import { C, display, sans, SHOPS } from "./theme";
+import { C, display, sans, SHOPS, type Shop } from "./theme";
 import spin from "./spin.json";
 import ev from "./events.json";
 import {
@@ -91,6 +91,36 @@ export function Simple() {
 /* ------------------------------------------------------------------ */
 
 const SHOP_LEN = ev.shopLen;
+const CARD = { left: 70, top: 390, w: 940, h: 760 };
+
+/** Photo cadrée sur un point focal, avec un lent zoom (Ken Burns). */
+function ShopPhoto({ shop, from, local, opacity }: { shop: Shop; from?: Shop; local: number; opacity: number }) {
+  const p = shop.photo;
+  // Même photo que le commerce précédent : on glisse vers le nouveau cadrage au lieu d'un fondu.
+  const pan = from && from.photo.src === p.src ? interpolate(local, [0, 16], [0, 1], { ...clamp, easing: ease }) : 1;
+  const q = from && pan < 1 ? from.photo : p;
+  const fx = q.fx + (p.fx - q.fx) * pan;
+  const fy = q.fy + (p.fy - q.fy) * pan;
+  const z = (q.z + (p.z - q.z) * pan) * (1 + local * 0.0018);
+  const wi = CARD.w * z;
+  const hi = wi * p.aspect;
+  const left = Math.min(0, Math.max(CARD.w - wi, CARD.w / 2 - fx * wi));
+  const top = Math.min(0, Math.max(CARD.h - hi, CARD.h / 2 - fy * hi));
+  const promo = shop.name === "La Boutique";
+  const tag = useSpring(Math.floor(useCurrentFrame() / SHOP_LEN) * SHOP_LEN + 8, { damping: 10, stiffness: 160 });
+  return (
+    <div style={{ position: "absolute", inset: 0, opacity }}>
+      <div style={{ position: "absolute", left, top, width: wi, height: hi }}>
+        <Img src={staticFile(p.src)} style={{ width: "100%", height: "100%" }} />
+        {promo ? (
+          <div style={{ position: "absolute", left: "8%", width: "27%", top: "60%", display: "flex", justifyContent: "center", transform: `rotate(-3deg) scale(${0.4 + 0.6 * tag})`, opacity: tag }}>
+            <span style={{ fontFamily: display, fontWeight: 750, fontSize: wi * 0.085, color: "#fff", lineHeight: 1, textShadow: "0 3px 10px rgba(0,0,0,0.35)" }}>-20 %</span>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
 
 export function Shops() {
   const f = useCurrentFrame();
@@ -98,31 +128,53 @@ export function Shops() {
   const local = f - i * SHOP_LEN;
   // Demi-tour en 3D au changement : la roue se retourne et revient avec la nouvelle identité.
   const flip = i === 0 ? 0 : interpolate(local, [0, 7], [90, 0], { ...clamp, easing: ease });
-  const prev = SHOPS[Math.max(0, i - 1)];
+  const prev = i === 0 ? undefined : SHOPS[i - 1];
   const shop = SHOPS[i];
-  const bg = i === 0 ? shop.bg : interpolateColors(local, [0, 8], [prev.bg, shop.bg]);
+  const samePhoto = prev?.photo.src === shop.photo.src;
+  const fade = !prev || samePhoto ? 1 : interpolate(local, [0, 8], [0, 1], clamp);
+  const cardIn = useSpring(0, { damping: 15, stiffness: 110 });
+  const chip = useSpring(i * SHOP_LEN + 4, { damping: 12, stiffness: 150 });
   const tag = useSpring(i * SHOP_LEN + 3, { damping: 13 });
+  const tilt = Math.sin(f / 22) * 2.5;
   return (
     <AbsoluteFill>
-      <Background tint={bg} />
-      <Headline top={150}>
-        <Words text="Une roue à vos couleurs, avec vos cadeaux" at={0} step={3} size={96} accent={["couleurs,", "cadeaux"]} />
+      {/* fond : la photo floutée, éclaircie */}
+      <AbsoluteFill style={{ overflow: "hidden", background: C.cream }}>
+        {prev && !samePhoto && fade < 1 ? <Img src={staticFile(prev.photo.src)} style={{ position: "absolute", inset: -80, width: 1240, height: 2080, objectFit: "cover", filter: "blur(40px) saturate(1.2)" }} /> : null}
+        <Img src={staticFile(shop.photo.src)} style={{ position: "absolute", inset: -80, width: 1240, height: 2080, objectFit: "cover", filter: "blur(40px) saturate(1.2)", opacity: fade }} />
+        <AbsoluteFill style={{ background: "rgba(251,246,238,0.62)" }} />
+      </AbsoluteFill>
+      <Headline top={120}>
+        <Words text="Une roue à vos couleurs, avec vos cadeaux" at={0} step={3} size={88} accent={["couleurs,", "cadeaux"]} />
       </Headline>
-      <div style={{ position: "absolute", left: (W - 800) / 2, top: 560, transform: `perspective(1500px) rotateY(${flip}deg)` }}>
-        <Wheel size={800} colors={shop.colors} prizes={shop.prizes} rotation={f * 2.4 + i * 30} rim={shop.rim} hub={shop.hub} hubLabel={shop.monogram} logo={shop.logo} />
-      </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1450, display: "flex", justifyContent: "center" }}>
-        <div key={i} style={{ display: "flex", alignItems: "center", gap: 26, padding: "18px 44px 18px 18px", borderRadius: 999, background: "#fff", boxShadow: "0 24px 50px rgba(60,30,10,0.18)", transform: `translateY(${(1 - tag) * 80}px) scale(${0.7 + 0.3 * tag})`, opacity: tag }}>
-          <ShopBadge logo={shop.logo} monogram={shop.monogram} color={shop.hub} size={100} />
-          <div>
-            <div style={{ fontFamily: display, fontWeight: 700, fontSize: 58, color: C.ink, lineHeight: 1 }}>{shop.name}</div>
-            <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 32, color: C.inkSoft, marginTop: 6, textTransform: "uppercase", letterSpacing: "0.12em" }}>{shop.short}</div>
+      {/* la photo du commerce */}
+      <div style={{ position: "absolute", left: CARD.left, top: CARD.top, perspective: 1800 }}>
+        <div style={{ position: "relative", width: CARD.w, height: CARD.h, borderRadius: 44, overflow: "hidden", boxShadow: "0 50px 90px rgba(40,20,10,0.35)", transform: `rotateX(${(1 - cardIn) * 30 + 3}deg) rotateY(${tilt}deg) translateY(${(1 - cardIn) * 300}px) scale(${0.85 + 0.15 * cardIn})`, opacity: cardIn }}>
+          {prev && !samePhoto && fade < 1 ? <ShopPhoto shop={prev} local={local + SHOP_LEN} opacity={1} /> : null}
+          <ShopPhoto shop={shop} from={prev} local={local} opacity={fade} />
+          <div style={{ position: "absolute", left: 30, top: 30, display: "flex", alignItems: "center", gap: 14, padding: "14px 28px 14px 16px", borderRadius: 999, background: "#fff", boxShadow: "0 16px 36px rgba(0,0,0,0.22)", transform: `scale(${0.5 + 0.5 * chip}) translateX(${(1 - chip) * -60}px)`, transformOrigin: "left center", opacity: chip }}>
+            <div style={{ width: 44, height: 44, borderRadius: "50%", background: C.tomette, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5" /></svg>
+            </div>
+            <span style={{ fontFamily: sans, fontWeight: 800, fontSize: 40, color: C.ink }}>{shop.featured}</span>
           </div>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1660, display: "flex", justifyContent: "center", gap: 16 }}>
+      <div style={{ position: "absolute", left: (W - 560) / 2, top: 1040, transform: `perspective(1500px) rotateY(${flip}deg)`, filter: "drop-shadow(0 30px 40px rgba(40,20,10,0.35))" }}>
+        <Wheel size={560} colors={shop.colors} prizes={shop.prizes} rotation={f * 2.4 + i * 30} rim={shop.rim} hub={shop.hub} hubLabel={shop.monogram} logo={shop.logo} />
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1660, display: "flex", justifyContent: "center" }}>
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: 22, padding: "14px 40px 14px 14px", borderRadius: 999, background: "#fff", boxShadow: "0 24px 50px rgba(60,30,10,0.18)", transform: `translateY(${(1 - tag) * 80}px) scale(${0.7 + 0.3 * tag})`, opacity: tag }}>
+          <ShopBadge logo={shop.logo} monogram={shop.monogram} color={shop.hub} size={88} />
+          <div>
+            <div style={{ fontFamily: display, fontWeight: 700, fontSize: 52, color: C.ink, lineHeight: 1 }}>{shop.name}</div>
+            <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 28, color: C.inkSoft, marginTop: 6, textTransform: "uppercase", letterSpacing: "0.12em" }}>{shop.short}</div>
+          </div>
+        </div>
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1850, display: "flex", justifyContent: "center", gap: 16 }}>
         {SHOPS.map((s, k) => (
-          <div key={k} style={{ width: k === i ? 60 : 18, height: 18, borderRadius: 999, background: k === i ? C.tomette : C.line }} />
+          <div key={k} style={{ width: k === i ? 60 : 18, height: 18, borderRadius: 999, background: k === i ? C.tomette : "rgba(29,26,22,0.18)" }} />
         ))}
       </div>
     </AbsoluteFill>
