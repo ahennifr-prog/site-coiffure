@@ -245,10 +245,12 @@ thud(at("hook", 62), 0.35);
 pop(at("simple", 4), 0.5, 1200);
 bell(at("simple", 20), note(86), 0.25, 0.4);
 // 3. Une roue par commerce : swipe à chaque changement.
-for (let k = 1; k < 5; k++) {
-  whoosh(at("shops", k * ev.shopLen) - 0.08, 0.22, 0.32);
-  click(at("shops", k * ev.shopLen), 0.25);
-}
+ev.shopStarts.slice(1).forEach((f) => {
+  whoosh(at("shops", f) - 0.08, 0.22, 0.32);
+  click(at("shops", f), 0.25);
+});
+whoosh(at("shops", ev.mosaic) - 0.1, 0.4, 0.35);
+[0, 1, 2, 3, 4].forEach((k) => pop(at("shops", ev.mosaic + k * 3 + 4), 0.18, 900 + k * 120));
 // 4. Flyer : arrivée, téléphone, laser, bip.
 whoosh(at("flyer", 0), 0.5, 0.35);
 whoosh(at("flyer", ev.flyerPhone), 0.4, 0.3);
@@ -291,7 +293,7 @@ for (let f = ev.slider[0]; f < ev.slider[1]; f += 3) tick(at("reglages", f), 0.2
 pop(at("reglages", ev.slider[1]), 0.3, 1000);
 // 9. IA : clic de souris, frappe.
 click(at("ia", ev.iaClick), 0.7);
-for (let f = ev.iaClick + 8; f < ev.iaClick + 8 + 62; f += 1) if (rnd() > -0.2) tick(at("ia", f) + rnd() * 0.01, 0.12, 1800 + rnd() * 600);
+for (let f = ev.iaType[0]; f < ev.iaType[1]; f += 1) if (rnd() > -0.2) tick(at("ia", f) + rnd() * 0.01, 0.12, 1800 + rnd() * 600);
 // 10. Boucle : whoosh à chaque étape, pièce sur le chiffre.
 ev.loopSteps.forEach((f, k) => {
   whoosh(at("boucle", f) - 0.1, 0.3, 0.25);

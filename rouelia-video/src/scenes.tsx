@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Img, interpolate, interpolateColors, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, interpolate, interpolateColors, spring, staticFile, useCurrentFrame } from "remotion";
 import { C, display, sans, SHOPS, type Shop } from "./theme";
 import spin from "./spin.json";
 import ev from "./events.json";
@@ -28,9 +28,9 @@ export function spinRotation(f: number) {
 export function Hook() {
   const f = useCurrentFrame();
   const drop = useSpring(2, { damping: 9, stiffness: 120 });
-  const push = interpolate(f, [0, 84], [1, 1.12], clamp);
-  const walk = interpolate(f, [22, 70], [0, 1], { ...clamp, easing: ease });
-  const door = interpolate(f, [18, 26, 54, 64], [0, 1, 1, 0], clamp);
+  const push = interpolate(f, [0, 62], [1, 1.1], clamp);
+  const walk = interpolate(f, [16, 54], [0, 1], { ...clamp, easing: ease });
+  const door = interpolate(f, [14, 20, 42, 50], [0, 1, 1, 0], clamp);
   return (
     <AbsoluteFill>
       <Background tint="#F6D9CE" />
@@ -56,7 +56,7 @@ export function Hook() {
         </div>
       </AbsoluteFill>
       <Headline top={230}>
-        <Words text="Du mal à fidéliser vos clients ?" at={6} step={4} size={124} accent={["fidéliser"]} />
+        <Words text="Du mal à fidéliser vos clients ?" at={4} step={3} size={124} accent={["fidéliser"]} />
       </Headline>
     </AbsoluteFill>
   );
@@ -90,24 +90,21 @@ export function Simple() {
 /* 3. Une roue par commerce                                            */
 /* ------------------------------------------------------------------ */
 
-const SHOP_LEN = ev.shopLen;
 const CARD = { left: 70, top: 390, w: 940, h: 760 };
+const SHOP_ORDER = ev.shopOrder;
+const SHOP_STARTS = ev.shopStarts;
+const MOSAIC = ev.mosaic;
 
 /** Photo cadrée sur un point focal, avec un lent zoom (Ken Burns). */
-function ShopPhoto({ shop, from, local, opacity }: { shop: Shop; from?: Shop; local: number; opacity: number }) {
+function ShopPhoto({ shop, start, local, opacity }: { shop: Shop; start: number; local: number; opacity: number }) {
   const p = shop.photo;
-  // Même photo que le commerce précédent : on glisse vers le nouveau cadrage au lieu d'un fondu.
-  const pan = from && from.photo.src === p.src ? interpolate(local, [0, 16], [0, 1], { ...clamp, easing: ease }) : 1;
-  const q = from && pan < 1 ? from.photo : p;
-  const fx = q.fx + (p.fx - q.fx) * pan;
-  const fy = q.fy + (p.fy - q.fy) * pan;
-  const z = (q.z + (p.z - q.z) * pan) * (1 + local * 0.0018);
+  const z = p.z * (1 + local * 0.0022);
   const wi = CARD.w * z;
   const hi = wi * p.aspect;
-  const left = Math.min(0, Math.max(CARD.w - wi, CARD.w / 2 - fx * wi));
-  const top = Math.min(0, Math.max(CARD.h - hi, CARD.h / 2 - fy * hi));
+  const left = Math.min(0, Math.max(CARD.w - wi, CARD.w / 2 - p.fx * wi));
+  const top = Math.min(0, Math.max(CARD.h - hi, CARD.h / 2 - p.fy * hi));
   const promo = shop.name === "La Boutique";
-  const tag = useSpring(Math.floor(useCurrentFrame() / SHOP_LEN) * SHOP_LEN + 8, { damping: 10, stiffness: 160 });
+  const tag = useSpring(start + 6, { damping: 10, stiffness: 160 });
   return (
     <div style={{ position: "absolute", inset: 0, opacity }}>
       <div style={{ position: "absolute", left, top, width: wi, height: hi }}>
@@ -122,61 +119,97 @@ function ShopPhoto({ shop, from, local, opacity }: { shop: Shop; from?: Shop; lo
   );
 }
 
+/** Fin de la scène : les cinq commerces en mosaïque. */
+function ShopMosaic({ at }: { at: number }) {
+  const f = useCurrentFrame();
+  const spots = [
+    { x: 60, y: 470 }, { x: 390, y: 430 }, { x: 720, y: 470 }, { x: 225, y: 960 }, { x: 555, y: 960 },
+  ];
+  return (
+    <>
+      {SHOPS.map((shop, k) => {
+        const s = spring({ frame: f - at - k * 3, fps: 30, config: { damping: 13, stiffness: 140 } });
+        const p = shop.photo;
+        const sp = spots[k];
+        const float = Math.sin((f + k * 11) / 18) * 8;
+        return (
+          <div key={k} style={{ position: "absolute", left: sp.x, top: sp.y + float, width: 300, height: 440, borderRadius: 30, overflow: "hidden", background: "#fff", boxShadow: "0 30px 60px rgba(40,20,10,0.3)", transform: `perspective(1200px) rotateY(${(1 - s) * 60}deg) rotate(${(k - 2) * 2.5}deg) scale(${0.4 + 0.6 * s})`, opacity: Math.min(1, s * 1.5) }}>
+            <div style={{ height: 340, overflow: "hidden" }}>
+              <Img src={staticFile(p.src)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `${p.fx * 100}% ${p.fy * 100}%`, transform: `scale(${p.z})`, transformOrigin: `${p.fx * 100}% ${p.fy * 100}%` }} />
+            </div>
+            <div style={{ height: 100, display: "flex", alignItems: "center", gap: 12, padding: "0 16px" }}>
+              <ShopBadge logo={shop.logo} monogram={shop.monogram} color={shop.hub} size={56} />
+              <div style={{ fontFamily: display, fontWeight: 700, fontSize: 30, color: C.ink, lineHeight: 1.05 }}>{shop.name}</div>
+            </div>
+          </div>
+        );
+      })}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1500, display: "flex", justifyContent: "center" }}>
+        <Words text="Un client de passage devient un habitué" at={at + 8} step={4} size={84} accent={["habitué"]} />
+      </div>
+    </>
+  );
+}
+
 export function Shops() {
   const f = useCurrentFrame();
-  const i = Math.min(SHOPS.length - 1, Math.floor(f / SHOP_LEN));
-  const local = f - i * SHOP_LEN;
+  const mosaic = f >= MOSAIC;
+  let n = 0;
+  while (n + 1 < SHOP_STARTS.length && f >= SHOP_STARTS[n + 1]) n++;
+  const start = SHOP_STARTS[n];
+  const local = f - start;
+  const shop = SHOPS[SHOP_ORDER[n]];
+  const prev = n === 0 ? undefined : SHOPS[SHOP_ORDER[n - 1]];
   // Demi-tour en 3D au changement : la roue se retourne et revient avec la nouvelle identité.
-  const flip = i === 0 ? 0 : interpolate(local, [0, 7], [90, 0], { ...clamp, easing: ease });
-  const prev = i === 0 ? undefined : SHOPS[i - 1];
-  const shop = SHOPS[i];
-  const samePhoto = prev?.photo.src === shop.photo.src;
-  const fade = !prev || samePhoto ? 1 : interpolate(local, [0, 8], [0, 1], clamp);
+  const flip = n === 0 ? 0 : interpolate(local, [0, 6], [90, 0], { ...clamp, easing: ease });
+  const fade = !prev ? 1 : interpolate(local, [0, 5], [0, 1], clamp);
   const cardIn = useSpring(0, { damping: 15, stiffness: 110 });
-  const chip = useSpring(i * SHOP_LEN + 4, { damping: 12, stiffness: 150 });
-  const tag = useSpring(i * SHOP_LEN + 3, { damping: 13 });
+  const out = interpolate(f, [MOSAIC - 2, MOSAIC + 6], [0, 1], { ...clamp, easing: easeIn });
+  const chip = useSpring(start + 3, { damping: 12, stiffness: 150 });
+  const tag = useSpring(start + 2, { damping: 13 });
   const tilt = Math.sin(f / 22) * 2.5;
+  const bgPhoto = (src: string, o: number) => <Img src={staticFile(src)} style={{ position: "absolute", inset: -80, width: 1240, height: 2080, objectFit: "cover", filter: "blur(40px) saturate(1.2)", opacity: o }} />;
   return (
     <AbsoluteFill>
       {/* fond : la photo floutée, éclaircie */}
       <AbsoluteFill style={{ overflow: "hidden", background: C.cream }}>
-        {prev && !samePhoto && fade < 1 ? <Img src={staticFile(prev.photo.src)} style={{ position: "absolute", inset: -80, width: 1240, height: 2080, objectFit: "cover", filter: "blur(40px) saturate(1.2)" }} /> : null}
-        <Img src={staticFile(shop.photo.src)} style={{ position: "absolute", inset: -80, width: 1240, height: 2080, objectFit: "cover", filter: "blur(40px) saturate(1.2)", opacity: fade }} />
-        <AbsoluteFill style={{ background: "rgba(251,246,238,0.62)" }} />
+        {prev && fade < 1 ? bgPhoto(prev.photo.src, 1) : null}
+        {bgPhoto(shop.photo.src, fade * (1 - out))}
+        <AbsoluteFill style={{ background: `rgba(251,246,238,${0.62 + out * 0.2})` }} />
       </AbsoluteFill>
-      <Headline top={120}>
-        <Words text="Une roue à vos couleurs, avec vos cadeaux" at={0} step={3} size={88} accent={["couleurs,", "cadeaux"]} />
-      </Headline>
-      {/* la photo du commerce */}
-      <div style={{ position: "absolute", left: CARD.left, top: CARD.top, perspective: 1800 }}>
-        <div style={{ position: "relative", width: CARD.w, height: CARD.h, borderRadius: 44, overflow: "hidden", boxShadow: "0 50px 90px rgba(40,20,10,0.35)", transform: `rotateX(${(1 - cardIn) * 30 + 3}deg) rotateY(${tilt}deg) translateY(${(1 - cardIn) * 300}px) scale(${0.85 + 0.15 * cardIn})`, opacity: cardIn }}>
-          {prev && !samePhoto && fade < 1 ? <ShopPhoto shop={prev} local={local + SHOP_LEN} opacity={1} /> : null}
-          <ShopPhoto shop={shop} from={prev} local={local} opacity={fade} />
-          <div style={{ position: "absolute", left: 30, top: 30, display: "flex", alignItems: "center", gap: 14, padding: "14px 28px 14px 16px", borderRadius: 999, background: "#fff", boxShadow: "0 16px 36px rgba(0,0,0,0.22)", transform: `scale(${0.5 + 0.5 * chip}) translateX(${(1 - chip) * -60}px)`, transformOrigin: "left center", opacity: chip }}>
-            <div style={{ width: 44, height: 44, borderRadius: "50%", background: C.tomette, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5" /></svg>
+      {!mosaic ? (
+        <Headline top={120}>
+          <Words text="Une roue à vos couleurs, avec vos cadeaux" at={0} step={3} size={88} accent={["couleurs,", "cadeaux"]} />
+        </Headline>
+      ) : null}
+      <div style={{ opacity: 1 - out, transform: `scale(${1 - out * 0.15})`, transformOrigin: "50% 50%", position: "absolute", inset: 0 }}>
+        {/* la photo du commerce */}
+        <div style={{ position: "absolute", left: CARD.left, top: CARD.top, perspective: 1800 }}>
+          <div style={{ position: "relative", width: CARD.w, height: CARD.h, borderRadius: 44, overflow: "hidden", boxShadow: "0 50px 90px rgba(40,20,10,0.35)", transform: `rotateX(${(1 - cardIn) * 30 + 3}deg) rotateY(${tilt}deg) translateY(${(1 - cardIn) * 300}px) scale(${0.85 + 0.15 * cardIn})`, opacity: cardIn }}>
+            {prev && fade < 1 ? <ShopPhoto shop={prev} start={SHOP_STARTS[n - 1]} local={f - SHOP_STARTS[n - 1]} opacity={1} /> : null}
+            <ShopPhoto shop={shop} start={start} local={local} opacity={fade} />
+            <div style={{ position: "absolute", left: 30, top: 30, display: "flex", alignItems: "center", gap: 14, padding: "14px 28px 14px 16px", borderRadius: 999, background: "#fff", boxShadow: "0 16px 36px rgba(0,0,0,0.22)", transform: `scale(${0.5 + 0.5 * chip}) translateX(${(1 - chip) * -60}px)`, transformOrigin: "left center", opacity: chip }}>
+              <div style={{ width: 44, height: 44, borderRadius: "50%", background: C.tomette, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5" /></svg>
+              </div>
+              <span style={{ fontFamily: sans, fontWeight: 800, fontSize: 40, color: C.ink }}>{shop.featured}</span>
             </div>
-            <span style={{ fontFamily: sans, fontWeight: 800, fontSize: 40, color: C.ink }}>{shop.featured}</span>
+          </div>
+        </div>
+        <div style={{ position: "absolute", left: (W - 560) / 2, top: 1040, transform: `perspective(1500px) rotateY(${flip}deg)`, filter: "drop-shadow(0 30px 40px rgba(40,20,10,0.35))" }}>
+          <Wheel size={560} colors={shop.colors} prizes={shop.prizes} rotation={f * 2.4 + n * 30} rim={shop.rim} hub={shop.hub} hubLabel={shop.monogram} logo={shop.logo} />
+        </div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 1660, display: "flex", justifyContent: "center" }}>
+          <div key={n} style={{ display: "flex", alignItems: "center", gap: 22, padding: "14px 40px 14px 14px", borderRadius: 999, background: "#fff", boxShadow: "0 24px 50px rgba(60,30,10,0.18)", transform: `translateY(${(1 - tag) * 80}px) scale(${0.7 + 0.3 * tag})`, opacity: tag }}>
+            <ShopBadge logo={shop.logo} monogram={shop.monogram} color={shop.hub} size={88} />
+            <div>
+              <div style={{ fontFamily: display, fontWeight: 700, fontSize: 52, color: C.ink, lineHeight: 1 }}>{shop.name}</div>
+              <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 28, color: C.inkSoft, marginTop: 6, textTransform: "uppercase", letterSpacing: "0.12em" }}>{shop.short}</div>
+            </div>
           </div>
         </div>
       </div>
-      <div style={{ position: "absolute", left: (W - 560) / 2, top: 1040, transform: `perspective(1500px) rotateY(${flip}deg)`, filter: "drop-shadow(0 30px 40px rgba(40,20,10,0.35))" }}>
-        <Wheel size={560} colors={shop.colors} prizes={shop.prizes} rotation={f * 2.4 + i * 30} rim={shop.rim} hub={shop.hub} hubLabel={shop.monogram} logo={shop.logo} />
-      </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1660, display: "flex", justifyContent: "center" }}>
-        <div key={i} style={{ display: "flex", alignItems: "center", gap: 22, padding: "14px 40px 14px 14px", borderRadius: 999, background: "#fff", boxShadow: "0 24px 50px rgba(60,30,10,0.18)", transform: `translateY(${(1 - tag) * 80}px) scale(${0.7 + 0.3 * tag})`, opacity: tag }}>
-          <ShopBadge logo={shop.logo} monogram={shop.monogram} color={shop.hub} size={88} />
-          <div>
-            <div style={{ fontFamily: display, fontWeight: 700, fontSize: 52, color: C.ink, lineHeight: 1 }}>{shop.name}</div>
-            <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 28, color: C.inkSoft, marginTop: 6, textTransform: "uppercase", letterSpacing: "0.12em" }}>{shop.short}</div>
-          </div>
-        </div>
-      </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1850, display: "flex", justifyContent: "center", gap: 16 }}>
-        {SHOPS.map((s, k) => (
-          <div key={k} style={{ width: k === i ? 60 : 18, height: 18, borderRadius: 999, background: k === i ? C.tomette : "rgba(29,26,22,0.18)" }} />
-        ))}
-      </div>
+      {f >= MOSAIC - 2 ? <ShopMosaic at={MOSAIC} /> : null}
     </AbsoluteFill>
   );
 }
@@ -261,7 +294,7 @@ export function Flyer() {
         </Phone>
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1780, display: "flex", justifyContent: "flex-start", paddingLeft: 70 }}>
-        <StepBadge n={1} label="Il scanne" at={40} />
+        <StepBadge n={1} label="Il scanne" at={ev.flyerBadge} />
       </div>
     </AbsoluteFill>
   );
@@ -311,7 +344,7 @@ export function Avis() {
         </Phone>
       </div>
       {/* l'avis s'envole vers la fiche Google */}
-      {f >= 58 ? (
+      {f >= ev.reviewFly - 4 ? (
         <div style={{ position: "absolute", left: 220 + fly * 300, top: 1150 - fly * 760, transform: `scale(${1 - fly * 0.45}) rotate(${-6 + fly * 10}deg)`, opacity: 1 - Math.max(0, fly - 0.85) * 6 }}>
           <Card style={{ padding: "24px 30px", width: 560 }}>
             <div style={{ display: "flex", gap: 6 }}>{[0, 1, 2, 3, 4].map((k) => <Star key={k} size={40} />)}</div>
@@ -319,7 +352,7 @@ export function Avis() {
           </Card>
         </div>
       ) : null}
-      <div style={{ position: "absolute", right: 40, top: 420, transform: `scale(${f >= ev.reviewCount ? 1 + (1 - bump) * 0.25 : 1})`, opacity: interpolate(f, [50, 60], [0, 1], clamp) }}>
+      <div style={{ position: "absolute", right: 40, top: 420, transform: `scale(${f >= ev.reviewCount ? 1 + (1 - bump) * 0.25 : 1})`, opacity: interpolate(f, [ev.reviewFly - 10, ev.reviewFly], [0, 1], clamp) }}>
         <Card style={{ padding: "18px 28px", display: "flex", alignItems: "center", gap: 14 }}>
           <span style={{ fontFamily: sans, fontWeight: 800, fontSize: 32 }}>Google</span>
           <Star size={36} />
@@ -381,7 +414,7 @@ export const RDV_TAP = ev.rdvTap;
 export function Cadeau() {
   const f = useCurrentFrame();
   const flip = interpolate(f, [4, 26], [-180, 0], { ...clamp, easing: ease });
-  const btn = useSpring(34, { damping: 13 });
+  const btn = useSpring(ev.rdvButton, { damping: 13 });
   const cal = useSpring(RDV_TAP + 6, { damping: 12 });
   const check = interpolate(f, [ev.rdvCheck, ev.rdvCheck + 12], [0, 1], { ...clamp, easing: ease });
   return (
@@ -457,7 +490,7 @@ export function Reglages() {
     <AbsoluteFill>
       <Background tint="#EFE3F1" />
       <Headline top={140}>
-        <Words text="Vous réglez les chances et le coût de chaque cadeau" at={0} step={3} size={84} accent={["chances", "coût"]} />
+        <Words text="Vous réglez les chances, le coût et vos gros cadeaux" at={0} step={4} size={84} accent={["chances,", "coût", "gros", "cadeaux"]} />
       </Headline>
       <div style={{ position: "absolute", left: 70, top: 470, perspective: 1800 }}>
         <div style={{ transform: `rotateX(${14 - card * 4}deg) rotateY(${-14 + card * 6}deg) translateY(${(1 - card) * 300}px)`, opacity: card }}>
@@ -498,14 +531,15 @@ export function Reglages() {
 
 export const IA_CLICK = ev.iaClick;
 const REPLY = "Merci beaucoup Julie ! Sarah sera ravie de lire votre message. À très bientôt chez ALIA coiffure.";
-export const IA_TYPE = [IA_CLICK + 8, IA_CLICK + 8 + Math.ceil(REPLY.length / 1.6)];
+export const IA_TYPE = ev.iaType;
+const TYPE_RATE = REPLY.length / (IA_TYPE[1] - IA_TYPE[0]);
 
 export function IA() {
   const f = useCurrentFrame();
   const card = useSpring(0, { damping: 15 });
-  const chars = Math.max(0, Math.min(REPLY.length, Math.floor((f - IA_TYPE[0]) * 1.6)));
-  const cursorX = interpolate(f, [8, IA_CLICK - 2], [980, 560], { ...clamp, easing: ease });
-  const cursorY = interpolate(f, [8, IA_CLICK - 2], [1700, 1090], { ...clamp, easing: ease });
+  const chars = Math.max(0, Math.min(REPLY.length, Math.floor((f - IA_TYPE[0]) * TYPE_RATE)));
+  const cursorX = interpolate(f, ev.iaCursor, [980, 560], { ...clamp, easing: ease });
+  const cursorY = interpolate(f, ev.iaCursor, [1700, 1090], { ...clamp, easing: ease });
   const pressed = f >= IA_CLICK && f < IA_CLICK + 5;
   const reply = useSpring(IA_CLICK + 4, { damping: 14 });
   return (
@@ -587,7 +621,7 @@ export function Boucle() {
       <div style={{ position: "absolute", left: cx - R - 20, top: cy - R - 20, width: (R + 20) * 2, height: (R + 20) * 2, transform: `perspective(1400px) rotateX(58deg) scale(${ring})` }}>
         <svg width="100%" height="100%" viewBox="0 0 700 700" style={{ overflow: "visible" }}>
           <circle cx="350" cy="350" r={R} fill="none" stroke={C.line} strokeWidth="26" />
-          <circle cx="350" cy="350" r={R} fill="none" stroke={C.tomette} strokeWidth="26" strokeLinecap="round" strokeDasharray={2 * Math.PI * R} strokeDashoffset={2 * Math.PI * R * (1 - Math.min(1, (f - 4) / 84))} transform="rotate(-90 350 350)" />
+          <circle cx="350" cy="350" r={R} fill="none" stroke={C.tomette} strokeWidth="26" strokeLinecap="round" strokeDasharray={2 * Math.PI * R} strokeDashoffset={2 * Math.PI * R * (1 - Math.min(1, Math.max(0, f - LOOP_STEPS[0]) / (LOOP_STEPS[3] - LOOP_STEPS[0])))} transform="rotate(-90 350 350)" />
         </svg>
       </div>
       {labels.map((l, k) => {
@@ -606,7 +640,7 @@ export function Boucle() {
         );
       })}
       <Headline top={160}>
-        <Words text="Plus d'avis, plus de visibilité, plus de clients" at={0} step={6} size={90} accent={["avis,", "visibilité,", "clients"]} />
+        <Words text="Plus d'avis, plus de visibilité, plus de clients" at={2} step={13} size={90} accent={["avis,", "visibilité,", "clients"]} />
       </Headline>
       <div style={{ position: "absolute", left: (W - 900) / 2, top: 1380, transform: `translateY(${(1 - card) * 200}px) scale(${0.8 + 0.2 * card})`, opacity: card }}>
         <Card style={{ width: 900, padding: "36px 44px", textAlign: "center" }}>
@@ -626,7 +660,7 @@ export function Cta() {
   const f = useCurrentFrame();
   const logo = useSpring(2, { damping: 11, stiffness: 120 });
   const btn = useSpring(ev.ctaButton, { damping: 10 });
-  const pulse = f > 95 ? 1 + Math.sin((f - 95) / 6) * 0.03 : 1;
+  const pulse = f > ev.ctaButton + 17 ? 1 + Math.sin((f - ev.ctaButton - 17) / 6) * 0.03 : 1;
   const aw = useSpring(0, { damping: 9 });
   return (
     <AbsoluteFill>
@@ -641,8 +675,8 @@ export function Cta() {
         <Logo size={190} spin={f * 3} />
       </div>
       <div style={{ position: "absolute", top: 610, left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
-        <Words text="Vos clients gagnent un cadeau." at={14} step={3} size={80} width={1000} />
-        <Words text="Vous gagnez leur prochaine visite." at={32} step={3} size={80} width={1000} accent={["prochaine", "visite."]} />
+        <Words text="La façon la plus simple d'attirer de nouveaux clients" at={ev.ctaLine1} step={7} size={80} width={1000} accent={["nouveaux", "clients"]} />
+        <Words text="et de les faire revenir." at={ev.ctaLine2} step={5} size={80} width={1000} accent={["revenir."]} />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1060, display: "flex", flexDirection: "column", alignItems: "center", gap: 30, transform: `scale(${btn * pulse})`, opacity: Math.min(1, btn * 1.4) }}>
         <div style={{ background: C.tomette, color: "#fff", borderRadius: 999, padding: "34px 70px", fontFamily: sans, fontWeight: 800, fontSize: 60, boxShadow: "0 30px 60px rgba(196,64,31,0.4)" }}>Essai gratuit 14 jours</div>

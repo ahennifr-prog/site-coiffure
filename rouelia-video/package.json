@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "studio": "remotion studio",
-    "audio": "node scripts/audio.mjs",
+    "audio": "node scripts/audio.mjs && sh scripts/mix.sh",
     "render": "remotion render"
   },
   "dependencies": {
