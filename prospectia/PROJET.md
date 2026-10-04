@@ -6,6 +6,20 @@
 
 ---
 
+## 0. Journal des décisions
+
+| Sujet | Décision | Statut |
+|---|---|---|
+| Activité | Prospection B2B par IA | ✅ validé |
+| Ambition produit | À terme un **logiciel (SaaS)** | ✅ validé |
+| Chemin vers le SaaS | Service + moteur IA maison / GoHighLevel en marque blanche / SaaS direct avec Claude Code (voir §9) | ⏳ en réflexion |
+| Facturation | **Abonnement mensuel + garantie de résultat** (un mois offert si l'objectif de RDV n'est pas atteint) | ✅ validé |
+| Cible de départ | À valider par entretiens (kit à préparer plus tard) | ⏳ plus tard |
+| Associés | **SAS à 2 associés** : toi opérationnel et président, et un **associé investisseur** (apport de capital, non opérationnel) | ✅ validé |
+| Site web | Plus tard, une fois l'offre stabilisée (thème sombre, nom Prospectia) | ⏸ en pause |
+
+---
+
 ## 1. Le projet en une phrase
 
 **Prospectia remplit l'agenda commercial des PME B2B avec des rendez-vous qualifiés, en
@@ -103,12 +117,30 @@ l'ICP, un besoin exprimé, un rendez-vous tenu (et non simplement planifié).
 
 ## 5. Montage juridique : la SAS Prospectia
 
-### 5.1 SAS ou SASU ?
+### 5.1 SAS à 2 associés : toi et un associé investisseur ✅
 
-- **SASU** si tu es seul associé. C'est la même société et elle se transforme en SAS
-  dès l'entrée d'un associé, sans changer de forme.
-- **SAS** si vous êtes plusieurs dès le départ. Il faut alors ajouter un **pacte
-  d'associés** (sortie, vesting, non-concurrence, clause de bad leaver).
+Tu es l'associé opérationnel et le président ; le second associé apporte du capital
+sans travailler dans la société. Les points à cadrer :
+
+- **Garder le contrôle** : rester majoritaire (plus de 50 %, idéalement au moins 67 %
+  pour les décisions extraordinaires). Si l'investisseur apporte beaucoup plus que toi,
+  on peut combiner :
+  - un **apport en capital** modeste, à parts proportionnelles ;
+  - un **apport en compte courant d'associé** pour le reste : c'est un prêt à la
+    société, remboursable, qui ne donne pas de droits de vote ;
+  - ou des **actions de préférence** : plus de dividendes ou une priorité de
+    remboursement pour lui, moins de droits de vote.
+- **Statuts** : clause d'agrément, clause d'inaliénabilité éventuelle, règles de
+  majorité.
+- **Pacte d'associés** (confidentiel, à côté des statuts) :
+  - droit de préemption ;
+  - sortie conjointe (*tag along*) et sortie forcée (*drag along*) ;
+  - information de l'investisseur (reporting trimestriel) ;
+  - non-concurrence ;
+  - modalités de sortie et de valorisation.
+- **Le président reste seul aux commandes** : l'investisseur n'a pas de mandat social.
+- Avec un associé, il faut adapter le projet de statuts (`STATUTS-PROJET.md` est
+  rédigé pour une SASU) : articles 6, 8, 9 et 13 notamment.
 
 ### 5.2 Fiche d'identité (à compléter)
 
@@ -218,10 +250,29 @@ frais fixes.
 
 ## 8. Décisions à prendre (par toi)
 
-1. Seul (SASU) ou avec des associés (SAS) ? Avec quelle répartition ?
+1. Répartition du capital avec l'associé investisseur, et montant qu'il apporte.
 2. Montant du capital.
 3. Adresse du siège : domicile ou domiciliation ?
 4. Nom définitif, après les vérifications INPI et de domaine.
 5. Statut actuel : salarié, demandeur d'emploi, autre ? Cela conditionne les aides et
    la rémunération.
 6. Prix de lancement : les fourchettes du §3 conviennent-elles ?
+
+---
+
+## 9. Chemin vers le SaaS : les 3 options
+
+| | A. Service + moteur IA maison | B. GoHighLevel en marque blanche | C. SaaS direct avec Claude Code |
+|---|---|---|---|
+| Premier chiffre d'affaires | mois 2 | mois 1 ou 2 | mois 4 à 6 au mieux |
+| Coût de départ | environ 600 € / mois d'outils | environ 300 à 500 $ / mois | outils et hébergement environ 100 à 300 € / mois, plus ton temps sans revenus |
+| Différenciation | forte (ton moteur IA) | faible (outil revendu, copiable) | forte, si ça marche |
+| Risque | faible | moyen (dépendance à la plateforme, mal adaptée à l'emailing à froid en France) | élevé (technique, sécurité, RGPD, sans validation du marché) |
+| Adapté à un fondateur seul, non développeur | ✅ | ✅ | ⚠️ |
+| Valeur de l'entreprise à terme | élevée (produit et clients) | faible | élevée |
+
+Délais estimés avec Claude Code, en solo : **outil interne en 3 à 6 semaines**, **SaaS
+vendable en 3 à 6 mois**, puis de la maintenance en continu.
+
+**Recommandation : option A.** GoHighLevel peut éventuellement servir de CRM, d'agenda
+et de reporting client, mais pas pour l'envoi d'emails à froid.
