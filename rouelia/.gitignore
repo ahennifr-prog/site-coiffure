@@ -8,3 +8,6 @@ next-env.d.ts
 .open-next
 .wrangler
 .dev.vars
+# Consignes générées par « next dev » (Next.js 16)
+AGENTS.md
+CLAUDE.md
