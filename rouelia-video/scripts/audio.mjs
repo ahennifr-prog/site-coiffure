@@ -75,7 +75,7 @@ function svf() {
 const BPM = 120;
 const BEAT = 60 / BPM;
 const music = track();
-const dropT = at("simple", 0); // la musique démarre franchement ici
+const dropT = at("simple", ev.simpleDrop); // la musique démarre franchement sur « simple »
 const endT = timing.duration / FPS;
 const chords = [
   [50, 54, 57, 62], // D
@@ -248,11 +248,12 @@ hit(dropT, 0.6);
 // 1. Accroche : store qui tombe, porte qui se ferme, mots qui claquent.
 whoosh(at("hook", ev.hookDrop), 0.3, 0.4, false);
 thud(at("hook", ev.hookDrop + 10), 0.55);
-thud(at("hook", 62), 0.35);
-[4, 7, 10, 13, 16, 19].forEach((f) => pop(at("hook", f + 2), 0.2, 700));
+thud(at("hook", 56), 0.35);
+for (let k = 0; k < 7; k++) pop(at("hook", ev.hookWords[0] + k * ev.hookWords[1] + 2), 0.22, 700);
+hit(at("hook", ev.hookWords[0] + ev.hookWords[1] * 3 + 2), 0.75);
 // 2. C'est simple : pop de la roue et du logo.
-pop(at("simple", 4), 0.5, 1200);
-bell(at("simple", 20), note(86), 0.25, 0.4);
+pop(at("simple", ev.simpleDrop - 4), 0.5, 1200);
+bell(at("simple", ev.simpleDrop + 12), note(86), 0.25, 0.4);
 // 3. Une roue par commerce : swipe à chaque changement.
 ev.shopStarts.slice(1).forEach((f) => {
   whoosh(at("shops", f) - 0.08, 0.22, 0.32);

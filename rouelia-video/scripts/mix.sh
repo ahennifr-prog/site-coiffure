@@ -1,13 +1,21 @@
 #!/bin/sh
-# Mixe la voix off (accélérée de 7 %), la musique (baissée sous la voix) et les bruitages.
+# Mixe la voix off, la musique (baissée sous la voix) et les bruitages.
+# La voix est remontée : accroche à vitesse naturelle avec deux pauses, puis le reste accéléré de 7 %.
 # Entrée : public/audio/voice-raw.mp3 (voix Higgsfield), music.wav et sfx.wav (npm run audio).
 # Sortie : public/audio/mix.wav, lue par la vidéo.
 set -e
 cd "$(dirname "$0")/.."
-OFFSET=$(node -e 'console.log(require("./src/timing.json").voiceOffset)')
-ffmpeg -loglevel error -y -i public/audio/voice-raw.mp3 -af "atempo=1.07" -ar 48000 -ac 2 public/audio/voice.wav
+ffmpeg -loglevel error -y -i public/audio/voice-raw.mp3 -filter_complex "
+anullsrc=r=48000:cl=stereo,atrim=0:0.25[s0];
+[0:a]aresample=48000,aformat=channel_layouts=stereo,asplit=3[a][b][c];
+[a]atrim=2.10:3.60,asetpts=PTS-STARTPTS[p1];
+anullsrc=r=48000:cl=stereo,atrim=0:0.65[s1];
+[b]atrim=4.05:5.66,asetpts=PTS-STARTPTS[p2];
+anullsrc=r=48000:cl=stereo,atrim=0:0.4567[s2];
+[c]atrim=start=5.80,asetpts=PTS-STARTPTS,atempo=1.07[p3];
+[s0][p1][s1][p2][s2][p3]concat=n=6:v=0:a=1[v]" -map "[v]" -ar 48000 public/audio/voice.wav
 ffmpeg -loglevel error -y -i public/audio/music.wav -i public/audio/sfx.wav -i public/audio/voice.wav -filter_complex "
-[2:a]atrim=start=$OFFSET,asetpts=PTS-STARTPTS,highpass=f=70,acompressor=threshold=0.12:ratio=3:attack=5:release=120:makeup=1.4,apad=whole_dur=60,asplit=2[v][key];
+[2:a]highpass=f=70,acompressor=threshold=0.12:ratio=3:attack=5:release=120:makeup=1.4,apad=whole_dur=60,asplit=2[v][key];
 [0:a]volume=0.7[m];
 [m][key]sidechaincompress=threshold=0.03:ratio=8:attack=15:release=350[md];
 [1:a]volume=0.7[s];

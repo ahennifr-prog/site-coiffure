@@ -28,9 +28,11 @@ export function spinRotation(f: number) {
 export function Hook() {
   const f = useCurrentFrame();
   const drop = useSpring(2, { damping: 9, stiffness: 120 });
-  const push = interpolate(f, [0, 62], [1, 1.1], clamp);
-  const walk = interpolate(f, [16, 54], [0, 1], { ...clamp, easing: ease });
-  const door = interpolate(f, [14, 20, 42, 50], [0, 1, 1, 0], clamp);
+  const push = interpolate(f, [0, 70], [1, 1.1], clamp);
+  const slam = ev.hookWords[0] + ev.hookWords[1] * 3;
+  const shake = f >= slam && f < slam + 10 ? Math.sin((f - slam) * 2.6) * (10 - (f - slam)) * 1.4 : 0;
+  const walk = interpolate(f, [18, 60], [0, 1], { ...clamp, easing: ease });
+  const door = interpolate(f, [14, 20, 48, 56], [0, 1, 1, 0], clamp);
   return (
     <AbsoluteFill>
       <Background tint="#F6D9CE" />
@@ -56,7 +58,9 @@ export function Hook() {
         </div>
       </AbsoluteFill>
       <Headline top={230}>
-        <Words text="Du mal à fidéliser vos clients ?" at={4} step={3} size={124} accent={["fidéliser"]} />
+        <div style={{ transform: `translate(${shake}px, ${shake * 0.4}px)` }}>
+          <Words text="Du mal à fidéliser vos clients ?" at={ev.hookWords[0]} step={ev.hookWords[1]} size={128} accent={["fidéliser"]} />
+        </div>
       </Headline>
     </AbsoluteFill>
   );
@@ -68,19 +72,19 @@ export function Hook() {
 
 export function Simple() {
   const f = useCurrentFrame();
-  const pop = useSpring(4, { damping: 11, stiffness: 120 });
-  const logo = useSpring(20, { damping: 14 });
+  const pop = useSpring(ev.simpleDrop - 4, { damping: 11, stiffness: 120 });
+  const logo = useSpring(ev.simpleDrop + 12, { damping: 14 });
   return (
     <AbsoluteFill>
       <Background tint="#FCE1D3" />
       <div style={{ position: "absolute", left: (W - 820) / 2, top: 520, transform: `perspective(1400px) rotateY(${(1 - pop) * 100}deg) scale(${0.3 + 0.7 * pop})` }}>
-        <Wheel size={820} colors={[C.tomette, C.cream, C.safran, C.sauge]} prizes={["Café offert", "-10 %", "Dessert", "Soin offert", "Cadeau", "Surprise", "-20 %", "Boisson"]} rotation={f * 7} hubLabel="R" />
+        <Wheel size={820} colors={[C.tomette, C.cream, C.safran, C.sauge]} prizes={["Café offert", "-10 %", "Dessert", "Soin offert", "Cadeau", "Surprise", "-20 %", "Boisson"]} rotation={Math.max(0, f - ev.simpleDrop + 4) * 7} hubLabel="R" />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1480, display: "flex", justifyContent: "center", transform: `scale(${logo}) translateY(${(1 - logo) * 60}px)`, opacity: logo }}>
         <Logo size={150} spin={f * 4} />
       </div>
       <Headline top={210}>
-        <Words text="C'est pourtant devenu simple." at={2} step={4} size={118} accent={["simple"]} />
+        <Words text="C'est pourtant devenu simple." at={ev.simpleWords[0]} step={ev.simpleWords[1]} size={118} accent={["simple"]} />
       </Headline>
     </AbsoluteFill>
   );
@@ -94,6 +98,8 @@ const CARD = { left: 70, top: 390, w: 940, h: 760 };
 const SHOP_ORDER = ev.shopOrder;
 const SHOP_STARTS = ev.shopStarts;
 const MOSAIC = ev.mosaic;
+/** Les mots de la voix off, affichés pile quand Xavier les dit. */
+const SHOP_WORDS = ["Un brushing,", "un mochi,", "une séance bien-être offerte,", "une promo…"];
 
 /** Photo cadrée sur un point focal, avec un lent zoom (Ken Burns). */
 function ShopPhoto({ shop, start, local, opacity }: { shop: Shop; start: number; local: number; opacity: number }) {
@@ -178,8 +184,8 @@ export function Shops() {
         <AbsoluteFill style={{ background: `rgba(251,246,238,${0.62 + out * 0.2})` }} />
       </AbsoluteFill>
       {!mosaic ? (
-        <Headline top={120}>
-          <Words text="Une roue à vos couleurs, avec vos cadeaux" at={0} step={3} size={88} accent={["couleurs,", "cadeaux"]} />
+        <Headline top={150}>
+          <Words key={n} text={SHOP_WORDS[n]} at={start} step={2} size={SHOP_WORDS[n].length > 20 ? 84 : 110} accent={[SHOP_WORDS[n].split(" ").slice(-1)[0]]} />
         </Headline>
       ) : null}
       <div style={{ opacity: 1 - out, transform: `scale(${1 - out * 0.15})`, transformOrigin: "50% 50%", position: "absolute", inset: 0 }}>
@@ -610,15 +616,15 @@ export function Boucle() {
   const labels = ["Plus d'avis", "Plus visible sur Google", "De nouveaux clients", "Qui reviennent"];
   const ring = useSpring(0, { damping: 16 });
   const card = useSpring(ev.loopCard, { damping: 12 });
-  const R = 330;
+  const R = 340;
   const cx = W / 2;
-  const cy = 900;
+  const cy = 1010;
   const lit = LOOP_STEPS.filter((t) => f >= t).length;
   return (
     <AbsoluteFill>
       <Background tint="#FCE7B8" />
       {/* anneau en perspective */}
-      <div style={{ position: "absolute", left: cx - R - 20, top: cy - R - 20, width: (R + 20) * 2, height: (R + 20) * 2, transform: `perspective(1400px) rotateX(58deg) scale(${ring})` }}>
+      <div style={{ position: "absolute", left: cx - R - 20, top: cy - R - 20, width: (R + 20) * 2, height: (R + 20) * 2, transform: `perspective(1400px) rotateX(35deg) scale(${ring})` }}>
         <svg width="100%" height="100%" viewBox="0 0 700 700" style={{ overflow: "visible" }}>
           <circle cx="350" cy="350" r={R} fill="none" stroke={C.line} strokeWidth="26" />
           <circle cx="350" cy="350" r={R} fill="none" stroke={C.tomette} strokeWidth="26" strokeLinecap="round" strokeDasharray={2 * Math.PI * R} strokeDashoffset={2 * Math.PI * R * (1 - Math.min(1, Math.max(0, f - LOOP_STEPS[0]) / (LOOP_STEPS[3] - LOOP_STEPS[0])))} transform="rotate(-90 350 350)" />
@@ -627,11 +633,11 @@ export function Boucle() {
       {labels.map((l, k) => {
         const a = -Math.PI / 2 + (k * Math.PI) / 2;
         const x = cx + Math.cos(a) * R;
-        const y = cy + Math.sin(a) * R * 0.53;
-        const s = interpolate(f, [LOOP_STEPS[k], LOOP_STEPS[k] + 10], [0, 1], { ...clamp, easing: ease });
+        const y = cy + Math.sin(a) * R * 0.8 + 40;
+        const s = spring({ frame: f - LOOP_STEPS[k], fps: 30, config: { damping: 11, stiffness: 180 } });
         const on = k < lit;
         return (
-          <div key={k} style={{ position: "absolute", left: x, top: y, transform: `translate(-50%, -100%) scale(${0.5 + 0.5 * s})`, opacity: 0.25 + 0.75 * s, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+          <div key={k} style={{ position: "absolute", left: x, top: y, transform: `translate(${k === 1 ? -72 : k === 3 ? -28 : -50}%, -100%) scale(${0.3 + 0.7 * s})`, opacity: s, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
             <div style={{ width: 130, height: 130, borderRadius: "50%", background: on ? "#fff" : C.cream, boxShadow: on ? `0 0 0 8px ${C.tomette}, 0 20px 40px rgba(0,0,0,0.18)` : "none", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <LoopIcon k={k} size={70} />
             </div>
@@ -642,7 +648,7 @@ export function Boucle() {
       <Headline top={160}>
         <Words text="Plus d'avis, plus de visibilité, plus de clients" at={2} step={13} size={90} accent={["avis,", "visibilité,", "clients"]} />
       </Headline>
-      <div style={{ position: "absolute", left: (W - 900) / 2, top: 1380, transform: `translateY(${(1 - card) * 200}px) scale(${0.8 + 0.2 * card})`, opacity: card }}>
+      <div style={{ position: "absolute", left: (W - 900) / 2, top: 1500, transform: `translateY(${(1 - card) * 200}px) scale(${0.8 + 0.2 * card})`, opacity: card }}>
         <Card style={{ width: 900, padding: "36px 44px", textAlign: "center" }}>
           <div style={{ fontFamily: display, fontWeight: 700, fontSize: 68, lineHeight: 1.05 }}>Rentable dès <span style={{ color: C.tomette }}>3 retours</span> par mois*</div>
           <div style={{ fontFamily: sans, fontWeight: 600, fontSize: 26, color: C.inkSoft, marginTop: 14 }}>*Exemple : salon de coiffure, panier moyen 35 €, pack Croissance</div>

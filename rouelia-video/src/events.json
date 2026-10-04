@@ -1,26 +1,68 @@
 {
-  "shopOrder": [0, 1, 3, 4],
-  "shopStarts": [0, 16, 29, 71],
+  "shopOrder": [
+    0,
+    1,
+    3,
+    4
+  ],
+  "shopStarts": [
+    0,
+    16,
+    29,
+    71
+  ],
   "mosaic": 86,
-  "stars": [8, 12, 16, 20, 24],
+  "stars": [
+    8,
+    12,
+    16,
+    20,
+    24
+  ],
   "reviewFly": 30,
   "reviewCount": 46,
   "rdvButton": 55,
   "rdvTap": 84,
   "rdvCheck": 94,
-  "slider": [8, 40],
-  "iaCursor": [6, 34],
-  "iaClick": 36,
-  "iaType": [44, 78],
-  "loopSteps": [4, 32, 88, 134],
+  "slider": [
+    8,
+    40
+  ],
+  "iaCursor": [
+    2,
+    14
+  ],
+  "iaClick": 16,
+  "iaType": [
+    22,
+    64
+  ],
+  "loopSteps": [
+    2,
+    30,
+    86,
+    131
+  ],
   "loopCard": 145,
   "flyerPhone": 16,
-  "scanLaser": [36, 60],
+  "scanLaser": [
+    36,
+    60
+  ],
   "scanFlash": 62,
   "flyerBadge": 30,
   "ctaLine1": 30,
   "ctaLine2": 106,
   "ctaButton": 160,
   "hookDoor": 14,
-  "hookDrop": 2
+  "hookDrop": 2,
+  "hookWords": [
+    8,
+    6
+  ],
+  "simpleWords": [
+    3,
+    11
+  ],
+  "simpleDrop": 36
 }
