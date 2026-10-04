@@ -44,7 +44,7 @@ export function Nav() {
   return (
     <header
       className={`sticky top-0 z-40 h-(--nav-h) transition-[background-color,box-shadow] duration-300 ${
-        scrolled || open ? "bg-cream/90 shadow-[0_1px_0_var(--color-line)] backdrop-blur-md" : "bg-cream/0"
+        scrolled || open ? "bg-cream/95 shadow-[0_1px_0_var(--color-line)]" : "bg-cream/0"
       }`}
     >
       <a

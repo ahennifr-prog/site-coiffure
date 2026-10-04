@@ -1,4 +1,4 @@
-import { Gift, PlayCircle } from "lucide-react";
+import { Gift } from "lucide-react";
 import { cta, hero } from "@/content";
 import { fr } from "@/lib/format";
 import { ButtonLink } from "@/components/ui/Button";
@@ -20,8 +20,8 @@ export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden pt-8 pb-24 sm:pt-16 lg:pt-20 lg:pb-36">
       {/* Halo chaud derrière la roue : profondeur sans image lourde. */}
-      <div aria-hidden className="pointer-events-none absolute -top-40 right-[-20%] h-[640px] w-[640px] rounded-full bg-tomette-soft opacity-70 blur-3xl lg:right-[-6%]" />
-      <div aria-hidden className="pointer-events-none absolute bottom-[-30%] left-[-15%] h-[520px] w-[520px] rounded-full bg-safran-soft opacity-60 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -top-40 right-[-20%] h-[640px] w-[640px] rounded-full bg-[radial-gradient(closest-side,var(--color-tomette-soft),transparent)] lg:right-[-6%]" />
+      <div aria-hidden className="pointer-events-none absolute bottom-[-30%] left-[-15%] h-[520px] w-[520px] rounded-full bg-[radial-gradient(closest-side,var(--color-safran-soft),transparent)]" />
       <Container className="relative grid grid-cols-[minmax(0,1fr)] items-center gap-x-16 gap-y-8 lg:grid-cols-[1fr_1fr] lg:grid-rows-[auto_auto_auto]">
         {/* Téléphone : titre, roue, puis texte. Ordinateur : texte à gauche, roue à droite. */}
         <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
@@ -39,9 +39,9 @@ export function Hero() {
 
         <div data-fx className="fx-parallax relative mx-auto w-full max-w-[330px] sm:max-w-[440px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:max-w-[500px]" style={{ ["--depth" as string]: "-140px" }}>
           <Tilt max={6}>
-            <div aria-hidden className="absolute inset-x-4 top-8 bottom-12 rounded-[44px] bg-paper/70 shadow-lg ring-1 ring-line/70 backdrop-blur-sm sm:top-10" style={{ transform: "translateZ(-40px)" }} />
+            <div aria-hidden className="absolute inset-x-4 top-8 bottom-12 rounded-[44px] bg-paper/80 shadow-lg ring-1 ring-line/70 sm:top-10 [@media(hover:hover)]:[transform:translateZ(-40px)]" />
             <Awning className="relative mx-auto h-7 w-[calc(100%-0.5rem)] drop-shadow-sm sm:h-9" />
-            <div className="relative px-5 pt-3 sm:px-6 sm:pt-4" style={{ transform: "translateZ(30px)" }}>
+            <div className="relative px-5 pt-3 sm:px-6 sm:pt-4 [@media(hover:hover)]:[transform:translateZ(30px)]">
               <HeroWheel />
             </div>
           </Tilt>
@@ -66,9 +66,6 @@ export function Hero() {
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
             <ButtonLink href="#demo" size="lg">
               {cta.primary}
-            </ButtonLink>
-            <ButtonLink href="#video" variant="ghost" className="self-center sm:self-auto">
-              <PlayCircle aria-hidden size={20} /> {cta.video}
             </ButtonLink>
           </div>
           <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-ink-soft">

@@ -66,7 +66,11 @@ export function ScrollFx() {
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     // Les blocs chargés plus tard (démo, simulateur) peuvent contenir des éléments animés.
-    const mo = new MutationObserver(() => watch());
+    let pending = 0;
+    const mo = new MutationObserver(() => {
+      window.clearTimeout(pending);
+      pending = window.setTimeout(watch, 300);
+    });
     mo.observe(document.getElementById("contenu") ?? document.body, { childList: true, subtree: true });
     schedule();
     return () => {
@@ -74,6 +78,7 @@ export function ScrollFx() {
       io.disconnect();
       split.disconnect();
       mo.disconnect();
+      window.clearTimeout(pending);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
     };

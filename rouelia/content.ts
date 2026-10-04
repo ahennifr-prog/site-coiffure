@@ -101,7 +101,6 @@ export const seo = {
 export const cta = {
   primary: "Créer ma roue",
   secondary: "Voir les tarifs",
-  video: "Voir la vidéo, 45 s",
   trial: "Démarrer l'essai gratuit",
 };
 
@@ -151,27 +150,28 @@ export const hero = {
 /* ------------------------------------------------------------------ */
 
 export const video = {
-  eyebrow: "En 45 secondes",
+  eyebrow: "En vidéo",
   title: "Rouelia, vu par vos clients.",
   play: "Lancer la vidéo de présentation, avec le son",
-  duration: "45 s",
   sound: "Avec le son",
-  captions: "Sous-titres",
   replay: "Revoir",
   endTitle: "À vous de jouer.",
   endNote: "14 jours gratuits, sans carte bancaire.",
   /** Fichiers dans /public/video. */
-  wide: { mp4: "/video/rouelia-16x9.mp4", webm: "/video/rouelia-16x9.webm", poster: "/video/apercu-16x9.jpg" },
-  tall: { mp4: "/video/rouelia-9x16.mp4", webm: "/video/rouelia-9x16.webm", poster: "/video/apercu-9x16.jpg" },
-  track: "/video/rouelia.vtt",
+  mp4: "/video/rouelia-16x9.mp4",
+  webm: "/video/rouelia-16x9.webm",
+  poster: "/video/apercu-16x9.jpg",
 };
 
 /* ------------------------------------------------------------------ */
 /* Bandeau de cadeaux                                                  */
 /* ------------------------------------------------------------------ */
 
-/** Bandeau de cadeaux qui défile entre deux sections. */
-export const marquee = ["Brushing offert", "Café offert", "Mochi offert", "Séance offerte", "-10 % sur la coupe", "Dessert offert", "Matcha latte offert", "-20 % sur l'achat", "Croissant offert"];
+/** Bandeau des avantages pour le commerçant, sous la vidéo. */
+export const advantages = {
+  label: "Ce que vous y gagnez",
+  items: ["14 jours d'essai gratuit", "Des clients fidélisés", "De nouveaux clients", "Plus d'avis Google", "Prêt en 5 minutes", "Sans engagement"],
+};
 
 /* ------------------------------------------------------------------ */
 /* Démo interactive                                                    */
@@ -408,12 +408,11 @@ export const howItWorks = {
   eyebrow: "Côté cliente, 20 secondes",
   title: "Sa coupe est finie. Voilà comment elle revient.",
   steps: [
-    { title: "Elle scanne", text: "Le QR code sur votre comptoir. Aucune appli à installer." },
-    { title: "Un avis, si elle veut", text: "Une invitation neutre, qu'elle peut fermer. La roue tourne quand même." },
-    { title: "Elle tourne, elle gagne", text: "Chaque case est un cadeau. Elle repart avec un code et une date." },
-    { title: "Elle revient le chercher", text: "Vous validez son code en caisse. Vous savez qu'elle est revenue." },
+    { title: "Elle scanne", text: "Le QR code posé sur votre comptoir." },
+    { title: "Elle laisse un avis", text: "En quelques secondes, sur votre fiche Google." },
+    { title: "Elle tourne, elle gagne", text: "Elle repart ravie, avec son cadeau." },
+    { title: "Elle revient le chercher", text: "Et vous la revoyez au salon." },
   ],
-  transition: "Et pendant ce temps, Rouelia travaille pour vous.",
 };
 
 /* ------------------------------------------------------------------ */
