@@ -276,3 +276,50 @@ vendable en 3 à 6 mois**, puis de la maintenance en continu.
 
 **Recommandation : option A.** GoHighLevel peut éventuellement servir de CRM, d'agenda
 et de reporting client, mais pas pour l'envoi d'emails à froid.
+
+---
+
+## 10. Ton profil et ce qu'il implique
+
+**Contraintes :** activité menée à côté d'un emploi ; 3 à 6 mois de marge
+personnelle ; associé investisseur à moins de 10 k€ ; **objectif : plus de 300 k€ de CA
+à 3-5 ans.**
+
+### Conséquences
+
+- **Le SaaS direct (C) devient trop lent.** 3 à 6 mois de développement à temps plein
+  font **9 à 18 mois** en soirée et le week-end, sans revenus, ni validation, ni
+  budget pour accélérer.
+- **GoHighLevel (B) ne mène pas à 300 k€.** Revendre l'outil d'un autre, c'est des
+  marges faibles et aucune barrière à l'entrée.
+- **Le service classique (A) se heurte à ton emploi.** Les décideurs B2B se joignent
+  en journée, et livrer du service prend du temps.
+- La bonne réponse est donc **A en version « automatisée dès le départ »** : peu de
+  clients, plutôt haut de gamme, et une livraison faite à 80 % par ton moteur IA.
+
+### Ce que représentent 300 k€ de CA
+
+| Modèle | Ce qu'il faut pour 300 k€ / an |
+|---|---|
+| Service à 2 000 € / mois | environ 13 clients actifs en permanence, donc une équipe (1 ou 2 personnes) ou une très forte automatisation |
+| SaaS à 300 € / mois | environ 85 clients |
+| SaaS à 99 € / mois | environ 250 clients |
+| **Mix réaliste en année 3** | 6 à 8 clients du service (environ 170 k€) et 40 clients SaaS à 300 € (environ 145 k€) |
+
+### Trajectoire recommandée
+
+| Phase | Statut | Objectif |
+|---|---|---|
+| **Mois 0 à 3** | à côté de l'emploi | SAS créée, outil interne construit avec Claude Code, **2 clients pilotes** à prix réduit |
+| **Mois 3 à 12** | à côté de l'emploi | 4 ou 5 clients à environ 2 000 € / mois (environ 8 à 10 k€ de revenu mensuel récurrent) ; démission quand ce revenu couvre ton salaire et 3 mois de charges |
+| **Année 2** | temps plein | 8 à 10 clients du service ; ouverture du moteur en SaaS à des clients bêta ; premier freelance ou SDR |
+| **Année 3** | | **plus de 300 k€** : service et SaaS |
+
+### À vérifier tout de suite (emploi actuel)
+
+- [ ] **Clause d'exclusivité** dans ton contrat de travail : elle peut t'interdire
+      d'exercer une autre activité, même le soir.
+- [ ] **Obligation de loyauté** : pas de concurrence avec ton employeur, et pas
+      d'utilisation de son matériel ni de ses clients.
+- [ ] Comme tu es salarié, **ne pas te rémunérer comme président** au début : pas de
+      charges sociales, tu restes couvert par ton emploi.
