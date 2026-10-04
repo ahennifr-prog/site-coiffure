@@ -51,9 +51,15 @@
   ],
   "scanFlash": 62,
   "flyerBadge": 30,
-  "ctaLine1": 30,
-  "ctaLine2": 106,
-  "ctaButton": 160,
+  "ctaLine1": [
+    47,
+    8
+  ],
+  "ctaLine2": [
+    103,
+    11
+  ],
+  "ctaButton": 176,
   "hookDoor": 14,
   "hookDrop": 2,
   "hookWords": [

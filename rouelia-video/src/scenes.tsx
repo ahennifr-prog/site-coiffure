@@ -681,8 +681,8 @@ export function Cta() {
         <Logo size={190} spin={f * 3} />
       </div>
       <div style={{ position: "absolute", top: 610, left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
-        <Words text="La façon la plus simple d'attirer de nouveaux clients" at={ev.ctaLine1} step={7} size={80} width={1000} accent={["nouveaux", "clients"]} />
-        <Words text="et de les faire revenir." at={ev.ctaLine2} step={5} size={80} width={1000} accent={["revenir."]} />
+        <Words text="Vos clients gagnent un cadeau…" at={ev.ctaLine1[0]} step={ev.ctaLine1[1]} size={84} width={1000} accent={["cadeau…"]} />
+        <Words text="vous, leur prochaine visite." at={ev.ctaLine2[0]} step={ev.ctaLine2[1]} size={84} width={1000} accent={["prochaine", "visite."]} />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1060, display: "flex", flexDirection: "column", alignItems: "center", gap: 30, transform: `scale(${btn * pulse})`, opacity: Math.min(1, btn * 1.4) }}>
         <div style={{ background: C.tomette, color: "#fff", borderRadius: 999, padding: "34px 70px", fontFamily: sans, fontWeight: 800, fontSize: 60, boxShadow: "0 30px 60px rgba(196,64,31,0.4)" }}>Essai gratuit 14 jours</div>
