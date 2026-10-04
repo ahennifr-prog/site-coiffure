@@ -168,22 +168,11 @@ export const video = {
 };
 
 /* ------------------------------------------------------------------ */
-/* Le problème                                                         */
+/* Bandeau de cadeaux                                                  */
 /* ------------------------------------------------------------------ */
 
 /** Bandeau de cadeaux qui défile entre deux sections. */
 export const marquee = ["Brushing offert", "Café offert", "Mochi offert", "Séance offerte", "-10 % sur la coupe", "Dessert offert", "Matcha latte offert", "-20 % sur l'achat", "Croissant offert"];
-
-export const problem = {
-  eyebrow: "Derrière le comptoir",
-  title: "Vos clients sont contents. Personne ne le sait.",
-  pains: [
-    { title: "Moins d'avis que le voisin", text: "Il n'est pas meilleur. Il a juste demandé." },
-    { title: "Des habitués qui oublient", text: "Rien ne leur rappelle votre adresse." },
-    { title: "Des promos à l'aveugle", text: "Vous payez, sans savoir qui revient." },
-  ],
-  transition: "Le plus parlant : la roue, avec vos lots.",
-};
 
 /* ------------------------------------------------------------------ */
 /* Démo interactive                                                    */
@@ -432,21 +421,6 @@ export const howItWorks = {
 };
 
 /* ------------------------------------------------------------------ */
-/* Ce que Rouelia fait de plus                                         */
-/* ------------------------------------------------------------------ */
-
-export const features = {
-  eyebrow: "Au-delà de la roue",
-  title: "Le travail que vous n'avez pas le temps de faire.",
-  items: [
-    { title: "Les relances", text: "Un rappel part avant que le cadeau expire.", packs: "Croissance et Premium" },
-    { title: "Les réponses aux avis", text: "L'IA rédige. Vous relisez, vous publiez.", packs: "Croissance et Premium" },
-    { title: "Le rapport du lundi", text: "Parties, retours, avis. Et une action à faire.", packs: "Tous les packs" },
-    { title: "La veille des voisins", text: "Leur note et leurs avis, chaque semaine.", packs: "Premium" },
-  ],
-};
-
-/* ------------------------------------------------------------------ */
 /* Simulateur de rentabilité                                           */
 /* Valeurs par défaut prudentes. Ce ne sont PAS des moyennes observées.*/
 /* À remplacer par des chiffres mesurés dès que des pilotes existent.  */
@@ -667,26 +641,6 @@ export const pricing = {
   featureColumn: "Fonction",
   included: "Inclus",
   notIncluded: "Non inclus",
-};
-
-/* ------------------------------------------------------------------ */
-/* Accompagnement                                                      */
-/* ------------------------------------------------------------------ */
-
-export const support = {
-  eyebrow: "Accompagnement",
-  title: "Seul, en visio ou au comptoir.",
-  options: [
-    { title: "En ligne, par vous", price: "Gratuit", text: "Prêt en 5 minutes, avec un guide pas à pas.", packs: "Tous les packs" },
-    { title: "En visio", price: "Offerte", text: "30 minutes pour régler vos lots avec nous.", packs: "Croissance et Premium" },
-    {
-      title: "Sur place",
-      price: "49 €",
-      priceNote: "79 € si le déplacement est fait uniquement pour vous",
-      text: "On pose le QR code et on forme l'équipe.",
-      packs: "Paris et petite couronne",
-    },
-  ],
 };
 
 /* ------------------------------------------------------------------ */
@@ -1043,7 +997,6 @@ export const scarcity = {
 /* ------------------------------------------------------------------ */
 
 export const ui = {
-  tryDemo: "Essayer la démo",
   step: (n: number) => `Étape ${n}`,
   won: (prize: string) => `Gagné : ${prize}`,
   illustrations: {

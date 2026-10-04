@@ -157,23 +157,6 @@ body::after {
 }
 .tilt.is-tracking { transition-duration: 120ms; }
 
-/* Lueur qui suit le pointeur sur les tuiles sombres. */
-.glow {
-  position: relative;
-  isolation: isolate;
-}
-.glow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  opacity: 0;
-  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgb(243 178 60 / 0.16), transparent 60%);
-  transition: opacity 400ms var(--ease-out);
-}
-.glow:hover::before { opacity: 1; }
-
 /* Étiquettes qui flottent autour de la roue du haut de page. */
 @keyframes float-y {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--r, 0deg)); }

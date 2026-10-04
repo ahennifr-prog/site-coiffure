@@ -40,11 +40,3 @@ export function Tilt({ children, className = "", max = 7 }: { children: ReactNod
     </div>
   );
 }
-
-/** Pose la position du pointeur (--gx, --gy) pour la lueur des tuiles .glow. */
-export function trackGlow(e: React.PointerEvent<HTMLElement>) {
-  const el = e.currentTarget;
-  const r = el.getBoundingClientRect();
-  el.style.setProperty("--gx", `${e.clientX - r.left}px`);
-  el.style.setProperty("--gy", `${e.clientY - r.top}px`);
-}
