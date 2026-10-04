@@ -687,6 +687,10 @@ export function Cta() {
       <div style={{ position: "absolute", left: 0, right: 0, top: 1060, display: "flex", flexDirection: "column", alignItems: "center", gap: 30, transform: `scale(${btn * pulse})`, opacity: Math.min(1, btn * 1.4) }}>
         <div style={{ background: C.tomette, color: "#fff", borderRadius: 999, padding: "34px 70px", fontFamily: sans, fontWeight: 800, fontSize: 60, boxShadow: "0 30px 60px rgba(196,64,31,0.4)" }}>Essai gratuit 14 jours</div>
         <div style={{ fontFamily: display, fontWeight: 700, fontSize: 96, color: C.ink }}>rouelia.fr</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, background: "#fff", borderRadius: 999, padding: "14px 34px", boxShadow: "0 16px 34px rgba(60,30,10,0.14)", fontFamily: sans, fontWeight: 800, fontSize: 42, color: C.sauge }}>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={C.sauge} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 2M9 2h6" /></svg>
+          Prêt en 5 minutes
+        </div>
         <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 38, color: C.inkSoft }}>Sans carte bancaire · Sans engagement</div>
       </div>
     </AbsoluteFill>
