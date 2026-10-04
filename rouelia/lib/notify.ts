@@ -4,6 +4,7 @@ import { addDays, parisClock, parisDay } from "@/lib/dates";
 import { markReminded, periodNumbers, playsToRemind, type Play } from "@/lib/game";
 import { sendMail } from "@/lib/mail";
 import { offerById } from "@/lib/offers";
+import { stripeReady } from "@/lib/stripe";
 import {
   clientCodeMail, clientReminderMail, merchantInviteMail, merchantResetMail, merchantTrialMail, merchantWeeklyMail,
 } from "@/lib/mail-templates";
@@ -39,6 +40,7 @@ async function trialMailInput(shop: Shop, pack: Pack, daysLeft: number, trialEnd
     price: pack.price,
     results: { parties: n.parties, retraits: n.retraits, avisClics: n.avisClics, enAttente: n.enAttente },
     offerLabel: offer,
+    payUrl: stripeReady() ? `${brand.url}/espace/abonnement` : null,
     profit: s.profit.basket > 0 ? { basket: s.profit.basket, margin: s.profit.margin / 100 } : null,
   };
 }

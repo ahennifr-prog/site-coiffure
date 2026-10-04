@@ -81,8 +81,7 @@ Les anciens enregistrements DNS d'IONOS (MX, SPF, autodiscover, _dmarc, _domainc
 - Règles reprises dans les CGV (section « Cadeaux de la roue d'offres Rouelia »).
 
 ### Plus tard
-- Étape 2 Stripe (paiement à la fin de l'essai, portail client pour arrêter en un clic, application automatique des
-  cadeaux de la roue d'offres) : dès que le SIREN arrive ; possible avant en mode test.
+- Stripe : codé le 4 octobre 2026 (voir plus bas), à activer par Aymen.
 - Saisie assistée Google Places (`lib/places.ts` prêt).
 - Activer le bloc « Résultat d'un pilote » (`pilots` dans `content.ts`) avec les vrais chiffres d'ALIA coiffure,
   l'accord écrit de la gérante et le lien de sa fiche Google.
@@ -154,6 +153,21 @@ d'un commerce dans `/admin`.
   prolongation proposés. Décision d'Aymen : ne jamais proposer le pack Essentiel en fin d'essai. Lien cliquable
   vers rouelia.fr en bas de chaque e-mail Rouelia.
 - Chevalet et flyers : impression corrigée le 4 octobre (bandeau cookies masqué, marge de sécurité de 6 mm).
+
+## Stripe : codé le 4 octobre 2026
+- Compte Stripe « rouelia.fr » connecté à Claude (connecteur Stripe, mode réel seulement). Aymen ajoute lui-même
+  son SIREN dans Stripe.
+- Page `/espace/abonnement` : choix du pack, cadeau de la roue d'offres affiché et appliqué au premier mois
+  (bons de réduction Stripe créés tout seuls), paiement Stripe Checkout. Pendant l'essai, le premier prélèvement
+  attend la fin de l'essai (si plus de 48 h restent). Abonné : bouton « Gérer mon abonnement » (portail Stripe :
+  carte, factures, changement de pack, arrêt en un clic). Bouton dans le bandeau de l'espace, icône carte bancaire
+  pour les abonnés.
+- `lib/stripe.ts` (API Stripe par fetch, catalogue créé au premier paiement, signature des notifications),
+  `lib/subscription.ts`, `/api/stripe/webhook`. Abonnement actif ou en essai : commerce « client » (et inscription
+  « Client ») ; arrêt : pause, ou retour à l'essai s'il reste des jours gratuits.
+- Avec Stripe branché, le bouton des e-mails de fin d'essai mène à `/espace/abonnement`.
+- **À faire par Aymen** : `DEPLOIEMENT.md`, section 3 ter (bac à sable, clés, webhook, portail, pied de facture,
+  secrets `STRIPE_SECRET_KEY` et `STRIPE_WEBHOOK_SECRET`). Sans clés, rien ne change (e-mail prérempli).
 
 ## Promis sur le site mais pas encore codé (groupes 3 à 6, comptes à créer par Aymen)
 - Groupe 3, SMS (Brevo, payant à l'envoi) : 50 ou 200 SMS par mois, rappels, relances, anniversaires, rapport SMS.

@@ -28,6 +28,22 @@ Si le premier build échoue parce que le dossier `rouelia` est introuvable, le p
 2. Type **Secret**, nom `ADMIN_PASSWORD`, valeur : votre mot de passe. Enregistrer (déployer).
 3. Ajouter aussi un secret `SESSION_SECRET` avec la longue suite de caractères donnée par Claude.
 
+## 3 ter. Le paiement (Stripe)
+Sans les deux clés ci-dessous, le site marche comme avant : le bouton « Continuer » ouvre un e-mail prérempli.
+Les produits (Essentiel, Croissance, Premium) et les réductions des cadeaux se créent tout seuls au premier paiement.
+1. Pour essayer sans vrai paiement : Stripe → **Bac à sable** (sandbox). Pour de vrai : le compte normal, une fois
+   le SIREN validé par Stripe. Les étapes 2 à 5 sont à refaire dans chacun des deux.
+2. **Développeurs → Clés API** : copier la **clé secrète** (`sk_test_...` ou `sk_live_...`).
+3. **Développeurs → Webhooks → Ajouter une destination** : adresse `https://rouelia.fr/api/stripe/webhook`,
+   événements `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`,
+   `customer.subscription.deleted`. Copier le **secret de signature** (`whsec_...`).
+4. **Paramètres → Facturation → Portail client** : autoriser l'annulation (à la fin de la période payée), la mise à
+   jour du moyen de paiement, l'historique des factures et le changement de pack (produits Rouelia). Enregistrer.
+5. **Paramètres → Facturation → Factures** : pied de page « TVA non applicable, art. 293 B du CGI ».
+6. Cloudflare, Worker `rouelia` → **Variables et secrets** : deux secrets `STRIPE_SECRET_KEY` et
+   `STRIPE_WEBHOOK_SECRET`. Pour passer du test au réel, remplacer les deux valeurs.
+7. Essai : espace commerçant → « Garder ma roue après l'essai » → carte `4242 4242 4242 4242`, date future, code 123.
+
 ## 3 bis. Les e-mails (Brevo)
 1. Brevo : domaine `rouelia.fr` authentifié (fait le 3 octobre 2026), téléphone vérifié.
 2. Brevo → Paramètres → **SMTP et API** → **Clés API** → générer une clé `rouelia-site`.

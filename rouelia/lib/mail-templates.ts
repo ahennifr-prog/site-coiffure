@@ -183,6 +183,8 @@ export interface TrialMailInput {
   results: TrialResults;
   /** Cadeau de la roue d'offres qui s'applique à l'abonnement (libellé), s'il y en a un. */
   offerLabel?: string | null;
+  /** Page de paiement en ligne (Stripe branché) ; sinon le bouton ouvre une réponse préremplie. */
+  payUrl?: string | null;
   /** Panier moyen (€) et part qui reste (0 à 1), si le commerçant les a réglés. */
   profit?: { basket: number; margin: number } | null;
 }
@@ -191,6 +193,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : 
 
 /** Lien « répondre » prérempli : le commerçant n'a qu'à envoyer. */
 function continueLink(p: TrialMailInput, packName = p.packName) {
+  if (p.payUrl) return p.payUrl;
   const subject = `Je continue avec ${packName} (${p.shopName})`;
   const body = `Bonjour,\n\nJe souhaite continuer avec le pack ${packName} pour ${p.shopName}.\n\n${p.firstName}`;
   return `mailto:${brand.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -244,7 +247,7 @@ export function merchantTrialMail(p: TrialMailInput): Mail {
         ? `Ces ${plural(r.enAttente, "cadeau en attente, c'est un client qui a", "cadeaux en attente, ce sont autant de clients qui ont")} une bonne raison de repasser dans les semaines qui viennent. C'est exactement ce que la roue est faite pour produire, et elle ne fait que commencer.`
         : `C'est un bon début, et la roue prend tout son sens avec le temps : plus elle tourne, plus vos clients ont une raison de revenir.`,
       priceLine(p),
-      `Votre essai se termine le ${formatDay(p.trialEnd)}. Pour que vos clients continuent de jouer sans interruption, cliquez ci-dessous et envoyez le message : on s'occupe du reste. Sans engagement, vous arrêtez quand vous voulez.`,
+      `Votre essai se termine le ${formatDay(p.trialEnd)}. Pour que vos clients continuent de jouer sans interruption, ${p.payUrl ? "prenez votre abonnement en ligne en deux minutes : le premier paiement n'a lieu qu'à la fin de l'essai." : "cliquez ci-dessous et envoyez le message : on s'occupe du reste."} Sans engagement, vous arrêtez quand vous voulez.`,
     ];
     button = { label: `Je continue avec ${p.packName}`, url: continueLink(p) };
   } else if (!ended) {
@@ -264,7 +267,7 @@ export function merchantTrialMail(p: TrialMailInput): Mail {
     paragraphs = [
       `Bonjour ${p.firstName},`,
       `Votre essai est terminé. Depuis ce matin, les clients qui scannent votre QR code voient un message de pause : ils repartent sans cadeau, et sans raison particulière de revenir. Pendant l'essai, voici ce que la roue avait fait :`,
-      `La bonne nouvelle : rien n'est perdu. Vos lots, vos réglages et le QR code déjà imprimé restent les mêmes. Un clic ci-dessous, vous envoyez le message, et la roue repart dans la journée.`,
+      `La bonne nouvelle : rien n'est perdu. Vos lots, vos réglages et le QR code déjà imprimé restent les mêmes. ${p.payUrl ? "Prenez votre abonnement en ligne en deux minutes, et la roue repart aussitôt." : "Un clic ci-dessous, vous envoyez le message, et la roue repart dans la journée."}`,
       priceLine(p),
     ];
     if (offer) paragraphs.push(offer);
