@@ -1,0 +1,227 @@
+# Prospectia : définition du projet et montage de la SAS
+
+> Document de travail, version du 4 octobre 2026.
+> Les chiffres (tarifs, frais, seuils) sont des **hypothèses à valider**, notamment avec
+> un expert-comptable avant la signature des statuts.
+
+---
+
+## 1. Le projet en une phrase
+
+**Prospectia remplit l'agenda commercial des PME B2B avec des rendez-vous qualifiés, en
+combinant l'IA (ciblage, enrichissement, personnalisation des messages) et un
+pilotage humain.**
+
+Le client paie pour des **conversations avec des décideurs**, pas pour des fichiers ni
+pour des outils.
+
+---
+
+## 2. Le marché
+
+### Client cible (ICP)
+
+| Critère | Cible prioritaire |
+|---|---|
+| Taille | PME de 5 à 250 salariés |
+| Modèle | B2B, panier moyen de 5 k€ ou plus, cycle de vente court à moyen |
+| Secteurs de départ | ESN et intégrateurs, éditeurs SaaS, cabinets de conseil, agences, industrie et services aux entreprises |
+| Situation | Pas de SDR interne, ou une équipe commerciale qui manque de pipeline |
+| Interlocuteur | Dirigeant·e, directeur·rice commercial·e, head of sales |
+| Zone | France (puis Belgique, Suisse et Québec, en français) |
+
+### Problème résolu
+
+- Les commerciaux passent 40 à 60 % de leur temps à chercher des prospects au lieu de
+  vendre.
+- Recruter un SDR coûte cher (45 à 55 k€ chargés par an) et prend du temps
+  (3 à 6 mois avant qu'il soit productif).
+- Les envois de masse non personnalisés ne marchent plus et abîment la délivrabilité.
+
+### Concurrence
+
+- **Agences de génération de leads** classiques : surtout humaines, chères, peu
+  transparentes.
+- **Outils en libre-service** (lemlist, La Growth Machine, Apollo…) : puissants, mais le
+  client doit savoir s'en servir et y consacrer du temps.
+- **Positionnement de Prospectia :** un service clé en main, un rendu humain sur le
+  message, la vitesse de l'IA sur la production, et la conformité RGPD dès la
+  conception.
+
+---
+
+## 3. L'offre
+
+| Formule | Contenu | Prix indicatif HT |
+|---|---|---|
+| **Diagnostic** (ponctuel) | Atelier ICP et proposition de valeur, base de 300 à 500 comptes ciblés et enrichis, 3 séquences rédigées, recommandations | 1 200 à 1 800 € |
+| **Croissance** (mensuel, engagement 3 mois) | Campagnes email et LinkedIn, jusqu'à 1 000 prospects par mois, personnalisation IA relue par un humain, gestion des réponses, reporting hebdomadaire | 1 800 à 2 500 € / mois |
+| **Performance** (mensuel) | Petit fixe et paiement au rendez-vous qualifié (critères définis par contrat) | 600 à 900 € / mois + 150 à 300 € / RDV |
+| Options | Relance téléphonique, paramétrage du CRM (HubSpot, Pipedrive), domaines d'envoi et warm-up, contenus LinkedIn | sur devis |
+
+**Définition d'un RDV qualifié** (à figer dans les CGV) : un décideur correspondant à
+l'ICP, un besoin exprimé, un rendez-vous tenu (et non simplement planifié).
+
+### Le processus en 3 étapes (repris sur le site)
+
+1. **Cibler** : atelier ICP, sélection des comptes, enrichissement des contacts.
+2. **Engager** : séquences multicanales personnalisées par IA et relues par un humain.
+3. **Convertir** : qualification des réponses, prise de RDV dans l'agenda du client,
+   reporting.
+
+### Socle technique (à arbitrer)
+
+- **Données** : base Sirene (INSEE), Pappers, LinkedIn Sales Navigator.
+- **Enrichissement** : Dropcontact (français, pensé pour le RGPD) ou équivalent.
+- **Séquences** : lemlist ou La Growth Machine ; domaines d'envoi séparés et warm-up.
+- **IA** : un LLM via API pour la recherche sur les comptes et le premier jet des
+  messages, toujours relu avant l'envoi.
+- **CRM interne** : HubSpot (version gratuite au départ) ou Pipedrive.
+
+---
+
+## 4. Conformité : un point clé du métier
+
+- **Email B2B (position de la CNIL)** : on peut démarcher un professionnel sans son
+  consentement préalable si le message porte sur son activité professionnelle, à
+  condition de l'informer et de lui offrir un **désabonnement simple** dans chaque
+  message.
+- **Base légale** : l'intérêt légitime. Il faut une mention d'information au premier
+  contact (source des données, finalité, droits).
+- **Registre des traitements** et **durée de conservation** : au plus 3 ans après le
+  dernier contact pour un prospect inactif.
+- **Contrats clients** : préciser le rôle de chacun (Prospectia est en général
+  **sous-traitant** au sens de l'article 28 du RGPD) et signer un DPA.
+- **LinkedIn** : ses CGU interdisent le scraping et limitent l'automatisation. Il faut
+  rester dans des volumes prudents, car c'est un risque pour les comptes.
+- **Téléphone** : Bloctel ne concerne pas les numéros professionnels, mais il faut
+  vérifier les règles en vigueur avant de lancer une offre d'appels.
+- **AI Act** : transparence sur l'usage de l'IA. La relecture humaine des messages est
+  aussi un argument commercial.
+
+---
+
+## 5. Montage juridique : la SAS Prospectia
+
+### 5.1 SAS ou SASU ?
+
+- **SASU** si tu es seul associé. C'est la même société et elle se transforme en SAS
+  dès l'entrée d'un associé, sans changer de forme.
+- **SAS** si vous êtes plusieurs dès le départ. Il faut alors ajouter un **pacte
+  d'associés** (sortie, vesting, non-concurrence, clause de bad leaver).
+
+### 5.2 Fiche d'identité (à compléter)
+
+| Élément | Proposition |
+|---|---|
+| Dénomination | **Prospectia** (vérifications au §5.3) |
+| Forme | SASU, ou SAS si plusieurs associés |
+| Capital | 1 000 à 5 000 € en numéraire, au moins 50 % libéré à la constitution, le solde sous 5 ans |
+| Siège | Domicile du président (autorisé 5 ans) ou société de domiciliation |
+| Président | [Nom Prénom], seul représentant légal |
+| Durée | 99 ans |
+| Exercice | Du 1er janvier au 31 décembre ; premier exercice long possible (jusqu'à 24 mois au plus) |
+| Code APE probable | 73.11Z (agences de publicité) ou 70.22Z (conseil pour les affaires et la gestion) |
+| Régime fiscal | Impôt sur les sociétés : 15 % jusqu'à 42 500 € de bénéfice (taux PME), 25 % au-delà |
+| TVA | **Opter pour le régime réel** : les clients B2B récupèrent la TVA, donc pas de surcoût pour eux, et Prospectia récupère la TVA sur ses outils |
+| Statut social du président | Assimilé salarié s'il est rémunéré. Sans rémunération : pas de cotisations, mais pas de droits non plus |
+
+**Objet social (projet) :**
+
+> La société a pour objet, en France et à l'étranger : la conception et la réalisation
+> de prestations de prospection commerciale, de génération de contacts et de prise de
+> rendez-vous pour le compte de tiers ; le conseil en stratégie commerciale, marketing
+> et développement des ventes ; la conception, l'édition, l'intégration et
+> l'exploitation de solutions logicielles et d'outils d'intelligence artificielle
+> appliqués à la vente et au marketing ; la formation dans ces domaines ; et plus
+> généralement toutes opérations se rattachant directement ou indirectement à cet objet.
+
+### 5.3 Vérifications avant de déposer quoi que ce soit
+
+- [ ] **Marque** : recherche d'antériorité sur data.inpi.fr (et EUIPO) pour
+      « Prospectia », en classes **35** (prospection, publicité), **42** (logiciels, SaaS)
+      et **9**. Le nom est assez descriptif, il existe donc un vrai risque d'homonymie.
+- [ ] **Sociétés** : recherche sur annuaire-entreprises.data.gouv.fr et Pappers.
+- [ ] **Domaine** : prospectia.fr, .com, .io. Prévoir aussi 2 ou 3 domaines secondaires
+      pour l'envoi d'emails (par exemple getprospectia.fr).
+- [ ] **Réseaux** : comptes LinkedIn (page entreprise), X et Instagram.
+- [ ] Si le nom est pris, garder une liste B : Prospekt.ia, Prospia, Leadia, Rdvia…
+- [ ] Dépôt de marque à l'INPI une fois le nom validé : 190 € pour 1 classe, +40 € par
+      classe supplémentaire.
+
+### 5.4 Étapes de création
+
+| # | Étape | Où | Coût indicatif |
+|---|---|---|---|
+| 1 | Vérifications du nom (§5.3) | INPI, annuaire des entreprises | gratuit |
+| 2 | Rédaction des statuts (projet : `STATUTS-PROJET.md`) | toi, avec relecture par un expert-comptable ou un avocat | 0 à 800 € |
+| 3 | Ouverture d'un compte pro et dépôt du capital, obtention de l'**attestation de dépôt des fonds** | banque en ligne (Qonto, Shine…) ou traditionnelle | 0 à 20 € / mois |
+| 4 | Signature des statuts, et de l'acte de nomination du président si besoin | — | — |
+| 5 | **Annonce légale** de constitution | journal habilité (département du siège) | environ 190 à 230 € (forfait SAS/SASU) |
+| 6 | Dossier sur le **guichet unique** : statuts, attestation de dépôt, justificatif de siège, pièce d'identité, déclaration de non-condamnation, déclaration des bénéficiaires effectifs | formalites.entreprises.gouv.fr | environ 37 € (greffe) + 21 € (RBE) |
+| 7 | Réception du **Kbis**, du SIREN et du n° de TVA intracommunautaire | — | — |
+| 8 | Déblocage du capital, choix du régime de TVA, impots.gouv pro | banque, espace pro | — |
+
+**Budget de création, hors capital : environ 300 à 1 200 €** selon qu'on se fait
+accompagner ou non.
+
+### 5.5 Juste après le Kbis
+
+- [ ] Expert-comptable (environ 100 à 250 € HT / mois pour une SASU de services).
+- [ ] **RC Pro** et cyber-risque (environ 300 à 800 € / an).
+- [ ] CGV, modèle de contrat de prestation, DPA RGPD, mentions légales et politique de
+      confidentialité du site.
+- [ ] Registre des décisions de l'associé unique (coté et paraphé).
+- [ ] Registre RGPD des traitements.
+- [ ] Aides : **ARCE ou maintien de l'ARE** si tu es demandeur d'emploi, **ACRE** (à
+      vérifier, l'éligibilité a été resserrée), prêt d'honneur (Initiative France,
+      Réseau Entreprendre), BPI.
+
+### 5.6 Rémunération du président : principe
+
+- **Au démarrage**, souvent pas de salaire (et si tu touches l'ARE, la cumuler) :
+  c'est simple et ça ne crée pas de charges.
+- **Ensuite**, arbitrer entre salaire (charges élevées, mais retraite et prévoyance) et
+  dividendes (flat tax, sans cotisations sociales, et sans droits à la retraite). À
+  simuler avec l'expert-comptable chaque année.
+
+---
+
+## 6. Prévisionnel simplifié (année 1, hypothèse prudente)
+
+| Poste | Hypothèse | Montant annuel |
+|---|---|---|
+| Clients Croissance | montée progressive jusqu'à 5 clients à 2 000 € / mois | ≈ 60 000 € |
+| Diagnostics | 8 × 1 500 € | 12 000 € |
+| **Chiffre d'affaires** | | **≈ 72 000 € HT** |
+| Outils (séquences, enrichissement, IA, Sales Nav, CRM) | ≈ 600 € / mois | − 7 200 € |
+| Comptable, assurance, banque | | − 4 500 € |
+| Domaines, site, divers | | − 1 500 € |
+| **Résultat avant rémunération du président** | | **≈ 58 800 €** |
+
+Le seuil de rentabilité est atteint avec environ **1 client Croissance**, qui couvre les
+frais fixes.
+
+---
+
+## 7. Feuille de route
+
+| Horizon | Objectif |
+|---|---|
+| Semaines 1 et 2 | Nom validé, statuts finalisés, compte bancaire, dépôt du capital |
+| Semaines 3 et 4 | Immatriculation, site Prospectia en ligne, domaines d'envoi en warm-up |
+| Mois 2 | Prospection de Prospectia par Prospectia : la meilleure démonstration. 2 clients pilotes à prix réduit contre un témoignage |
+| Mois 3 à 6 | 3 à 5 clients récurrents, études de cas, CGV stabilisées |
+| Mois 6 à 12 | Premier recrutement (SDR ou freelance), ou productisation d'une partie de l'outil |
+
+---
+
+## 8. Décisions à prendre (par toi)
+
+1. Seul (SASU) ou avec des associés (SAS) ? Avec quelle répartition ?
+2. Montant du capital.
+3. Adresse du siège : domicile ou domiciliation ?
+4. Nom définitif, après les vérifications INPI et de domaine.
+5. Statut actuel : salarié, demandeur d'emploi, autre ? Cela conditionne les aides et
+   la rémunération.
+6. Prix de lancement : les fourchettes du §3 conviennent-elles ?
