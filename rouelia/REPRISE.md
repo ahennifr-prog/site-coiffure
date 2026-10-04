@@ -269,3 +269,20 @@ refonte saisonnière, chevalet, support sous 24 h.
 - Démo : 4 lots par défaut (`starterPrizes` dans `lib/wheel.ts`). Tarifs : 2 points masqués par pack (« Voir plus »),
   ligne « Rentable dès 3 clients qui reviennent par mois » (même exemple que la vidéo).
 - Pages légales inchangées (éditeur : Aymen Henni). « Prêt en 5 minutes » aligné entre site et vidéo.
+
+## Point de reprise (4 octobre 2026, fin de session)
+- En ligne : page d'accueil refondue (voir section précédente), corrections Safari, roue d'offres sans pourcentages.
+  Aperçu de la vidéo = la scène « Invité à laisser un avis Google » (image 15,45 s de la version horizontale).
+- Diagnostic fait à Aymen, actions proposées et PAS encore faites (attendre son « go ») :
+  1. Fonctions vendues mais absentes du code : SMS (50/200 par mois), anniversaires, veille de 3 concurrents,
+     alerte avis négatif (attend l'API Google Business Profile). Les marquer « bientôt » ou les retirer des packs.
+  2. Badge « Le plus choisi » sur Croissance : faux sans clients payants, le remplacer par « Recommandé ».
+  3. Étape 2 de la timeline « Elle laisse un avis » avant « Elle tourne, elle gagne » : lu comme avis contre cadeau
+     (interdit par Google). Proposition : « Elle donne son avis sur Google » + « Puis elle tourne la roue, comme tous vos clients. »
+  4. Ajouter un contact humain (bouton WhatsApp ou téléphone, « Je passe vous voir » à Paris) : brand.phone est vide.
+  5. Lots de démo moins chers (coût moyen affiché 1,90 € par partie pour le coiffeur, viser environ 0,50 €).
+  6. Preuves : activer le bloc pilotes (content.pilots) avec ALIA dès 4 à 6 semaines de chiffres et accord écrit.
+  7. Plus tard : pages par métier pour le référencement ; Enzo (nom d'usage) face aux mentions légales (Aymen Henni).
+- Toujours en attente côté Aymen : clés Stripe en mode réel (SIREN), demande d'accès à l'API Google Business Profile.
+- Tests utiles (scripts locaux non versionnés, à recréer si besoin) : défilement lent multi-écrans, test « façon Safari »
+  (overflow-anchor: none, réseau et processeur ralentis), mesure du recalcul de style (CDP Performance.getMetrics).
