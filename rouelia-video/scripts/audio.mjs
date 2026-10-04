@@ -244,12 +244,11 @@ function blip(t0, g = 0.3) {
   }, g, 0.15);
 }
 
-// Transitions entre scènes : whoosh, clic de souris au moment de la coupe, blip, impact grave.
+// Transitions entre scènes : clic de souris au moment de la coupe, blip, impact grave (sans whoosh, jugé lassant).
 Object.entries(S).forEach(([id, [from]], k) => {
   if (k === 0) return;
-  whoosh(fr(from) - 0.2, 0.42, 0.5);
-  click(fr(from) + 0.02, 0.8);
-  blip(fr(from) + 0.05, 0.22);
+  click(fr(from) + 0.02, 0.6);
+  blip(fr(from) + 0.05, 0.14);
   hit(fr(from) + 0.02, 0.3);
 });
 hit(dropT, 0.6);
@@ -265,7 +264,7 @@ pop(at("simple", ev.simpleDrop - 4), 0.5, 1200);
 bell(at("simple", ev.simpleDrop + 12), note(86), 0.25, 0.4);
 // 3. Une roue par commerce : swipe à chaque changement.
 ev.shopStarts.slice(1).forEach((f) => {
-  whoosh(at("shops", f) - 0.08, 0.22, 0.32);
+  whoosh(at("shops", f) - 0.08, 0.22, 0.16);
   click(at("shops", f), 0.25);
 });
 whoosh(at("shops", ev.mosaic) - 0.1, 0.4, 0.35);

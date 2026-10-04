@@ -7,11 +7,11 @@
   ],
   "shopStarts": [
     0,
-    16,
-    29,
-    71
+    26,
+    50,
+    95
   ],
-  "mosaic": 86,
+  "mosaic": 120,
   "stars": [
     8,
     12,
@@ -63,12 +63,12 @@
   "hookDoor": 14,
   "hookDrop": 2,
   "hookWords": [
-    8,
+    9,
     6
   ],
   "simpleWords": [
-    3,
-    11
+    7,
+    10
   ],
-  "simpleDrop": 36
+  "simpleDrop": 37
 }

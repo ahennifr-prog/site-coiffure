@@ -28,10 +28,10 @@ export function spinRotation(f: number) {
 export function Hook() {
   const f = useCurrentFrame();
   const drop = useSpring(2, { damping: 9, stiffness: 120 });
-  const push = interpolate(f, [0, 70], [1, 1.1], clamp);
+  const push = interpolate(f, [0, 72], [1, 1.1], clamp);
   const slam = ev.hookWords[0] + ev.hookWords[1] * 3;
   const shake = f >= slam && f < slam + 10 ? Math.sin((f - slam) * 2.6) * (10 - (f - slam)) * 1.4 : 0;
-  const walk = interpolate(f, [18, 60], [0, 1], { ...clamp, easing: ease });
+  const walk = interpolate(f, [20, 62], [0, 1], { ...clamp, easing: ease });
   const door = interpolate(f, [14, 20, 48, 56], [0, 1, 1, 0], clamp);
   return (
     <AbsoluteFill>
@@ -77,8 +77,8 @@ export function Simple() {
   return (
     <AbsoluteFill>
       <Background tint="#FCE1D3" />
-      <div style={{ position: "absolute", left: (W - 820) / 2, top: 520, transform: `perspective(1400px) rotateY(${(1 - pop) * 100}deg) scale(${0.3 + 0.7 * pop})` }}>
-        <Wheel size={820} colors={[C.tomette, C.cream, C.safran, C.sauge]} prizes={["Café offert", "-10 %", "Dessert", "Soin offert", "Cadeau", "Surprise", "-20 %", "Boisson"]} rotation={Math.max(0, f - ev.simpleDrop + 4) * 7} hubLabel="R" />
+      <div style={{ position: "absolute", left: (W - 820) / 2, top: 520, transform: `perspective(1400px) rotateY(${(1 - pop) * 100}deg) scale(${0.3 + 0.7 * pop})`, opacity: Math.min(1, pop * 3) }}>
+        <Wheel size={820} colors={[C.tomette, C.cream, C.safran, C.sauge]} prizes={["Café offert", "-10 %", "Dessert", "Soin offert", "Cadeau", "Surprise", "-20 %", "Boisson"]} rotation={f * 7} hubLabel="R" />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1480, display: "flex", justifyContent: "center", transform: `scale(${logo}) translateY(${(1 - logo) * 60}px)`, opacity: logo }}>
         <Logo size={150} spin={f * 4} />
