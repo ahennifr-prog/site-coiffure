@@ -22,6 +22,11 @@ interface Layout {
   footer: string;
 }
 
+/** Rend cliquable l'adresse du site dans un pied d'e-mail (pas l'adresse e-mail contact@...). */
+const SITE_HOST = brand.url.replace("https://", "");
+const siteLinked = (html: string) =>
+  html.replace(new RegExp(`(^|[\\s,(])${SITE_HOST.replace(/\./g, "\\.")}\\b`), `$1<a href="${brand.url}" style="color:#5E564E">${SITE_HOST}</a>`);
+
 function statsTable(stats: { value: string; label: string }[]): string {
   const cell = (x: { value: string; label: string }) =>
     `<td width="50%" style="padding:6px;vertical-align:top"><div style="background:#FBF6EE;border-radius:12px;padding:12px 14px"><div style="font-family:Georgia,serif;font-size:28px;font-weight:bold;color:#1D1A16">${esc(x.value)}</div><div style="font-size:13px;line-height:1.35;color:#5E564E">${esc(x.label)}</div></div></td>`;
@@ -43,7 +48,7 @@ ${l.highlight ? `<div style="margin:6px 0 18px;padding:14px 16px;border:2px dash
 ${l.button ? `<p style="margin:6px 0 22px"><a href="${esc(l.button.url)}" style="display:inline-block;background:#1D1A16;color:#FFFFFF;text-decoration:none;font-weight:bold;padding:13px 22px;border-radius:999px">${esc(l.button.label)}</a></p>` : ""}
 ${l.link ? `<p style="margin:-8px 0 22px;font-size:14px"><a href="${esc(l.link.url)}" style="color:#5E564E">${esc(l.link.label)}</a></p>` : ""}
 </td></tr>
-<tr><td style="padding:14px 26px 22px;font-size:12px;line-height:1.5;color:#5E564E;border-top:1px solid #E8DFD2">${esc(l.footer)}</td></tr>
+<tr><td style="padding:14px 26px 22px;font-size:12px;line-height:1.5;color:#5E564E;border-top:1px solid #E8DFD2">${siteLinked(esc(l.footer))}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 
@@ -180,8 +185,6 @@ export interface TrialMailInput {
   offerLabel?: string | null;
   /** Panier moyen (€) et part qui reste (0 à 1), si le commerçant les a réglés. */
   profit?: { basket: number; margin: number } | null;
-  /** Pack moins cher à proposer à qui hésite (absent si le commerçant est déjà sur le moins cher). */
-  cheaper?: { name: string; price: number } | null;
 }
 
 const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`;
@@ -265,7 +268,6 @@ export function merchantTrialMail(p: TrialMailInput): Mail {
       priceLine(p),
     ];
     if (offer) paragraphs.push(offer);
-    if (p.cheaper) paragraphs.push(`Vous préférez commencer plus petit ? Le pack ${p.cheaper.name}, à ${p.cheaper.price} € par mois, garde la roue, le QR code et les cadeaux à retirer. Répondez simplement « ${p.cheaper.name} ».`);
     button = { label: "Relancer ma roue", url: continueLink(p) };
   } else {
     subject = `${p.firstName}, on prolonge votre essai ?`;

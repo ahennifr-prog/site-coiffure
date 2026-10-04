@@ -15,7 +15,7 @@ const play = { firstName: "Léa", prizeName: "Soin profond offert", prizeDetail:
 const trial = {
   email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine", trialEnd: "2026-10-17", packName: "Croissance", price: 49,
   results: { parties: 41, retraits: 9, avisClics: 12, enAttente: 23 },
-  offerLabel: "Installation sur place offerte", profit: { basket: 35, margin: 0.6 }, cheaper: { name: "Essentiel", price: 29 },
+  offerLabel: "Installation sur place offerte", profit: { basket: 35, margin: 0.6 },
 };
 
 const mails: [string, string, Mail][] = [

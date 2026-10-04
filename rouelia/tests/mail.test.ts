@@ -109,7 +109,9 @@ describe("tâche quotidienne", () => {
     expect(m.html).toContain("mailto:contact@rouelia.fr?subject=Je%20continue%20avec%20Croissance");
     await runDaily(new Date("2026-10-16T07:00:00Z"));
     expect(sent[1].subject).toBe("La roue de Salon Martine est en pause");
-    expect(sent[1].text).toContain("pack Essentiel, à 29 €");
+    expect(sent[1].text).not.toContain("Essentiel");
+    expect(sent[1].html).toContain('<a href="https://rouelia.fr" style="color:#5E564E">rouelia.fr</a>');
+    expect(sent[1].html).toContain("contact@rouelia.fr");
   });
 
   it("envoie le rapport le lundi, une fois", async () => {

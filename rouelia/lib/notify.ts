@@ -28,7 +28,6 @@ async function trialMailInput(shop: Shop, pack: Pack, daysLeft: number, trialEnd
   const n = await periodNumbers(shop.id, start, today, today);
   const s = withDefaults(shop.settings);
   const offer = shop.offer && shop.offer.status === "applied" && OFFERS_FOR_SUBSCRIPTION.has(shop.offer.id) ? offerById(shop.offer.id).label : null;
-  const cheapest = pricing.packs[0];
   return {
     email: shop.email,
     firstName: shop.firstName,
@@ -41,7 +40,6 @@ async function trialMailInput(shop: Shop, pack: Pack, daysLeft: number, trialEnd
     results: { parties: n.parties, retraits: n.retraits, avisClics: n.avisClics, enAttente: n.enAttente },
     offerLabel: offer,
     profit: s.profit.basket > 0 ? { basket: s.profit.basket, margin: s.profit.margin / 100 } : null,
-    cheaper: cheapest.id !== pack.id && cheapest.price < pack.price ? { name: cheapest.name, price: cheapest.price } : null,
   };
 }
 

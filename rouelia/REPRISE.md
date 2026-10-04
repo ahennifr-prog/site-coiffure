@@ -147,6 +147,13 @@ d'un commerce dans `/admin`.
 - Tâche du matin : `worker.ts` (entrée du Worker) appelle `/api/cron` à 6 h UTC (`wrangler.jsonc`), protégée
   par `SESSION_SECRET`. Sans `BREVO_API_KEY`, rien n'est envoyé et rien ne casse.
 - À tester en réel par Aymen une fois la clé posée : inscription test, ouverture d'essai, partie avec un e-mail.
+- Testé par Aymen le 4 octobre 2026 : les e-mails marchent.
+- E-mails de fin d'essai réécrits pour vendre l'abonnement (validés par Aymen le 4 octobre) : vrais résultats de
+  l'essai, prix ramené à la journée et au nombre de clients qui le remboursent, cadeau de la roue d'offres rappelé,
+  bouton « Je continue » qui ouvre une réponse préremplie. Roue jamais jouée : conseils, appel de 10 minutes et
+  prolongation proposés. Décision d'Aymen : ne jamais proposer le pack Essentiel en fin d'essai. Lien cliquable
+  vers rouelia.fr en bas de chaque e-mail Rouelia.
+- Chevalet et flyers : impression corrigée le 4 octobre (bandeau cookies masqué, marge de sécurité de 6 mm).
 
 ## Promis sur le site mais pas encore codé (groupes 3 à 6, comptes à créer par Aymen)
 - Groupe 3, SMS (Brevo, payant à l'envoi) : 50 ou 200 SMS par mois, rappels, relances, anniversaires, rapport SMS.
