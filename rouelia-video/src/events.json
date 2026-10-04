@@ -1,0 +1,18 @@
+{
+  "shopLen": 30,
+  "stars": [22, 28, 34, 40, 46],
+  "reviewFly": 62,
+  "reviewCount": 88,
+  "rdvTap": 58,
+  "rdvCheck": 72,
+  "slider": [30, 72],
+  "iaClick": 26,
+  "loopSteps": [8, 32, 56, 80],
+  "loopCard": 98,
+  "flyerPhone": 30,
+  "scanLaser": [52, 78],
+  "scanFlash": 80,
+  "ctaButton": 78,
+  "hookDoor": 18,
+  "hookDrop": 2
+}
