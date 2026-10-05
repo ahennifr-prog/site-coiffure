@@ -91,6 +91,7 @@ du client compte.
 - La cible n'est pas modifiée en cours de route sans un nouveau démarrage du compteur.
 - L'offre du client est vendable : prix public et proposition claire.
 - Le mois offert ne peut être obtenu qu'une seule fois.
+- Les 3 mois de la garantie se comptent **à partir du premier envoi**, après le warm-up de 14 jours, et non à partir de la signature.
 
 ### Tarif pilote (2 premiers clients)
 
