@@ -95,8 +95,9 @@ du client compte.
 
 ### Tarif pilote (2 premiers clients)
 
-Pack Agenda plein à **890 € / mois**, mise en place offerte, en échange d'un témoignage
-et d'une étude de cas chiffrée.
+**Premier mois offert** (préparation et lancement, pendant la création de la SAS), puis
+**890 € / mois pendant 2 mois**, **sans garantie**, à 300 prospects par mois, en
+échange d'un témoignage et d'une étude de cas chiffrée. Détails dans `PILOTES.md`.
 
 ### Économie d'un client du Pack Agenda plein (estimation)
 
