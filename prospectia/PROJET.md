@@ -15,6 +15,7 @@
 | Chemin vers le SaaS | **Service + moteur IA maison construit avec Claude Code** ; le même moteur devient le SaaS (bêta entre les mois 4 et 6). Voir `OFFRE.md` et `MOTEUR-IA.md` | ✅ validé |
 | Emploi actuel | À côté de l'emploi ; **pas de clause d'exclusivité** | ✅ vérifié |
 | Facturation | **Abonnement mensuel + garantie de résultat** (un mois offert si l'objectif de RDV n'est pas atteint) | ✅ validé |
+| Gamme | **3 packs** : Réveil (990 €), Agenda plein (1 490 € / mois), Intégral (1 990 € / mois), avec anti-absence et automatisations simples. Voir `OFFRE.md` | ⏳ proposé |
 | Cible de départ | À valider par entretiens (kit à préparer plus tard) | ⏳ plus tard |
 | Associés | **SAS à 2 associés** : toi opérationnel et président, et un **associé investisseur** (apport de capital, non opérationnel) | ✅ validé |
 | Site web | Plus tard, une fois l'offre stabilisée (thème sombre, nom Prospectia) | ⏸ en pause |
