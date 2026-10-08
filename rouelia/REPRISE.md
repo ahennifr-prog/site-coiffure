@@ -295,18 +295,19 @@ fusion dans `claude/great-lovelace-lpyydk`.
 - **Conformité avis** : le jeu ne passe plus par une fenêtre d'avis avant la roue. L'invitation « Partager votre avis,
   c'est facultatif » apparaît après le gain, pour tous, sans tri (`ShopGame.tsx`, démo `PhoneScreen.tsx`). Règlement,
   CGV, réglages de l'espace, QR, FAQ et vidéo (aperçu et résumé) reformulés. Page `/utilisation-responsable`.
-  Reste : la voix off de la vidéo dit encore « il est invité à laisser un avis Google… puis il tourne la roue » et
-  « Plus d'avis » : à réenregistrer (Higgsfield, voix Xavier) puis remonter avec `rouelia-video/scripts/mix.sh`.
 - **Accueil** : hero (H1 « Offrez un jeu à vos clients. Ils reviennent. »), vidéo, avantages, 3 étapes, avis de
   commerçants (masqués tant qu'aucun n'est validé ; aperçu avec `/?apercu=avis`), « Pour qui », tarifs en bénéfices
   (« Recommandé » sur Croissance, fonctions non codées retirées), FAQ courte, roue d'offres + contact.
   Démo et fondateur retirés de l'accueil (démo sur `/creer-ma-roue`, histoire sur `/a-propos`).
-- **Avis de commerçants** : `textes/avis-commercants.ts`, champ `valide` à passer à `true` seulement après accord écrit.
-  Logos : Alia (logo du salon), Pizza Time et Bangkok Factory 94 en monogramme (sites bloqués par le réseau de Claude),
-  Elsa Beauty en monogramme « EB ». Déposer les logos dans `public/logos/` puis renseigner `logo`.
+- **Avis de commerçants** : `textes/avis-commercants.ts`. Les 4 avis sont validés (confirmé par Aymen le 8 octobre 2026)
+  et affichés, avec logos (Alia, Pizza Time, Bangkok Factory 94 ; « EB » en monogramme pour Elsa Beauty), date et
+  encadré « Comment ces avis sont recueillis » (transparence, art. L111-7-2). Nouvel avis : `valide: true` seulement
+  après accord écrit du commerçant.
+- **Vidéo** : on garde la vidéo et la voix off telles quelles (décision d'Aymen du 8 octobre). Aperçu : scène « 100 % gagnant ».
+- **Roue d'offres** : gardée avant le contact (utile pour l'inscription, aucune contrainte).
 - **Nouvelles pages** : `/creer-ma-roue` (A : outil ; B : « Créez-la pour moi », e-mail à contact@ avec le logo,
   table `wheel_requests`), `/rendez-vous` (créneaux, table `bookings`, clé primaire = créneau, e-mails + .ics),
-  `/a-propos` (photo à fournir : `bash scripts/photo-a-propos.sh photo.jpg` puis `ready: true`), `/tarifs`, `/faq`
+  `/a-propos` (photo « Poto enzo » du Drive, portrait 4:5 ; pour la changer : `bash scripts/photo-a-propos.sh photo.jpg`), `/tarifs`, `/faq`
   (20 questions), 4 pages métiers, `/blog` (4 articles), `/utilisation-responsable`, `/cookies`.
   Textes des pages dans `textes/` (même contrôle de rédaction que `content.ts`).
 - **SEO / IA** : `lib/jsonld.ts` (Organization, WebSite, Person, Product/Offer, FAQPage, BreadcrumbList, Article),

@@ -1,5 +1,6 @@
 import { merchantReviewsSection, type MerchantReview } from "@/textes/avis-commercants";
 import { Container, Eyebrow, SectionTitle } from "@/components/ui/Section";
+import { fr } from "@/lib/format";
 import { ReviewCard } from "./ReviewCard";
 
 export function ReviewsBand({ reviews, compact, draft = false }: { reviews: MerchantReview[]; compact?: boolean; draft?: boolean }) {
@@ -22,7 +23,7 @@ export function ReviewsBand({ reviews, compact, draft = false }: { reviews: Merc
       <ul className="sr-only">
         {reviews.map((r) => (
           <li key={r.shop}>
-            {r.shop}, {r.trade} : « {r.text} » ({r.stars} sur 5)
+            {r.shop}, {r.trade} : « {r.text} » ({r.stars} sur 5, {r.date})
           </li>
         ))}
       </ul>
@@ -37,6 +38,12 @@ export function ReviewsBand({ reviews, compact, draft = false }: { reviews: Merc
           ))}
         </div>
       </div>
+      <Container>
+        <details className="mx-auto mt-2 max-w-2xl text-center text-sm text-ink-soft">
+          <summary className="inline-flex min-h-11 items-center font-semibold underline underline-offset-4">{merchantReviewsSection.howTitle}</summary>
+          <p className="pb-2">{fr(merchantReviewsSection.how)}</p>
+        </details>
+      </Container>
     </section>
   );
 }

@@ -2,7 +2,8 @@ import type { SeoPage } from "./types";
 
 /**
  * Page /utilisation-responsable : règles Google, cadre légal français, conception de Rouelia.
- * Points juridiques vérifiés en octobre 2026 ; les articles non vérifiables sont cités sans numéro.
+ * Points juridiques vérifiés en octobre 2026 (recherches croisées et guide du cabinet Victoris Avocat du 30 septembre 2026) ;
+ * les articles non vérifiables sont cités sans numéro.
  */
 export const responsiblePage: SeoPage & { disclaimer: string; sources: { label: string; url: string }[] } = {
   path: "/utilisation-responsable",
@@ -31,6 +32,7 @@ export const responsiblePage: SeoPage & { disclaimer: string; sources: { label: 
       p: [
         "L'article L111-7-2 du Code de la consommation, issu de la loi pour une République numérique de 2016, oblige toute personne qui collecte, modère ou diffuse des avis de consommateurs à expliquer de façon loyale, claire et transparente comment ces avis sont publiés et traités. Le décret n° 2017-1436 du 29 septembre 2017, en vigueur depuis le 1er janvier 2018, précise ces informations : existence ou non d'un contrôle, date de publication, raisons d'un refus.",
         "La directive européenne dite « Omnibus » (2019/2161) a renforcé ce cadre. Elle a été transposée en France par l'ordonnance n° 2021-1734 du 22 décembre 2021, applicable depuis le 28 mai 2022. Diffuser ou faire diffuser de faux avis de consommateurs, ou modifier des avis réels pour promouvoir un produit, fait désormais partie des pratiques commerciales trompeuses. La DGCCRF rappelle que ces pratiques peuvent être sanctionnées pénalement, jusqu'à deux ans d'emprisonnement et 300 000 € d'amende.",
+        "Ces obligations vous concernent aussi si vous affichez vous-même des avis de clients, sur votre site ou vos réseaux : indiquez s'ils sont contrôlés avant publication, leur date, s'ils ont donné lieu à une contrepartie et pour quelles raisons un avis peut être refusé. Un manque de transparence peut être sanctionné par une amende administrative, en plus des sanctions pénales prévues pour les faux avis.",
       ],
     },
     {

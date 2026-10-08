@@ -15,10 +15,10 @@ import { Container } from "@/components/ui/Section";
 
 /**
  * Photo du fondateur avec un commerçant. Fichiers générés par scripts/photo-a-propos.sh
- * (WebP 640, 960 et 1280 px, ratio 4:3). Tant que `ready` vaut false, un visuel aux couleurs de la marque la remplace.
+ * (WebP 480, 720 et 1080 px, portrait 4:5). Tant que `ready` vaut false, un visuel aux couleurs de la marque la remplace.
  */
 const aboutPhoto = {
-  ready: false,
+  ready: true,
   base: "/a-propos/poignee-de-main",
   alt: "Le fondateur de Rouelia serre la main d'un commerçant devant son établissement",
 };
@@ -34,19 +34,19 @@ function Photo() {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={src(960)}
-        srcSet={`${src(640)} 640w, ${src(960)} 960w, ${src(1280)} 1280w`}
-        sizes="(min-width: 1024px) 520px, 100vw"
-        width={960}
-        height={720}
+        src={src(720)}
+        srcSet={`${src(480)} 480w, ${src(720)} 720w, ${src(1080)} 1080w`}
+        sizes="(min-width: 1024px) 440px, (min-width: 640px) 440px, calc(100vw - 40px)"
+        width={720}
+        height={900}
         alt={aboutPhoto.alt}
         fetchPriority="high"
-        className="aspect-[4/3] h-auto w-full rounded-[28px] object-cover shadow-lg"
+        className="aspect-[4/5] h-auto w-full rounded-[28px] object-cover shadow-lg"
       />
     );
   }
   return (
-    <div role="img" aria-label={aboutPhoto.alt} className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-[28px] bg-tomette shadow-lg">
+    <div role="img" aria-label={aboutPhoto.alt} className="relative flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-[28px] bg-tomette shadow-lg">
       <Awning className="absolute inset-x-0 top-0 h-10 w-full" stripe="#A33317" base="#FBF6EE" />
       <HeartHandshake aria-hidden size={120} strokeWidth={1.25} className="text-cream" />
     </div>
@@ -66,7 +66,7 @@ export default function Page() {
               {cta.callShort}
             </ButtonLink>
           </PageHero>
-          <div className="relative pb-6 lg:pb-0">
+          <div className="relative mx-auto w-full max-w-[440px] pb-6 lg:pb-0">
             <div aria-hidden className="absolute -inset-3 -z-10 translate-x-4 translate-y-4 rounded-[32px] bg-tomette-soft" />
             <Photo />
           </div>
