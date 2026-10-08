@@ -414,3 +414,79 @@ export function signupAlertMail(p: { firstName: string; shopName: string; email:
     ...rouelia("Nouvelle inscription", lines, { label: "Ouvrir l'admin", url: `${brand.url}/admin` }, "Alerte interne Rouelia."),
   };
 }
+
+/* Appels de découverte et demandes « Créez-la pour moi » ------------------------------------------ */
+
+export function bookingAlertMail(p: { name: string; phone: string; email: string; shop: string; when: string }): Mail {
+  return {
+    to: { email: brand.email, name: brand.name },
+    subject: `Appel réservé : ${p.when}`,
+    tags: ["rendez-vous"],
+    replyTo: p.email,
+    ...rouelia("Nouvel appel réservé", [
+      `Créneau : ${p.when} (heure de Paris), 5 minutes.`,
+      `Nom : ${p.name}. Téléphone : ${p.phone}. E-mail : ${p.email}.`,
+      `Commerce : ${p.shop || "non précisé"}.`,
+    ], undefined, "Alerte interne Rouelia."),
+  };
+}
+
+export function bookingConfirmMail(p: { name: string; email: string; phone: string; when: string; ics: string }): Mail {
+  return {
+    to: { email: p.email, name: p.name },
+    subject: `Votre appel Rouelia : ${p.when}`,
+    tags: ["rendez-vous"],
+    replyTo: brand.email,
+    attachments: [{ filename: "appel-rouelia.ics", content: p.ics }],
+    ...rouelia("Votre appel est réservé", [
+      `Bonjour ${p.name},`,
+      `Nous vous appelons ${p.when} (heure de Paris) au ${p.phone}. Cinq minutes pour répondre à vos questions sur Rouelia, sans engagement.`,
+      "L'invitation pour votre agenda est jointe à cet e-mail. Besoin de décaler ? Répondez simplement à ce message.",
+    ]),
+  };
+}
+
+export interface WheelRequestMail {
+  shopName: string;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  google: string;
+  prizes: string;
+  message: string;
+  logoName: string | null;
+}
+
+export function wheelRequestAlertMail(p: WheelRequestMail, logo: { filename: string; content: string; base64: true } | null): Mail {
+  return {
+    to: { email: brand.email, name: brand.name },
+    subject: `Roue à créer : ${p.shopName}`,
+    tags: ["roue-a-creer"],
+    replyTo: p.email,
+    ...(logo ? { attachments: [logo] } : {}),
+    ...rouelia("Demande « Créez-la pour moi »", [
+      `Commerce : ${p.shopName}. Contact : ${p.name || "non précisé"}.`,
+      `Téléphone : ${p.phone}. E-mail : ${p.email}.`,
+      `Adresse : ${p.address}.`,
+      `Fiche Google : ${p.google}.`,
+      `Lots souhaités : ${p.prizes || "à proposer"}.`,
+      `Message : ${p.message || "aucun"}.`,
+      p.logoName ? `Logo joint : ${p.logoName}.` : "Pas de logo envoyé.",
+    ], undefined, "Alerte interne Rouelia. Envoyer le QR code sous 24 à 48 h."),
+  };
+}
+
+export function wheelRequestConfirmMail(p: { email: string; name: string; shopName: string }): Mail {
+  return {
+    to: { email: p.email, name: p.name || p.shopName },
+    subject: "Votre roue Rouelia est en préparation",
+    tags: ["roue-a-creer"],
+    replyTo: brand.email,
+    ...rouelia("C'est parti", [
+      `Bonjour${p.name ? ` ${p.name}` : ""},`,
+      `Nous préparons la roue de ${p.shopName}. Vous recevrez votre QR code par e-mail sous 24 à 48 h.`,
+      "Une précision à ajouter ? Répondez simplement à cet e-mail.",
+    ]),
+  };
+}

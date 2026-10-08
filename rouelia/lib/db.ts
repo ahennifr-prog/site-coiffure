@@ -50,6 +50,10 @@ const SCHEMA = [
   "CREATE TABLE IF NOT EXISTS play_locks (shop_id TEXT NOT NULL, phone TEXT NOT NULL, code TEXT NOT NULL, until TEXT NOT NULL, PRIMARY KEY (shop_id, phone))",
   "CREATE TABLE IF NOT EXISTS stats (shop_id TEXT NOT NULL, day TEXT NOT NULL, field TEXT NOT NULL, n INTEGER NOT NULL, PRIMARY KEY (shop_id, day, field))",
   "CREATE TABLE IF NOT EXISTS rates (key TEXT PRIMARY KEY, win TEXT NOT NULL, n INTEGER NOT NULL)",
+  // Appels de découverte : la clé primaire sur le créneau empêche toute double réservation.
+  "CREATE TABLE IF NOT EXISTS bookings (slot TEXT PRIMARY KEY, created_at TEXT NOT NULL, email TEXT NOT NULL, data TEXT NOT NULL)",
+  // Demandes « Créez-la pour moi ».
+  "CREATE TABLE IF NOT EXISTS wheel_requests (id TEXT PRIMARY KEY, created_at TEXT NOT NULL, email TEXT NOT NULL, data TEXT NOT NULL)",
 ];
 
 /** La base D1 liée sous le nom DB (voir wrangler.jsonc), ou null hors Cloudflare. */

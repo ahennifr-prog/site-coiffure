@@ -61,6 +61,18 @@ Sans cette clé, le site marche normalement mais n'envoie aucun e-mail.
 La tâche du matin (rappels clients, fins d'essai, rapport du lundi) tourne chaque jour à 6 h UTC grâce au
 déclencheur `triggers.crons` de `wrangler.jsonc` ; elle apparaît dans le Worker → **Paramètres → Déclencheurs**.
 
+## 3 quinquies. Les e-mails par Resend (rendez-vous, « Créez-la pour moi », et tous les autres)
+Le site envoie par Resend dès que le secret `RESEND_API_KEY` existe ; sinon il continue avec Brevo (`BREVO_API_KEY`).
+1. https://resend.com : créer un compte, **Domains → Add domain** → `rouelia.fr`, région Europe (Irlande).
+2. Copier les enregistrements DNS proposés (SPF, DKIM, éventuellement MX d'envoi) dans Cloudflare → `rouelia.fr` → **DNS**.
+   Ne pas toucher aux enregistrements du routage des e-mails (réception de contact@). Attendre « Verified ».
+3. **API Keys → Create API key**, nom `rouelia-site`, droit « Sending access ». Copier la clé (`re_...`).
+4. Worker `rouelia` → **Variables et secrets** : secret `RESEND_API_KEY`.
+5. Essai : réserver un créneau sur `/rendez-vous` avec votre propre e-mail : alerte sur contact@ et confirmation avec
+   le fichier `.ics` doivent arriver.
+Sans aucune des deux clés, les réservations et les demandes sont quand même enregistrées dans la base (tables `bookings`
+et `wheel_requests`), mais aucun e-mail ne part.
+
 ## 4. Vérifier
 1. Ouvrir l'adresse donnée par Cloudflare (`https://rouelia.<votre-sous-domaine>.workers.dev`).
 2. Faire une inscription test (bouton « Créer ma roue », puis choisir un pack).

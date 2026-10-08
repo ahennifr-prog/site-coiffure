@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { CalendarCheck, Check, Copy, Crown, Gift, LoaderCircle, MapPin, Phone, Share2, Star, Volume2, VolumeX, X } from "lucide-react";
+import { CalendarCheck, Check, Copy, Crown, Gift, LoaderCircle, MapPin, Phone, Share2, Volume2, VolumeX } from "lucide-react";
 import { reviewPrompt } from "@/content";
 import { formatDay, parisDay } from "@/lib/dates";
 import { fr } from "@/lib/format";
@@ -81,6 +81,33 @@ function Social({ shop }: { shop: PublicShop }) {
   );
 }
 
+/**
+ * Invitation à partager son avis : proposée APRÈS le gain, à tous, sans condition ni tri selon la note.
+ * Le cadeau est déjà attribué ; ne jamais la remettre avant la roue ni la lier au cadeau.
+ */
+function ReviewInvite({ shop, onShow, onClick }: { shop: PublicShop; onShow: () => void; onClick: () => void }) {
+  useEffect(() => {
+    onShow();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (!shop.reviewUrl) return null;
+  return (
+    <div className="mt-5 rounded-xl bg-paper p-4 text-center ring-1 ring-line">
+      <p className="font-semibold">{fr(reviewPrompt.title)}</p>
+      <p className="mt-1 text-sm text-ink-soft">{fr(reviewPrompt.text)}</p>
+      <a
+        href={shop.reviewUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onClick}
+        className="mt-3 inline-flex min-h-11 items-center justify-center rounded-full bg-paper px-5 text-sm font-semibold ring-1 ring-ink/30"
+      >
+        {reviewPrompt.button}
+      </a>
+    </div>
+  );
+}
+
 function Ticket({ play, shop }: { play: ClientPlay; shop: PublicShop }) {
   const [copied, setCopied] = useState(false);
   const today = parisDay();
@@ -151,7 +178,6 @@ function Ticket({ play, shop }: { play: ClientPlay; shop: PublicShop }) {
 
 export function ShopGame({ shop }: { shop: PublicShop }) {
   const [step, setStep] = useState<Step>("accueil");
-  const [reviewOpen, setReviewOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
@@ -168,7 +194,6 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
   const [celebrate, setCelebrate] = useState(false);
   const [announce, setAnnounce] = useState("");
   const wheel = useRef<WheelHandle>(null);
-  const closeRef = useRef<HTMLButtonElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const spinRef = useRef<HTMLButtonElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -209,29 +234,14 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
   }, []);
 
   useEffect(() => {
-    if (reviewOpen) closeRef.current?.focus();
-  }, [reviewOpen]);
-
-  useEffect(() => {
     if (step === "infos") firstFieldRef.current?.focus({ preventScroll: true });
     if (step === "roue") spinRef.current?.focus({ preventScroll: true });
     if (step === "gain" || step === "deja") headingRef.current?.focus({ preventScroll: true });
     if (step !== "accueil") window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  // On joue directement : aucune étape d'avis avant la roue.
   function start() {
-    // Sans lien d'avis réglé, on passe directement au jeu.
-    if (!shop.reviewUrl) {
-      setStep("infos");
-      return;
-    }
-    setReviewOpen(true);
-    send("avis_ouverts");
-  }
-
-  function afterReview(clicked: boolean) {
-    send(clicked ? "avis_clics" : "avis_fermes");
-    setReviewOpen(false);
     setStep("infos");
   }
 
@@ -533,6 +543,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                   {step === "gain" && emailed ? " Il vous a aussi été envoyé par e-mail." : ""}
                 </p>
                 <Ticket play={result.play} shop={shop} />
+                {step === "gain" ? <ReviewInvite shop={shop} onShow={() => shop.reviewUrl && send("avis_ouverts")} onClick={() => send("avis_clics")} /> : null}
               </div>
             ) : null}
           </div>
@@ -557,47 +568,6 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
         </footer>
       </div>
 
-      {/* Invitation à l'avis : facultative, se ferme d'un geste, la roue reste accessible dans tous les cas. */}
-      {reviewOpen ? (
-        <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 p-3 sm:items-center" onClick={(e) => e.target === e.currentTarget && afterReview(false)}>
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="avis-texte"
-            onKeyDown={(e) => e.key === "Escape" && afterReview(false)}
-            className="pop-in relative w-full max-w-md rounded-xl bg-paper p-6 pt-7 shadow-2xl"
-          >
-            <button
-              ref={closeRef}
-              type="button"
-              onClick={() => afterReview(false)}
-              aria-label={reviewPrompt.close}
-              className="absolute top-1.5 right-1.5 inline-flex h-11 w-11 items-center justify-center rounded-full"
-            >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-ink text-white">
-                <X aria-hidden size={18} strokeWidth={3} />
-              </span>
-            </button>
-            <div aria-hidden className="flex gap-0.5 text-safran">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Star key={i} size={20} fill="currentColor" strokeWidth={0} />
-              ))}
-            </div>
-            <p id="avis-texte" className="mt-3 pr-8 text-lg font-semibold">
-              {fr(reviewPrompt.text)}
-            </p>
-            <a
-              href={shop.reviewUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => afterReview(true)}
-              className="mt-5 flex min-h-13 w-full items-center justify-center rounded-full bg-ink px-6 font-semibold text-white"
-            >
-              {reviewPrompt.button}
-            </a>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

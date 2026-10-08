@@ -1,4 +1,4 @@
-import { Gift } from "lucide-react";
+import { CalendarClock, Gift } from "lucide-react";
 import { cta, hero } from "@/content";
 import { fr } from "@/lib/format";
 import { ButtonLink } from "@/components/ui/Button";
@@ -18,10 +18,10 @@ export function Hero() {
   // Le titre met en valeur la seconde moitié : ce que gagne le commerçant.
   const [first, second] = hero.title.split(". ");
   return (
-    <section aria-labelledby="hero-title" className="relative overflow-hidden pt-8 pb-24 sm:pt-16 lg:pt-20 lg:pb-36">
+    <section aria-labelledby="hero-title" className="relative overflow-hidden pt-6 pb-8 sm:pt-12 sm:pb-12 lg:pt-16 lg:pb-14">
       {/* Halo chaud derrière la roue : profondeur sans image lourde. */}
       <div aria-hidden className="pointer-events-none absolute -top-40 right-[-20%] h-[640px] w-[640px] rounded-full bg-[radial-gradient(closest-side,var(--color-tomette-soft),transparent)] lg:right-[-6%]" />
-      <div aria-hidden className="pointer-events-none absolute bottom-[-30%] left-[-15%] h-[520px] w-[520px] rounded-full bg-[radial-gradient(closest-side,var(--color-safran-soft),transparent)]" />
+      <div aria-hidden className="pointer-events-none absolute top-[460px] left-[-15%] h-[420px] w-[420px] lg:top-[260px] rounded-full bg-[radial-gradient(closest-side,var(--color-safran-soft),transparent)]" />
       <Container className="relative grid grid-cols-[minmax(0,1fr)] items-center gap-x-16 gap-y-8 lg:grid-cols-[1fr_1fr] lg:grid-rows-[auto_auto_auto]">
         {/* Téléphone : titre, roue, puis texte. Ordinateur : texte à gauche, roue à droite. */}
         <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
@@ -64,11 +64,14 @@ export function Hero() {
 
         <div className="lg:col-start-1 lg:row-start-3 lg:self-start">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
-            <ButtonLink href="#demo" size="lg">
+            <ButtonLink href={cta.href} size="lg">
               {cta.primary}
             </ButtonLink>
+            <ButtonLink href={cta.callHref} size="lg" variant="secondary">
+              <CalendarClock aria-hidden size={18} /> {cta.callShort}
+            </ButtonLink>
           </div>
-          <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-ink-soft">
+          <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-ink-soft">
             {hero.reassurance.map((r) => (
               <li key={r} className="flex items-center gap-2">
                 <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-sauge" />

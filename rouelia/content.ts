@@ -7,6 +7,8 @@
  * sont rendus insécables automatiquement à l'affichage.
  */
 
+import { EMAIL, whatsappUrl } from "@/config";
+
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
@@ -49,8 +51,9 @@ export interface Trade {
 export const brand = {
   name: "Rouelia",
   url: "https://rouelia.fr",
-  email: "contact@rouelia.fr",
+  email: EMAIL,
   phone: "",
+  whatsapp: whatsappUrl(),
   founder: "Enzo",
   area: "Paris et petite couronne",
 };
@@ -70,7 +73,7 @@ export const company = {
   /** Franchise en base de TVA (art. 293 B du CGI). */
   vatExempt: true,
   vatMention: "TVA non applicable, art. 293 B du CGI",
-  lastUpdate: "1er octobre 2026",
+  lastUpdate: "8 octobre 2026",
 };
 
 const missing = "[à compléter]";
@@ -87,8 +90,8 @@ export const host = {
 export const seo = {
   title: "Rouelia : la roue à cadeaux qui fait revenir vos clients",
   description:
-    "Un QR code sur votre comptoir, une roue où chaque client gagne un cadeau à retirer à sa prochaine visite. Vous réglez les lots et leur coût. Essai gratuit de 14 jours.",
-  ogTitle: "Vos clients gagnent un cadeau. Vous gagnez leur prochaine visite.",
+    "Un QR code sur le comptoir, une roue où chaque client gagne un cadeau pour sa prochaine visite. Vous réglez lots et coût. Essai gratuit de 14 jours.",
+  ogTitle: "Offrez un jeu à vos clients. Ils reviennent.",
   ogDescription:
     "La roue à cadeaux 100 % gagnante pour les coiffeurs, restaurants, instituts, boulangeries et bars. Prête en 5 minutes.",
   locale: "fr_FR",
@@ -100,16 +103,25 @@ export const seo = {
 
 export const cta = {
   primary: "Créer ma roue",
+  /** Tous les boutons « Créer ma roue » mènent à cette page. */
+  href: "/creer-ma-roue",
   secondary: "Voir les tarifs",
   trial: "Démarrer l'essai gratuit",
+  call: "Réserver un appel gratuit de 5 minutes",
+  callShort: "Réserver un appel",
+  callHref: "/rendez-vous",
+  whatsapp: "Écrire sur WhatsApp",
+  email: "Écrire un e-mail",
 };
 
 export const nav = {
   links: [
-    { href: "#demo", label: "Démo" },
-    { href: "#fonctionnement", label: "Comment ça marche" },
-    { href: "#tarifs", label: "Tarifs" },
-    { href: "#faq", label: "Questions" },
+    { href: "/#fonctionnement", label: "Comment ça marche" },
+    { href: "/#pour-qui", label: "Pour qui" },
+    { href: "/tarifs", label: "Tarifs" },
+    { href: "/faq", label: "FAQ" },
+    { href: "/blog", label: "Blog" },
+    { href: "/a-propos", label: "À propos" },
   ],
   menuOpen: "Ouvrir le menu",
   menuClose: "Fermer le menu",
@@ -122,13 +134,13 @@ export const nav = {
 
 export const hero = {
   eyebrow: "Pour les commerces de quartier",
-  title: "Vos clients gagnent un cadeau. Vous gagnez leur prochaine visite.",
-  titleAlternatives: [
-    "Une roue sur le comptoir. Des clients qui reviennent.",
-    "Un QR code, une roue, et une bonne raison de revenir chez vous.",
-  ],
-  lead: "Un QR code sur le comptoir. Une roue où chaque client gagne. Un cadeau qui le fait revenir.",
-  reassurance: ["14 jours gratuits", "Sans carte bancaire", "100 % gagnant"],
+  title: "Offrez un jeu à vos clients. Ils reviennent.",
+  /**
+   * Sous-titre retenu face à « Un QR code sur le comptoir. Une roue où chaque client gagne. Un cadeau qui le fait
+   * revenir. » : plus court, il dit ce que gagnent le client et le commerçant, sans aucun lien avec les avis.
+   */
+  lead: "Vos clients gagnent un cadeau. Vous gagnez leur prochaine visite.",
+  reassurance: ["14 jours gratuits", "Sans carte bancaire", "Sans engagement"],
   /** Étiquettes décoratives qui flottent autour de la roue. */
   floating: ["Brushing offert", "Café offert", "-10 % sur la coupe"],
   wheelLabel: "Exemple de roue Rouelia",
@@ -150,8 +162,15 @@ export const hero = {
 /* ------------------------------------------------------------------ */
 
 export const video = {
-  eyebrow: "En vidéo",
-  title: "Rouelia, vu par vos clients.",
+  caption: "Rouelia en vidéo",
+  summaryToggle: "Lire le résumé de la vidéo",
+  /** Résumé texte : la vidéo n'est lue ni par Google ni par les IA. */
+  summary: [
+    "Un commerçant pose un QR code sur son comptoir. Son client le scanne avec son téléphone, sans application.",
+    "Le client tourne une roue où chaque case est un cadeau : un brushing, un dessert, une réduction. Son cadeau l'attend lors de sa prochaine visite, avec un code à montrer en caisse.",
+    "Le commerçant règle lui-même ses lots, leurs chances et leur coût. Partager son avis reste proposé au client, de façon facultative, sans lien avec le cadeau.",
+    "Rouelia s'installe en 5 minutes, avec 14 jours d'essai gratuit et sans engagement.",
+  ],
   play: "Lancer la vidéo de présentation, avec le son",
   sound: "Avec le son",
   replay: "Revoir",
@@ -170,7 +189,7 @@ export const video = {
 /** Bandeau des avantages pour le commerçant, sous la vidéo. */
 export const advantages = {
   label: "Ce que vous y gagnez",
-  items: ["14 jours d'essai gratuit", "Des clients fidélisés", "De nouveaux clients", "Plus d'avis Google", "Prêt en 5 minutes", "Sans engagement"],
+  items: ["14 jours d'essai gratuit", "Plus de clients fidèles", "De nouveaux clients", "Prêt en 5 minutes", "Sans engagement", "Sans appli à installer"],
 };
 
 /* ------------------------------------------------------------------ */
@@ -271,15 +290,16 @@ export const demo = {
 };
 
 /**
- * Fenêtre d'invitation à l'avis : reproduit le vrai produit à l'identique.
- * Ne pas modifier sans vérifier la conformité aux règles de Google :
- * texte neutre, croix de fermeture, roue qui tourne dans tous les cas.
+ * Invitation à l'avis : reproduit le vrai produit à l'identique (components/jeu/ShopGame.tsx).
+ * Règles de conformité (Google et Code de la consommation), à ne jamais changer :
+ * proposée APRÈS le gain, à tous les joueurs, sans condition, sans tri selon la note, texte neutre.
  */
 export const reviewPrompt = {
-  text: "Votre avis compte beaucoup pour nous. Souhaitez-vous laisser un avis Google ?",
-  button: "Laisser un avis",
+  title: "Partager votre avis, c'est facultatif",
+  text: "Votre cadeau est déjà à vous, quoi que vous fassiez.",
+  button: "Partager mon avis sur Google",
   close: "Fermer",
-  demoNotice: "Dans la vraie version, ce bouton ouvre votre fiche Google.",
+  demoNotice: "Dans la vraie version, ce lien ouvre votre fiche Google.",
 };
 
 export const winScreen = {
@@ -405,32 +425,48 @@ export const trades: Trade[] = [
 /* ------------------------------------------------------------------ */
 
 export const howItWorks = {
-  eyebrow: "Côté cliente, 20 secondes",
-  title: "Sa coupe est finie. Voilà comment elle revient.",
+  eyebrow: "Comment ça marche",
+  title: "Trois gestes, et votre client a une raison de revenir.",
+  answer: "Le client scanne le QR code posé sur votre comptoir, tourne la roue sur son téléphone et gagne un cadeau à utiliser lors de sa prochaine visite.",
   steps: [
-    { title: "Elle scanne", text: "Le QR code posé sur votre comptoir." },
-    { title: "Elle laisse un avis", text: "En quelques secondes, sur votre fiche Google." },
-    { title: "Elle tourne, elle gagne", text: "Elle repart ravie, avec son cadeau." },
-    { title: "Elle revient le chercher", text: "Et vous la revoyez au salon." },
+    { title: "Le client scanne le QR code", text: "Posé sur votre comptoir. Avec son téléphone, sans appli." },
+    { title: "Il joue", text: "Il tourne la roue. Chaque case est un cadeau." },
+    { title: "Il gagne un cadeau pour sa prochaine visite", text: "Son code l'attend en caisse. Et vous le revoyez." },
   ],
+};
+
+/* ------------------------------------------------------------------ */
+/* Pour qui                                                            */
+/* ------------------------------------------------------------------ */
+
+export const forWho = {
+  eyebrow: "Pour qui",
+  title: "Pensé pour les commerces où l'on revient.",
+  answer: "Rouelia sert à tous les commerces de proximité qui vivent de clients réguliers : salons, restaurants, instituts, boulangeries, bars et boutiques.",
+  items: [
+    { href: "/jeu-fidelisation-coiffeur", label: "Coiffeurs et barbiers", text: "Un soin ou un brushing qui fait revenir avant la prochaine coupe.", icon: "ciseaux" },
+    { href: "/jeu-fidelisation-restaurant", label: "Restaurants et pizzerias", text: "Un dessert ou un café offert au prochain repas.", icon: "assiette" },
+    { href: "/jeu-fidelisation-institut-beaute", label: "Instituts de beauté", text: "Une pose de vernis ou un massage des mains au prochain rendez-vous.", icon: "vernis" },
+    { href: "/jeu-fidelisation-boulangerie", label: "Boulangeries et pâtisseries", text: "Un croissant offert qui ramène au comptoir dès demain.", icon: "croissant" },
+  ] as { href: string; label: string; text: string; icon: PrizeIcon }[],
+  others: "Bar, café, fleuriste, boutique : la roue s'adapte à vos lots.",
+  othersLink: { href: "/creer-ma-roue", label: "Créer ma roue" },
+  more: "Voir la page",
+};
+
+/* ------------------------------------------------------------------ */
+/* Contact                                                             */
+/* ------------------------------------------------------------------ */
+
+export const contact = {
+  eyebrow: "Contact",
+  title: "Une question ? Parlons-en.",
+  text: "Une vraie personne vous répond, par WhatsApp, par e-mail ou au téléphone.",
 };
 
 /* ------------------------------------------------------------------ */
 /* Preuve sociale                                                      */
 /* ------------------------------------------------------------------ */
-
-export const founder = {
-  eyebrow: "Qui est derrière Rouelia",
-  title: "Je viens installer la roue moi-même.",
-  text: [
-    "Je m'appelle Enzo. Chez les commerçants, j'entends toujours la même chose : les clients sont contents, mais ils ne reviennent pas assez.",
-    "Rouelia rend ça simple. À Paris et en petite couronne, je la pose chez vous.",
-  ],
-  signature: "Enzo, fondateur de Rouelia",
-  photoAlt: "Portrait d'Enzo, fondateur de Rouelia",
-  /** Chemin de la photo dans /public. Vide tant qu'elle n'est pas fournie. */
-  photo: "/enzo.jpg",
-};
 
 export interface PilotResult {
   enabled: boolean;
@@ -475,8 +511,12 @@ export interface Pack {
   id: PackId;
   name: string;
   price: number;
+  /** Accroche « Idéal pour... ». */
   tagline: string;
+  /** Bénéfices pour le commerçant (pas une liste de fonctions). */
   highlights: string[];
+  /** Les fonctions, en petit sous les bénéfices. */
+  features: string;
   badge?: string;
 }
 
@@ -492,6 +532,8 @@ export const pricing = {
   choose: (name: string) => `Essayer ${name}`,
   more: "Voir plus",
   less: "Voir moins",
+  featuresLabel: "Inclus :",
+  details: "Tous les détails des tarifs",
   /** Nombre de points masqués par défaut sur chaque pack (dépliables avec « Voir plus »). */
   hiddenHighlights: 2,
   packs: [
@@ -499,43 +541,43 @@ export const pricing = {
       id: "essentiel",
       name: "Essentiel",
       price: 29,
-      tagline: "La roue, le QR code, les cadeaux.",
+      tagline: "Idéal pour démarrer seul, en 5 minutes.",
       highlights: [
-        "Roue 100 % gagnante, lots et chances à votre main",
-        "QR code et flyer PDF prêts à imprimer",
-        "Code cadeau envoyé par e-mail, validé en caisse",
-        "Modèles par métier et calculateur de coût",
-        "Rapport hebdomadaire par e-mail",
+        "Vos clients repartent avec une raison de revenir",
+        "Un cadeau valable à la prochaine visite fait revenir vos clients",
+        "Vous gardez la main sur le coût de chaque cadeau",
+        "Un client de plus par mois peut suffire à le rembourser",
       ],
+      features: "Roue 100 % gagnante, QR code, chevalet et flyer à imprimer, codes validés en caisse, code envoyé par e-mail, suivi des parties.",
     },
     {
       id: "croissance",
       name: "Croissance",
       price: 49,
-      badge: "Le plus choisi",
-      tagline: "Faire revenir, et répondre aux avis sans y passer la soirée.",
+      badge: "Recommandé",
+      tagline: "Idéal pour faire revenir vos clients plus souvent.",
       highlights: [
-        "Tout l'Essentiel",
-        "Relances automatiques des cadeaux non retirés",
-        "50 SMS par mois : rappels, relances, anniversaires",
-        "Réponses aux avis en un clic",
-        "Roues saisonnières et roue de parrainage",
-        "Visio de configuration de 30 minutes offerte",
+        "Remboursé dès 3 clients qui reviennent par mois",
+        "Vos clients sont prévenus avant que leur cadeau expire",
+        "Vos habitués font venir leurs amis grâce au parrainage",
+        "Votre roue change avec les saisons, sans y penser",
+        "Vous répondez à vos avis en un clic, sans y passer la soirée",
       ],
+      features: "Tout l'Essentiel, rappel par e-mail, parrainage, roues saisonnières, réservation et réseaux sociaux après le jeu, statistiques par employé, 30 réponses aux avis par IA par mois, visio de configuration offerte.",
     },
     {
       id: "premium",
       name: "Premium",
       price: 89,
-      tagline: "On s'occupe de tout. Et on surveille les voisins.",
+      tagline: "Idéal si vous voulez qu'on s'occupe de tout.",
       highlights: [
-        "Tout Croissance, réponses aux avis illimitées",
-        "200 SMS par mois",
-        "Veille de 3 concurrents voisins",
-        "Alerte avis négatif et analyse des avis",
-        "Point mensuel de 15 minutes et audit de votre fiche Google",
-        "Chevalet offert et support sous 24 h",
+        "On refait votre roue à chaque saison, pour vous",
+        "Vos heures creuses se remplissent avec des lots dédiés",
+        "Vous voyez chaque mois ce que la roue vous rapporte",
+        "Un point chaque mois et un audit de votre fiche Google",
+        "Un chevalet offert et une réponse sous 24 h",
       ],
+      features: "Tout Croissance, lots pour heures creuses, suivi de la rentabilité, réponses aux avis par IA illimitées, point mensuel de 15 minutes, audit de fiche Google, sans mention « Propulsé par Rouelia ».",
     },
   ] as Pack[],
   guarantee: {
@@ -555,22 +597,17 @@ export const pricing = {
     { feature: "Cadeaux à retirer avec date limite, validation en caisse par code", values: [true, true, true] },
     { feature: "Code du cadeau envoyé", values: ["Par e-mail", "Par e-mail", "Par e-mail"] },
     { feature: "Modèles par métier, calculateur de coût des lots", values: [true, true, true] },
-    { feature: "Mise en route guidée par IA", values: [true, true, true] },
     { feature: "Mise en route en ligne par vous", values: ["Gratuite", "Gratuite", "Gratuite"] },
     { feature: "Visio de configuration de 30 minutes", values: [false, "Offerte", "Offerte"] },
     { feature: "Installation sur place (Paris et petite couronne)", values: ["49 € (79 € si déplacement dédié)", "49 € (79 € si déplacement dédié)", "49 € (79 € si déplacement dédié)"] },
-    { feature: "Rapport hebdomadaire", values: ["Par e-mail", "WhatsApp ou SMS, avec une action courte à faire", "WhatsApp ou SMS, avec une action détaillée à faire"] },
-    { feature: "SMS inclus (rappels, relances, anniversaires)", values: ["0", "50 par mois", "200 par mois"] },
-    { feature: "Relances automatiques du cadeau non retiré", values: [false, true, true] },
+    { feature: "Rapport hebdomadaire par e-mail, avec une action à faire", values: [true, true, true] },
+    { feature: "Rappel par e-mail avant la date limite du cadeau", values: [false, true, true] },
     { feature: "Réponses aux avis en un clic", values: [false, "Quota mensuel", "Illimitées"] },
-    { feature: "Ajustement des lots par IA", values: [false, true, true] },
     { feature: "Roues saisonnières programmées, roue de parrainage", values: [false, true, true] },
     { feature: "Actions Instagram et Facebook, lien de réservation après le jeu", values: [false, true, true] },
     { feature: "Statistiques par employé (visibles par vous seul)", values: [false, true, true] },
     { feature: "Lots pour heures creuses, suivi de la rentabilité", values: [false, false, true] },
-    { feature: "Analyse IA des avis, alerte avis négatif", values: [false, false, true] },
     { feature: "Point mensuel de 15 minutes, audit de la fiche Google", values: [false, false, true] },
-    { feature: "Veille de 3 concurrents voisins (note et nombre d'avis)", values: [false, false, true] },
     { feature: "Refonte de la roue à chaque saison, faite par nous", values: [false, false, true] },
     { feature: "Kit de bienvenue (chevalet offert), support prioritaire sous 24 h", values: [false, false, true] },
     { feature: "Sans mention « Propulsé par Rouelia », domaine personnalisé", values: [false, false, true] },
@@ -587,22 +624,23 @@ export const pricing = {
 export const faq = {
   eyebrow: "Questions fréquentes",
   title: "Ce qu'on nous demande au comptoir",
+  all: "Voir toutes les questions",
   items: [
     {
-      q: "La roue est-elle vraiment 100 % gagnante ?",
-      a: "Oui. Chaque case est un cadeau que vous choisissez. Il n'y a aucune case perdante.",
+      q: "Comment fidéliser ses clients avec un jeu en boutique ?",
+      a: "Offrez un cadeau à utiliser lors de la prochaine visite. Avec Rouelia, le client scanne un QR code, tourne la roue et repart avec une bonne raison de revenir.",
     },
     {
-      q: "Le cadeau est-il donné en échange d'un avis ?",
-      a: "Non. La roue tourne dans tous les cas. L'avis reste facultatif, comme l'exigent les règles de Google.",
+      q: "Une roue à gagner est-elle autorisée ?",
+      a: "Un jeu gratuit, sans obligation d'achat et avec un règlement accessible est en principe autorisé. Rouelia prévoit un règlement pour chaque commerce. Le détail est sur la page [utilisation responsable](/utilisation-responsable).",
+    },
+    {
+      q: "Le cadeau dépend-il d'un avis Google ?",
+      a: "Non, jamais. Le cadeau est remis quoi que fasse le client. Partager son avis lui est ensuite proposé, de façon facultative.",
     },
     {
       q: "Combien me coûtent les cadeaux ?",
       a: "Ce que vous décidez. Vous fixez chaque lot et sa chance, et Rouelia affiche en direct le coût moyen d'une partie.",
-    },
-    {
-      q: "Faut-il du matériel ?",
-      a: "Non. Un QR code imprimé suffit. Vos clients jouent sur leur téléphone, sans appli.",
     },
     {
       q: "Et après les 14 jours d'essai ?",
@@ -690,11 +728,42 @@ export const finalCta = {
 
 export const footer = {
   tagline: "La roue à cadeaux des commerces de quartier.",
+  groups: [
+    {
+      title: "Rouelia",
+      links: [
+        { href: "/#fonctionnement", label: "Comment ça marche" },
+        { href: "/tarifs", label: "Tarifs" },
+        { href: "/creer-ma-roue", label: "Créer ma roue" },
+        { href: "/a-propos", label: "À propos" },
+        { href: "/blog", label: "Blog" },
+        { href: "/faq", label: "FAQ" },
+      ],
+    },
+    {
+      title: "Métiers",
+      links: [
+        { href: "/jeu-fidelisation-coiffeur", label: "Coiffeurs et barbiers" },
+        { href: "/jeu-fidelisation-restaurant", label: "Restaurants" },
+        { href: "/jeu-fidelisation-institut-beaute", label: "Instituts de beauté" },
+        { href: "/jeu-fidelisation-boulangerie", label: "Boulangeries" },
+      ],
+    },
+    {
+      title: "Contact",
+      links: [
+        { href: "/rendez-vous", label: "Réserver un appel" },
+        { href: brand.whatsapp, label: "WhatsApp" },
+        { href: `mailto:${brand.email}`, label: brand.email },
+      ],
+    },
+  ],
   links: [
+    { href: "/utilisation-responsable", label: "Utilisation responsable" },
     { href: "/mentions-legales", label: "Mentions légales" },
     { href: "/cgv", label: "CGV" },
     { href: "/confidentialite", label: "Confidentialité" },
-    { href: `mailto:${brand.email}`, label: "Contact" },
+    { href: "/cookies", label: "Cookies" },
   ],
   cookies: "Gérer les cookies",
   copyright: (year: number) => `© ${year} Rouelia`,
@@ -748,6 +817,7 @@ export const signup = {
 
 export const cookieBanner = {
   label: "Choix des cookies",
+  moreHref: "/cookies",
   text:
     "Nous aimerions mesurer l'audience de ce site pour l'améliorer. Rien n'est déposé sans votre accord.",
   accept: "Accepter",
@@ -829,11 +899,19 @@ export const legal = {
           ],
         },
         {
+          h: "Les appels et les demandes de création de roue",
+          p: [
+            "Quand vous réservez un appel (/rendez-vous) ou demandez qu'on crée votre roue (/creer-ma-roue), nous collectons les informations du formulaire : nom ou prénom, téléphone, e-mail, nom et adresse du commerce, lien ou nom de la fiche Google, lots souhaités, message et logo éventuel.",
+            "Finalité : vous rappeler au créneau choisi, préparer votre roue et vous répondre. Base légale : votre consentement, donné en cochant la case du formulaire. Durée de conservation : 3 ans après le dernier contact si vous ne devenez pas client.",
+          ],
+        },
+        {
           h: "Qui a accès à vos données",
           p: [
             `Seul ${company.owner} a accès à vos données. Elles ne sont ni vendues ni louées.`,
             `Hébergement : ${host.name} (États-Unis) héberge le site et la base des inscriptions. Ce transfert hors de l'Union européenne est encadré par le cadre de protection des données UE et États-Unis (Data Privacy Framework) et par les clauses contractuelles types de la Commission européenne.`,
             "Envoi des e-mails : Brevo (Sendinblue SAS, 106 boulevard Haussmann, 75008 Paris, France) envoie les e-mails du service : accusé de réception, accès à votre espace, fin d'essai, rapport hebdomadaire, et pour vos clients le code gagné et son rappel.",
+            "Si le service Resend (Resend, Inc., États-Unis) est activé pour l'envoi des e-mails, il traite les mêmes données pour le seul envoi des messages. Ce transfert hors de l'Union européenne est encadré par les clauses contractuelles types de la Commission européenne.",
           ],
         },
         {
@@ -846,13 +924,46 @@ export const legal = {
           h: "Cookies et stockage local",
           p: [
             "Aucun traceur publicitaire. Le site garde dans votre navigateur votre choix sur les cookies, votre roue de démo et le cadeau de la roue d'offres : ces éléments servent seulement au fonctionnement du site et ne demandent pas d'accord.",
-            "Une mesure d'audience ne peut être activée qu'après votre accord. Vous pouvez changer d'avis à tout moment via le lien « Gérer les cookies » en bas de page.",
+            "Une mesure d'audience ne peut être activée qu'après votre accord. Vous pouvez changer d'avis à tout moment via le lien « Gérer les cookies » en bas de page. Le détail est sur notre page Cookies.",
           ],
         },
         {
           h: "Vos droits",
           p: [
             `Vous pouvez accéder à vos données, les rectifier, les supprimer, les récupérer, vous opposer à leur traitement ou retirer votre consentement en écrivant à ${brand.email}. Nous répondons sous un mois. Vous pouvez aussi saisir la CNIL (cnil.fr).`,
+          ],
+        },
+      ],
+    },
+    cookies: {
+      title: "Cookies",
+      description: "Les cookies et le stockage local utilisés par le site Rouelia, et comment changer votre choix.",
+      sections: [
+        {
+          h: "En bref",
+          p: [
+            "Le site Rouelia ne dépose aucun cookie publicitaire. Rien n'est déposé sans votre accord, sauf ce qui est strictement nécessaire au fonctionnement du site. Refuser est aussi simple qu'accepter : les deux boutons sont au même niveau.",
+          ],
+        },
+        {
+          h: "Ce qui est nécessaire au fonctionnement",
+          p: [
+            "Votre choix sur les cookies, gardé dans le stockage local de votre navigateur pour ne pas vous le redemander à chaque page.",
+            "La roue que vous réglez dans la démo et le cadeau de la roue d'offres (7 jours), gardés sur votre appareil pour que vous les retrouviez.",
+            "Dans l'espace commerçant et l'espace admin, un cookie de session sécurisé qui vous garde connecté.",
+            "Ces éléments ne servent qu'au fonctionnement du site et ne demandent pas d'accord, conformément aux lignes directrices de la CNIL.",
+          ],
+        },
+        {
+          h: "La mesure d'audience",
+          p: [
+            "Aucune mesure d'audience n'est active aujourd'hui. Si nous en ajoutons une, elle ne se chargera qu'après votre clic sur « Accepter », et votre choix vous sera redemandé au plus tard après 6 mois.",
+          ],
+        },
+        {
+          h: "Changer d'avis",
+          p: [
+            "Le lien « Gérer les cookies », en bas de chaque page, rouvre le choix à tout moment. Vous pouvez aussi effacer les données du site dans les réglages de votre navigateur.",
           ],
         },
       ],
@@ -898,7 +1009,7 @@ export const legal = {
         {
           h: "Règles du jeu et avis Google",
           p: [
-            "La roue est gagnante à chaque partie. L'invitation à laisser un avis est facultative, identique pour tous et sans lien avec le cadeau. Le commerçant s'engage à ne pas modifier ce fonctionnement.",
+            "La roue est gagnante à chaque partie et le cadeau est remis quoi que fasse le client. L'invitation à partager un avis est proposée après le gain, identique pour tous, facultative et sans lien avec le cadeau ; aucun tri n'est fait selon la note. Le commerçant s'engage à ne pas modifier ce fonctionnement ni à présenter le cadeau comme une contrepartie d'un avis.",
           ],
         },
         {

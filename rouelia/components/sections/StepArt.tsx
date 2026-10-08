@@ -1,5 +1,5 @@
 import { Check, X } from "lucide-react";
-import { reviewPrompt, ui } from "@/content";
+import { ui } from "@/content";
 
 /* Illustrations des 4 étapes côté client (décoratives, sans données). */
 
@@ -38,21 +38,6 @@ export function QrArt() {
   );
 }
 
-export function ReviewArt() {
-  return (
-    <div className="w-44 rounded-xl bg-paper p-3 text-left shadow-md ring-1 ring-line">
-      <div className="flex justify-end">
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-white">
-          <X aria-hidden size={14} strokeWidth={3} />
-        </span>
-      </div>
-      <div className="mt-1 h-2 w-32 rounded bg-line" />
-      <div className="mt-1.5 h-2 w-24 rounded bg-line" />
-      <div className="mt-3 rounded-full bg-ink py-1.5 text-center text-[10px] font-semibold text-white">{reviewPrompt.button}</div>
-    </div>
-  );
-}
-
 export function WheelArt() {
   return (
     <div className="relative">
@@ -81,4 +66,4 @@ export function TicketArt() {
   );
 }
 
-export const stepArts = [QrArt, ReviewArt, WheelArt, TicketArt];
+export const stepArts = [QrArt, WheelArt, TicketArt];

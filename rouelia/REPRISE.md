@@ -286,3 +286,31 @@ refonte saisonnière, chevalet, support sous 24 h.
 - Toujours en attente côté Aymen : clés Stripe en mode réel (SIREN), demande d'accès à l'API Google Business Profile.
 - Tests utiles (scripts locaux non versionnés, à recréer si besoin) : défilement lent multi-écrans, test « façon Safari »
   (overflow-anchor: none, réseau et processeur ralentis), mesure du recalcul de style (CDP Performance.getMetrics).
+
+## Refonte « conversion + référencement » (8 octobre 2026, branche `claude/inspiring-mccarthy-13gj1h`)
+Faite sur une branche de test, pas encore sur la branche de production. À valider par Aymen sur l'aperçu Cloudflare, puis
+fusion dans `claude/great-lovelace-lpyydk`.
+- **Réglages en un seul fichier** : `config.ts` (e-mail, numéro WhatsApp provisoire 33672780326, horaires des appels :
+  lundi à vendredi 12 h à 14 h et 18 h à 20 h, créneaux de 5 minutes, 14 jours, délai de 2 h, jours bloqués).
+- **Conformité avis** : le jeu ne passe plus par une fenêtre d'avis avant la roue. L'invitation « Partager votre avis,
+  c'est facultatif » apparaît après le gain, pour tous, sans tri (`ShopGame.tsx`, démo `PhoneScreen.tsx`). Règlement,
+  CGV, réglages de l'espace, QR, FAQ et vidéo (aperçu et résumé) reformulés. Page `/utilisation-responsable`.
+  Reste : la voix off de la vidéo dit encore « il est invité à laisser un avis Google… puis il tourne la roue » et
+  « Plus d'avis » : à réenregistrer (Higgsfield, voix Xavier) puis remonter avec `rouelia-video/scripts/mix.sh`.
+- **Accueil** : hero (H1 « Offrez un jeu à vos clients. Ils reviennent. »), vidéo, avantages, 3 étapes, avis de
+  commerçants (masqués tant qu'aucun n'est validé ; aperçu avec `/?apercu=avis`), « Pour qui », tarifs en bénéfices
+  (« Recommandé » sur Croissance, fonctions non codées retirées), FAQ courte, roue d'offres + contact.
+  Démo et fondateur retirés de l'accueil (démo sur `/creer-ma-roue`, histoire sur `/a-propos`).
+- **Avis de commerçants** : `textes/avis-commercants.ts`, champ `valide` à passer à `true` seulement après accord écrit.
+  Logos : Alia (logo du salon), Pizza Time et Bangkok Factory 94 en monogramme (sites bloqués par le réseau de Claude),
+  Elsa Beauty en monogramme « EB ». Déposer les logos dans `public/logos/` puis renseigner `logo`.
+- **Nouvelles pages** : `/creer-ma-roue` (A : outil ; B : « Créez-la pour moi », e-mail à contact@ avec le logo,
+  table `wheel_requests`), `/rendez-vous` (créneaux, table `bookings`, clé primaire = créneau, e-mails + .ics),
+  `/a-propos` (photo à fournir : `bash scripts/photo-a-propos.sh photo.jpg` puis `ready: true`), `/tarifs`, `/faq`
+  (20 questions), 4 pages métiers, `/blog` (4 articles), `/utilisation-responsable`, `/cookies`.
+  Textes des pages dans `textes/` (même contrôle de rédaction que `content.ts`).
+- **SEO / IA** : `lib/jsonld.ts` (Organization, WebSite, Person, Product/Offer, FAQPage, BreadcrumbList, Article),
+  `lib/site-pages.ts` (sitemap), `robots.ts` (robots IA autorisés), `/llms.txt` et `/llms-full.txt` générés depuis les textes.
+- **E-mails** : Resend si `RESEND_API_KEY`, sinon Brevo (`lib/mail.ts`). Voir `DEPLOIEMENT.md`, section 3 quinquies.
+- **Vérifier** : `npm run check` (98 tests), `npm run cf-build`, puis `npm run preview` et
+  `BASE_URL=http://localhost:8787 CHROMIUM_PATH=... npm run e2e` (parcours complet avec rendez-vous et demande de roue).

@@ -86,7 +86,7 @@ export function OfferWheel() {
         )}
       </div>
 
-      <p className="mt-3 max-w-[440px] text-center text-xs text-white/85">{fr(offerWheel.rules)}</p>
+      <p className="mt-3 max-w-[440px] text-center text-xs text-white">{fr(offerWheel.rules)}</p>
     </div>
   );
 }

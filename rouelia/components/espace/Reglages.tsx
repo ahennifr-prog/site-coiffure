@@ -305,11 +305,11 @@ export function Reglages({ slug, pack, onSaved }: { slug: string; pack: PackId; 
             <TextField
               id="avis"
               type="url"
-              label="Lien « Laisser un avis Google »"
+              label="Lien « Partager mon avis sur Google »"
               value={c.reviewUrl}
               placeholder="https://g.page/r/..."
               onChange={(v) => set({ reviewUrl: v })}
-              help="Sur Google, ouvrez votre fiche en étant connecté au compte du commerce, cliquez sur « Demander des avis » et copiez le lien. Sans lien, l'invitation à laisser un avis n'apparaît pas."
+              help="Sur Google, ouvrez votre fiche en étant connecté au compte du commerce, cliquez sur « Demander des avis » et copiez le lien. L'invitation est proposée après le gain, à tous, et reste facultative. Sans lien, elle n'apparaît pas."
             />
             {f.booking ? (
               <TextField id="rdv" type="url" label="Lien de réservation (affiché après le jeu)" value={c.bookingUrl} placeholder="https://www.planity.com/..." onChange={(v) => set({ bookingUrl: v })} help="Facultatif : Planity, TheFork, votre site." />

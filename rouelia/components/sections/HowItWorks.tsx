@@ -70,6 +70,7 @@ export function HowItWorks() {
     <div className="max-w-xl">
       <Eyebrow>{howItWorks.eyebrow}</Eyebrow>
       <SectionTitle id={id}>{howItWorks.title}</SectionTitle>
+      <p className="mt-4 text-lg text-ink-soft">{fr(howItWorks.answer)}</p>
     </div>
   );
 

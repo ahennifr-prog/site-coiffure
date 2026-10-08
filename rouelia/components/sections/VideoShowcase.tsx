@@ -5,7 +5,7 @@ import { Play, RotateCcw, Volume2 } from "lucide-react";
 import { cta, video } from "@/content";
 import { fr } from "@/lib/format";
 import { ButtonLink } from "@/components/ui/Button";
-import { Container, Eyebrow, SectionTitle } from "@/components/ui/Section";
+import { Container } from "@/components/ui/Section";
 
 /**
  * La vidéo de présentation, en horizontal sur tous les écrans. Rien n'est chargé avant le clic :
@@ -30,13 +30,9 @@ export function VideoShowcase() {
   }
 
   return (
-    <section id="video" aria-labelledby="video-title" className="relative pb-(--section-y)">
+    <section id="video" aria-label={video.caption} className="relative">
       <Container>
-        <div className="mx-auto max-w-2xl text-center">
-          <Eyebrow>{video.eyebrow}</Eyebrow>
-          <SectionTitle id="video-title">{video.title}</SectionTitle>
-        </div>
-        <div className="mt-12" data-fx="grow">
+        <div data-fx="grow">
           <div className="relative origin-top mx-auto aspect-video w-full overflow-hidden rounded-[14px] bg-night shadow-lg ring-1 ring-black/5 sm:rounded-[24px]">
             {playing ? (
               <video
@@ -75,7 +71,7 @@ export function VideoShowcase() {
             {ended ? (
               <div className="pop-in absolute inset-0 flex flex-col items-center justify-center gap-3 bg-ink/80 p-4 text-center text-white sm:gap-5 sm:p-6">
                 <p className="font-display text-2xl font-semibold sm:text-5xl">{fr(video.endTitle)}</p>
-                <ButtonLink href="#demo" size="lg">
+                <ButtonLink href={cta.href} size="lg">
                   {cta.primary}
                 </ButtonLink>
                 <p className="hidden text-sm text-white/85 sm:block">{fr(video.endNote)}</p>
@@ -86,6 +82,17 @@ export function VideoShowcase() {
             ) : null}
           </div>
         </div>
+        {/* Résumé texte de la vidéo : toujours dans le HTML, lisible par les moteurs et les lecteurs d'écran. */}
+        <details className="group mx-auto mt-3 max-w-3xl text-sm text-ink-soft">
+          <summary className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-tomette-deep">
+            {video.summaryToggle}
+          </summary>
+          <div className="space-y-2 pb-2">
+            {video.summary.map((t) => (
+              <p key={t}>{fr(t)}</p>
+            ))}
+          </div>
+        </details>
       </Container>
     </section>
   );

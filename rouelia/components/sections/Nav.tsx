@@ -1,15 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { cta, nav, ui } from "@/content";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
 
+/**
+ * Menu principal. Fond crème plein dès le haut de page (le texte ne transparaît jamais derrière),
+ * bordure et ombre légère au défilement.
+ */
 export function Nav() {
+  const pathname = usePathname() ?? "/";
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState<string | null>(null);
+  const [section, setSection] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -19,20 +25,21 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Indique la section en cours de lecture.
+  // Sur l'accueil, indique la section en cours de lecture.
   useEffect(() => {
-    const ids = nav.links.map((l) => l.href.slice(1));
+    if (pathname !== "/") return;
+    const ids = nav.links.filter((l) => l.href.startsWith("/#")).map((l) => l.href.slice(2));
     const els = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if (!els.length || typeof IntersectionObserver === "undefined") return;
     const io = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) if (e.isIntersecting) setActive(e.target.id);
+        for (const e of entries) if (e.isIntersecting) setSection(e.target.id);
       },
       { rootMargin: "-45% 0px -50% 0px" },
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -41,10 +48,13 @@ export function Nav() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const isActive = (href: string) =>
+    href.startsWith("/#") ? pathname === "/" && section === href.slice(2) : pathname === href || pathname.startsWith(`${href}/`);
+
   return (
     <header
-      className={`sticky top-0 z-40 h-(--nav-h) transition-[background-color,box-shadow] duration-300 ${
-        scrolled || open ? "bg-cream/95 shadow-[0_1px_0_var(--color-line)]" : "bg-cream/0"
+      className={`sticky top-0 z-40 h-(--nav-h) border-b bg-cream transition-[border-color,box-shadow] duration-300 ${
+        scrolled || open ? "border-line shadow-[0_6px_20px_-12px_rgb(60_30_10/0.25)]" : "border-transparent"
       }`}
     >
       <a
@@ -53,37 +63,34 @@ export function Nav() {
       >
         {nav.skipLink}
       </a>
-      <nav aria-label={ui.mainNav} className="mx-auto flex h-full max-w-6xl items-center gap-4 px-5 sm:px-8">
+      <nav aria-label={ui.mainNav} className="mx-auto flex h-full max-w-6xl items-center gap-3 px-5 sm:px-8">
         <Link href="/" className="-ml-1 rounded-lg px-1 py-2" title={ui.homeLink}>
           <Logo />
         </Link>
 
-        <ul className="ml-auto hidden items-center gap-1 lg:flex">
-          {nav.links.map((l) => {
-            const isActive = active === l.href.slice(1);
-            return (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  aria-current={isActive ? "true" : undefined}
-                  className={`relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
-                    isActive ? "bg-tomette-soft text-ink" : "text-ink-soft hover:text-ink"
-                  }`}
-                >
-                  {l.label}
-                </a>
-              </li>
-            );
-          })}
+        <ul className="ml-auto hidden items-center gap-0.5 xl:flex">
+          {nav.links.map((l) => (
+            <li key={l.href}>
+              <Link
+                href={l.href}
+                aria-current={isActive(l.href) ? "page" : undefined}
+                className={`relative rounded-full px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive(l.href) ? "bg-tomette-soft text-ink" : "text-ink-soft hover:text-ink"
+                }`}
+              >
+                {l.label}
+              </Link>
+            </li>
+          ))}
         </ul>
 
-        <ButtonLink href="#demo" className="ml-auto lg:ml-3" onClick={() => setOpen(false)}>
+        <ButtonLink href={cta.href} className="ml-auto xl:ml-3" onClick={() => setOpen(false)}>
           {cta.primary}
         </ButtonLink>
 
         <button
           type="button"
-          className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-ink lg:hidden"
+          className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-ink xl:hidden"
           aria-expanded={open}
           aria-controls="menu-mobile"
           aria-label={open ? nav.menuClose : nav.menuOpen}
@@ -93,24 +100,25 @@ export function Nav() {
         </button>
       </nav>
 
-      <div
-        id="menu-mobile"
-        hidden={!open}
-        className="absolute inset-x-0 top-(--nav-h) border-b border-line bg-cream px-5 pb-6 shadow-md lg:hidden"
-      >
+      <div id="menu-mobile" hidden={!open} className="absolute inset-x-0 top-(--nav-h) border-b border-line bg-cream px-5 pb-6 shadow-md xl:hidden">
         <ul className="flex flex-col">
           {nav.links.map((l) => (
             <li key={l.href}>
-              <a
+              <Link
                 href={l.href}
                 onClick={() => setOpen(false)}
-                aria-current={active === l.href.slice(1) ? "true" : undefined}
-                className="flex min-h-12 items-center border-b border-line text-lg font-medium aria-[current=true]:text-tomette-deep"
+                aria-current={isActive(l.href) ? "page" : undefined}
+                className="flex min-h-12 items-center border-b border-line text-lg font-medium aria-[current=page]:text-tomette-deep"
               >
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
+          <li>
+            <Link href={cta.callHref} onClick={() => setOpen(false)} className="flex min-h-12 items-center text-lg font-semibold text-tomette-deep">
+              {cta.callShort}
+            </Link>
+          </li>
         </ul>
       </div>
     </header>

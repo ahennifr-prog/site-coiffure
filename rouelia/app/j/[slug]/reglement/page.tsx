@@ -19,7 +19,7 @@ export default async function Reglement({ params }: { params: Promise<{ slug: st
         `Jeu gratuit et sans obligation d'achat, proposé par ${who}.`,
         "Chaque case de la roue est un cadeau : toutes les participations sont gagnantes.",
         `Une participation par personne et par numéro de téléphone${c.replayDays > 0 ? `, tous les ${c.replayDays} jours` : ""}.`,
-        "L'invitation à laisser un avis Google est facultative et n'a aucun lien avec le cadeau : la roue tourne dans tous les cas.",
+        "Le cadeau est attribué à chaque participant, quoi qu'il fasse. Après le jeu, partager son avis sur Google peut être proposé : c'est facultatif, identique pour tous et sans aucun lien avec le cadeau.",
       ],
     ],
     [

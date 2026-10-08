@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next";
 import { brand } from "@/content";
+import { sitePages } from "@/lib/site-pages";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  return [
-    { url: brand.url, lastModified: now, changeFrequency: "weekly", priority: 1 },
-    { url: `${brand.url}/mentions-legales`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
-    { url: `${brand.url}/confidentialite`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
-    { url: `${brand.url}/cgv`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
-  ];
+  return sitePages.map((p) => ({
+    url: p.path === "/" ? brand.url : `${brand.url}${p.path}`,
+    lastModified: p.lastModified ? new Date(p.lastModified) : now,
+    changeFrequency: p.changeFrequency,
+    priority: p.priority,
+  }));
 }

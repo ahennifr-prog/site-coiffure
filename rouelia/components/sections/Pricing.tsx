@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useId, useState } from "react";
 import { Check, ChevronDown, Minus, ShieldCheck } from "lucide-react";
 import { pricing } from "@/content";
@@ -65,7 +66,8 @@ function PackHighlights({ items, featured }: { items: string[]; featured: boolea
   );
 }
 
-export function Pricing() {
+/** Les trois packs. `standalone` : sur la page /tarifs, le titre de page est déjà le H1, et le lien vers /tarifs est inutile. */
+export function Pricing({ standalone = false }: { standalone?: boolean }) {
   const { openSignup } = useAppState();
 
   return (
@@ -106,6 +108,9 @@ export function Pricing() {
                   {fr(pricing.perDay(formatPrice(pricePerDay(p.price))))}
                 </p>
                 <PackHighlights items={p.highlights} featured={featured} />
+                <p className={`mt-5 border-t pt-4 text-xs leading-relaxed ${featured ? "border-cream/15 text-cream/75" : "border-line text-ink-soft"}`}>
+                  <span className="font-semibold">{pricing.featuresLabel}</span> {fr(p.features)}
+                </p>
                 <div className="mt-auto pt-8">
                   <Button
                     size="lg"
@@ -207,7 +212,14 @@ export function Pricing() {
           </div>
         </details>
 
-        <p className="mt-6 text-center text-sm text-ink-soft">{fr(pricing.printNote)}</p>
+        {!standalone ? (
+          <p className="mt-6 text-center">
+            <Link href="/tarifs" className="inline-flex min-h-11 items-center font-semibold text-tomette-deep underline underline-offset-4">
+              {pricing.details}
+            </Link>
+          </p>
+        ) : null}
+        <p className="mt-4 text-center text-sm text-ink-soft">{fr(pricing.printNote)}</p>
         <p className="mt-1 text-center text-sm text-ink-soft">{fr(pricing.vatNote)}</p>
       </Container>
     </Section>

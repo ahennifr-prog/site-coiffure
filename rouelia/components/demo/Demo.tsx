@@ -213,12 +213,13 @@ function Recap() {
           </dl>
         </div>
         <div className="md:max-w-xs">
-          <a
-            href="#tarifs"
-            className="flex min-h-13 items-center justify-center gap-2 rounded-full bg-tomette px-6 text-center font-semibold text-white shadow-lg hover:bg-tomette-deep"
+          <button
+            type="button"
+            onClick={() => app.openSignup()}
+            className="flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-tomette px-6 text-center font-semibold text-white shadow-lg hover:bg-tomette-deep"
           >
             {t.recap.cta} <ArrowRight aria-hidden size={18} />
-          </a>
+          </button>
           <p className="mt-2 text-center text-xs text-cream/85">{fr(t.recap.kept)}</p>
         </div>
       </div>

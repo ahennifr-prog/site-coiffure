@@ -47,7 +47,7 @@
 }
 
 :root {
-  --section-y: clamp(96px, 13vw, 184px);
+  --section-y: clamp(56px, 9vw, 120px);
   --nav-h: 64px;
   --duration-fast: 180ms;
   --duration-base: 320ms;
@@ -245,3 +245,16 @@ dialog::backdrop {
 
 /* Rail de la timeline sur téléphone : rempli par <ScrollFx> ; plein sans animation. */
 .fx-on .tl-fill { transform: scaleY(0); }
+
+/* Bandeau des avis de commerçants : défilement lent, pause au survol, relief des cartes. */
+.reviews-track { display: flex; width: max-content; animation: marquee 70s linear infinite; }
+.reviews-band:hover .reviews-track { animation-play-state: paused; }
+.review-card { transition: transform 500ms var(--ease-out), box-shadow 500ms var(--ease-out); transform: translateZ(0); }
+@media (hover: hover) {
+  .review-card:hover { transform: translateZ(30px) rotateX(4deg) rotateY(-5deg); box-shadow: var(--shadow-lg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reviews-track { animation: none; }
+  .reviews-band { overflow-x: auto; scroll-snap-type: x mandatory; }
+  .review-card { scroll-snap-align: start; }
+}

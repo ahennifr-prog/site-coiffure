@@ -46,7 +46,7 @@ function visibleStrings(src: string, isTsx: boolean): { text: string; line: numb
 }
 
 const problems: string[] = [];
-for (const file of [join(root, "content.ts"), ...files(join(root, "app")), ...files(join(root, "components"))]) {
+for (const file of [join(root, "content.ts"), join(root, "config.ts"), ...files(join(root, "app")), ...files(join(root, "components")), ...files(join(root, "textes"))]) {
   const src = readFileSync(file, "utf8");
   const rel = file.replace(root + "/", "");
   if (/[–—]/.test(src)) problems.push(`${rel} : tiret cadratin ou demi-cadratin`);

@@ -19,3 +19,17 @@ export function indexedPage(path: string, share?: { title: string; description: 
   const images = path === "/" ? {} : { images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: seo.ogTitle }] };
   return { alternates: { canonical: path }, openGraph: { ...baseOpenGraph, ...share, url: path, ...images } };
 }
+
+/** Métadonnées complètes d'une page de contenu (title, description, canonical, Open Graph, Twitter). */
+export function pageMeta(p: { path: string; title: string; description: string }, og: Partial<NonNullable<Metadata["openGraph"]>> = {}): Metadata {
+  // Un titre qui contient déjà « Rouelia » n'a pas besoin du suffixe « | Rouelia ».
+  const title = p.title.includes(brand.name) ? { absolute: p.title } : p.title;
+  const base = indexedPage(p.path, { title: p.title, description: p.description });
+  return {
+    title,
+    description: p.description,
+    ...base,
+    openGraph: { ...base.openGraph, ...og } as Metadata["openGraph"],
+    twitter: { card: "summary_large_image", title: p.title, description: p.description },
+  };
+}

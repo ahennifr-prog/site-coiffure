@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Info, RotateCcw, Settings2, Star, Volume2, VolumeX, X } from "lucide-react";
+import { Info, RotateCcw, Settings2, Volume2, VolumeX } from "lucide-react";
 import { demo as demoText, reviewPrompt, winScreen } from "@/content";
 import { formatDate, fr } from "@/lib/format";
 import { deadlineFrom, generateCode, pickWeighted, readableOn } from "@/lib/wheel";
@@ -9,7 +9,7 @@ import { Wheel, type WheelHandle } from "@/components/wheel/Wheel";
 import { prizeIcons } from "@/components/wheel/icons";
 import { useAppState } from "@/components/AppState";
 
-type Phase = "review" | "ready" | "spinning" | "won";
+type Phase = "ready" | "spinning" | "won";
 
 export interface PhoneScreenProps {
   mode: "preview" | "test";
@@ -72,28 +72,23 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
   const app = useAppState();
   const { demo, colors, segmentTextColors, primary, displayName, monogram } = app;
   const wheel = useRef<WheelHandle>(null);
-  const [phase, setPhase] = useState<Phase>(mode === "test" ? "review" : "ready");
+  const [phase, setPhase] = useState<Phase>("ready");
   const [reviewNotice, setReviewNotice] = useState(false);
   const [sound, setSound] = useState(false);
   const [win, setWin] = useState<{ index: number; name: string; code: string; deadline: Date } | null>(null);
   const [announce, setAnnounce] = useState("");
-  const closeBtn = useRef<HTMLButtonElement>(null);
   const winTitle = useRef<HTMLHeadingElement>(null);
   const spinBtn = useRef<HTMLButtonElement>(null);
-  const wasReview = useRef(false);
 
   useEffect(() => {
-    setPhase(mode === "test" ? "review" : "ready");
+    setPhase("ready");
     setWin(null);
     setReviewNotice(false);
+    if (mode === "test") spinBtn.current?.focus({ preventScroll: true });
   }, [mode]);
 
   useEffect(() => {
-    if (phase === "review") closeBtn.current?.focus({ preventScroll: true });
     if (phase === "won") winTitle.current?.focus({ preventScroll: true });
-    // Après la fenêtre d'avis, le focus va directement au bouton de la roue.
-    if (phase === "ready" && wasReview.current) spinBtn.current?.focus({ preventScroll: true });
-    wasReview.current = phase === "review";
   }, [phase]);
 
   const segments = demo.prizes.map((p, i) => ({
@@ -127,7 +122,7 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
   function replay() {
     setWin(null);
     setReviewNotice(false);
-    setPhase("review");
+    setPhase("ready");
   }
 
   const wonPrize = win ? demo.prizes[win.index] : null;
@@ -182,7 +177,7 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
           <button
             type="button"
             onClick={spin}
-            disabled={phase === "spinning" || phase === "review" || phase === "won"}
+            disabled={phase === "spinning" || phase === "won"}
             tabIndex={mode === "test" && phase === "ready" ? 0 : -1}
             aria-hidden={mode !== "test" || phase !== "ready" ? true : undefined}
             aria-label={demoText.preview.spin}
@@ -214,64 +209,6 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
           </button>
         )}
       </div>
-
-      {/* Note affichée après « Laisser un avis » dans la démo */}
-      {reviewNotice && phase === "ready" ? (
-        <div role="status" className="pop-in absolute inset-x-3 top-3 z-10 flex items-start gap-2 rounded-lg bg-night p-3 text-sm text-cream shadow-lg">
-          <Info aria-hidden size={18} className="mt-0.5 shrink-0 text-safran" />
-          <p className="flex-1">{fr(reviewPrompt.demoNotice)}</p>
-          <button
-            type="button"
-            onClick={() => setReviewNotice(false)}
-            aria-label={reviewPrompt.close}
-            className="-m-2 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-          >
-            <X aria-hidden size={18} />
-          </button>
-        </div>
-      ) : null}
-
-      {/* Invitation à l'avis : identique au vrai produit. Facultative, se ferme au premier appui. */}
-      {phase === "review" ? (
-        <div className="absolute inset-0 z-20 flex items-end bg-ink/45 p-3 sm:items-center">
-          <div
-            role="dialog"
-            aria-modal="false"
-            aria-labelledby="avis-texte"
-            onKeyDown={(e) => e.key === "Escape" && setPhase("ready")}
-            className="pop-in relative w-full rounded-xl bg-paper p-5 pt-6 shadow-lg">
-            <button
-              ref={closeBtn}
-              type="button"
-              onClick={() => setPhase("ready")}
-              aria-label={reviewPrompt.close}
-              className="absolute top-1 right-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-ink hover:bg-cream"
-            >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-ink text-white">
-                <X aria-hidden size={18} strokeWidth={3} />
-              </span>
-            </button>
-            <div aria-hidden className="mb-3 flex gap-0.5 text-safran">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Star key={i} size={18} fill="currentColor" strokeWidth={0} />
-              ))}
-            </div>
-            <p id="avis-texte" className="pr-8 text-base font-semibold">
-              {fr(reviewPrompt.text)}
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setReviewNotice(true);
-                setPhase("ready");
-              }}
-              className="mt-4 flex min-h-12 w-full items-center justify-center rounded-full bg-ink px-5 font-semibold text-white"
-            >
-              {reviewPrompt.button}
-            </button>
-          </div>
-        </div>
-      ) : null}
 
       {/* Écran de gain */}
       {phase === "won" && win ? (
@@ -307,6 +244,20 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
               <p className="mt-3 text-sm text-ink-soft">{fr(winScreen.howTo(displayName))}</p>
             </div>
             <p className="mt-3 text-xs text-white">{fr(winScreen.emailNote)}</p>
+            {/* Invitation à l'avis : comme dans le vrai produit, après le gain, facultative et sans lien avec le cadeau. */}
+            <div className="mt-3 w-full rounded-xl bg-white/12 p-3 text-sm ring-1 ring-white/30">
+              <p className="font-semibold">{fr(reviewPrompt.title)}</p>
+              <p className="mt-0.5 text-white/90">{fr(reviewPrompt.text)}</p>
+              {reviewNotice ? (
+                <p role="status" className="mt-2 text-xs font-semibold text-white">
+                  {fr(reviewPrompt.demoNotice)}
+                </p>
+              ) : (
+                <button type="button" onClick={() => setReviewNotice(true)} className="mt-2 inline-flex min-h-10 items-center rounded-full bg-paper px-4 text-xs font-semibold text-ink">
+                  {reviewPrompt.button}
+                </button>
+              )}
+            </div>
             <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-night/35 px-3 py-1 text-xs font-semibold">
               <Info aria-hidden size={14} /> {fr(winScreen.demoNotice)}
             </p>

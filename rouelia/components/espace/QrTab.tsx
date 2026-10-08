@@ -74,7 +74,7 @@ export function QrTab({ slug, name }: { slug: string; name: string }) {
             <li>
               Texte conseillé : « Tentez votre chance. Scannez, tournez la roue : chaque case est un cadeau à utiliser lors de votre prochaine visite. Jeu gratuit, sans obligation d&apos;achat. »
             </li>
-            <li>N&apos;écrivez pas que le cadeau est offert contre un avis : Google l&apos;interdit. L&apos;avis reste une simple invitation.</li>
+            <li>N&apos;écrivez jamais que le cadeau est offert contre un avis : Google et la loi l&apos;interdisent. Le cadeau est donné à tous, l&apos;avis reste facultatif.</li>
           </ul>
         </section>
       </div>
