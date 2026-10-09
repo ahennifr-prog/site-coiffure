@@ -21,8 +21,8 @@
   demande le pack de l'essai (Croissance ou Premium) et renvoie les visiteurs de l'Essentiel vers l'outil libre.
 - **Rentabilité** : « Rentable dès 2 clients », calculée (`profitability` dans `content.ts`, test dans `tests/simulator.test.ts`).
 - **Fondateur** : le site garde « Enzo » (`brand.founder`, source unique). La photo de /a-propos est une vraie photo du
-  fondateur (alt et JSON-LD rétablis). Pastille « À propos » : recadrage provisoire de cette photo (`FOUNDER_AVATAR`),
-  à remplacer par une photo de profil dédiée (`scripts/photo-profil.sh`).
+  fondateur (alt et JSON-LD rétablis). Pastille « À propos » : photo de profil du Drive (9 octobre), recadrée en 96 et 192 px
+  (`FOUNDER_AVATAR`, `scripts/photo-profil.sh`).
 - **Avis de commerçants** : sans date ni ville pour l'instant ; d'autres avis seront ajoutés petit à petit.
 - **Participation au jeu** : mention affichée seulement si le commerçant limite les parties (réglage « Rejouer après »).
 - **Fonctions prévues, en cours de développement** : leurs textes restent affichés tels quels (consigne du 9 octobre).
@@ -80,8 +80,7 @@ fiche Google, refonte saisonnière, chevalet offert, support sous 24 h, installa
 
 ## Ce qui reste à fournir par Aymen
 
-0. Une photo de profil dédiée pour la pastille (aucune trouvée dans le projet ni dans les fichiers envoyés au 9 octobre).
-   Plus tard, pour chaque témoignage : métier, ville, lien de fiche Google, date (champs prêts, vides).
+0. Plus tard, pour chaque témoignage : métier, ville, lien de fiche Google, date (champs prêts, vides).
 
 1. SIREN et adresse (domiciliation possible) : `company.siren` et `company.address` dans `content.ts`.
 2. Clé `RESEND_API_KEY` (facultative, Brevo fonctionne) et numéro WhatsApp business.

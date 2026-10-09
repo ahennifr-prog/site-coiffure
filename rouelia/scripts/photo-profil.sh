@@ -2,7 +2,8 @@
 # Prépare la pastille « À propos » : carré 1:1 centré sur le visage, WebP 96 et 192 px.
 # Usage : bash scripts/photo-profil.sh photo.jpg TAILLE X Y
 #   TAILLE : côté du carré dans la photo d'origine, X Y : coin haut gauche du carré (en pixels).
-# Sans argument : recadrage provisoire du fondateur dans la photo de /a-propos (carré de 320 px en 240, 30).
+# Sans argument : recadrage du fondateur dans la photo de /a-propos (carré de 320 px en 240, 30).
+# Version en ligne : photo de profil du Drive (9 octobre 2026), bash scripts/photo-profil.sh photo.png 900 230 90.
 # Puis renseigner FOUNDER_AVATAR dans config.ts.
 set -euo pipefail
 dir="$(dirname "$0")/../public/a-propos"
