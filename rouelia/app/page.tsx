@@ -4,7 +4,7 @@ import { faqJsonLd, ldString, productJsonLd, websiteJsonLd } from "@/lib/jsonld"
 import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
 import { HowItWorks } from "@/components/sections/HowItWorks";
-import { ForWho } from "@/components/sections/ForWho";
+import { WhoTeaser } from "@/components/sections/WhoTeaser";
 import { MerchantReviews } from "@/components/sections/MerchantReviews";
 import { Pricing } from "@/components/sections/Pricing";
 import { Faq } from "@/components/sections/Faq";
@@ -36,7 +36,7 @@ export default function Home() {
         <Marquee />
         <HowItWorks />
         <MerchantReviews />
-        <ForWho />
+        <WhoTeaser />
         <Pricing />
         <Faq />
         <FinalCta />

@@ -315,3 +315,16 @@ fusion dans `claude/great-lovelace-lpyydk`.
 - **E-mails** : Resend si `RESEND_API_KEY`, sinon Brevo (`lib/mail.ts`). Voir `DEPLOIEMENT.md`, section 3 quinquies.
 - **Vérifier** : `npm run check` (98 tests), `npm run cf-build`, puis `npm run preview` et
   `BASE_URL=http://localhost:8787 CHROMIUM_PATH=... npm run e2e` (parcours complet avec rendez-vous et demande de roue).
+
+## Ajustements du 9 octobre 2026 (branche `claude/inspiring-mccarthy-13gj1h`)
+- Titre « Voyez la roue en action. » (H2) au-dessus de la vidéo. Bandeau des avantages : défilement continu sur
+  téléphone et ordinateur (pause au survol et au toucher, défilement à la main si les animations sont réduites),
+  texte dans le HTML.
+- Page `/pour-qui` (`textes/pour-qui.ts`) : 6 cartes métiers avec exemples de cadeaux, carte « Autre activité ou
+  indépendant » avec formulaire (`/api/autre-activite`, e-mail à contact@, table `wheel_requests` avec `kind`).
+  Section « Pour qui » retirée de l'accueil, remplacée par un bloc compact sous les avis (liens seulement).
+- Navigation : chaque nouvelle page s'ouvre en haut (`components/ui/ScrollReset.tsx` + `data-scroll-behavior` sur
+  `<html>`, nécessaire depuis Next.js 16), menu téléphone refermé à chaque changement de page.
+- Boutons : le « Créer ma roue » du menu est masqué tant que celui du haut de l'accueil est visible ; sur
+  `/creer-ma-roue` le menu propose « Réserver un appel » ; comparatif des tarifs seulement sur `/tarifs` ;
+  boutons du haut de `/a-propos` retirés (le bloc final et le menu suffisent).

@@ -6,6 +6,7 @@ import { pricingPage } from "@/textes/tarifs";
 import { aboutPage } from "@/textes/a-propos";
 import { responsiblePage } from "@/textes/utilisation-responsable";
 import { booking, createWheel } from "@/textes/formulaires";
+import { whoPage } from "@/textes/pour-qui";
 
 export interface SitePage {
   path: string;
@@ -20,6 +21,7 @@ export const sitePages: SitePage[] = [
   { path: "/", title: "Rouelia : la roue à cadeaux qui fait revenir vos clients", description: "Accueil : l'offre en bref, comment ça marche, tarifs, contact.", priority: 1, changeFrequency: "weekly" },
   { path: pricingPage.path, title: pricingPage.h1, description: pricingPage.description, priority: 0.9, changeFrequency: "monthly" },
   { path: createWheel.path, title: createWheel.title, description: createWheel.description, priority: 0.9, changeFrequency: "monthly" },
+  { path: whoPage.path, title: whoPage.h1, description: whoPage.description, priority: 0.8, changeFrequency: "monthly" },
   ...tradePages.map((t) => ({ path: t.path, title: t.h1, description: t.description, priority: 0.8, changeFrequency: "monthly" as const })),
   { path: faqPage.path, title: faqPage.h1, description: faqPage.description, priority: 0.7, changeFrequency: "monthly" },
   { path: aboutPage.path, title: aboutPage.h1, description: aboutPage.description, priority: 0.6, changeFrequency: "monthly" },

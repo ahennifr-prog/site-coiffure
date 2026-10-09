@@ -17,7 +17,7 @@ export const tradePage = (path: string) => tradePages.find((t) => t.path === pat
 export function TradeView({ page: p }: { page: TradePage }) {
   const others = tradePages.filter((t) => t.path !== p.path);
   return (
-    <PageShell crumbs={[{ name: "Pour qui", href: "/#pour-qui" }, { name: p.label, href: p.path }]} jsonLd={p.faq?.length ? [faqJsonLd(p.faq)] : []}>
+    <PageShell crumbs={[{ name: "Pour qui ?", href: "/pour-qui" }, { name: p.label, href: p.path }]} jsonLd={p.faq?.length ? [faqJsonLd(p.faq)] : []}>
       <Container>
         <PageHero eyebrow={p.eyebrow} h1={p.h1} lead={p.lead}>
           <ButtonLink href={cta.href} size="lg">

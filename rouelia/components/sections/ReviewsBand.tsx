@@ -7,7 +7,7 @@ export function ReviewsBand({ reviews, compact, draft = false }: { reviews: Merc
   // Assez de cartes pour couvrir les grands écrans, puis la même suite une seconde fois pour boucler sans saut.
   const loop = reviews.length < 6 ? [...reviews, ...reviews] : reviews;
   return (
-    <section id="avis" aria-labelledby="avis-title" className={compact ? "py-12" : "py-(--section-y)"}>
+    <section id="avis" aria-labelledby="avis-title" className={compact ? "py-12" : "pt-(--section-y) pb-8 sm:pb-10"}>
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <Eyebrow>{merchantReviewsSection.eyebrow}</Eyebrow>

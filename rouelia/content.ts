@@ -117,7 +117,7 @@ export const cta = {
 export const nav = {
   links: [
     { href: "/#fonctionnement", label: "Comment ça marche" },
-    { href: "/#pour-qui", label: "Pour qui" },
+    { href: "/pour-qui", label: "Pour qui ?" },
     { href: "/tarifs", label: "Tarifs" },
     { href: "/faq", label: "FAQ" },
     { href: "/blog", label: "Blog" },
@@ -163,6 +163,8 @@ export const hero = {
 
 export const video = {
   caption: "Rouelia en vidéo",
+  /** Titre court au-dessus de la vidéo (H2 : le seul H1 reste celui du haut de page). */
+  title: "Voyez la roue en action.",
   summaryToggle: "Lire le résumé de la vidéo",
   /** Résumé texte : la vidéo n'est lue ni par Google ni par les IA. */
   summary: [
@@ -433,25 +435,6 @@ export const howItWorks = {
     { title: "Il joue", text: "Il tourne la roue. Chaque case est un cadeau." },
     { title: "Il gagne un cadeau pour sa prochaine visite", text: "Son code l'attend en caisse. Et vous le revoyez." },
   ],
-};
-
-/* ------------------------------------------------------------------ */
-/* Pour qui                                                            */
-/* ------------------------------------------------------------------ */
-
-export const forWho = {
-  eyebrow: "Pour qui",
-  title: "Pensé pour les commerces où l'on revient.",
-  answer: "Rouelia sert à tous les commerces de proximité qui vivent de clients réguliers : salons, restaurants, instituts, boulangeries, bars et boutiques.",
-  items: [
-    { href: "/jeu-fidelisation-coiffeur", label: "Coiffeurs et barbiers", text: "Un soin ou un brushing qui fait revenir avant la prochaine coupe.", icon: "ciseaux" },
-    { href: "/jeu-fidelisation-restaurant", label: "Restaurants et pizzerias", text: "Un dessert ou un café offert au prochain repas.", icon: "assiette" },
-    { href: "/jeu-fidelisation-institut-beaute", label: "Instituts de beauté", text: "Une pose de vernis ou un massage des mains au prochain rendez-vous.", icon: "vernis" },
-    { href: "/jeu-fidelisation-boulangerie", label: "Boulangeries et pâtisseries", text: "Un croissant offert qui ramène au comptoir dès demain.", icon: "croissant" },
-  ] as { href: string; label: string; text: string; icon: PrizeIcon }[],
-  others: "Bar, café, fleuriste, boutique : la roue s'adapte à vos lots.",
-  othersLink: { href: "/creer-ma-roue", label: "Créer ma roue" },
-  more: "Voir la page",
 };
 
 /* ------------------------------------------------------------------ */
@@ -733,6 +716,7 @@ export const footer = {
       title: "Rouelia",
       links: [
         { href: "/#fonctionnement", label: "Comment ça marche" },
+        { href: "/pour-qui", label: "Pour qui ?" },
         { href: "/tarifs", label: "Tarifs" },
         { href: "/creer-ma-roue", label: "Créer ma roue" },
         { href: "/a-propos", label: "À propos" },

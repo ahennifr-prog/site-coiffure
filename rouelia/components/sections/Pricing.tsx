@@ -66,7 +66,7 @@ function PackHighlights({ items, featured }: { items: string[]; featured: boolea
   );
 }
 
-/** Les trois packs. `standalone` : sur la page /tarifs, le titre de page est déjà le H1, et le lien vers /tarifs est inutile. */
+/** Les trois packs. `standalone` : sur la page /tarifs (comparatif complet affiché, pas de lien vers /tarifs). */
 export function Pricing({ standalone = false }: { standalone?: boolean }) {
   const { openSignup } = useAppState();
 
@@ -144,6 +144,8 @@ export function Pricing({ standalone = false }: { standalone?: boolean }) {
           </div>
         </div>
 
+        {/* Le comparatif complet vit sur /tarifs ; l'accueil renvoie vers la page (un seul chemin vers le détail). */}
+        {standalone ? (
         <details className="group mt-8 rounded-xl ring-1 ring-line">
           <summary className="flex min-h-14 items-center justify-center gap-2 rounded-xl px-5 font-semibold text-tomette-deep hover:bg-cream">
             <span className="group-open:hidden">{pricing.tableToggle.open}</span>
@@ -211,6 +213,7 @@ export function Pricing({ standalone = false }: { standalone?: boolean }) {
             ))}
           </div>
         </details>
+        ) : null}
 
         {!standalone ? (
           <p className="mt-6 text-center">

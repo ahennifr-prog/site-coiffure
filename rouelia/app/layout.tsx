@@ -7,6 +7,7 @@ import { baseOpenGraph } from "@/lib/seo";
 import { AppStateProvider } from "@/components/AppState";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { SignupMount } from "@/components/signup/SignupMount";
+import { ScrollReset } from "@/components/ui/ScrollReset";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -37,9 +38,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${fraunces.variable} ${figtree.variable}`} suppressHydrationWarning>
+    <html lang="fr" data-scroll-behavior="smooth" className={`${fraunces.variable} ${figtree.variable}`} suppressHydrationWarning>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldString(organizationJsonLd()) }} />
+        <ScrollReset />
         <AppStateProvider>
           {children}
           <SignupMount />

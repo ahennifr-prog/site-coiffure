@@ -7,6 +7,7 @@ import { tradePages } from "@/textes/metiers";
 import { pricingPage } from "@/textes/tarifs";
 import { aboutPage } from "@/textes/a-propos";
 import { responsiblePage } from "@/textes/utilisation-responsable";
+import { whoPage } from "@/textes/pour-qui";
 import type { Block, Faq } from "@/textes/types";
 import { sitePages } from "@/lib/site-pages";
 
@@ -67,6 +68,7 @@ const faqs = (items: Faq[]) => items.flatMap((f) => [`**${f.q}**`, md(f.a), ""])
 export function llmsFullTxt(): string {
   const out: string[] = [llmsTxt(), "---", "", "## Questions fréquentes (accueil)", "", ...faqs(faq.items)];
   out.push(`## ${pricingPage.h1}`, `Source : ${url(pricingPage.path)}`, "", md(pricingPage.lead), "", ...blocks(pricingPage.sections), ...faqs(pricingPage.faq ?? []));
+  out.push(`## ${whoPage.h1}`, `Source : ${url(whoPage.path)}`, "", md(whoPage.lead), "", ...whoPage.cards.map((c) => `- ${c.title} : ${c.text}`), `- ${whoPage.other.title} : ${whoPage.other.text}`, "", ...faqs(whoPage.faq));
   for (const t of tradePages) {
     out.push(`## ${t.h1}`, `Source : ${url(t.path)}`, "", md(t.lead), "", ...blocks(t.sections), "### Exemples de lots", ...t.prizes.map((p) => `- ${p.name} : ${p.note}`), "", ...faqs(t.faq ?? []));
   }

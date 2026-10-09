@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Check, HeartHandshake, LineChart, Sparkles } from "lucide-react";
 import { aboutPage as p } from "@/textes/a-propos";
-import { brand, cta } from "@/content";
+import { brand } from "@/content";
 import { fr } from "@/lib/format";
 import { faqJsonLd, personJsonLd } from "@/lib/jsonld";
 import { pageMeta } from "@/lib/seo";
@@ -10,7 +10,6 @@ import { FaqList, PageHero } from "@/components/pages/Blocks";
 import { CtaBand } from "@/components/pages/CtaBand";
 import { Awning } from "@/components/brand/Awning";
 import { MerchantReviews } from "@/components/sections/MerchantReviews";
-import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Section";
 
 /**
@@ -58,14 +57,7 @@ export default function Page() {
     <PageShell crumbs={[{ name: "À propos", href: p.path }]} jsonLd={[personJsonLd(), faqJsonLd(p.faq)]}>
       <Container>
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
-          <PageHero eyebrow={p.eyebrow} h1={p.h1} lead={p.lead}>
-            <ButtonLink href={cta.href} size="lg">
-              {cta.primary}
-            </ButtonLink>
-            <ButtonLink href={cta.callHref} size="lg" variant="secondary">
-              {cta.callShort}
-            </ButtonLink>
-          </PageHero>
+          <PageHero eyebrow={p.eyebrow} h1={p.h1} lead={p.lead} />
           <div className="relative mx-auto w-full max-w-[440px] pb-6 lg:pb-0">
             <div aria-hidden className="absolute -inset-3 -z-10 translate-x-4 translate-y-4 rounded-[32px] bg-tomette-soft" />
             <Photo />

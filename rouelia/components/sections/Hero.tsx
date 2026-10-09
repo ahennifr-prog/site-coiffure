@@ -63,7 +63,7 @@ export function Hero() {
         <p className="max-w-md text-lg text-ink-soft sm:text-xl lg:col-start-1 lg:row-start-2">{fr(hero.lead)}</p>
 
         <div className="lg:col-start-1 lg:row-start-3 lg:self-start">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
+          <div id="hero-cta" className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
             <ButtonLink href={cta.href} size="lg">
               {cta.primary}
             </ButtonLink>

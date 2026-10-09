@@ -30,8 +30,11 @@ export function VideoShowcase() {
   }
 
   return (
-    <section id="video" aria-label={video.caption} className="relative">
+    <section id="video" aria-labelledby="video-title" className="relative">
       <Container>
+        <h2 id="video-title" className="mb-4 text-center font-display text-2xl leading-tight font-semibold tracking-[-0.02em] sm:mb-6 sm:text-[2rem]">
+          {fr(video.title)}
+        </h2>
         <div data-fx="grow">
           <div className="relative origin-top mx-auto aspect-video w-full overflow-hidden rounded-[14px] bg-night shadow-lg ring-1 ring-black/5 sm:rounded-[24px]">
             {playing ? (

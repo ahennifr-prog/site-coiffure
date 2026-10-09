@@ -17,6 +17,11 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [section, setSection] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  // Sur l'accueil, le bouton du menu reste caché tant que celui du haut de page est à l'écran (pas de doublon).
+  const [heroCtaVisible, setHeroCtaVisible] = useState(pathname === "/");
+  // Sur /creer-ma-roue, « Créer ma roue » mènerait à la page en cours : le menu propose l'appel à la place.
+  const onCreatePage = pathname === cta.href;
+  const navCta = onCreatePage ? { href: cta.callHref, label: cta.callShort } : { href: cta.href, label: cta.primary };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -38,6 +43,18 @@ export function Nav() {
       { rootMargin: "-45% 0px -50% 0px" },
     );
     els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [pathname]);
+
+  useEffect(() => {
+    setOpen(false);
+    const el = pathname === "/" ? document.getElementById("hero-cta") : null;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setHeroCtaVisible(false);
+      return;
+    }
+    const io = new IntersectionObserver(([e]) => setHeroCtaVisible(e.isIntersecting), { rootMargin: "-64px 0px 0px 0px" });
+    io.observe(el);
     return () => io.disconnect();
   }, [pathname]);
 
@@ -84,8 +101,15 @@ export function Nav() {
           ))}
         </ul>
 
-        <ButtonLink href={cta.href} className="ml-auto xl:ml-3" onClick={() => setOpen(false)}>
-          {cta.primary}
+        <ButtonLink
+          href={navCta.href}
+          variant={onCreatePage ? "secondary" : "primary"}
+          aria-hidden={heroCtaVisible || undefined}
+          tabIndex={heroCtaVisible ? -1 : undefined}
+          className={`ml-auto transition-[opacity,transform] duration-300 xl:ml-3 ${heroCtaVisible ? "pointer-events-none translate-y-1 opacity-0" : "opacity-100"}`}
+          onClick={() => setOpen(false)}
+        >
+          {navCta.label}
         </ButtonLink>
 
         <button
@@ -114,11 +138,13 @@ export function Nav() {
               </Link>
             </li>
           ))}
-          <li>
-            <Link href={cta.callHref} onClick={() => setOpen(false)} className="flex min-h-12 items-center text-lg font-semibold text-tomette-deep">
-              {cta.callShort}
-            </Link>
-          </li>
+          {!onCreatePage ? (
+            <li>
+              <Link href={cta.callHref} onClick={() => setOpen(false)} className="flex min-h-12 items-center text-lg font-semibold text-tomette-deep">
+                {cta.callShort}
+              </Link>
+            </li>
+          ) : null}
         </ul>
       </div>
     </header>

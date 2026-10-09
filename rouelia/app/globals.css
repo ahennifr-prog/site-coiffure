@@ -242,6 +242,12 @@ dialog::backdrop {
 /* Bandeau des avantages, en défilement continu et léger. */
 @keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
 .marquee-track { display: flex; width: max-content; animation: marquee 32s linear infinite; }
+.advantages-band:hover .marquee-track, .advantages-band[data-held] .marquee-track { animation-play-state: paused; }
+@media (max-width: 639px) { .advantages-band .marquee-track { animation-duration: 26s; } }
+@media (prefers-reduced-motion: reduce) {
+  .advantages-band { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .advantages-band .marquee-track { animation: none; }
+}
 
 /* Rail de la timeline sur téléphone : rempli par <ScrollFx> ; plein sans animation. */
 .fx-on .tl-fill { transform: scaleY(0); }

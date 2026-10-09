@@ -17,7 +17,7 @@ for (const [name, w, h] of [["m", 375, 812], ["d", 1440, 900]]) {
   p.on("pageerror", (e) => errors.push(e.message));
   p.on("console", (m) => m.type() === "error" && errors.push(m.text()));
   await p.goto(BASE, { waitUntil: "networkidle" });
-  for (const id of ["video", "fonctionnement", "pour-qui-title", "tarifs-title", "faq-title", "final-title"]) {
+  for (const id of ["video", "fonctionnement", "pour-qui-teaser", "tarifs-title", "faq-title", "final-title"]) {
     await p.locator(`#${id}`).scrollIntoViewIfNeeded();
     await p.evaluate((id) => { const el = document.getElementById(id); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 90); }, id);
     await p.waitForTimeout(700);

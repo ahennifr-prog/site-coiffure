@@ -490,3 +490,34 @@ export function wheelRequestConfirmMail(p: { email: string; name: string; shopNa
     ]),
   };
 }
+
+/* Demandes « Autre activité » (page /pour-qui) ------------------------------------------------- */
+
+export function otherActivityAlertMail(p: { name: string; description: string; prizes: string; phone: string; email: string }): Mail {
+  return {
+    to: { email: brand.email, name: brand.name },
+    subject: `Autre activité : ${p.name}`,
+    tags: ["autre-activite"],
+    replyTo: p.email,
+    ...rouelia("Demande « Autre activité »", [
+      `Commerce ou activité : ${p.name}.`,
+      `Activité : ${p.description}`,
+      `Cadeaux souhaités : ${p.prizes || "à proposer"}.`,
+      `Téléphone : ${p.phone}. E-mail : ${p.email}.`,
+    ], undefined, "Alerte interne Rouelia, depuis la page Pour qui."),
+  };
+}
+
+export function otherActivityConfirmMail(p: { email: string; name: string }): Mail {
+  return {
+    to: { email: p.email, name: p.name },
+    subject: "Votre demande Rouelia est bien reçue",
+    tags: ["autre-activite"],
+    replyTo: brand.email,
+    ...rouelia("C'est bien reçu", [
+      "Bonjour,",
+      `Merci pour votre message au sujet de ${p.name}. On étudie votre activité et on revient vers vous très vite avec une proposition de roue et de cadeaux adaptés.`,
+      "Une précision à ajouter ? Répondez simplement à cet e-mail.",
+    ]),
+  };
+}
