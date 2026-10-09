@@ -19,6 +19,8 @@
 - **« Créez-la pour moi »** (création de la roue par Aymen) : PAS incluse dans l'Essentiel (le commerçant crée sa roue
   lui-même en 5 minutes), incluse à partir de Croissance. Source unique : `doneForYou` dans `content.ts`. Le formulaire
   demande le pack de l'essai (Croissance ou Premium) et renvoie les visiteurs de l'Essentiel vers l'outil libre.
+  Chaque demande crée aussi un « essai à ouvrir » dans `/admin` (source « Créez-la pour moi », pack choisi) : on prépare la roue,
+  puis le bouton habituel crée le commerce et envoie l'accès.
 - **Rentabilité** : « Rentable dès 2 clients », calculée (`profitability` dans `content.ts`, test dans `tests/simulator.test.ts`).
 - **Fondateur** : le site garde « Enzo » (`brand.founder`, source unique). La photo de /a-propos est une vraie photo du
   fondateur (alt et JSON-LD rétablis). Pastille « À propos » : photo de profil du Drive (9 octobre), recadrée en 96 et 192 px
