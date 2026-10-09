@@ -5,6 +5,7 @@ import { sendMail } from "@/lib/mail";
 import { wheelRequestAlertMail, wheelRequestConfirmMail } from "@/lib/mail-templates";
 import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
 import { countEvent } from "@/lib/mesure";
+import { doneForYou, pricing, type PackId } from "@/content";
 
 const str = (v: unknown, max = 200) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
@@ -37,7 +38,10 @@ export async function POST(req: Request) {
     prizes: str(body.prizes, 1000),
     message: str(body.message, 2000),
     logoName: null as string | null,
+    // « Créez-la pour moi » n'existe qu'à partir de Croissance : toute autre valeur revient à Croissance.
+    pack: (doneForYou.packs.includes(body.pack as PackId) ? body.pack : doneForYou.packs[0]) as PackId,
   };
+  const packLabel = pricing.packs.find((x) => x.id === p.pack)?.name ?? p.pack;
   const errors: WheelRequestField[] = [];
   if (!p.shopName) errors.push("shopName");
   if (!normalizeFrenchPhone(p.phone)) errors.push("phone");
@@ -66,9 +70,9 @@ export async function POST(req: Request) {
     console.error("[roue-pour-moi] enregistrement impossible", e);
   }
 
-  const alert = await sendMail(wheelRequestAlertMail(p, logo));
+  const alert = await sendMail(wheelRequestAlertMail({ ...p, pack: packLabel }, logo));
   if (!alert.ok && (!stored || !alert.skipped)) return json({ ok: false, error: "mail" }, 502);
   await countEvent("roue_pour_moi_envoye", now);
-  await sendMail(wheelRequestConfirmMail({ email: p.email, name: p.name, shopName: p.shopName }));
+  await sendMail(wheelRequestConfirmMail({ email: p.email, name: p.name, shopName: p.shopName, pack: packLabel }));
   return json({ ok: true }, 201);
 }

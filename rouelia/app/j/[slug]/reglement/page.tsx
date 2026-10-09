@@ -18,7 +18,9 @@ export default async function Reglement({ params }: { params: Promise<{ slug: st
       [
         `Jeu gratuit et sans obligation d'achat, proposé par ${who}.`,
         "Chaque case de la roue est un cadeau : toutes les participations sont gagnantes.",
-        `Une participation par personne et par numéro de téléphone${c.replayDays > 0 ? `, tous les ${c.replayDays} jours` : ""}.`,
+        c.replayDays > 0
+          ? `Une participation par personne et par numéro de téléphone, tous les ${c.replayDays} jours.`
+          : "Le commerce ne limite pas le nombre de participations.",
         "Le cadeau est attribué à chaque participant, quoi qu'il fasse. Après le jeu, partager son avis sur Google peut être proposé : c'est facultatif, identique pour tous et sans aucun lien avec le cadeau.",
       ],
     ],
@@ -32,7 +34,7 @@ export default async function Reglement({ params }: { params: Promise<{ slug: st
     [
       "Vos données",
       [
-        `${c.name} enregistre votre prénom et votre numéro de téléphone pour retrouver votre cadeau et limiter le jeu à une participation par personne. Base légale : votre consentement. Si vous l'avez accepté, ${c.name} peut aussi vous envoyer ses offres par SMS ; vous pouvez vous désinscrire à tout moment.`,
+        `${c.name} enregistre votre prénom et votre numéro de téléphone pour retrouver votre cadeau${c.replayDays > 0 ? " et limiter le nombre de participations" : ""}. Base légale : votre consentement. Si vous l'avez accepté, ${c.name} peut aussi vous envoyer ses offres par SMS ; vous pouvez vous désinscrire à tout moment.`,
         "Si vous indiquez votre e-mail (facultatif), il sert uniquement à vous envoyer votre code et un seul rappel avant la date limite.",
         "Ces données ne sont ni revendues, ni utilisées pour de la publicité par des tiers. Elles sont supprimées automatiquement un an après la fin de validité du cadeau.",
         `Le jeu est fourni par Rouelia, qui héberge ces données pour le compte de ${c.name} (hébergement Cloudflare, envoi des e-mails par Brevo).`,

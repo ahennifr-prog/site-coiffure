@@ -8,18 +8,25 @@
 - **Production** : `claude/great-lovelace-lpyydk`. Chaque push déploie rouelia.fr (Cloudflare Workers). Dernier commit
   déployé : `6edc835` (page Pour qui, bandeau défilant, retour en haut de page, boutons sans doublon).
 - **Travail** : `claude/inspiring-mccarthy-13gj1h`. Production + documents (audit, conversion, notes) + le lot
-  « modifications ciblées » du 9 octobre (14 points de conversion). **Ce lot attend « go prod »**.
+  « modifications ciblées » (14 points de conversion) + le lot « finalisation » du 9 octobre. **Les deux lots attendent « go prod »**.
 - Règle : on travaille sur la branche de travail, on vérifie, puis Aymen dit « go prod » et on avance la branche de production
   (avance rapide, sans réécrire l'historique).
 
 ## Décisions prises par Aymen
 
-- **Essai de 14 jours** : ouvert à la main par Aymen dans `/admin` (pas d'ouverture automatique). Le site doit annoncer un délai
-  (à préciser) au lieu de « On vous écrit très vite ».
-- **« Créez-la pour moi »** : essai sur le pack Essentiel (formulation à ajouter sur le formulaire).
-- **Rentabilité** : « 2 clients » partout (aujourd'hui `content.ts` dit encore « 3 clients » : à corriger).
-- **SMS et relances clients** : prévus mais **non codés**. Ne jamais les promettre (retirer ou reformuler la case « offres par SMS »
-  et le rappel e-mail affiché aux clients des commerçants en Essentiel).
+- **Essai de 14 jours** : gratuit sur tous les packs, Essentiel compris. Ouvert à la main par Aymen dans `/admin` ; le site
+  annonce « en général en quelques minutes (24 h maximum) ».
+- **« Créez-la pour moi »** (création de la roue par Aymen) : PAS incluse dans l'Essentiel (le commerçant crée sa roue
+  lui-même en 5 minutes), incluse à partir de Croissance. Source unique : `doneForYou` dans `content.ts`. Le formulaire
+  demande le pack de l'essai (Croissance ou Premium) et renvoie les visiteurs de l'Essentiel vers l'outil libre.
+- **Rentabilité** : « Rentable dès 2 clients », calculée (`profitability` dans `content.ts`, test dans `tests/simulator.test.ts`).
+- **Fondateur** : le site garde « Enzo » (`brand.founder`, source unique). La photo de /a-propos est une vraie photo du
+  fondateur (alt et JSON-LD rétablis). Pastille « À propos » : recadrage provisoire de cette photo (`FOUNDER_AVATAR`),
+  à remplacer par une photo de profil dédiée (`scripts/photo-profil.sh`).
+- **Avis de commerçants** : sans date ni ville pour l'instant ; d'autres avis seront ajoutés petit à petit.
+- **Participation au jeu** : mention affichée seulement si le commerçant limite les parties (réglage « Rejouer après »).
+- **Fonctions prévues, en cours de développement** : leurs textes restent affichés tels quels (consigne du 9 octobre).
+  Liste à jour ci-dessous, section « Fonctions affichées non codées ».
 - **Roue d'ALIA** (`alia-roue/`, Netlify, avis demandé avant le jeu) : traitée par Aymen lui-même.
 - **Vidéo** : on garde la vidéo et la voix off telles quelles. Aperçu : scène « 100 % gagnant ».
 - **Roue d'offres** : gardée avant le contact en fin d'accueil.
@@ -55,21 +62,33 @@
 - Textes : `rouelia/content.ts` (accueil, tarifs, légal), `rouelia/textes/*.ts` (pages SEO, formulaires, avis, Pour qui).
 - Fondateur affiché : Enzo (nom d'usage) ; éditeur légal : Aymen Henni (lien entre les deux à décider, voir audit I3).
 
+## Fonctions affichées non codées (état au 9 octobre 2026)
+
+| Fonction | Où elle apparaît | Pack |
+|---|---|---|
+| Envoi d'offres par SMS aux clients | Case « Recevoir les offres par SMS » du jeu, règlement du jeu, tuile « Clients joignables par SMS » de l'espace | Tous (consentement recueilli, aucun envoi) |
+| Relances des clients (SMS ou autres) | Notes et audit ; aucune page ne les vend explicitement | Non défini |
+| Publication des réponses aux avis sur Google | « Vous répondez à vos avis en un clic », tableau « Réponses aux avis en un clic » | Croissance, Premium (seul le brouillon de réponse par IA est codé, à copier à la main ; l'API Google Business Profile n'est pas branchée) |
+| Domaine personnalisé | Tableau des tarifs, ligne « Sans mention Propulsé par Rouelia, domaine personnalisé » | Premium |
+| Rappel e-mail aux clients en Essentiel | Pied de l'e-mail du code « Un seul rappel vous sera envoyé » et règlement, affichés quel que soit le pack | Essentiel (le rappel n'est envoyé qu'en Croissance et Premium, et seulement si le client a laissé un e-mail) |
+
+Codé et automatique : rappel e-mail avant expiration (Croissance, Premium), e-mails de fin d'essai, rapport du lundi,
+parrainage, roues saisonnières, roue des heures creuses, liens après le jeu, statistiques par employé, suivi de rentabilité,
+brouillons de réponses aux avis par IA (clé `ANTHROPIC_API_KEY` requise).
+Services rendus à la main (pas du code) : création « Créez-la pour moi », visio de configuration, point mensuel, audit de
+fiche Google, refonte saisonnière, chevalet offert, support sous 24 h, installation sur place.
+
 ## Ce qui reste à fournir par Aymen
 
-0. Lot du 9 octobre : une vraie photo de profil (carré, visage centré) si vous voulez une photo dans la pastille ;
-   les champs `metier`, `ville`, `ficheGoogle` de chaque témoignage ; la règle « Créez-la pour moi » et Essentiel ;
-   le prénom affiché (Enzo ou Aymen, `brand.founder`).
+0. Une photo de profil dédiée pour la pastille (aucune trouvée dans le projet ni dans les fichiers envoyés au 9 octobre).
+   Plus tard, pour chaque témoignage : métier, ville, lien de fiche Google, date (champs prêts, vides).
 
 1. SIREN et adresse (domiciliation possible) : `company.siren` et `company.address` dans `content.ts`.
 2. Clé `RESEND_API_KEY` (facultative, Brevo fonctionne) et numéro WhatsApp business.
-3. Délai promis pour l'ouverture de l'essai.
-4. Réponses aux questions Q3 à Q7 de `CONVERSION-ROUELIA.md` (haut de page mobile, WhatsApp, présence humaine et photo,
-   page comparative, nouveaux créneaux d'appel).
-5. Décision Enzo / Aymen Henni, et lien éventuel entre Alia Coiffure et l'éditeur (à indiquer près du témoignage s'il existe).
-6. Villes et liens des fiches Google des commerçants témoins ; plus tard, un cas chiffré ALIA avec accord écrit.
-7. Clés Stripe en mode réel (après le SIREN) et accès à l'API Google Business Profile.
-8. Relecture juridique : CGV (sous-traitance RGPD, pénalités B2B), confidentialité (Anthropic, Stripe), règlement du jeu.
+3. Lien éventuel entre Alia Coiffure et l'éditeur (à indiquer près du témoignage s'il existe).
+4. Plus tard, un cas chiffré ALIA avec accord écrit.
+5. Clés Stripe en mode réel (après le SIREN) et accès à l'API Google Business Profile.
+6. Relecture juridique : CGV (sous-traitance RGPD, pénalités B2B), confidentialité (Anthropic, Stripe), règlement du jeu.
 
 ## Prochaines étapes proposées (rien n'est commencé)
 

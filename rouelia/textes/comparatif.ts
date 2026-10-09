@@ -107,7 +107,7 @@ export const comparePage: SeoPage & {
         {
           h3: "Vous avez peu de temps",
           p: [
-            "Choisissez la solution la plus simple à faire vivre. La carte demande seulement de tamponner. La roue se règle en quelques minutes, ou nous la préparons pour vous sur [Créer ma roue](/creer-ma-roue).",
+            "Choisissez la solution la plus simple à faire vivre. La carte demande seulement de tamponner. La roue se règle en quelques minutes, ou nous la préparons pour vous à partir du pack Croissance, sur [Créer ma roue](/creer-ma-roue).",
           ],
         },
       ],
@@ -118,7 +118,7 @@ export const comparePage: SeoPage & {
     criterionLabel: "Critère",
     columns: ["Carte à tampons", "Appli de fidélité", "Roue Rouelia"],
     rows: [
-      { criterion: "Mise en place", values: ["Faire imprimer des cartes", "Plus longue : configuration, puis faire installer l'appli aux clients", "Environ 5 minutes en ligne, ou préparée pour vous"] },
+      { criterion: "Mise en place", values: ["Faire imprimer des cartes", "Plus longue : configuration, puis faire installer l'appli aux clients", "Environ 5 minutes en ligne, ou préparée pour vous à partir du pack Croissance"] },
       { criterion: "Coût", values: ["Impression et cadeaux", "Abonnement, souvent plus élevé, et cadeaux", "De 29 à 89 € par mois sans engagement, et les cadeaux que vous fixez"] },
       { criterion: "Effort pour le client", values: ["Garder la carte et la présenter", "Télécharger l'appli et créer un compte", "Scanner un QR code et donner un prénom et un numéro"] },
       { criterion: "Première récompense", values: ["Après plusieurs passages", "Selon les points cumulés", "Dès la première partie, à utiliser à la visite suivante"] },

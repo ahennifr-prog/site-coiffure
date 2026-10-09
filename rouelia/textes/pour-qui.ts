@@ -82,7 +82,7 @@ export const whoPage = {
     },
     {
       q: "Combien de temps pour démarrer ?",
-      a: "Environ 5 minutes pour régler votre roue vous-même sur [Créer ma roue](/creer-ma-roue), ou 24 à 48 h si vous préférez qu'on la prépare pour vous.",
+      a: "Environ 5 minutes pour régler votre roue vous-même sur [Créer ma roue](/creer-ma-roue), ou 24 à 48 h si vous préférez qu'on la prépare pour vous, à partir du pack Croissance.",
     },
   ] as Faq[],
   ctaTitle: "Votre commerce a des habitués à faire revenir ?",

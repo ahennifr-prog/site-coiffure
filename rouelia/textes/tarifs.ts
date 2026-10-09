@@ -21,13 +21,13 @@ export const pricingPage: SeoPage = {
         {
           h3: "Essentiel, 29 € par mois : pour démarrer seul",
           p: [
-            "Vous avez tout pour lancer votre roue : le QR code, le flyer et le chevalet à imprimer, des modèles de lots adaptés à votre métier, les codes cadeaux validés en caisse et le suivi des parties. C'est le bon choix si vous voulez tester l'idée simplement, à votre rythme.",
+            "Vous avez tout pour lancer votre roue : le QR code, le flyer et le chevalet à imprimer, des modèles de lots adaptés à votre métier, les codes cadeaux validés en caisse et le suivi des parties. Vous créez et personnalisez votre roue vous-même, en 5 minutes. C'est le bon choix si vous voulez tester l'idée simplement, à votre rythme.",
           ],
         },
         {
           h3: "Croissance, 49 € par mois : pour faire revenir et animer",
           p: [
-            "Ce pack ajoute ce qui aide le client à repasser : un rappel par e-mail avant la date limite de son cadeau, des roues saisonnières programmées à l'avance, le parrainage entre clients, et vos liens de réservation, Instagram et Facebook affichés après le jeu. Vous voyez aussi les statistiques par employé et recevez une aide par IA pour répondre à vos avis (30 par mois). Une visio de configuration de 30 minutes est offerte.",
+            "Ce pack ajoute la création de votre roue par nos soins (« Créez-la pour moi ») et ce qui aide le client à repasser : un rappel par e-mail avant la date limite de son cadeau, des roues saisonnières programmées à l'avance, le parrainage entre clients, et vos liens de réservation, Instagram et Facebook affichés après le jeu. Vous voyez aussi les statistiques par employé et recevez une aide par IA pour répondre à vos avis (30 par mois). Une visio de configuration de 30 minutes est offerte.",
           ],
         },
         {
@@ -82,10 +82,10 @@ export const pricingPage: SeoPage = {
     {
       h2: "Pouvez-vous installer la roue à ma place ?",
       answer:
-        "Oui. La mise en route en ligne est gratuite, l'installation sur place coûte 49 € à Paris et en petite couronne, et le service « Créez-la pour moi » crée la roue pour vous.",
+        "Oui. La mise en route en ligne est gratuite, l'installation sur place coûte 49 € à Paris et en petite couronne, et le service « Créez-la pour moi », inclus à partir du pack Croissance, crée la roue pour vous.",
       p: [
         "Sur place, nous venons dans votre commerce pour régler la roue et poser le chevalet : 49 €, ou 79 € si le déplacement est fait uniquement pour vous. Vous pouvez [prendre rendez-vous](/rendez-vous) pour fixer un créneau.",
-        "Avec « Créez-la pour moi », vous envoyez vos informations (logo, couleurs, cadeaux souhaités) et nous vous renvoyons votre roue et son QR code sous 24 à 48 h. Pour bien placer ensuite votre QR code, lisez notre guide sur [l'emplacement du QR code](/blog/qr-code-commerce-emplacement).",
+        "Avec « Créez-la pour moi » (packs Croissance et Premium), vous envoyez vos informations (logo, couleurs, cadeaux souhaités) et nous vous renvoyons votre roue et son QR code sous 24 à 48 h. Pour bien placer ensuite votre QR code, lisez notre guide sur [l'emplacement du QR code](/blog/qr-code-commerce-emplacement).",
       ],
     },
     {
@@ -119,7 +119,7 @@ export const pricingPage: SeoPage = {
     {
       q: "Puis-je changer de pack en cours de route ?",
       a:
-        "Oui. Vous pouvez commencer avec Essentiel et passer à Croissance ou Premium quand vous en avez besoin,. Pour toute question sur votre abonnement, écrivez à contact@rouelia.fr ou consultez la [FAQ](/faq).",
+        "Oui. Vous pouvez commencer avec Essentiel et passer à Croissance ou Premium quand vous en avez besoin. Pour toute question sur votre abonnement, écrivez à contact@rouelia.fr ou consultez la [FAQ](/faq).",
     },
     {
       q: "Le prix dépend-il du nombre de parties jouées ?",

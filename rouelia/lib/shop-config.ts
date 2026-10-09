@@ -458,3 +458,11 @@ export function shopFromSignup(r: SignupRecord, id: string, slug: string, now: D
   };
 }
 
+
+/**
+ * Règle de participation au JEU (jamais liée à un avis), selon le réglage « Rejouer après » du commerçant.
+ * null quand les parties ne sont pas limitées (replayDays = 0) : aucune mention n'est alors affichée.
+ */
+export function participationRule(replayDays: number): string | null {
+  return replayDays > 0 ? `Une participation par personne tous les ${replayDays} jours` : null;
+}

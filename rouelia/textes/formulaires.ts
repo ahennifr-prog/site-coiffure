@@ -1,5 +1,6 @@
 /** Textes des pages /creer-ma-roue et /rendez-vous (formulaires). */
 import { EMAIL } from "@/config";
+import { doneForYou } from "@/content";
 
 export const consentText = `J'accepte que Rouelia utilise ces informations pour répondre à ma demande et me recontacter à ce sujet. Je peux retirer mon accord à tout moment en écrivant à ${EMAIL}.`;
 
@@ -7,29 +8,35 @@ export const createWheel = {
   path: "/creer-ma-roue",
   title: "Créer ma roue à cadeaux",
   description:
-    "Créez votre roue à cadeaux Rouelia vous-même en 5 minutes, ou envoyez-nous vos infos : on la prépare pour vous et votre QR code arrive sous 24 à 48 h.",
+    "Créez votre roue à cadeaux Rouelia vous-même en 5 minutes, ou, à partir du pack Croissance, envoyez-nous vos infos : on la prépare pour vous sous 24 à 48 h.",
   eyebrow: "Créer ma roue",
   h1: "Votre roue, prête aujourd'hui.",
   lead: "Deux façons de démarrer, toutes les deux avec 14 jours d'essai gratuit et sans carte bancaire.",
   choose: "Choisissez votre parcours",
+  /** Qui a droit à « Créez-la pour moi » : affiché sous les deux parcours. */
+  packRule: doneForYou.rule,
   paths: {
     moi: {
       id: "moi-meme",
       title: "Je crée ma roue moi-même",
-      text: "Vos lots, vos couleurs, votre logo. Vous testez la roue comme un client, en direct.",
+      text: "Vos lots, vos couleurs, votre logo. Vous testez la roue comme un client, en direct. Possible avec tous les packs, Essentiel compris.",
       badge: "5 minutes",
     },
     pourMoi: {
       id: "pour-moi",
       title: "Créez-la pour moi",
-      text: "Vous nous donnez l'essentiel, on s'occupe du reste. QR code par e-mail sous 24 à 48 h.",
+      text: `Vous nous donnez quelques informations, on s'occupe du reste. QR code par e-mail sous 24 à 48 h. Inclus à partir du pack ${doneForYou.fromPack}.`,
       badge: "Le plus simple",
     },
   },
   demoTitle: "Réglez votre roue. Tournez-la comme un client.",
   form: {
-    title: "Dites-nous l'essentiel",
+    title: "Quelques informations suffisent",
     lead: "Une seule étape. On prépare votre roue et on vous envoie votre QR code.",
+    pack: "Pack de votre essai gratuit",
+    packHelp: "La création de votre roue par nos soins est incluse dans ces packs. 14 jours d'essai gratuit, sans carte bancaire.",
+    essentielNote: "Vous préférez l'Essentiel ? Avec ce pack, vous créez votre roue vous-même en 5 minutes :",
+    essentielLink: "créer ma roue moi-même",
     shopName: "Nom du commerce",
     name: "Votre prénom",
     nameHelp: "Facultatif, pour savoir comment vous appeler.",
@@ -48,7 +55,7 @@ export const createWheel = {
     message: "Message",
     messageHelp: "Facultatif. Horaires, couleurs, une idée particulière...",
     submit: "Envoyer ma demande",
-    next: "vous recevez un e-mail de confirmation. Nous préparons votre roue et vous envoyons votre QR code par e-mail sous 24 à 48 h.",
+    next: "vous recevez un e-mail de confirmation. Nous préparons votre roue et vous envoyons votre QR code par e-mail sous 24 à 48 h, avec votre essai gratuit de 14 jours sur le pack choisi.",
     submitting: "Envoi en cours",
     errors: {
       shopName: "Indiquez le nom de votre commerce.",
@@ -65,7 +72,7 @@ export const createWheel = {
     },
     success: {
       title: "C'est parti.",
-      text: "Vous recevrez votre QR code par e-mail sous 24 à 48 h.",
+      text: "Vous recevrez votre QR code par e-mail sous 24 à 48 h, avec votre essai gratuit de 14 jours sur le pack choisi.",
       note: "Un e-mail de confirmation vient de partir. Pensez à regarder vos courriers indésirables.",
     },
   },

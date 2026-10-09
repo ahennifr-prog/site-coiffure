@@ -8,6 +8,7 @@
  */
 
 import { EMAIL, whatsappUrl } from "@/config";
+import { visitsToCoverPack } from "@/lib/simulator";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -503,6 +504,18 @@ export interface Pack {
   badge?: string;
 }
 
+/**
+ * Rentabilité affichée partout (tarifs, pack Croissance, JSON-LD, llms.txt) : source unique, calculée et non saisie.
+ * Exemple retenu : salon de coiffure (panier et marge du modèle « coiffeur »), pack Croissance.
+ * Calcul : prix du pack / (panier moyen x marge), arrondi au client supérieur (lib/simulator.ts).
+ */
+const CROISSANCE_PRICE = 49;
+const coiffeur = trades.find((t) => t.id === "coiffeur")!.simulator;
+export const profitability = {
+  clients: visitsToCoverPack(CROISSANCE_PRICE, coiffeur.averageBasket, coiffeur.grossMargin),
+  basket: coiffeur.averageBasket,
+};
+
 export const pricing = {
   eyebrow: "Tarifs",
   title: "Un prix fixe par mois. Pas d'engagement.",
@@ -511,8 +524,8 @@ export const pricing = {
   perMonthShort: "/ mois",
   perDay: (amount: string) => `soit environ ${amount} par jour`,
   /** La ligne de rentabilité, reprise de la vidéo. Calcul : lib/simulator.ts (visitsToCoverPack). */
-  profit: "Rentable dès 3 clients qui reviennent par mois.",
-  profitNote: "Exemple : salon de coiffure, panier moyen 35 €, pack Croissance.",
+  profit: `Rentable dès ${profitability.clients} clients qui reviennent par mois.`,
+  profitNote: `Exemple : salon de coiffure, panier moyen ${profitability.basket} €, pack Croissance.`,
   choose: (name: string) => `Essayer ${name}`,
   more: "Voir plus",
   less: "Voir moins",
@@ -540,17 +553,17 @@ export const pricing = {
     {
       id: "croissance",
       name: "Croissance",
-      price: 49,
+      price: CROISSANCE_PRICE,
       badge: "Recommandé",
       tagline: "Idéal pour faire revenir vos clients plus souvent.",
       highlights: [
-        "Remboursé dès 3 clients qui reviennent par mois",
+        `Rentable dès ${profitability.clients} clients qui reviennent par mois`,
         "Vos clients sont prévenus avant que leur cadeau expire",
         "Vos habitués font venir leurs amis grâce au parrainage",
         "Votre roue change avec les saisons, sans y penser",
         "Vous répondez à vos avis en un clic, sans y passer la soirée",
       ],
-      features: "Tout l'Essentiel, rappel par e-mail, parrainage, roues saisonnières, réservation et réseaux sociaux après le jeu, statistiques par employé, 30 réponses aux avis par IA par mois, visio de configuration offerte.",
+      features: "Tout l'Essentiel, création de votre roue par nos soins (« Créez-la pour moi »), rappel par e-mail, parrainage, roues saisonnières, réservation et réseaux sociaux après le jeu, statistiques par employé, 30 réponses aux avis par IA par mois, visio de configuration offerte.",
     },
     {
       id: "premium",
@@ -585,6 +598,7 @@ export const pricing = {
     { feature: "Code du cadeau envoyé", values: ["Par e-mail", "Par e-mail", "Par e-mail"] },
     { feature: "Modèles par métier, calculateur de coût des lots", values: [true, true, true] },
     { feature: "Mise en route en ligne par vous", values: ["Gratuite", "Gratuite", "Gratuite"] },
+    { feature: "Création de votre roue par nos soins (« Créez-la pour moi »)", values: [false, "Incluse", "Incluse"] },
     { feature: "Visio de configuration de 30 minutes", values: [false, "Offerte", "Offerte"] },
     { feature: "Installation sur place (Paris et petite couronne)", values: ["49 € (79 € si déplacement dédié)", "49 € (79 € si déplacement dédié)", "49 € (79 € si déplacement dédié)"] },
     { feature: "Rapport hebdomadaire par e-mail, avec une action à faire", values: [true, true, true] },
@@ -602,6 +616,18 @@ export const pricing = {
   featureColumn: "Fonction",
   included: "Inclus",
   notIncluded: "Non inclus",
+};
+
+/**
+ * « Créez-la pour moi » (création de la roue par nos soins) : packs concernés, source unique des textes.
+ * Règle d'Aymen : l'essai de 14 jours est gratuit sur tous les packs ; avec l'Essentiel, le commerçant crée sa roue
+ * lui-même ; la création par nos soins est incluse à partir de Croissance.
+ */
+const packName = (id: PackId) => pricing.packs.find((p) => p.id === id)?.name ?? id;
+export const doneForYou = {
+  packs: ["croissance", "premium"] as PackId[],
+  fromPack: packName("croissance"),
+  rule: `Avec l'${packName("essentiel")}, vous créez et personnalisez votre roue vous-même en 5 minutes. La création par nos soins est incluse à partir du pack ${packName("croissance")}.`,
 };
 
 /* ------------------------------------------------------------------ */

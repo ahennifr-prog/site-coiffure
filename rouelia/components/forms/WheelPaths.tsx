@@ -69,6 +69,9 @@ export function WheelPaths() {
         })}
       </div>
 
+      {/* Qui a droit à « Créez-la pour moi » : visible quel que soit le parcours choisi. */}
+      <p className="mt-6 rounded-lg bg-sauge-soft px-4 py-3 text-sm font-medium text-ink">{fr(createWheel.packRule)}</p>
+
       <div id="panel-pour-moi" role="tabpanel" aria-labelledby="tab-pour-moi" hidden={path !== "pour-moi"} className="mt-10">
         <WheelRequestForm />
       </div>

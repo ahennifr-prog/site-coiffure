@@ -1,5 +1,5 @@
 /** Contenu de /llms.txt (résumé) et /llms-full.txt (texte complet), générés depuis les textes du site. */
-import { brand, company, cta, faq, howItWorks, pricing } from "@/content";
+import { brand, company, cta, doneForYou, faq, howItWorks, pricing } from "@/content";
 import { BOOKING } from "@/config";
 import { articles } from "@/textes/blog";
 import { faqPage } from "@/textes/faq";
@@ -32,6 +32,7 @@ export function llmsTxt(): string {
     "## Offres (prix par mois, sans engagement)",
     ...pricing.packs.map((p) => `- ${p.name} : ${p.price} € par mois. ${p.tagline} ${p.features}`),
     `- ${company.vatMention}.`,
+    `- Rentabilité, exemple de calcul et non promesse : ${pricing.profit} ${pricing.profitNote}`,
     "",
     "## Pages clés",
     ...sitePages.filter((p) => p.priority >= 0.5).map((p) => `- [${p.title}](${url(p.path)}) : ${p.description}`),
@@ -40,7 +41,7 @@ export function llmsTxt(): string {
     `- E-mail : ${brand.email}`,
     `- WhatsApp : ${brand.whatsapp}`,
     `- ${cta.call} : ${url(cta.callHref)} (du lundi au vendredi, ${Object.values(BOOKING.hours)[0]?.map(([a, b]) => `${a} à ${b}`).join(" et ")}, heure de Paris)`,
-    `- Créer sa roue ou la faire créer : ${url(cta.href)}`,
+    `- Créer sa roue soi-même (tous les packs) ou la faire créer (${doneForYou.rule}) : ${url(cta.href)}`,
     "",
     "## Optionnel",
     `- [Texte complet du site](${url("/llms-full.txt")})`,

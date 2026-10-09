@@ -257,7 +257,7 @@ export function merchantTrialMail(p: TrialMailInput): Mail {
       `Bonjour ${p.firstName},`,
       `Votre essai se termine le ${formatDay(p.trialEnd)} et la roue de ${p.shopName} n'a pas encore été jouée. C'est presque toujours une question d'emplacement : le QR code doit se voir au moment où le client paie.`,
       `Trois gestes qui font la différence : posez le chevalet juste à côté de la caisse, proposez la roue à chaque client en lui rendant la monnaie, et jouez une fois vous-même pour pouvoir la montrer.`,
-      `Répondez à cet e-mail : on vous appelle dix minutes pour la mettre en place avec vous, et on prolonge votre essai le temps de voir les premiers résultats.`,
+      `Répondez à cet e-mail : on vous appelle pendant 5 minutes pour la mettre en place avec vous, et on prolonge votre essai le temps de voir les premiers résultats.`,
     ];
     button = { label: "Imprimer mon chevalet", url: `${brand.url}/espace/flyer` };
     link = undefined;
@@ -278,7 +278,7 @@ export function merchantTrialMail(p: TrialMailInput): Mail {
     paragraphs = [
       `Bonjour ${p.firstName},`,
       `Votre essai est terminé, mais la roue de ${p.shopName} n'a pas encore été jouée : vous n'avez donc pas pu voir ce qu'elle vaut. Ce serait dommage d'en rester là.`,
-      `Répondez à cet e-mail : on vous appelle dix minutes pour la mettre en place avec vous et on relance votre essai pour quelques jours, sans rien vous facturer.`,
+      `Répondez à cet e-mail : on vous appelle pendant 5 minutes pour la mettre en place avec vous et on relance votre essai pour quelques jours, sans rien vous facturer.`,
     ];
     button = { label: "Je veux relancer mon essai", url: `mailto:${brand.email}?subject=${encodeURIComponent(`Relancer mon essai (${p.shopName})`)}` };
     link = undefined;
@@ -332,7 +332,7 @@ export function merchantTrialLastMail(p: TrialMailInput): Mail {
     paragraphs = [
       `Bonjour ${p.firstName},`,
       `Votre essai s'est terminé avant que la roue de ${p.shopName} ait pu tourner. C'est dommage : vous n'avez pas vu ce qu'elle peut faire pour vous.`,
-      `Nous vous proposons de relancer votre essai gratuitement, avec un appel de dix minutes pour la mettre en place ensemble. Il suffit de répondre à cet e-mail.`,
+      `Nous vous proposons de relancer votre essai gratuitement, avec un appel de 5 minutes pour la mettre en place ensemble. Il suffit de répondre à cet e-mail.`,
     ];
     button = { label: "Je veux relancer mon essai", url: `mailto:${brand.email}?subject=${encodeURIComponent(`Relancer mon essai (${p.shopName})`)}` };
   }
@@ -457,6 +457,8 @@ export interface WheelRequestMail {
   prizes: string;
   message: string;
   logoName: string | null;
+  /** Nom du pack choisi pour l'essai (Croissance ou Premium). */
+  pack: string;
 }
 
 export function wheelRequestAlertMail(p: WheelRequestMail, logo: { filename: string; content: string; base64: true } | null): Mail {
@@ -468,6 +470,7 @@ export function wheelRequestAlertMail(p: WheelRequestMail, logo: { filename: str
     ...(logo ? { attachments: [logo] } : {}),
     ...rouelia("Demande « Créez-la pour moi »", [
       `Commerce : ${p.shopName}. Contact : ${p.name || "non précisé"}.`,
+      `Pack de l'essai : ${p.pack}.`,
       `Téléphone : ${p.phone}. E-mail : ${p.email}.`,
       `Adresse : ${p.address}.`,
       `Fiche Google : ${p.google}.`,
@@ -478,7 +481,7 @@ export function wheelRequestAlertMail(p: WheelRequestMail, logo: { filename: str
   };
 }
 
-export function wheelRequestConfirmMail(p: { email: string; name: string; shopName: string }): Mail {
+export function wheelRequestConfirmMail(p: { email: string; name: string; shopName: string; pack: string }): Mail {
   return {
     to: { email: p.email, name: p.name || p.shopName },
     subject: "Votre roue Rouelia est en préparation",
@@ -486,7 +489,7 @@ export function wheelRequestConfirmMail(p: { email: string; name: string; shopNa
     replyTo: brand.email,
     ...rouelia("C'est parti", [
       `Bonjour${p.name ? ` ${p.name}` : ""},`,
-      `Nous préparons la roue de ${p.shopName}. Vous recevrez votre QR code par e-mail sous 24 à 48 h.`,
+      `Nous préparons la roue de ${p.shopName}. Vous recevrez votre QR code par e-mail sous 24 à 48 h, avec votre essai gratuit de 14 jours sur le pack ${p.pack}.`,
       "Une précision à ajouter ? Répondez simplement à cet e-mail.",
     ]),
   };

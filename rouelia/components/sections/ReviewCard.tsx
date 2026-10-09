@@ -32,15 +32,17 @@ export function ReviewCard({ review: r }: { review: MerchantReview }) {
         ))}
       </div>
       <blockquote className="mt-2 text-[15px] leading-snug text-ink">« {fr(r.text)} »</blockquote>
-      <p className="mt-auto flex items-center justify-between gap-3 pt-3 text-xs text-ink-soft">
-        <span>{r.date}</span>
-        {r.ficheGoogle ? (
-          <a href={r.ficheGoogle} target="_blank" rel="noopener noreferrer" tabIndex={-1} className="inline-flex min-h-8 items-center gap-1 font-semibold text-tomette-deep underline underline-offset-2">
-            {merchantReviewsSection.googleLink}
-            <ExternalLink aria-hidden size={12} />
-          </a>
-        ) : null}
-      </p>
+      {r.date || r.ficheGoogle ? (
+        <p className="mt-auto flex items-center justify-between gap-3 pt-3 text-xs text-ink-soft">
+          <span>{r.date}</span>
+          {r.ficheGoogle ? (
+            <a href={r.ficheGoogle} target="_blank" rel="noopener noreferrer" tabIndex={-1} className="inline-flex min-h-8 items-center gap-1 font-semibold text-tomette-deep underline underline-offset-2">
+              {merchantReviewsSection.googleLink}
+              <ExternalLink aria-hidden size={12} />
+            </a>
+          ) : null}
+        </p>
+      ) : null}
     </figure>
   );
 }

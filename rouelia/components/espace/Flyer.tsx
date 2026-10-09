@@ -4,6 +4,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import QRCode from "qrcode";
 import { ArrowLeft, Printer, TriangleAlert } from "lucide-react";
 import { Monogram } from "@/components/demo/PhoneScreen";
+import { participationRule } from "@/lib/shop-config";
 
 type Format = "a5" | "a6";
 
@@ -24,6 +25,8 @@ interface FlyerShop {
   monogram: string;
   logoUrl: string | null;
   poweredBy: boolean;
+  /** Réglage « Rejouer après », en jours (0 = parties non limitées). */
+  replayDays: number;
   /** Couleurs des segments et noms des lots de la roue. */
   colors: string[];
   prizes: string[];
@@ -131,7 +134,7 @@ function Card({ shop, svg, size }: { shop: FlyerShop; svg: string; size: Format 
       </ol>
 
       <p className="mt-auto text-ink-soft" style={{ fontSize: mm(2.7), padding: `0 ${mm(10)} ${mm(5)}`, lineHeight: 1.35 }}>
-        Jeu gratuit, sans obligation d&apos;achat. Une participation par personne. Pas d&apos;application à installer.
+        Jeu gratuit, sans obligation d&apos;achat.{participationRule(shop.replayDays) ? ` ${participationRule(shop.replayDays)}.` : ""} Pas d&apos;application à installer.
         {shop.poweredBy ? <><br />Propulsé par Rouelia</> : null}
       </p>
     </div>

@@ -36,7 +36,7 @@ export const aboutPage: Omit<SeoPage, "sections" | "faq"> & {
       {
         title: "Simple",
         text:
-          "Votre roue doit être prête en 5 minutes, sans formation. Vos clients jouent sans application, et vous validez les cadeaux en caisse en un geste. Si quelque chose vous semble compliqué, dites-le moi : c'est que je dois l'améliorer.",
+          "Votre roue doit être prête en 5 minutes, sans formation. Vos clients jouent sans application, et vous validez les cadeaux en caisse en un geste. Si quelque chose vous semble compliqué, dites-le-moi : c'est que je dois l'améliorer.",
       },
       {
         title: "Humain",
@@ -141,7 +141,7 @@ export const aboutPage: Omit<SeoPage, "sections" | "faq"> & {
     {
       q: "Comment démarrer avec Rouelia ?",
       a:
-        "Le plus simple est de [créer votre roue](/creer-ma-roue) : l'essai gratuit de 14 jours démarre sans carte bancaire. Si vous manquez de temps, le service « Créez-la pour moi » existe : vous m'envoyez vos informations et je vous renvoie votre QR code sous 24 à 48 h.",
+        "Le plus simple est de [créer votre roue](/creer-ma-roue) : l'essai gratuit de 14 jours démarre sans carte bancaire. Si vous manquez de temps, le service « Créez-la pour moi » est inclus à partir du pack Croissance : vous m'envoyez vos informations et je vous renvoie votre QR code sous 24 à 48 h. Avec l'Essentiel, vous créez votre roue vous-même en 5 minutes.",
     },
   ],
   cta: {

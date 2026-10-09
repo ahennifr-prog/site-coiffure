@@ -91,7 +91,7 @@ export const tradePages: TradePage[] = [
       },
       {
         q: "Je n'ai pas le temps de configurer la roue, comment faire ?",
-        a: "Choisissez le service « Créez-la pour moi » sur la page [créer ma roue](/creer-ma-roue) : vous envoyez vos infos, nous créons la roue et vous recevez le QR code sous 24 à 48 h.",
+        a: "Choisissez le service « Créez-la pour moi » sur la page [créer ma roue](/creer-ma-roue), inclus à partir du pack Croissance : vous envoyez vos infos, nous créons la roue et vous recevez le QR code sous 24 à 48 h.",
       },
     ],
     cta:
@@ -240,7 +240,7 @@ export const tradePages: TradePage[] = [
           "Les meilleurs lots d'institut coûtent surtout quelques minutes de votre temps. Vous réglez coût et chance de chaque lot, Rouelia vous donne le coût moyen d'une partie.",
         p: [
           "Exemple de calcul, à titre indicatif : votre roue mélange des échantillons, des poses de vernis et des massages des mains, avec une réduction plus forte réservée à de rares gagnantes. Si le coût moyen d'une partie est d'environ 2,50 € et que 30 clientes jouent dans le mois, vous consacrez à peu près 75 € de cadeaux sur le mois.",
-          "Avec un panier moyen d'institut souvent plus élevé qu'en commerce alimentaire, une seule cliente qui revient au lieu de partir peut déjà représenter plus que ce budget. C'est un raisonnement à faire avec vos propres chiffres, pas une promesse. Les packs sont détaillés sur la page [tarifs](/tarifs), et le pack Premium ajoute des lots pour remplir les heures creuses.",
+          "Avec un panier moyen d'institut souvent plus élevé qu'en commerce alimentaire, une seule cliente qui revient au lieu de partir peut déjà représenter plus que ce budget. C'est un raisonnement à faire avec vos propres chiffres, pas une promesse. Les packs sont détaillés sur la page [tarifs](/tarifs), et le pack Premium permet de programmer une roue dédiée à vos heures creuses.",
         ],
       },
       {
@@ -271,7 +271,7 @@ export const tradePages: TradePage[] = [
       },
       {
         q: "Puis-je utiliser la roue pour remplir mes créneaux creux ?",
-        a: "Le pack Premium propose des lots pour heures creuses, par exemple un cadeau valable seulement en semaine l'après-midi.",
+        a: "Avec le pack Premium, vous programmez une roue dédiée aux heures creuses, sur les jours et les heures de votre choix (par exemple en semaine, de 14 h à 17 h). Les clientes qui jouent à ces moments-là tournent cette roue, avec les lots que vous lui avez choisis ; le reste du temps, c'est votre roue habituelle.",
       },
       {
         q: "Mes clientes doivent-elles installer une application ?",
@@ -367,7 +367,7 @@ export const tradePages: TradePage[] = [
       },
       {
         q: "Je n'ai pas le temps de m'en occuper entre deux fournées.",
-        a: "Choisissez « Créez-la pour moi » sur la page [créer ma roue](/creer-ma-roue). À Paris et en petite couronne, l'installation sur place est aussi possible.",
+        a: "Choisissez « Créez-la pour moi » sur la page [créer ma roue](/creer-ma-roue), inclus à partir du pack Croissance. À Paris et en petite couronne, l'installation sur place est aussi possible.",
       },
     ],
     cta:

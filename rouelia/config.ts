@@ -51,6 +51,6 @@ export const BOOKING = {
  * null : cercle avec l'initiale du fondateur (brand.founder dans content.ts).
  * Pour afficher une vraie photo : déposer deux carrés WebP de 96 et 192 px dans /public et renseigner leurs chemins,
  * par exemple { src96: "/a-propos/profil-96.webp", src192: "/a-propos/profil-192.webp" }.
- * Ne mettre qu'une photo de la personne nommée comme fondateur sur le site.
+ * Provisoire : visage recadré dans la photo de /a-propos (scripts/photo-profil.sh), en attendant une photo de profil dédiée.
  */
-export const FOUNDER_AVATAR: { src96: string; src192: string } | null = null;
+export const FOUNDER_AVATAR: { src96: string; src192: string } | null = { src96: "/a-propos/profil-96.webp", src192: "/a-propos/profil-192.webp" };

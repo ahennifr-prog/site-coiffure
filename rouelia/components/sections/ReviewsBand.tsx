@@ -24,7 +24,7 @@ export function ReviewsBand({ reviews, compact, draft = false }: { reviews: Merc
       <ul className="sr-only focus-within:not-sr-only focus-within:mx-auto focus-within:mt-6 focus-within:block focus-within:max-w-2xl focus-within:space-y-2 focus-within:px-5 focus-within:text-sm">
         {reviews.map((r) => (
           <li key={r.shop}>
-            {r.shop}, {reviewSubtitle(r)} : « {r.text} » ({r.stars} sur 5, {r.date})
+            {r.shop}, {reviewSubtitle(r)} : « {r.text} » ({r.stars} sur 5{r.date ? `, ${r.date}` : ""})
             {r.ficheGoogle ? (
               <>
                 {" "}

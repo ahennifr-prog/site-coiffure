@@ -7,7 +7,7 @@
  */
 export interface MerchantReview {
   shop: string;
-  /** Métier et ville, affichés sous le nom (remplacés par `metier` et `ville` quand ils sont renseignés). */
+  /** Métier, affiché sous le nom (remplacé par `metier` et `ville` quand ils sont renseignés). Sans ville pour l'instant. */
   trade: string;
   /**
    * Champs facultatifs pour rendre le témoignage vérifiable. Ne les remplir qu'avec des informations exactes
@@ -22,8 +22,8 @@ export interface MerchantReview {
   text: string;
   /** Note sur 5. */
   stars: number;
-  /** Mois de publication, affiché sur la carte (transparence des avis, art. L111-7-2 du Code de la consommation). */
-  date: string;
+  /** Mois de publication, affiché sur la carte s'il est renseigné. Laissé vide pour l'instant (choix d'Aymen, 9 octobre 2026). */
+  date?: string;
   /** Logo dans /public/logos (fond foncé conseillé pour un logo blanc), sinon monogramme. */
   logo?: { src: string; width: number; height: number; background: string };
   monogram: string;
@@ -35,10 +35,9 @@ export interface MerchantReview {
 export const merchantReviews: MerchantReview[] = [
   {
     shop: "Alia Coiffure",
-    trade: "Salon de coiffure, Champigny-sur-Marne",
+    trade: "Salon de coiffure",
     text: "Je ne m'attendais pas à ce que ça apporte autant. Avec cette roue, mes clientes reviennent et mon planning est plus rempli.",
     stars: 5,
-    date: "Octobre 2026",
     logo: { src: "/logos/alia-coiffure.webp", width: 160, height: 158, background: "#1D1A16" },
     monogram: "AC",
     color: "#1D1A16",
@@ -49,7 +48,6 @@ export const merchantReviews: MerchantReview[] = [
     trade: "Pizzeria",
     text: "Les clients adorent jouer en attendant leur commande, et ils reviennent pour leur cadeau.",
     stars: 5,
-    date: "Octobre 2026",
     logo: { src: "/logos/pizza-time.webp", width: 200, height: 131, background: "#FFFFFF" },
     monogram: "PT",
     color: "#C4401F",
@@ -60,7 +58,6 @@ export const merchantReviews: MerchantReview[] = [
     trade: "Restaurant thaï",
     text: "Avec la roue, on fidélise vraiment : les clients reviennent pour utiliser leur cadeau.",
     stars: 5,
-    date: "Octobre 2026",
     logo: { src: "/logos/bangkok-factory-94.webp", width: 200, height: 200, background: "#FFFFFF" },
     monogram: "BF",
     color: "#2E6150",
@@ -71,7 +68,6 @@ export const merchantReviews: MerchantReview[] = [
     trade: "Institut de beauté",
     text: "Simple à installer, et mes clientes reviennent plus souvent. Je recommande.",
     stars: 5,
-    date: "Octobre 2026",
     monogram: "EB",
     color: "#8A4B5C",
     valide: true,

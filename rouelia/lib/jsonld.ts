@@ -41,7 +41,7 @@ export function personJsonLd() {
     jobTitle: "Fondateur de Rouelia",
     worksFor: { "@id": `${brand.url}/#organisation` },
     url: `${brand.url}/a-propos`,
-    // Pas d'image : la photo de /a-propos est une illustration, elle ne représente pas le fondateur.
+    image: `${brand.url}/a-propos/poignee-de-main-720.webp`,
   };
 }
 
@@ -51,7 +51,7 @@ export function productJsonLd() {
     "@context": "https://schema.org",
     "@type": "Product",
     name: `${brand.name}, roue à cadeaux de fidélisation`,
-    description: seo.description,
+    description: `${seo.description} ${pricing.profit} ${pricing.profitNote}`,
     brand: { "@type": "Brand", name: brand.name },
     url: `${brand.url}/tarifs`,
     offers: pricing.packs.map((p) => ({

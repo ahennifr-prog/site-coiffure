@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { CheckCircle2, ImagePlus, LoaderCircle, X } from "lucide-react";
-import { brand, cta } from "@/content";
-import { fr } from "@/lib/format";
+import { brand, cta, doneForYou, pricing, type PackId } from "@/content";
+import { formatPrice, fr } from "@/lib/format";
 import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
 import { consentText, createWheel } from "@/textes/formulaires";
 import { readImage } from "@/components/demo/readImage";
@@ -16,6 +16,7 @@ type Key = "shopName" | "phone" | "email" | "address" | "google" | "consent";
 /** Formulaire « Créez-la pour moi » : une seule étape, envoi à contact@ et confirmation au commerçant. */
 export function WheelRequestForm() {
   const [v, setV] = useState({ shopName: "", name: "", phone: "", email: "", address: "", google: "", prizes: "", message: "" });
+  const [pack, setPack] = useState<PackId>(doneForYou.packs[0]);
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState("");
   const [logo, setLogo] = useState<{ dataUrl: string; name: string } | null>(null);
@@ -65,7 +66,7 @@ export function WheelRequestForm() {
       const res = await fetch("/api/roue-pour-moi", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...v, consent, website, logo: logo?.dataUrl ?? null, logoName: logo?.name ?? "" }),
+        body: JSON.stringify({ ...v, pack, consent, website, logo: logo?.dataUrl ?? null, logoName: logo?.name ?? "" }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
@@ -119,6 +120,36 @@ export function WheelRequestForm() {
       <h3 className="font-display text-2xl font-semibold sm:text-3xl">{fr(t.title)}</h3>
       <p className="mt-1 text-ink-soft">{fr(t.lead)}</p>
       <Honeypot value={website} onChange={setWebsite} />
+      {/* « Créez-la pour moi » est inclus à partir de Croissance : le pack de l'essai est choisi ici. */}
+      <fieldset className="mt-6">
+        <legend className="text-sm font-semibold">{t.pack}</legend>
+        <div className="mt-2 grid gap-3 sm:grid-cols-2">
+          {doneForYou.packs.map((id) => {
+            const p = pricing.packs.find((x) => x.id === id)!;
+            return (
+              <label key={id} className={`flex min-h-13 cursor-pointer items-center gap-3 rounded-lg px-4 py-2 ring-1 transition-colors ${pack === id ? "bg-tomette-soft/60 ring-2 ring-tomette" : "bg-paper ring-line hover:ring-ink/40"}`}>
+                <input type="radio" name="pm-pack" value={id} checked={pack === id} onChange={() => setPack(id)} aria-describedby="pm-pack-help" className="h-5 w-5 shrink-0 accent-tomette" />
+                <span>
+                  <span className="font-semibold">{p.name}</span>
+                  {p.badge ? <span className="ml-2 text-xs font-bold text-tomette-deep uppercase">{p.badge}</span> : null}
+                  <span className="block text-sm text-ink-soft">
+                    {formatPrice(p.price)} {pricing.perMonth}, après l&apos;essai
+                  </span>
+                </span>
+              </label>
+            );
+          })}
+        </div>
+        <p id="pm-pack-help" className="mt-2 text-sm text-ink-soft">
+          {fr(t.packHelp)}
+        </p>
+        <p className="mt-1 text-sm text-ink-soft">
+          {fr(t.essentielNote)}{" "}
+          <a href="#moi-meme" className="font-semibold text-tomette-deep underline underline-offset-2">
+            {t.essentielLink}
+          </a>
+        </p>
+      </fieldset>
       {tried && Object.values(check).some((x) => !x) ? (
         <p role="alert" className="mt-4 rounded-lg bg-danger/10 p-3 text-sm font-semibold text-danger">
           {fr(t.errors.summary)}

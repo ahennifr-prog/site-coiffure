@@ -36,3 +36,11 @@ describe("simulateur", () => {
     expect(visitsToCoverPack(49, 0, 0.75)).toBe(Infinity);
   });
 });
+
+describe("rentabilité affichée", () => {
+  it("vient du calcul et vaut 2 clients (salon de coiffure, pack Croissance)", async () => {
+    const { profitability, pricing } = await import("@/content");
+    expect(profitability.clients).toBe(2);
+    expect(pricing.profit).toBe("Rentable dès 2 clients qui reviennent par mois.");
+  });
+});

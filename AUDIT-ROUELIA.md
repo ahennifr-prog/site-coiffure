@@ -10,24 +10,29 @@ indépendantes du code (textes, puis conformité et sécurité).
 Je ne suis pas juriste : tout point juridique ci-dessous est à faire valider par un professionnel.
 
 
-## Suivi (mis à jour le 9 octobre 2026, avant /compact)
+## Suivi (mis à jour le 9 octobre 2026, lot « finalisation »)
 
-Aucune correction de cet audit n'est encore appliquée au site. Décisions d'Aymen :
+Appliqué sur la branche de travail `claude/inspiring-mccarthy-13gj1h`, **pas encore en production** (attend « go prod ») :
 
 - [x] Roue d'ALIA (C2) : traitée par Aymen lui-même, hors de ce dépôt.
-- [x] Rentabilité (I4) : « 2 clients » partout. À appliquer dans `content.ts` (lignes « Rentable dès 3 clients » et
-      « Remboursé dès 3 clients »), aligné sur `visitsToCoverPack`.
-- [x] Essai : ouvert à la main par Aymen (pas d'ouverture automatique). Le texte « On vous écrit très vite » doit donner un délai.
-- [x] Pack Essentiel : choix d'Aymen pour l'essai lié à « Créez-la pour moi » (à reformuler sur le formulaire ; interprétation
-      à confirmer si besoin).
-- [x] SMS et relances : prévus mais non codés. Les textes qui les promettent (case « offres par SMS », rappel e-mail affiché
-      en Essentiel) restent à rendre exacts (C3, I11).
+- [x] I4 Rentabilité : « Rentable dès 2 clients » partout, calculée par `visitsToCoverPack` (source unique
+      `profitability` dans `content.ts`, reprise par les tarifs, le JSON-LD Product et llms.txt).
+- [x] Essai : délai annoncé « en général en quelques minutes (24 h maximum) » sur le site et dans l'e-mail.
+- [x] Pack Essentiel : essai gratuit sur tous les packs ; « Créez-la pour moi » inclus à partir de Croissance
+      (`doneForYou` dans `content.ts`, tableau des tarifs, /creer-ma-roue, formulaire avec choix du pack, e-mails, FAQ, llms.txt).
+- [x] C4 Participation : la mention « Une participation par personne » ne s'affiche (jeu, flyer, règlement) que si le
+      commerçant limite les parties (`participationRule` dans `lib/shop-config.ts`).
+- [x] I11 « dix minutes » remplacé par « 5 minutes » dans les e-mails de fin d'essai ; heures creuses décrites comme le
+      produit les fait (roue programmée sur des jours et heures) sur la page institut.
+- [x] I3 Enzo / Aymen Henni : décision d'Aymen, le site garde « Enzo » (`brand.founder`).
+- [x] I9 Mesure des conversions : compteurs sans cookie (lot conversion).
+- [x] Coquilles « besoin,. » et « dites-le moi » corrigées.
+- [ ] C3 Rappel e-mail promis aux clients en Essentiel : laissé tel quel (fonctions prévues, consigne D du 9 octobre).
+- [ ] SMS et relances : prévus mais non codés, textes laissés tels quels (liste dans NOTES-PROJET.md).
 - [ ] C1 SIREN, adresse, contact : en attente d'Aymen.
-- [ ] C3, C4 textes du jeu client (rappel, participation, flyer) : à corriger.
 - [ ] I1, I2 confidentialité (Anthropic, Stripe, « Autre activité ») et relecture juridique : à faire.
-- [ ] I3 Enzo / Aymen Henni : décision à prendre.
-- [ ] I5, I6, I7 en-têtes de sécurité, limites de débit : à faire (mode « AUDIT + CORRECTIONS SÛRES » non encore donné).
-- [ ] I8 purge des données, I9 mesure des conversions, I10 performance de l'accueil : à faire.
+- [ ] I5, I6, I7 en-têtes de sécurité, limites de débit : à faire.
+- [ ] I8 purge des données, I10 performance de l'accueil : à faire.
 
 ---
 

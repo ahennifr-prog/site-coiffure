@@ -6,7 +6,7 @@ import { CalendarCheck, Check, Copy, Crown, Gift, LoaderCircle, MapPin, Phone, S
 import { reviewPrompt } from "@/content";
 import { formatDay, parisDay } from "@/lib/dates";
 import { fr } from "@/lib/format";
-import type { PublicShop } from "@/lib/shop-config";
+import { participationRule, type PublicShop } from "@/lib/shop-config";
 import { normalizeFrenchPhone } from "@/lib/signup";
 import { readableOn, segmentColors } from "@/lib/wheel";
 import { Confetti, Monogram } from "@/components/demo/PhoneScreen";
@@ -312,7 +312,8 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
     setTimeout(() => setCelebrate(false), 4500);
   }
 
-  const replay = shop.replayDays > 0 ? ` tous les ${shop.replayDays} jours` : "";
+  // Mention affichée seulement si le commerçant limite les parties (réglage « Rejouer après »).
+  const rule = participationRule(shop.replayDays);
   const buttonStyle = { background: primary, color: onPrimary };
 
   return (
@@ -415,7 +416,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                   </button>
                 ) : null}
                 <p className="mt-6 text-xs text-ink-soft">
-                  Jeu gratuit, sans obligation d&apos;achat. Une participation par personne{replay}.{" "}
+                  Jeu gratuit, sans obligation d&apos;achat.{rule ? ` ${rule}.` : ""}{" "}
                   <Link href={`/j/${shop.slug}/reglement`} className="underline underline-offset-2">
                     Règlement et données
                   </Link>
@@ -539,7 +540,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                   {step === "gain" ? `Bravo ${result.play.firstName}` : "Vous avez déjà joué"}
                 </h1>
                 <p className="mt-2 mb-5 text-center text-ink-soft lg:text-left">
-                  {step === "gain" ? "Voici votre cadeau." : `Une participation par personne${replay}. Voici le cadeau que vous avez gagné.`}
+                  {step === "gain" ? "Voici votre cadeau." : `${rule ? `${rule}. ` : ""}Voici le cadeau que vous avez gagné.`}
                   {step === "gain" && emailed ? " Il vous a aussi été envoyé par e-mail." : ""}
                 </p>
                 <Ticket play={result.play} shop={shop} />

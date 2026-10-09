@@ -40,7 +40,7 @@ export function Hero() {
           </h1>
         </div>
 
-        <div id="hero-wheel" data-fx="parallax" data-depth="-140" className="relative mx-auto w-full max-w-[288px] max-sm:order-3 sm:max-w-[440px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:max-w-[500px]">
+        <div id="hero-wheel" data-fx="parallax" data-depth="-140" className="relative mx-auto w-full max-w-[288px] max-sm:order-3 max-sm:[@media(max-height:660px)]:max-w-[256px] sm:max-w-[440px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:max-w-[500px]">
           <Tilt max={6}>
             <div aria-hidden className="absolute inset-x-4 top-8 bottom-12 rounded-[44px] bg-paper/80 shadow-lg ring-1 ring-line/70 sm:top-10 [@media(hover:hover)]:[transform:translateZ(-40px)]" />
             <Awning className="relative mx-auto h-6 w-[calc(100%-0.5rem)] drop-shadow-sm sm:h-9" />

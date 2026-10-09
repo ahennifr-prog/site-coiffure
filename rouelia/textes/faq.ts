@@ -45,7 +45,7 @@ export const faqPage: Omit<SeoPage, "sections" | "faq"> & { groups: { title: str
         },
         {
           q: "Pouvez-vous créer la roue pour moi ?",
-          a: "Oui. Avec le service « Créez-la pour moi », vous nous envoyez vos informations (lots, couleurs, logo) et nous préparons la roue. Vous recevez votre QR code sous 24 à 48 heures. Tout commence sur la page [créer ma roue](/creer-ma-roue).",
+          a: "Oui, à partir du pack Croissance (avec l'Essentiel, vous créez votre roue vous-même en 5 minutes). Avec le service « Créez-la pour moi », vous nous envoyez vos informations (lots, couleurs, logo) et nous préparons la roue. Vous recevez votre QR code sous 24 à 48 heures. Tout commence sur la page [créer ma roue](/creer-ma-roue).",
         },
         {
           q: "Proposez-vous une installation sur place ?",

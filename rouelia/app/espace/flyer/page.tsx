@@ -22,6 +22,7 @@ export default async function Page() {
         monogram: p.theme.monogram,
         logoUrl: p.logoUrl,
         poweredBy: p.poweredBy,
+        replayDays: p.replayDays,
         colors: p.theme.colors,
         prizes: p.prizes.map((x) => x.name),
       }}

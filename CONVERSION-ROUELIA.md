@@ -20,7 +20,7 @@ Légende :
 Appliqué sur la branche de travail `claude/inspiring-mccarthy-13gj1h`, **pas encore en production** (attend « go prod ») :
 
 - [x] Q1 Essai ouvert à la main : le site, la fenêtre d'inscription et l'e-mail disent « en général en quelques minutes (24 h maximum) ».
-- [ ] Q2 « Créez-la pour moi » et pack Essentiel : **contradiction à trancher** (voir plus bas). Le texte « Ensuite » ne parle pas du pack.
+- [x] Q2 « Créez-la pour moi » : inclus à partir de Croissance, essai gratuit sur tous les packs (lot finalisation).
 - [x] Q3 Haut de page téléphone : titre, sous-titre, roue (288 px), bouton et réassurance tiennent sur 375 × 667.
 - [x] Q4 WhatsApp : bouton flottant discret, masqué pendant la saisie et au-dessus des formulaires et boutons principaux.
 - [x] Q5 Présence humaine : pastille « À propos » dans le menu. Initiale du fondateur tant qu'aucune vraie photo n'est fournie.
@@ -39,10 +39,10 @@ Actions de la section 7 et autres points :
 - [x] Lien « Voir les tarifs » dans le haut de page, vers la section tarifs.
 - [x] FAQ de l'accueil : « Mes clients vont-ils vraiment jouer ? ».
 - [x] Accueil des visiteurs venus d'une roue (`/?ref=roue`).
-- [ ] « 2 clients » partout : hors périmètre de ce lot (l'accueil dit encore « 3 clients »).
+- [x] « Rentable dès 2 clients » partout, calculé (lot finalisation).
 - [ ] SMS et relances : toujours non codés, à ne pas promettre.
 
-Contradiction Q2 : la note du 8 octobre dit « essai sur le pack Essentiel » ; la consigne du 9 octobre dit « testable pendant l'essai, sauf avec Essentiel ». Le code ne tranche pas : le formulaire « Créez-la pour moi » ne choisit aucun pack, et c'est Aymen qui ouvre l'essai dans `/admin`. Le tableau des tarifs indique seulement « Mise en route en ligne par vous » pour tous les packs et la visio de configuration à partir de Croissance.
+Contradiction Q2 (résolue le 9 octobre) : Aymen a fixé la règle, essai gratuit sur tous les packs et « Créez-la pour moi » inclus à partir de Croissance.
 
 ---
 
