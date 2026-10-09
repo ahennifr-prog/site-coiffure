@@ -91,7 +91,7 @@ export const tradePages: TradePage[] = [
       },
       {
         q: "Je n'ai pas le temps de configurer la roue, comment faire ?",
-        a: "Choisissez le service « Créez-la pour moi » sur la page [créer ma roue](/creer-ma-roue), inclus à partir du pack Croissance : vous envoyez vos infos, nous créons la roue et vous recevez le QR code sous 24 à 48 h.",
+        a: "Choisissez le service « Créez-la pour moi » sur la page [créer ma roue](/creer-ma-roue), inclus à partir du pack Croissance : vous envoyez vos infos, nous créons la roue et vous recevez le QR code en quelques heures.",
       },
     ],
     cta:

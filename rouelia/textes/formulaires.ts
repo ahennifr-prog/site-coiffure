@@ -8,7 +8,7 @@ export const createWheel = {
   path: "/creer-ma-roue",
   title: "Créer ma roue à cadeaux",
   description:
-    "Créez votre roue à cadeaux Rouelia vous-même en 5 minutes, ou, à partir du pack Croissance, envoyez-nous vos infos : on la prépare pour vous sous 24 à 48 h.",
+    "Créez votre roue à cadeaux Rouelia vous-même en 5 minutes, ou, à partir du pack Croissance, envoyez-nous vos infos : on la prépare pour vous en quelques heures.",
   eyebrow: "Créer ma roue",
   h1: "Votre roue, prête aujourd'hui.",
   lead: "Deux façons de démarrer, toutes les deux avec 14 jours d'essai gratuit et sans carte bancaire.",
@@ -25,7 +25,7 @@ export const createWheel = {
     pourMoi: {
       id: "pour-moi",
       title: "Créez-la pour moi",
-      text: `Vous nous donnez quelques informations, on s'occupe du reste. QR code par e-mail sous 24 à 48 h. Inclus à partir du pack ${doneForYou.fromPack}.`,
+      text: `Vous nous donnez quelques informations, on s'occupe du reste. QR code par e-mail en quelques heures. Inclus à partir du pack ${doneForYou.fromPack}.`,
       badge: "Le plus simple",
     },
   },
@@ -55,7 +55,7 @@ export const createWheel = {
     message: "Message",
     messageHelp: "Facultatif. Horaires, couleurs, une idée particulière...",
     submit: "Envoyer ma demande",
-    next: "vous recevez un e-mail de confirmation. Nous préparons votre roue et vous envoyons votre QR code par e-mail sous 24 à 48 h, avec votre essai gratuit de 14 jours sur le pack choisi.",
+    next: "vous recevez un e-mail de confirmation. Nous préparons votre roue et vous envoyons votre QR code par e-mail en quelques heures, avec votre essai gratuit de 14 jours sur le pack choisi.",
     submitting: "Envoi en cours",
     errors: {
       shopName: "Indiquez le nom de votre commerce.",
@@ -72,7 +72,7 @@ export const createWheel = {
     },
     success: {
       title: "C'est parti.",
-      text: "Vous recevrez votre QR code par e-mail sous 24 à 48 h, avec votre essai gratuit de 14 jours sur le pack choisi.",
+      text: "Vous recevrez votre QR code par e-mail en quelques heures, avec votre essai gratuit de 14 jours sur le pack choisi.",
       note: "Un e-mail de confirmation vient de partir. Pensez à regarder vos courriers indésirables.",
     },
   },

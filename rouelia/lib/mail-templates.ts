@@ -477,7 +477,7 @@ export function wheelRequestAlertMail(p: WheelRequestMail, logo: { filename: str
       `Lots souhaités : ${p.prizes || "à proposer"}.`,
       `Message : ${p.message || "aucun"}.`,
       p.logoName ? `Logo joint : ${p.logoName}.` : "Pas de logo envoyé.",
-    ], undefined, "Alerte interne Rouelia. Envoyer le QR code sous 24 à 48 h."),
+    ], undefined, "Alerte interne Rouelia. Envoyer le QR code en quelques heures."),
   };
 }
 
@@ -489,7 +489,7 @@ export function wheelRequestConfirmMail(p: { email: string; name: string; shopNa
     replyTo: brand.email,
     ...rouelia("C'est parti", [
       `Bonjour${p.name ? ` ${p.name}` : ""},`,
-      `Nous préparons la roue de ${p.shopName}. Vous recevrez votre QR code par e-mail sous 24 à 48 h, avec votre essai gratuit de 14 jours sur le pack ${p.pack}.`,
+      `Nous préparons la roue de ${p.shopName}. Vous recevrez votre QR code par e-mail en quelques heures, avec votre essai gratuit de 14 jours sur le pack ${p.pack}.`,
       "Une précision à ajouter ? Répondez simplement à cet e-mail.",
     ]),
   };
@@ -520,7 +520,7 @@ export function otherActivityConfirmMail(p: { email: string; name: string }): Ma
     replyTo: brand.email,
     ...rouelia("C'est bien reçu", [
       "Bonjour,",
-      `Merci pour votre message au sujet de ${p.name}. Nous étudions votre activité et vous répondons avec une proposition de roue et de cadeaux adaptés, en général sous 48 h (jours ouvrés).`,
+      `Merci pour votre message au sujet de ${p.name}. Nous étudions votre activité et vous répondons avec une proposition de roue et de cadeaux adaptés, en général en quelques heures.`,
       "Une précision à ajouter ? Répondez simplement à cet e-mail.",
     ]),
   };

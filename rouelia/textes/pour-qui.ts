@@ -45,7 +45,7 @@ export const whoPage = {
       phone: "Téléphone",
       email: "E-mail",
       submit: "Envoyer",
-      next: "vous recevez un e-mail de confirmation. Nous étudions votre activité et vous répondons avec une proposition de roue, en général sous 48 h (jours ouvrés).",
+      next: "vous recevez un e-mail de confirmation. Nous étudions votre activité et vous répondons avec une proposition de roue, en général en quelques heures.",
       submitting: "Envoi en cours",
       errors: {
         name: "Indiquez le nom de votre commerce ou de votre activité.",
@@ -59,7 +59,7 @@ export const whoPage = {
       },
       success: {
         title: "Merci, c'est bien reçu.",
-        text: "Un e-mail de confirmation vient de partir. Nous étudions votre activité et vous répondons avec une proposition de roue, en général sous 48 h (jours ouvrés).",
+        text: "Un e-mail de confirmation vient de partir. Nous étudions votre activité et vous répondons avec une proposition de roue, en général en quelques heures.",
       },
     },
   },
@@ -82,7 +82,7 @@ export const whoPage = {
     },
     {
       q: "Combien de temps pour démarrer ?",
-      a: "Environ 5 minutes pour régler votre roue vous-même sur [Créer ma roue](/creer-ma-roue), ou 24 à 48 h si vous préférez qu'on la prépare pour vous, à partir du pack Croissance.",
+      a: "Environ 5 minutes pour régler votre roue vous-même sur [Créer ma roue](/creer-ma-roue), ou quelques heures si vous préférez qu'on la prépare pour vous, à partir du pack Croissance.",
     },
   ] as Faq[],
   ctaTitle: "Votre commerce a des habitués à faire revenir ?",

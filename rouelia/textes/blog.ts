@@ -123,7 +123,7 @@ export const articles: Article[] = [
       },
       {
         q: "Combien de temps faut-il pour lancer une roue ?",
-        a: "Une roue Rouelia est prête en 5 minutes environ, avec des modèles de lots par métier. Si vous préférez, le service « Créez-la pour moi », inclus à partir du pack Croissance, s'en charge et vous envoie le QR code sous 24 à 48 h. Vous pouvez commencer depuis la page [créer ma roue](/creer-ma-roue).",
+        a: "Une roue Rouelia est prête en 5 minutes environ, avec des modèles de lots par métier. Si vous préférez, le service « Créez-la pour moi », inclus à partir du pack Croissance, s'en charge et vous envoie le QR code en quelques heures. Vous pouvez commencer depuis la page [créer ma roue](/creer-ma-roue).",
       },
       {
         q: "Le client doit-il télécharger une application ?",

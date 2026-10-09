@@ -85,7 +85,7 @@ export const pricingPage: SeoPage = {
         "Oui. La mise en route en ligne est gratuite, l'installation sur place coûte 49 € à Paris et en petite couronne, et le service « Créez-la pour moi », inclus à partir du pack Croissance, crée la roue pour vous.",
       p: [
         "Sur place, nous venons dans votre commerce pour régler la roue et poser le chevalet : 49 €, ou 79 € si le déplacement est fait uniquement pour vous. Vous pouvez [prendre rendez-vous](/rendez-vous) pour fixer un créneau.",
-        "Avec « Créez-la pour moi » (packs Croissance et Premium), vous envoyez vos informations (logo, couleurs, cadeaux souhaités) et nous vous renvoyons votre roue et son QR code sous 24 à 48 h. Pour bien placer ensuite votre QR code, lisez notre guide sur [l'emplacement du QR code](/blog/qr-code-commerce-emplacement).",
+        "Avec « Créez-la pour moi » (packs Croissance et Premium), vous envoyez vos informations (logo, couleurs, cadeaux souhaités) et nous vous renvoyons votre roue et son QR code en quelques heures. Pour bien placer ensuite votre QR code, lisez notre guide sur [l'emplacement du QR code](/blog/qr-code-commerce-emplacement).",
       ],
     },
     {
