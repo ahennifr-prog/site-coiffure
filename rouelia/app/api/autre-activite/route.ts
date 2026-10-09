@@ -4,6 +4,7 @@ import { clientIp, json, readJson } from "@/lib/http";
 import { sendMail } from "@/lib/mail";
 import { otherActivityAlertMail, otherActivityConfirmMail } from "@/lib/mail-templates";
 import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
+import { countEvent } from "@/lib/mesure";
 
 const str = (v: unknown, max = 200) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
@@ -47,6 +48,7 @@ export async function POST(req: Request) {
 
   const alert = await sendMail(otherActivityAlertMail(p));
   if (!alert.ok && (!stored || !alert.skipped)) return json({ ok: false, error: "mail" }, 502);
+  await countEvent("autre_activite_envoye", now);
   await sendMail(otherActivityConfirmMail({ email: p.email, name: p.name }));
   return json({ ok: true }, 201);
 }

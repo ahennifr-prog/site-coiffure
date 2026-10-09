@@ -27,7 +27,7 @@ export const articles: Article[] = [
         answer:
           "Parce qu'il transforme une visite terminée en rendez-vous suivant : le client repart avec un cadeau qui ne vaut que s'il revient.",
         p: [
-          "Une carte de fidélité demande dix passages avant la moindre récompense. Beaucoup de clients la perdent ou l'oublient au fond d'un portefeuille. Un jeu inverse la logique : le plaisir arrive tout de suite, au comptoir, et l'avantage se concrétise au passage suivant.",
+          "Une carte de fidélité demande dix passages avant la moindre récompense. Beaucoup de clients la perdent ou l'oublient au fond d'un portefeuille. Un jeu inverse la logique : le plaisir arrive tout de suite, au comptoir, et l'avantage se concrétise au passage suivant. Pour peser le pour et le contre de chaque solution, lisez notre [comparatif entre carte à tampons, appli et roue de fidélité](/comparatif).",
           "Ce petit décalage compte. Le client a gagné quelque chose, il le sait, et il a une date limite pour en profiter. Il a donc un motif concret de pousser votre porte plutôt que celle d'à côté. Vous ne lui demandez rien de plus que de revenir, ce qu'il avait peut-être déjà envie de faire.",
           "Le jeu crée aussi un moment agréable dans la relation. On rit, on commente le résultat, on en parle à la personne qui attend. Ce sont des souvenirs de visite qui restent, bien plus qu'une remise affichée en vitrine.",
         ],

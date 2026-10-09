@@ -395,7 +395,8 @@ export function signupConfirmMail(p: { email: string; firstName: string; shopNam
     ...rouelia("C'est noté, merci", [
       `Bonjour ${p.firstName},`,
       `Votre demande d'essai pour ${p.shopName} est enregistrée, avec la roue que vous avez réglée.`,
-      "On vous écrit très vite pour ouvrir votre accès. Une question d'ici là ? Répondez simplement à cet e-mail.",
+      "Nous validons votre inscription et vous envoyons votre accès par e-mail, en général en quelques minutes (24 h maximum). Vous créerez alors votre mot de passe, et votre roue sera prête.",
+      "Une question d'ici là ? Répondez simplement à cet e-mail.",
     ]),
   };
 }
@@ -516,7 +517,7 @@ export function otherActivityConfirmMail(p: { email: string; name: string }): Ma
     replyTo: brand.email,
     ...rouelia("C'est bien reçu", [
       "Bonjour,",
-      `Merci pour votre message au sujet de ${p.name}. On étudie votre activité et on revient vers vous très vite avec une proposition de roue et de cadeaux adaptés.`,
+      `Merci pour votre message au sujet de ${p.name}. Nous étudions votre activité et vous répondons avec une proposition de roue et de cadeaux adaptés, en général sous 48 h (jours ouvrés).`,
       "Une précision à ajouter ? Répondez simplement à cet e-mail.",
     ]),
   };

@@ -5,9 +5,10 @@ import { brand, seo } from "@/content";
 import { ldString, organizationJsonLd } from "@/lib/jsonld";
 import { baseOpenGraph } from "@/lib/seo";
 import { AppStateProvider } from "@/components/AppState";
-import { CookieBanner } from "@/components/consent/CookieBanner";
 import { SignupMount } from "@/components/signup/SignupMount";
 import { ScrollReset } from "@/components/ui/ScrollReset";
+import { Mesure } from "@/components/ui/Mesure";
+import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -46,7 +47,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <SignupMount />
         </AppStateProvider>
-        <CookieBanner />
+        <WhatsAppFloat />
+        <Mesure />
       </body>
     </html>
   );

@@ -45,6 +45,7 @@ export const whoPage = {
       phone: "Téléphone",
       email: "E-mail",
       submit: "Envoyer",
+      next: "vous recevez un e-mail de confirmation. Nous étudions votre activité et vous répondons avec une proposition de roue, en général sous 48 h (jours ouvrés).",
       submitting: "Envoi en cours",
       errors: {
         name: "Indiquez le nom de votre commerce ou de votre activité.",
@@ -58,7 +59,7 @@ export const whoPage = {
       },
       success: {
         title: "Merci, c'est bien reçu.",
-        text: "On étudie votre activité et on revient vers vous très vite avec une proposition de roue.",
+        text: "Un e-mail de confirmation vient de partir. Nous étudions votre activité et vous répondons avec une proposition de roue, en général sous 48 h (jours ouvrés).",
       },
     },
   },
@@ -70,6 +71,10 @@ export const whoPage = {
     {
       q: "Quels cadeaux choisir pour mon activité ?",
       a: "Des cadeaux utiles lors de la prochaine visite et peu coûteux pour vous : un service rapide, un produit offert, une petite réduction. Rouelia affiche le coût moyen d'une partie pour que vous gardiez la main. Plus de conseils dans notre article [fidéliser ses clients avec un jeu en boutique](/blog/fideliser-clients-jeu-en-boutique).",
+    },
+    {
+      q: "Vaut-il mieux une roue, une carte à tampons ou une appli de fidélité ?",
+      a: "Cela dépend de la fréquence de passage de vos clients et du temps dont vous disposez. Les trois peuvent aussi se compléter. Nous avons écrit un [comparatif honnête des trois solutions](/comparatif), limites de la roue comprises.",
     },
     {
       q: "Faut-il une boutique physique ?",

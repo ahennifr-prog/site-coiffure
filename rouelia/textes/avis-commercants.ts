@@ -7,8 +7,18 @@
  */
 export interface MerchantReview {
   shop: string;
-  /** Métier et ville, affichés sous le nom. */
+  /** Métier et ville, affichés sous le nom (remplacés par `metier` et `ville` quand ils sont renseignés). */
   trade: string;
+  /**
+   * Champs facultatifs pour rendre le témoignage vérifiable. Ne les remplir qu'avec des informations exactes
+   * fournies ou acceptées par le commerçant. Affichés sur la carte uniquement s'ils sont renseignés.
+   */
+  /** Métier, par exemple « Salon de coiffure ». */
+  metier?: string;
+  /** Ville du commerce, par exemple « Champigny-sur-Marne ». */
+  ville?: string;
+  /** Lien public de la fiche Google du commerce (https://...). */
+  ficheGoogle?: string;
   text: string;
   /** Note sur 5. */
   stars: number;
@@ -73,6 +83,15 @@ export const merchantReviewsSection = {
   title: "Ce qu'en disent les commerçants.",
   draft: "Brouillon, non publié : en attente de validation du commerçant",
   /** Information sur la collecte des avis, affichée sous le bandeau (art. L111-7-2 du Code de la consommation). */
+  googleLink: "Voir la fiche Google",
   howTitle: "Comment ces avis sont recueillis",
+  logosTitle: "Ils utilisent Rouelia dans leur commerce",
+  logosLink: "Lire leurs avis",
   how: "Témoignages de commerçants qui utilisent Rouelia, relus et validés par écrit par chacun avant publication. Aucune contrepartie n'est accordée pour un témoignage, et aucun n'est modifié après validation. Une question ou une demande de retrait : contact@rouelia.fr.",
 };
+
+/** Ligne affichée sous le nom du commerce : métier et ville s'ils sont renseignés, sinon `trade`. */
+export function reviewSubtitle(r: MerchantReview): string {
+  if (!r.metier && !r.ville) return r.trade;
+  return [r.metier ?? r.trade, r.ville].filter(Boolean).join(", ");
+}

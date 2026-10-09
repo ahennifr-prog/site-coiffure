@@ -48,6 +48,7 @@ export const createWheel = {
     message: "Message",
     messageHelp: "Facultatif. Horaires, couleurs, une idée particulière...",
     submit: "Envoyer ma demande",
+    next: "vous recevez un e-mail de confirmation. Nous préparons votre roue et vous envoyons votre QR code par e-mail sous 24 à 48 h.",
     submitting: "Envoi en cours",
     errors: {
       shopName: "Indiquez le nom de votre commerce.",
@@ -97,6 +98,7 @@ export const booking = {
     shop: "Commerce",
     shopHelp: "Facultatif.",
     submit: "Réserver ce créneau",
+    next: "vous recevez tout de suite un e-mail de confirmation avec l'invitation pour votre agenda. Nous vous appelons au créneau choisi, au numéro indiqué.",
     submitting: "Réservation en cours",
     errors: {
       name: "Indiquez votre nom.",

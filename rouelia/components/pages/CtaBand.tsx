@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/Section";
 /** Bloc d'appel final des pages de contenu : créer sa roue, réserver un appel ou écrire sur WhatsApp. */
 export function CtaBand({ title, text }: { title: string; text?: string }) {
   return (
-    <section aria-labelledby="cta-final" className="relative mt-16 overflow-hidden bg-tomette text-white sm:mt-24">
+    <section aria-labelledby="cta-final" data-wa-hide className="relative mt-16 overflow-hidden bg-tomette text-white sm:mt-24">
       <Awning className="h-8 w-full" stripe="#A33317" base="#FBF6EE" />
       <Container className="py-14 sm:py-20">
         <h2 id="cta-final" className="max-w-3xl font-display text-3xl leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl">

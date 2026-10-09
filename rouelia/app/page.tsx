@@ -3,6 +3,8 @@ import { indexedPage } from "@/lib/seo";
 import { faqJsonLd, ldString, productJsonLd, websiteJsonLd } from "@/lib/jsonld";
 import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
+import { FromWheelWelcome } from "@/components/sections/FromWheelWelcome";
+import { MerchantLogos } from "@/components/sections/MerchantLogos";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { WhoTeaser } from "@/components/sections/WhoTeaser";
 import { MerchantReviews } from "@/components/sections/MerchantReviews";
@@ -31,7 +33,9 @@ export default function Home() {
       <div aria-hidden data-fx="progress" className="fixed inset-x-0 top-0 z-[70] h-[3px] origin-left bg-tomette" style={{ transform: "scaleX(0)" }} />
       <Nav />
       <main id="contenu">
+        <FromWheelWelcome />
         <Hero />
+        <MerchantLogos />
         <VideoShowcase />
         <Marquee />
         <HowItWorks />

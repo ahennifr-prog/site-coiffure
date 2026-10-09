@@ -43,9 +43,9 @@ export function HeroWheel() {
           className="absolute inset-[4%] cursor-pointer rounded-full disabled:cursor-progress"
         />
       </div>
-      <p aria-live="polite" className="mt-3 flex min-h-11 items-center justify-center text-center text-sm font-medium text-ink-soft">
+      <p aria-live="polite" className="mt-1.5 flex min-h-7 items-center justify-center text-center text-[13px] font-medium text-ink-soft sm:mt-3 sm:min-h-11 sm:text-sm">
         {result ? (
-          <span className="pop-in inline-flex items-center gap-2 rounded-full bg-sauge px-4 py-2 font-semibold text-white">
+          <span className="pop-in inline-flex items-center gap-2 rounded-full bg-sauge px-4 py-1 font-semibold text-white sm:py-2">
             {fr(ui.won(result))}
           </span>
         ) : (

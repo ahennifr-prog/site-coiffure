@@ -15,6 +15,14 @@ export const whatsappUrl = (text: string = WHATSAPP_TEXT) => `https://wa.me/${WH
  * Disponibilités des appels de découverte (page /rendez-vous), heure de Paris.
  * Jours : 1 = lundi ... 7 = dimanche. Plages au format « HH:MM ».
  */
+/** Plages des jours ouvrés (lundi à vendredi), heure de Paris : matin, midi, après-midi, soir. */
+const WEEKDAY_HOURS: [string, string][] = [
+  ["09:00", "12:00"],
+  ["12:00", "14:00"],
+  ["14:00", "17:00"],
+  ["18:00", "20:00"],
+];
+
 export const BOOKING = {
   /** Durée d'un créneau, en minutes. */
   slotMinutes: 5,
@@ -22,14 +30,27 @@ export const BOOKING = {
   daysAhead: 14,
   /** Délai minimum avant un créneau, en heures. */
   minNoticeHours: 2,
-  /** Plages ouvertes par jour de la semaine. Un jour absent est fermé. */
+  /**
+   * Plages ouvertes par jour de la semaine. Un jour absent est fermé.
+   * Pour changer les horaires de tous les jours ouvrés, modifiez WEEKDAY_HOURS ci-dessous ;
+   * pour un jour précis, remplacez sa ligne par sa propre liste (exemple : 3: [["09:00", "12:00"]]).
+   */
   hours: {
-    1: [["12:00", "14:00"], ["18:00", "20:00"]],
-    2: [["12:00", "14:00"], ["18:00", "20:00"]],
-    3: [["12:00", "14:00"], ["18:00", "20:00"]],
-    4: [["12:00", "14:00"], ["18:00", "20:00"]],
-    5: [["12:00", "14:00"], ["18:00", "20:00"]],
+    1: WEEKDAY_HOURS,
+    2: WEEKDAY_HOURS,
+    3: WEEKDAY_HOURS,
+    4: WEEKDAY_HOURS,
+    5: WEEKDAY_HOURS,
   } as Record<number, [string, string][]>,
   /** Jours bloqués (congés, jours fériés), au format AAAA-MM-JJ. */
   blockedDays: [] as string[],
 };
+
+/**
+ * Photo de profil du fondateur, affichée en pastille à côté de « À propos » dans le menu.
+ * null : cercle avec l'initiale du fondateur (brand.founder dans content.ts).
+ * Pour afficher une vraie photo : déposer deux carrés WebP de 96 et 192 px dans /public et renseigner leurs chemins,
+ * par exemple { src96: "/a-propos/profil-96.webp", src192: "/a-propos/profil-192.webp" }.
+ * Ne mettre qu'une photo de la personne nommée comme fondateur sur le site.
+ */
+export const FOUNDER_AVATAR: { src96: string; src192: string } | null = null;

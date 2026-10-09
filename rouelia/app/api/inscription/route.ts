@@ -6,6 +6,7 @@ import { signupAlertMail, signupConfirmMail } from "@/lib/mail-templates";
 import { offerById, offerForSignup } from "@/lib/offers";
 import { pricing } from "@/content";
 import { buildRecord } from "@/lib/signup";
+import { countEvent } from "@/lib/mesure";
 
 /**
  * Inscription à l'essai gratuit.
@@ -45,6 +46,8 @@ export async function POST(req: Request) {
     console.error("[inscription] enregistrement impossible", e);
     return NextResponse.json({ ok: false, error: "storage" }, { status: 500 });
   }
+
+  await countEvent("essai_envoye", now);
 
   // Accusé de réception au commerçant et alerte interne (sans effet si Brevo n'est pas branché).
   const r = result.record;

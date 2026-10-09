@@ -11,7 +11,6 @@ mkdirSync(S, { recursive: true });
 const b = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 for (const [name, w, h] of [["m", 375, 812], ["d", 1440, 900]]) {
   const ctx = await b.newContext({ viewport: { width: w, height: h } });
-  await ctx.addInitScript(() => localStorage.setItem("rouelia-cookies", "refused"));
   const p = await ctx.newPage();
   const errors = [];
   p.on("pageerror", (e) => errors.push(e.message));

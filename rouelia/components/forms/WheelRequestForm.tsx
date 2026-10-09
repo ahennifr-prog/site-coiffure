@@ -8,7 +8,7 @@ import { fr } from "@/lib/format";
 import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
 import { consentText, createWheel } from "@/textes/formulaires";
 import { readImage } from "@/components/demo/readImage";
-import { describedBy, Field, Honeypot, inputClass } from "./Field";
+import { describedBy, Field, Honeypot, inputClass, NextStep } from "./Field";
 
 const t = createWheel.form;
 type Key = "shopName" | "phone" | "email" | "address" | "google" | "consent";
@@ -217,6 +217,7 @@ export function WheelRequestForm() {
         {status === "sending" ? <LoaderCircle aria-hidden size={18} className="animate-spin" /> : null}
         {status === "sending" ? t.submitting : t.submit}
       </button>
+      <NextStep text={t.next} />
     </form>
   );
 }

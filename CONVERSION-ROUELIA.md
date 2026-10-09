@@ -15,20 +15,34 @@ Légende :
 - **[Opinion]** : mon avis.
 
 
-## Suivi (mis à jour le 9 octobre 2026, avant /compact)
+## Suivi (mis à jour le 9 octobre 2026, lot « modifications ciblées »)
 
-Aucune recommandation n'est encore appliquée au site. Réponses d'Aymen aux questions de la section 9 :
+Appliqué sur la branche de travail `claude/inspiring-mccarthy-13gj1h`, **pas encore en production** (attend « go prod ») :
 
-- [x] Q1 Essai : ouvert à la main (pas automatique). Délai à promettre : à préciser par Aymen.
-- [x] Q2 « Créez-la pour moi » : essai sur le pack Essentiel (à confirmer dans la formulation).
-- [ ] Q3 Haut de page téléphone (texte d'abord ou roue réduite) : en attente.
-- [ ] Q4 WhatsApp (lien discret ou bouton flottant) : en attente.
-- [ ] Q5 Présence humaine sur l'accueil et choix de la photo : en attente.
-- [ ] Q6 Page comparative : en attente.
-- [ ] Q7 Créneaux d'appel du matin et du milieu d'après-midi : en attente (une ligne dans `rouelia/config.ts`).
+- [x] Q1 Essai ouvert à la main : le site, la fenêtre d'inscription et l'e-mail disent « en général en quelques minutes (24 h maximum) ».
+- [ ] Q2 « Créez-la pour moi » et pack Essentiel : **contradiction à trancher** (voir plus bas). Le texte « Ensuite » ne parle pas du pack.
+- [x] Q3 Haut de page téléphone : titre, sous-titre, roue (288 px), bouton et réassurance tiennent sur 375 × 667.
+- [x] Q4 WhatsApp : bouton flottant discret, masqué pendant la saisie et au-dessus des formulaires et boutons principaux.
+- [x] Q5 Présence humaine : pastille « À propos » dans le menu. Initiale du fondateur tant qu'aucune vraie photo n'est fournie.
+- [x] Q6 Page comparative : `/comparatif` (environ 1 400 mots, tableau, FAQ de 6 questions, JSON-LD).
+- [x] Q7 Créneaux d'appel : 9 h à 12 h, 12 h à 14 h, 14 h à 17 h et 18 h à 20 h, du lundi au vendredi (`WEEKDAY_HOURS` dans `rouelia/config.ts`).
 
-Autres décisions : rentabilité « 2 clients » partout ; SMS et relances prévus mais non codés (ne pas les promettre).
-Les 5 actions de la section 7 restent à faire, aucune n'est commencée.
+Actions de la section 7 et autres points :
+
+- [x] Bandeau cookies retiré (aucun traceur non essentiel), pages Cookies et Confidentialité mises à jour.
+- [x] Mesure sans cookie : compteurs par jour en base (table `stats`, commerce `_site`), visibles dans `/admin`.
+- [x] « Ensuite : ... » sous chaque bouton d'envoi, aligné avec les e-mails de confirmation.
+- [x] Bande de logos des commerçants validés, juste sous le haut de page.
+- [x] Témoignages vérifiables : champs `metier`, `ville`, `ficheGoogle` prêts, vides en attendant les données.
+- [x] Timeline compacte : 2 925 px vers 1 033 px sur ordinateur, 1 484 px vers 940 px sur téléphone.
+- [x] Tarifs sur téléphone : 3 259 px vers 2 228 px.
+- [x] Lien « Voir les tarifs » dans le haut de page, vers la section tarifs.
+- [x] FAQ de l'accueil : « Mes clients vont-ils vraiment jouer ? ».
+- [x] Accueil des visiteurs venus d'une roue (`/?ref=roue`).
+- [ ] « 2 clients » partout : hors périmètre de ce lot (l'accueil dit encore « 3 clients »).
+- [ ] SMS et relances : toujours non codés, à ne pas promettre.
+
+Contradiction Q2 : la note du 8 octobre dit « essai sur le pack Essentiel » ; la consigne du 9 octobre dit « testable pendant l'essai, sauf avec Essentiel ». Le code ne tranche pas : le formulaire « Créez-la pour moi » ne choisit aucun pack, et c'est Aymen qui ouvre l'essai dans `/admin`. Le tableau des tarifs indique seulement « Mise en route en ligne par vous » pour tous les packs et la visio de configuration à partir de Croissance.
 
 ---
 

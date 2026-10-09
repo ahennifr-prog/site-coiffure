@@ -508,6 +508,7 @@ export const pricing = {
   title: "Un prix fixe par mois. Pas d'engagement.",
   lead: "14 jours gratuits sur chaque pack. Sans carte bancaire.",
   perMonth: "par mois",
+  perMonthShort: "/ mois",
   perDay: (amount: string) => `soit environ ${amount} par jour`,
   /** La ligne de rentabilité, reprise de la vidéo. Calcul : lib/simulator.ts (visitsToCoverPack). */
   profit: "Rentable dès 3 clients qui reviennent par mois.",
@@ -519,6 +520,9 @@ export const pricing = {
   details: "Tous les détails des tarifs",
   /** Nombre de points masqués par défaut sur chaque pack (dépliables avec « Voir plus »). */
   hiddenHighlights: 2,
+  /** Sur téléphone : nombre de points visibles par pack avant « Voir plus ». */
+  mobileHighlights: 2,
+  moreMobile: "Voir tous les avantages et le détail",
   packs: [
     {
       id: "essentiel",
@@ -614,6 +618,10 @@ export const faq = {
       a: "Offrez un cadeau à utiliser lors de la prochaine visite. Avec Rouelia, le client scanne un QR code, tourne la roue et repart avec une bonne raison de revenir.",
     },
     {
+      q: "Mes clients vont-ils vraiment jouer ?",
+      a: "Jouer prend quelques secondes, sans appli : un prénom, un numéro, et la roue tourne. Chaque case est un cadeau, votre client n'a rien à perdre. Le plus important est de le proposer : le QR code bien visible sur le comptoir, et un mot au moment de payer. Votre espace affiche chaque jour le nombre de parties, pour voir ce qui marche chez vous.",
+    },
+    {
       q: "Une roue à gagner est-elle autorisée ?",
       a: "Un jeu gratuit, sans obligation d'achat et avec un règlement accessible est en principe autorisé. Rouelia prévoit un règlement pour chaque commerce. Le détail est sur la page [utilisation responsable](/utilisation-responsable).",
     },
@@ -702,6 +710,15 @@ export const offerWheel = {
 /* Appel final et pied de page                                         */
 /* ------------------------------------------------------------------ */
 
+/** Message d'accueil des visiteurs venus de la roue d'un commerçant (lien « Propulsé par Rouelia », ?ref=roue). */
+export const fromWheel = {
+  title: "Vous venez de jouer ?",
+  text: "La même roue peut tourner dans votre commerce : voici comment.",
+  button: "Voir comment ça marche",
+  href: "#fonctionnement",
+  close: "Fermer ce message",
+};
+
 export const finalCta = {
   title: "Votre roue est à deux minutes d'ici.",
   text: "Réglez vos lots, testez, posez le QR code demain.",
@@ -720,6 +737,7 @@ export const footer = {
         { href: "/tarifs", label: "Tarifs" },
         { href: "/creer-ma-roue", label: "Créer ma roue" },
         { href: "/a-propos", label: "À propos" },
+        { href: "/comparatif", label: "Roue, carte ou appli ?" },
         { href: "/blog", label: "Blog" },
         { href: "/faq", label: "FAQ" },
       ],
@@ -749,7 +767,6 @@ export const footer = {
     { href: "/confidentialite", label: "Confidentialité" },
     { href: "/cookies", label: "Cookies" },
   ],
-  cookies: "Gérer les cookies",
   copyright: (year: number) => `© ${year} Rouelia`,
 };
 
@@ -785,28 +802,15 @@ export const signup = {
     server: "L'envoi n'a pas fonctionné. Vérifiez votre connexion et réessayez.",
   },
   submit: "Créer mon compte d'essai",
+  next: "nous validons votre inscription et vous envoyons votre accès par e-mail, en général en quelques minutes (24 h maximum). Vous créez votre mot de passe et votre roue est prête.",
   submitting: "Création en cours",
   success: {
     title: "C'est noté, merci.",
     text: (firstName: string) =>
-      `${firstName}, votre demande est enregistrée avec votre roue. On vous écrit très vite pour ouvrir votre accès.`,
+      `${firstName}, votre demande est enregistrée avec votre roue. Nous la validons et vous envoyons votre accès par e-mail, en général en quelques minutes (24 h maximum). Vous créez votre mot de passe et votre roue est prête.`,
     close: "Revenir au site",
   },
   close: "Fermer",
-};
-
-/* ------------------------------------------------------------------ */
-/* Consentement cookies                                                */
-/* ------------------------------------------------------------------ */
-
-export const cookieBanner = {
-  label: "Choix des cookies",
-  moreHref: "/cookies",
-  text:
-    "Nous aimerions mesurer l'audience de ce site pour l'améliorer. Rien n'est déposé sans votre accord.",
-  accept: "Accepter",
-  refuse: "Refuser",
-  more: "En savoir plus",
 };
 
 /* ------------------------------------------------------------------ */
@@ -905,10 +909,11 @@ export const legal = {
           ],
         },
         {
-          h: "Cookies et stockage local",
+          h: "Cookies, stockage local et mesure d'audience",
           p: [
-            "Aucun traceur publicitaire. Le site garde dans votre navigateur votre choix sur les cookies, votre roue de démo et le cadeau de la roue d'offres : ces éléments servent seulement au fonctionnement du site et ne demandent pas d'accord.",
-            "Une mesure d'audience ne peut être activée qu'après votre accord. Vous pouvez changer d'avis à tout moment via le lien « Gérer les cookies » en bas de page. Le détail est sur notre page Cookies.",
+            "Le site public (rouelia.fr) ne dépose aucun cookie et aucun traceur publicitaire. Il garde seulement dans votre navigateur votre roue de démo et le cadeau de la roue d'offres, pour que vous les retrouviez : ces éléments servent au fonctionnement du site et ne demandent pas d'accord.",
+            "Pour savoir quels boutons et quelles pages sont utiles, le site compte certaines actions : clic sur « Créer ma roue », sur WhatsApp ou sur les tarifs, envoi d'un formulaire, réservation d'un appel, profondeur de lecture de la page d'accueil, arrivée depuis la roue d'un commerçant. Chaque action ajoute seulement 1 à un compteur du jour. Aucune adresse IP, aucun identifiant et aucune information sur votre navigateur ne sont enregistrés : il est impossible de relier un compteur à une personne. Cette mesure ne lit et n'écrit rien sur votre appareil, elle ne demande donc pas d'accord.",
+            "Le détail est sur notre page Cookies.",
           ],
         },
         {
@@ -921,33 +926,33 @@ export const legal = {
     },
     cookies: {
       title: "Cookies",
-      description: "Les cookies et le stockage local utilisés par le site Rouelia, et comment changer votre choix.",
+      description: "Le site Rouelia ne dépose aucun cookie de mesure ni de publicité. Ce qui est gardé dans votre navigateur et comment l'effacer.",
       sections: [
         {
           h: "En bref",
           p: [
-            "Le site Rouelia ne dépose aucun cookie publicitaire. Rien n'est déposé sans votre accord, sauf ce qui est strictement nécessaire au fonctionnement du site. Refuser est aussi simple qu'accepter : les deux boutons sont au même niveau.",
+            "Le site public rouelia.fr ne dépose aucun cookie : ni publicité, ni mesure d'audience, ni réseau social. C'est pourquoi aucun bandeau ne vous demande votre accord.",
           ],
         },
         {
-          h: "Ce qui est nécessaire au fonctionnement",
+          h: "Ce qui est gardé dans votre navigateur",
           p: [
-            "Votre choix sur les cookies, gardé dans le stockage local de votre navigateur pour ne pas vous le redemander à chaque page.",
-            "La roue que vous réglez dans la démo et le cadeau de la roue d'offres (7 jours), gardés sur votre appareil pour que vous les retrouviez.",
-            "Dans l'espace commerçant et l'espace admin, un cookie de session sécurisé qui vous garde connecté.",
-            "Ces éléments ne servent qu'au fonctionnement du site et ne demandent pas d'accord, conformément aux lignes directrices de la CNIL.",
+            "La roue que vous réglez dans la démo et le cadeau de la roue d'offres (7 jours), gardés dans le stockage local de votre appareil pour que vous les retrouviez. Ils ne nous sont transmis que si vous créez un compte.",
+            "Dans l'espace commerçant et l'espace admin seulement, un cookie de session sécurisé qui vous garde connecté.",
+            "Ces éléments servent uniquement au fonctionnement du site et ne demandent pas d'accord, conformément aux lignes directrices de la CNIL.",
           ],
         },
         {
-          h: "La mesure d'audience",
+          h: "La mesure des visites, sans cookie",
           p: [
-            "Aucune mesure d'audience n'est active aujourd'hui. Si nous en ajoutons une, elle ne se chargera qu'après votre clic sur « Accepter », et votre choix vous sera redemandé au plus tard après 6 mois.",
+            "Pour améliorer le site, nous comptons certaines actions : clic sur « Créer ma roue », sur WhatsApp ou sur les tarifs, envoi d'un formulaire, réservation d'un appel, profondeur de lecture de la page d'accueil, arrivée depuis la roue d'un commerçant.",
+            "Chaque action ajoute 1 à un compteur du jour, sur notre serveur. Rien n'est lu ni écrit sur votre appareil, et aucune adresse IP, aucun identifiant ni aucune information sur votre navigateur ne sont gardés. Ces compteurs ne permettent pas de vous reconnaître.",
           ],
         },
         {
-          h: "Changer d'avis",
+          h: "Effacer ces données",
           p: [
-            "Le lien « Gérer les cookies », en bas de chaque page, rouvre le choix à tout moment. Vous pouvez aussi effacer les données du site dans les réglages de votre navigateur.",
+            "Vous pouvez effacer à tout moment la démo et le cadeau gardés sur votre appareil, dans les réglages de votre navigateur (données du site rouelia.fr). Une question : contact@rouelia.fr.",
           ],
         },
       ],

@@ -23,6 +23,12 @@ export default function Page() {
     <PageShell crumbs={[{ name: "Blog", href: "/blog" }]}>
       <Container>
         <PageHero eyebrow="Blog" h1="Fidéliser ses clients, concrètement." lead="Des conseils courts et applicables dès demain, pour les commerces de quartier." />
+        <p className="-mt-2 mb-8 text-ink-soft">
+          Vous hésitez entre plusieurs solutions ?{" "}
+          <Link href="/comparatif" className="font-semibold text-tomette-deep underline underline-offset-4">
+            Roue de fidélité, carte à tampons ou appli : notre comparatif
+          </Link>
+        </p>
         <ul className="grid gap-5 pb-4 md:grid-cols-2">
           {articles.map((a) => (
             <li key={a.slug}>

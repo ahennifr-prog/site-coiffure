@@ -41,7 +41,7 @@ export function personJsonLd() {
     jobTitle: "Fondateur de Rouelia",
     worksFor: { "@id": `${brand.url}/#organisation` },
     url: `${brand.url}/a-propos`,
-    image: `${brand.url}/a-propos/poignee-de-main-720.webp`,
+    // Pas d'image : la photo de /a-propos est une illustration, elle ne représente pas le fondateur.
   };
 }
 

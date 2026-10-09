@@ -7,6 +7,9 @@ import { Menu, X } from "lucide-react";
 import { cta, nav, ui } from "@/content";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
+import { FounderAvatar } from "@/components/brand/FounderAvatar";
+
+const ABOUT = "/a-propos";
 
 /**
  * Menu principal. Fond crème plein dès le haut de page (le texte ne transparaît jamais derrière),
@@ -91,10 +94,12 @@ export function Nav() {
               <Link
                 href={l.href}
                 aria-current={isActive(l.href) ? "page" : undefined}
-                className={`relative rounded-full px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive(l.href) ? "bg-tomette-soft text-ink" : "text-ink-soft hover:text-ink"
-                }`}
+                className={`relative inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-colors ${
+                  l.href === ABOUT ? "py-1.5 pl-1.5" : ""
+                } ${isActive(l.href) ? "bg-tomette-soft text-ink" : "text-ink-soft hover:text-ink"}`}
               >
+                {/* « À propos » : la pastille du fondateur, comme une photo de profil (cercle et texte forment un seul lien). */}
+                {l.href === ABOUT ? <FounderAvatar size={28} /> : null}
                 {l.label}
               </Link>
             </li>
@@ -132,8 +137,9 @@ export function Nav() {
                 href={l.href}
                 onClick={() => setOpen(false)}
                 aria-current={isActive(l.href) ? "page" : undefined}
-                className="flex min-h-12 items-center border-b border-line text-lg font-medium aria-[current=page]:text-tomette-deep"
+                className="flex min-h-12 items-center gap-3 border-b border-line text-lg font-medium aria-[current=page]:text-tomette-deep"
               >
+                {l.href === ABOUT ? <FounderAvatar size={32} /> : null}
                 {l.label}
               </Link>
             </li>

@@ -3,7 +3,6 @@ import { brand, footer, ui } from "@/content";
 import { fr } from "@/lib/format";
 import { Logo } from "@/components/brand/Logo";
 import { Container } from "@/components/ui/Section";
-import { CookieSettingsLink } from "@/components/consent/CookieBanner";
 
 const linkClass = "inline-flex min-h-11 items-center text-sm text-cream/90 underline-offset-4 hover:text-white hover:underline";
 
@@ -49,9 +48,6 @@ export function Footer() {
                 <FooterLink {...l} />
               </li>
             ))}
-            <li>
-              <CookieSettingsLink className={linkClass}>{footer.cookies}</CookieSettingsLink>
-            </li>
           </ul>
           <p className="mt-2 text-sm text-cream/80">{footer.copyright(new Date().getFullYear())}</p>
         </nav>

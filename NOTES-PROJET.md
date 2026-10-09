@@ -7,8 +7,8 @@
 
 - **Production** : `claude/great-lovelace-lpyydk`. Chaque push déploie rouelia.fr (Cloudflare Workers). Dernier commit
   déployé : `6edc835` (page Pour qui, bandeau défilant, retour en haut de page, boutons sans doublon).
-- **Travail** : `claude/inspiring-mccarthy-13gj1h`. Égale à la production, plus 3 commits de documents seulement
-  (audit, conversion, ces notes). **Rien n'est à pousser en production** : ces fichiers ne changent pas le site.
+- **Travail** : `claude/inspiring-mccarthy-13gj1h`. Production + documents (audit, conversion, notes) + le lot
+  « modifications ciblées » du 9 octobre (14 points de conversion). **Ce lot attend « go prod »**.
 - Règle : on travaille sur la branche de travail, on vérifie, puis Aymen dit « go prod » et on avance la branche de production
   (avance rapide, sans réécrire l'historique).
 
@@ -44,14 +44,22 @@
 ## Constantes
 
 - `rouelia/config.ts` : `EMAIL` = contact@rouelia.fr ; `WHATSAPP_NUMBER` = 33672780326 (provisoire, une ligne à changer pour
-  le numéro business) ; créneaux d'appel `BOOKING` (lundi à vendredi, 12 h à 14 h et 18 h à 20 h, 5 minutes, 14 jours,
-  délai 2 h, jours bloqués).
+  le numéro business) ; créneaux d'appel `BOOKING` (lundi à vendredi, plages `WEEKDAY_HOURS` : 9 h à 12 h, 12 h à 14 h, 14 h à 17 h,
+  18 h à 20 h ; 5 minutes, 14 jours, délai 2 h, jours bloqués) ; `FOUNDER_AVATAR` (photo de la pastille « À propos »,
+  null = initiale du fondateur).
+- Mesure sans cookie : `lib/mesure-events.ts` (liste des événements), compteurs par jour dans la table `stats`
+  (commerce `_site`), lecture dans `/admin` (« Mesure du site »). Aucun bandeau cookies : ne pas ajouter de traceur
+  sans remettre un consentement.
 - E-mails : Resend si le secret `RESEND_API_KEY` est posé, sinon Brevo (`BREVO_API_KEY`, déjà en place) ; voir
   `rouelia/DEPLOIEMENT.md`, section 3 quinquies.
 - Textes : `rouelia/content.ts` (accueil, tarifs, légal), `rouelia/textes/*.ts` (pages SEO, formulaires, avis, Pour qui).
 - Fondateur affiché : Enzo (nom d'usage) ; éditeur légal : Aymen Henni (lien entre les deux à décider, voir audit I3).
 
 ## Ce qui reste à fournir par Aymen
+
+0. Lot du 9 octobre : une vraie photo de profil (carré, visage centré) si vous voulez une photo dans la pastille ;
+   les champs `metier`, `ville`, `ficheGoogle` de chaque témoignage ; la règle « Créez-la pour moi » et Essentiel ;
+   le prénom affiché (Enzo ou Aymen, `brand.founder`).
 
 1. SIREN et adresse (domiciliation possible) : `company.siren` et `company.address` dans `content.ts`.
 2. Clé `RESEND_API_KEY` (facultative, Brevo fonctionne) et numéro WhatsApp business.

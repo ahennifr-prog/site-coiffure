@@ -8,6 +8,7 @@ import { pricingPage } from "@/textes/tarifs";
 import { aboutPage } from "@/textes/a-propos";
 import { responsiblePage } from "@/textes/utilisation-responsable";
 import { whoPage } from "@/textes/pour-qui";
+import { comparePage } from "@/textes/comparatif";
 import type { Block, Faq } from "@/textes/types";
 import { sitePages } from "@/lib/site-pages";
 
@@ -69,6 +70,19 @@ export function llmsFullTxt(): string {
   const out: string[] = [llmsTxt(), "---", "", "## Questions fréquentes (accueil)", "", ...faqs(faq.items)];
   out.push(`## ${pricingPage.h1}`, `Source : ${url(pricingPage.path)}`, "", md(pricingPage.lead), "", ...blocks(pricingPage.sections), ...faqs(pricingPage.faq ?? []));
   out.push(`## ${whoPage.h1}`, `Source : ${url(whoPage.path)}`, "", md(whoPage.lead), "", ...whoPage.cards.map((c) => `- ${c.title} : ${c.text}`), `- ${whoPage.other.title} : ${whoPage.other.text}`, "", ...faqs(whoPage.faq));
+  out.push(
+    `## ${comparePage.h1}`,
+    `Source : ${url(comparePage.path)}`,
+    "",
+    md(comparePage.lead),
+    "",
+    ...blocks(comparePage.sections),
+    `| ${comparePage.table.criterionLabel} | ${comparePage.table.columns.join(" | ")} |`,
+    "| --- | --- | --- | --- |",
+    ...comparePage.table.rows.map((r) => `| ${r.criterion} | ${r.values.join(" | ")} |`),
+    "",
+    ...faqs(comparePage.faq ?? []),
+  );
   for (const t of tradePages) {
     out.push(`## ${t.h1}`, `Source : ${url(t.path)}`, "", md(t.lead), "", ...blocks(t.sections), "### Exemples de lots", ...t.prizes.map((p) => `- ${p.name} : ${p.note}`), "", ...faqs(t.faq ?? []));
   }

@@ -15,19 +15,25 @@ describe("rendez-vous", () => {
     expect(parisToDate("2026-11-10", "12:00").toISOString()).toBe("2026-11-10T11:00:00.000Z");
   });
 
-  it("propose 14 jours, du lundi au vendredi, 12 h à 14 h et 18 h à 20 h, par 5 minutes", () => {
+  it("propose 14 jours, du lundi au vendredi, 9 h à 17 h et 18 h à 20 h, par 5 minutes", () => {
     const days = buildCalendar(now, new Set());
     expect(days).toHaveLength(14);
     const thu = days[0];
+    // Jeudi 10 h : le délai de 2 heures ouvre à midi.
     expect(thu.slots[0].id).toBe("2026-10-08T12:00");
-    expect(thu.slots).toHaveLength(48);
+    expect(thu.slots).toHaveLength(5 * 12 + 2 * 12);
+    const fri = days[1];
+    expect(fri.slots[0].id).toBe("2026-10-09T09:00");
+    expect(fri.slots).toHaveLength(10 * 12);
+    expect(new Set(fri.slots.map((s) => s.id)).size).toBe(fri.slots.length);
+    expect(fri.slots.some((s) => s.time === "17:30")).toBe(false);
     expect(thu.slots.at(-1)?.time).toBe("19:55");
     expect(days.find((d) => d.day === "2026-10-10")?.slots).toHaveLength(0); // samedi
   });
 
   it("respecte le délai minimum de 2 heures", () => {
-    const at13 = new Date("2026-10-08T11:00:00Z"); // 13 h à Paris
-    expect(buildCalendar(at13, new Set())[0].slots[0].id).toBe("2026-10-08T18:00");
+    const at15 = new Date("2026-10-08T13:00:00Z"); // 15 h à Paris
+    expect(buildCalendar(at15, new Set())[0].slots[0].id).toBe("2026-10-08T18:00");
   });
 
   it("empêche la double réservation d'un créneau", async () => {
@@ -42,6 +48,7 @@ describe("rendez-vous", () => {
   it("refuse un créneau fermé ou passé", async () => {
     expect(await reserve({ ...input, slot: "2026-10-10T12:00" }, now)).toEqual({ ok: false, error: "closed" });
     expect(await reserve({ ...input, slot: "2026-10-08T09:00" }, now)).toEqual({ ok: false, error: "closed" });
+    expect(await reserve({ ...input, slot: "2026-10-09T17:30" }, now)).toEqual({ ok: false, error: "closed" });
   });
 
   it("valide les champs et produit un .ics", async () => {

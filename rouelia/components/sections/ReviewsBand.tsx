@@ -1,4 +1,4 @@
-import { merchantReviewsSection, type MerchantReview } from "@/textes/avis-commercants";
+import { merchantReviewsSection, reviewSubtitle, type MerchantReview } from "@/textes/avis-commercants";
 import { Container, Eyebrow, SectionTitle } from "@/components/ui/Section";
 import { fr } from "@/lib/format";
 import { ReviewCard } from "./ReviewCard";
@@ -20,10 +20,19 @@ export function ReviewsBand({ reviews, compact, draft = false }: { reviews: Merc
         </div>
       </Container>
       {/* Liste lisible pour les lecteurs d'écran et les moteurs ; le bandeau animé est décoratif. */}
-      <ul className="sr-only">
+      {/* Elle s'affiche si l'on y arrive au clavier (lien vers une fiche Google). */}
+      <ul className="sr-only focus-within:not-sr-only focus-within:mx-auto focus-within:mt-6 focus-within:block focus-within:max-w-2xl focus-within:space-y-2 focus-within:px-5 focus-within:text-sm">
         {reviews.map((r) => (
           <li key={r.shop}>
-            {r.shop}, {r.trade} : « {r.text} » ({r.stars} sur 5, {r.date})
+            {r.shop}, {reviewSubtitle(r)} : « {r.text} » ({r.stars} sur 5, {r.date})
+            {r.ficheGoogle ? (
+              <>
+                {" "}
+                <a href={r.ficheGoogle} target="_blank" rel="noopener noreferrer" className="font-semibold underline">
+                  {merchantReviewsSection.googleLink} : {r.shop}
+                </a>
+              </>
+            ) : null}
           </li>
         ))}
       </ul>

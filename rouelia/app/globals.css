@@ -251,6 +251,7 @@ dialog::backdrop {
 
 /* Rail de la timeline sur téléphone : rempli par <ScrollFx> ; plein sans animation. */
 .fx-on .tl-fill { transform: scaleY(0); }
+.fx-on .tl-fillx { transform: scaleX(0); }
 
 /* Bandeau des avis de commerçants : défilement lent, pause au survol, relief des cartes. */
 .reviews-track { display: flex; width: max-content; animation: marquee 70s linear infinite; }

@@ -42,3 +42,13 @@ export function Honeypot({ value, onChange }: { value: string; onChange: (v: str
     </div>
   );
 }
+
+/** « Ensuite : ... » sous un bouton d'envoi : ce qui se passe réellement après l'envoi. */
+export function NextStep({ text, tone = "default" }: { text: string; tone?: "default" | "center" }) {
+  return (
+    <p className={`mt-3 text-sm text-ink-soft ${tone === "center" ? "text-center" : ""}`}>
+      <span className="font-semibold text-ink">Ensuite : </span>
+      {fr(text)}
+    </p>
+  );
+}

@@ -8,6 +8,7 @@ import { offerSummary } from "@/lib/offers";
 import { SIGNUP_STATUSES, type SignupRecord, type SignupStatus } from "@/lib/signup";
 import { Logo } from "@/components/brand/Logo";
 import { ShopPanel, type AdminShop } from "./ShopPanel";
+import { SiteMesure } from "./SiteMesure";
 
 type Data = { storage: "d1" | "memory"; signups: SignupRecord[] };
 
@@ -128,6 +129,8 @@ export function AdminDashboard() {
             </div>
           ))}
         </dl>
+
+        <SiteMesure />
 
         <label htmlFor="recherche" className="sr-only">
           {admin.search}

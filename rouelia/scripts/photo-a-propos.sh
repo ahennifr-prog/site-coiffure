@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prépare la photo de la page /a-propos : WebP en 3 largeurs, portrait 4:5, recadrée au centre.
+# Prépare la photo d'illustration de la page /a-propos : WebP en 3 largeurs, portrait 4:5, recadrée au centre.
 # Usage : bash scripts/photo-a-propos.sh chemin/vers/photo.jpg
 # Puis passer `aboutPhoto.ready` à true dans app/a-propos/page.tsx.
 set -euo pipefail

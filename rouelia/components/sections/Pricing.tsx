@@ -28,40 +28,53 @@ function Cell({ v }: { v: boolean | string }) {
   return <span className="text-sm font-medium">{fr(v)}</span>;
 }
 
-/** Points clés d'un pack : les premiers visibles, le reste derrière « Voir plus ». */
-function PackHighlights({ items, featured }: { items: string[]; featured: boolean }) {
+/**
+ * Points clés d'un pack et liste des fonctions.
+ * Ordinateur : les premiers points visibles, le reste derrière « Voir plus ».
+ * Téléphone (moins de 640 px) : deux points visibles ; les autres et la liste « Inclus » derrière le même bouton,
+ * pour que les trois prix tiennent sur peu d'écrans sans perdre la lecture en bénéfices.
+ */
+function PackDetails({ items, features, featured }: { items: string[]; features: string; featured: boolean }) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const visible = Math.max(3, items.length - pricing.hiddenHighlights);
   const hidden = items.length - visible;
-  const row = (h: string) => (
-    <li key={h} className="flex gap-2.5">
+  const row = (h: string, i: number) => (
+    <li key={h} className={`flex gap-2.5 ${i >= pricing.mobileHighlights && !open ? "max-sm:hidden" : ""}`}>
       <Check aria-hidden size={18} strokeWidth={3} className={`mt-0.5 shrink-0 ${featured ? "text-safran" : "text-sauge"}`} />
       <span>{fr(h)}</span>
     </li>
   );
   return (
-    <div className="mt-6">
-      <ul className="space-y-3">{items.slice(0, visible).map(row)}</ul>
+    <div id={id} className="mt-4 sm:mt-6">
+      <ul className="space-y-2.5 sm:space-y-3">{items.slice(0, visible).map(row)}</ul>
       {hidden > 0 ? (
-        <>
-          <div id={id} className={`grid transition-[grid-template-rows,opacity] duration-500 ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
-            <ul className="space-y-3 overflow-hidden pt-3" aria-hidden={!open}>
-              {items.slice(visible).map(row)}
-            </ul>
-          </div>
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-controls={id}
-            onClick={() => setOpen((o) => !o)}
-            className={`mt-3 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline ${featured ? "text-safran" : "text-tomette-deep"}`}
-          >
-            {open ? pricing.less : `${pricing.more} (${hidden})`}
-            <ChevronDown aria-hidden size={16} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
-          </button>
-        </>
+        <div className={`grid transition-[grid-template-rows,opacity] duration-500 ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+          <ul className={`space-y-2.5 overflow-hidden sm:space-y-3 ${open ? "pt-2.5 sm:pt-3" : ""}`} aria-hidden={!open}>
+            {items.slice(visible).map((h, i) => row(h, visible + i))}
+          </ul>
+        </div>
       ) : null}
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen((o) => !o)}
+        className={`mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline sm:mt-3 ${hidden > 0 ? "" : "sm:hidden"} ${featured ? "text-safran" : "text-tomette-deep"}`}
+      >
+        {open ? (
+          pricing.less
+        ) : (
+          <>
+            <span className="sm:hidden">{pricing.moreMobile}</span>
+            <span className="max-sm:hidden">{`${pricing.more} (${hidden})`}</span>
+          </>
+        )}
+        <ChevronDown aria-hidden size={16} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+      </button>
+      <p className={`mt-3 border-t pt-4 text-xs leading-relaxed sm:mt-5 ${open ? "" : "max-sm:hidden"} ${featured ? "border-cream/15 text-cream/75" : "border-line text-ink-soft"}`}>
+        <span className="font-semibold">{pricing.featuresLabel}</span> {fr(features)}
+      </p>
     </div>
   );
 }
@@ -83,13 +96,13 @@ export function Pricing({ standalone = false }: { standalone?: boolean }) {
           </p>
         </div>
 
-        <ul className="mt-12 grid items-stretch gap-5 lg:grid-cols-3">
+        <ul className="mt-8 grid items-stretch gap-5 sm:mt-12 lg:grid-cols-3">
           {pricing.packs.map((p) => {
             const featured = !!p.badge;
             return (
               <li
                 key={p.id}
-                className={`relative flex flex-col rounded-xl p-6 sm:p-8 ${
+                className={`relative flex flex-col rounded-xl p-5 sm:p-8 ${
                   featured ? "bg-night text-cream shadow-lg ring-2 ring-tomette lg:-my-3 lg:py-11" : "bg-cream ring-1 ring-line"
                 }`}
               >
@@ -98,20 +111,24 @@ export function Pricing({ standalone = false }: { standalone?: boolean }) {
                     {p.badge}
                   </p>
                 ) : null}
-                <h3 className="font-display text-2xl font-semibold">{p.name}</h3>
-                <p className={`mt-1 min-h-12 ${featured ? "text-cream/85" : "text-ink-soft"}`}>{fr(p.tagline)}</p>
-                <p className="mt-5 flex items-baseline gap-1.5">
-                  <span className="font-display text-5xl font-semibold tabular">{formatPrice(p.price)}</span>
-                  <span className={featured ? "text-cream/85" : "text-ink-soft"}>{pricing.perMonth}</span>
-                </p>
-                <p className={`mt-1 text-sm font-semibold ${featured ? "text-safran" : "text-tomette-deep"}`}>
-                  {fr(pricing.perDay(formatPrice(pricePerDay(p.price))))}
-                </p>
-                <PackHighlights items={p.highlights} featured={featured} />
-                <p className={`mt-5 border-t pt-4 text-xs leading-relaxed ${featured ? "border-cream/15 text-cream/75" : "border-line text-ink-soft"}`}>
-                  <span className="font-semibold">{pricing.featuresLabel}</span> {fr(p.features)}
-                </p>
-                <div className="mt-auto pt-8">
+                {/* Téléphone : nom et prix sur la même ligne, puis l'accroche. Ordinateur : nom, accroche, prix. */}
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3 sm:block">
+                  <h3 className="font-display text-2xl font-semibold max-sm:order-1">{p.name}</h3>
+                  <p className={`mt-1 sm:min-h-12 max-sm:order-3 max-sm:col-span-2 ${featured ? "text-cream/85" : "text-ink-soft"}`}>{fr(p.tagline)}</p>
+                  <p className="flex items-baseline gap-1.5 max-sm:order-2 sm:mt-5">
+                    <span className="font-display text-4xl leading-none font-semibold tabular sm:text-5xl">{formatPrice(p.price)}</span>
+                    <span className={featured ? "text-cream/85" : "text-ink-soft"}>
+                      <span className="sm:hidden">{pricing.perMonthShort}</span>
+                      <span className="max-sm:hidden">{pricing.perMonth}</span>
+                    </span>
+                  </p>
+                  <p className={`mt-1 text-sm font-semibold max-sm:order-4 max-sm:col-span-2 ${featured ? "text-safran" : "text-tomette-deep"}`}>
+                    {fr(pricing.perDay(formatPrice(pricePerDay(p.price))))}
+                  </p>
+                </div>
+                <PackDetails items={p.highlights} features={p.features} featured={featured} />
+                {/* data-wa-hide : le bouton WhatsApp flottant s'efface quand ce bouton passe en bas de l'écran. */}
+                <div data-wa-hide className="mt-auto pt-5 sm:pt-8">
                   <Button
                     size="lg"
                     variant={featured ? "primary" : "secondary"}
@@ -127,8 +144,8 @@ export function Pricing({ standalone = false }: { standalone?: boolean }) {
           })}
         </ul>
 
-        <div className="mt-10 grid gap-6 rounded-xl bg-sauge-soft p-6 sm:p-8 md:grid-cols-[auto_1fr] md:items-center">
-          <span aria-hidden className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-sauge text-white">
+        <div className="mt-8 grid gap-6 rounded-xl bg-sauge-soft p-5 sm:mt-10 sm:p-8 md:grid-cols-[auto_1fr] md:items-center">
+          <span aria-hidden className="max-sm:hidden inline-flex h-14 w-14 items-center justify-center rounded-full bg-sauge text-white">
             <ShieldCheck size={28} />
           </span>
           <div>

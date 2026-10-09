@@ -7,7 +7,7 @@ import { brand, cta } from "@/content";
 import { fr } from "@/lib/format";
 import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
 import { booking as t, consentText } from "@/textes/formulaires";
-import { describedBy, Field, Honeypot, inputClass } from "./Field";
+import { describedBy, Field, Honeypot, inputClass, NextStep } from "./Field";
 
 interface Slot {
   id: string;
@@ -22,6 +22,18 @@ interface Day {
 const dayFmt = (day: string, opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("fr-FR", { ...opts, timeZone: "UTC" }).format(new Date(`${day}T12:00:00Z`));
 const longDay = (day: string) => dayFmt(day, { weekday: "long", day: "numeric", month: "long" });
 const whenText = (id: string) => `${longDay(id.slice(0, 10))} à ${id.slice(11).replace(":", " h ")}`;
+
+/** Regroupement des créneaux pour la lecture : matin, midi, après-midi, soir. */
+const PERIODS = [
+  { id: "matin", label: "Matin" },
+  { id: "midi", label: "Midi" },
+  { id: "apres-midi", label: "Après-midi" },
+  { id: "soir", label: "Soir" },
+] as const;
+function periodOf(time: string): (typeof PERIODS)[number]["id"] {
+  const h = Number(time.slice(0, 2));
+  return h < 12 ? "matin" : h < 14 ? "midi" : h < 18 ? "apres-midi" : "soir";
+}
 
 type Key = "name" | "phone" | "email" | "consent";
 
@@ -176,23 +188,34 @@ export function BookingForm() {
               <div className="mt-6">
                 <h3 className="font-semibold first-letter:uppercase">{t.slotsTitle(longDay(current.day))}</h3>
                 {current.slots.some((s) => s.free) ? (
-                  <ul className="mt-3 grid max-h-[340px] grid-cols-3 gap-2 overflow-y-auto pr-1 sm:grid-cols-4">
-                    {current.slots.map((s) => (
-                      <li key={s.id}>
-                        <button
-                          type="button"
-                          disabled={!s.free}
-                          onClick={() => pick(s.id)}
-                          aria-pressed={slot === s.id}
-                          className={`min-h-11 w-full rounded-full text-sm font-semibold tabular transition-colors ${
-                            slot === s.id ? "bg-ink text-white" : s.free ? "bg-cream ring-1 ring-line hover:ring-ink/40" : "cursor-not-allowed bg-cream/50 text-ink-soft/50 line-through"
-                          }`}
-                        >
-                          {s.time.replace(":", " h ")}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="mt-3 max-h-[380px] space-y-4 overflow-y-auto pr-1">
+                    {PERIODS.map((period) => {
+                      const list = current.slots.filter((s) => periodOf(s.time) === period.id);
+                      if (!list.length) return null;
+                      return (
+                        <div key={period.id} role="group" aria-label={period.label}>
+                          <p className="text-xs font-bold tracking-wide text-ink-soft uppercase">{period.label}</p>
+                          <ul className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-4">
+                            {list.map((s) => (
+                              <li key={s.id}>
+                                <button
+                                  type="button"
+                                  disabled={!s.free}
+                                  onClick={() => pick(s.id)}
+                                  aria-pressed={slot === s.id}
+                                  className={`min-h-11 w-full rounded-full text-sm font-semibold tabular transition-colors ${
+                                    slot === s.id ? "bg-ink text-white" : s.free ? "bg-cream ring-1 ring-line hover:ring-ink/40" : "cursor-not-allowed bg-cream/50 text-ink-soft/50 line-through"
+                                  }`}
+                                >
+                                  {s.time.replace(":", " h ")}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    })}
+                  </div>
                 ) : (
                   <p className="mt-3 text-ink-soft">{fr(t.noSlot)}</p>
                 )}
@@ -252,6 +275,7 @@ export function BookingForm() {
           {status === "sending" ? <LoaderCircle aria-hidden size={18} className="animate-spin" /> : null}
           {status === "sending" ? t.form.submitting : t.form.submit}
         </button>
+        <NextStep text={t.form.next} tone="center" />
         <p className="mt-4 text-center text-sm text-ink-soft">
           {t.alternative}{" "}
           <a href={brand.whatsapp} target="_blank" rel="noopener noreferrer" className="font-semibold text-tomette-deep underline underline-offset-2">

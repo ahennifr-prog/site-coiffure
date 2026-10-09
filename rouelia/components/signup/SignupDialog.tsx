@@ -11,6 +11,7 @@ import { validateSignup, type SignupErrorKey, type SignupField, type SignupPaylo
 import { useAppState } from "@/components/AppState";
 import { Monogram } from "@/components/demo/PhoneScreen";
 import { readImage } from "@/components/demo/readImage";
+import { NextStep } from "@/components/forms/Field";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -349,6 +350,7 @@ export function SignupDialog() {
                 t.submit
               )}
             </button>
+            <NextStep text={t.next} tone="center" />
           </form>
         )}
       </div>

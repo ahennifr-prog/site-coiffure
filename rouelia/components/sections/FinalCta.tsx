@@ -13,7 +13,7 @@ const card =
 /** Dernière section : la roue d'offres, puis le contact (WhatsApp, e-mail, appel de 5 minutes). */
 export function FinalCta() {
   return (
-    <section id="contact" aria-labelledby="final-title" data-fx="rise" className="relative overflow-hidden bg-tomette pb-14 text-white sm:pb-20">
+    <section id="contact" aria-labelledby="final-title" data-fx="rise" data-wa-hide className="relative overflow-hidden bg-tomette pb-14 text-white sm:pb-20">
       <Awning className="h-10 w-full" stripe="#A33317" base="#FBF6EE" />
       <Container className="grid items-center gap-12 pt-14 pb-6 sm:pt-20 lg:grid-cols-[1.2fr_1fr]">
         <div>

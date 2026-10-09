@@ -13,13 +13,14 @@ import { MerchantReviews } from "@/components/sections/MerchantReviews";
 import { Container } from "@/components/ui/Section";
 
 /**
- * Photo du fondateur avec un commerçant. Fichiers générés par scripts/photo-a-propos.sh
+ * Photo d'illustration (elle ne représente pas le fondateur). Fichiers générés par scripts/photo-a-propos.sh
  * (WebP 480, 720 et 1080 px, portrait 4:5). Tant que `ready` vaut false, un visuel aux couleurs de la marque la remplace.
  */
 const aboutPhoto = {
   ready: true,
   base: "/a-propos/poignee-de-main",
-  alt: "Le fondateur de Rouelia serre la main d'un commerçant devant son établissement",
+  /** Texte neutre : la scène est une illustration, elle n'est présentée ni comme réelle ni comme le fondateur. */
+  alt: "Deux hommes se serrent la main devant un café",
 };
 
 export const metadata: Metadata = pageMeta(p);

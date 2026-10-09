@@ -561,7 +561,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
             </a>
           ) : null}
           {shop.poweredBy ? (
-            <a href="/" className="inline-flex min-h-11 items-center font-semibold">
+            <a href="/?ref=roue" className="inline-flex min-h-11 items-center font-semibold">
               Propulsé par Rouelia
             </a>
           ) : null}

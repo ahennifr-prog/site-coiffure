@@ -12,6 +12,7 @@ type Fx = { el: HTMLElement; kind: string; top: number; height: number; depth: n
  * - data-fx="grow" : son premier enfant s'agrandit en arrivant à l'écran ;
  * - data-fx="rise" : l'élément remonte doucement en arrivant ;
  * - data-fx="rail" : son premier enfant (le trait) se remplit pendant la traversée ;
+ * - data-fx="railx" : même chose pour un trait horizontal ;
  * - data-fx="progress" : fil d'avancement dans la page ;
  * - [data-split] : titres mot à mot, déclenchés une fois à l'arrivée.
  * La classe .fx-on est posée par le script de démarrage, sauf si l'utilisateur limite les animations.
@@ -29,7 +30,7 @@ export function ScrollFx() {
     function collect() {
       items = [...document.querySelectorAll<HTMLElement>("[data-fx]")].map((el) => {
         const kind = el.dataset.fx ?? "";
-        const target = kind === "grow" || kind === "rail" ? ((el.firstElementChild as HTMLElement) ?? el) : el;
+        const target = kind === "grow" || kind === "rail" || kind === "railx" ? ((el.firstElementChild as HTMLElement) ?? el) : el;
         return { el, kind, top: 0, height: 0, depth: Number(el.dataset.depth ?? -100), target, applied: 0, last: "" };
       });
       measure();
@@ -72,6 +73,8 @@ export function ScrollFx() {
             t = `scale(${(0.88 + 0.12 * enter).toFixed(3)})`;
           } else if (it.kind === "rail") {
             t = `scaleY(${Math.min(1, Math.max(0, (p - 0.18) * 1.9)).toFixed(3)})`;
+          } else if (it.kind === "railx") {
+            t = `scaleX(${Math.min(1, Math.max(0, (p - 0.2) * 2.2)).toFixed(3)})`;
           } else continue;
         }
         // On n'écrit que si la valeur change : rien à recalculer pour les éléments immobiles.

@@ -3,6 +3,7 @@ import { hit } from "@/lib/game";
 import { clientIp, json, readJson } from "@/lib/http";
 import { sendMail } from "@/lib/mail";
 import { bookingAlertMail, bookingConfirmMail } from "@/lib/mail-templates";
+import { countEvent } from "@/lib/mesure";
 
 /** Créneaux des 14 prochains jours, heure de Paris. */
 export async function GET() {
@@ -32,6 +33,7 @@ export async function POST(req: Request) {
     if (!r.ok) return json({ ok: false, error: r.error }, 409);
     const b = r.booking;
     const when = formatSlot(b.slot);
+    await countEvent("rdv_reserve", now);
     await Promise.all([
       sendMail(bookingAlertMail({ name: b.name, phone: b.phone, email: b.email, shop: b.shop, when })),
       sendMail(bookingConfirmMail({ name: b.name, email: b.email, phone: b.phone, when, ics: bookingIcs(b, now) })),

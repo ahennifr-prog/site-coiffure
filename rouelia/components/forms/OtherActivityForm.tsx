@@ -8,7 +8,7 @@ import { fr } from "@/lib/format";
 import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
 import { consentText } from "@/textes/formulaires";
 import { whoPage } from "@/textes/pour-qui";
-import { describedBy, Field, Honeypot, inputClass } from "./Field";
+import { describedBy, Field, Honeypot, inputClass, NextStep } from "./Field";
 
 const t = whoPage.other.form;
 type Key = "name" | "description" | "phone" | "email" | "consent";
@@ -139,6 +139,7 @@ export function OtherActivityForm() {
         {status === "sending" ? <LoaderCircle aria-hidden size={18} className="animate-spin" /> : null}
         {status === "sending" ? t.submitting : t.submit}
       </button>
+      <NextStep text={t.next} />
     </form>
   );
 }

@@ -7,6 +7,7 @@ import { aboutPage } from "@/textes/a-propos";
 import { responsiblePage } from "@/textes/utilisation-responsable";
 import { booking, createWheel } from "@/textes/formulaires";
 import { whoPage } from "@/textes/pour-qui";
+import { comparePage } from "@/textes/comparatif";
 
 export interface SitePage {
   path: string;
@@ -23,6 +24,7 @@ export const sitePages: SitePage[] = [
   { path: createWheel.path, title: createWheel.title, description: createWheel.description, priority: 0.9, changeFrequency: "monthly" },
   { path: whoPage.path, title: whoPage.h1, description: whoPage.description, priority: 0.8, changeFrequency: "monthly" },
   ...tradePages.map((t) => ({ path: t.path, title: t.h1, description: t.description, priority: 0.8, changeFrequency: "monthly" as const })),
+  { path: comparePage.path, title: comparePage.h1, description: comparePage.description, priority: 0.7, changeFrequency: "monthly" },
   { path: faqPage.path, title: faqPage.h1, description: faqPage.description, priority: 0.7, changeFrequency: "monthly" },
   { path: aboutPage.path, title: aboutPage.h1, description: aboutPage.description, priority: 0.6, changeFrequency: "monthly" },
   { path: booking.path, title: booking.title, description: booking.description, priority: 0.6, changeFrequency: "monthly" },
@@ -32,5 +34,5 @@ export const sitePages: SitePage[] = [
   { path: "/mentions-legales", title: "Mentions légales", description: "Éditeur, hébergeur et contact.", priority: 0.2, changeFrequency: "yearly" },
   { path: "/cgv", title: "Conditions générales de vente", description: "Conditions de l'abonnement.", priority: 0.2, changeFrequency: "yearly" },
   { path: "/confidentialite", title: "Politique de confidentialité", description: "Données personnelles.", priority: 0.2, changeFrequency: "yearly" },
-  { path: "/cookies", title: "Cookies", description: "Cookies et stockage local.", priority: 0.2, changeFrequency: "yearly" },
+  { path: "/cookies", title: "Cookies", description: "Aucun cookie de mesure : stockage local et mesure sans cookie.", priority: 0.2, changeFrequency: "yearly" },
 ];
