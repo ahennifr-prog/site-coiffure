@@ -1,7 +1,7 @@
-import { getSignup, updateSignup } from "@/lib/db";
+import { getSignup, getSignupLogo, updateSignup } from "@/lib/db";
 import { json, readJson, requireAdmin } from "@/lib/http";
 import { sendInvite } from "@/lib/notify";
-import { createInvite, getShop, insertShop, listShops, shopFromSignup, slugify, uniqueSlug } from "@/lib/shops";
+import { createInvite, getShop, insertShop, listShops, setLogo, shopFromSignup, slugify, uniqueSlug } from "@/lib/shops";
 
 export async function GET() {
   const denied = await requireAdmin();
@@ -21,7 +21,12 @@ export async function POST(req: Request) {
   const now = new Date();
   const shop = shopFromSignup(signup, crypto.randomUUID(), await uniqueSlug(slugify(signup.wheelConfig?.shopName || signup.shopName)), now);
   await insertShop(shop);
+  // Logo envoyé avec « Créez-la pour moi » : il est posé directement sur la roue.
+  const logo = signup.request?.hasLogo ? await getSignupLogo(signup.id) : null;
+  if (logo) await setLogo(shop, logo, now);
   await updateSignup({ ...signup, shopId: shop.id, status: "essai_en_cours", trialStartedAt: now.toISOString() });
+  // « Créez-la pour moi » : on peut créer le commerce sans prévenir le commerçant, préparer sa roue, puis envoyer l'accès.
+  if (body?.invite === false) return json({ ok: true, shopId: shop.id, slug: shop.slug, token: null, emailed: false });
   const token = await createInvite(shop.id, now);
   // Le lien part aussi par e-mail au commerçant quand Brevo est branché.
   const emailed = (await sendInvite(shop, token)).ok;

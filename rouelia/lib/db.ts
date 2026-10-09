@@ -54,6 +54,8 @@ const SCHEMA = [
   "CREATE TABLE IF NOT EXISTS bookings (slot TEXT PRIMARY KEY, created_at TEXT NOT NULL, email TEXT NOT NULL, data TEXT NOT NULL)",
   // Demandes « Créez-la pour moi ».
   "CREATE TABLE IF NOT EXISTS wheel_requests (id TEXT PRIMARY KEY, created_at TEXT NOT NULL, email TEXT NOT NULL, data TEXT NOT NULL)",
+  // Logo envoyé avec « Créez-la pour moi », gardé à part pour ne pas alourdir la liste de l'admin.
+  "CREATE TABLE IF NOT EXISTS signup_logos (signup_id TEXT PRIMARY KEY, data TEXT NOT NULL, updated_at TEXT NOT NULL)",
 ];
 
 /** La base D1 liée sous le nom DB (voir wrangler.jsonc), ou null hors Cloudflare. */
@@ -147,6 +149,24 @@ export async function deleteSignup(id: string): Promise<void> {
     return;
   }
   await db.prepare("DELETE FROM signups WHERE id = ?").bind(id).run();
+  await db.prepare("DELETE FROM signup_logos WHERE signup_id = ?").bind(id).run();
+}
+
+/** Logo joint à une inscription (data URL), ou null. */
+export async function getSignupLogo(id: string): Promise<string | null> {
+  const db = await ready();
+  if (!db) return null;
+  const row = await db.prepare("SELECT data FROM signup_logos WHERE signup_id = ?").bind(id).first<{ data: string }>();
+  return row?.data ?? null;
+}
+
+export async function saveSignupLogo(id: string, dataUrl: string, now = new Date()): Promise<void> {
+  const db = await ready();
+  if (!db) return;
+  await db
+    .prepare("INSERT INTO signup_logos (signup_id, data, updated_at) VALUES (?, ?, ?) ON CONFLICT (signup_id) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at")
+    .bind(id, dataUrl, now.toISOString())
+    .run();
 }
 
 /** Pour les tests : remplace la base (null = mémoire). */

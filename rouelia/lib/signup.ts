@@ -78,6 +78,21 @@ export interface SignupRecord {
   offer: SignupOffer | null;
   /** Commerce créé à l'ouverture de l'essai. */
   shopId?: string | null;
+  /** Notes privées d'Aymen, modifiables dans l'admin. */
+  notes?: string;
+  /** Détails d'une demande « Créez-la pour moi » (le logo est rangé à part, table signup_logos). */
+  request?: WheelRequestInfo | null;
+}
+
+/** Ce que le commerçant a demandé dans « Créez-la pour moi », affiché sur sa fiche dans l'admin. */
+export interface WheelRequestInfo {
+  requestId: string;
+  address: string;
+  google: string;
+  prizes: string;
+  message: string;
+  logoName: string | null;
+  hasLogo: boolean;
 }
 
 export type SignupField = "firstName" | "email" | "phone" | "shopName" | "consent";

@@ -10,7 +10,7 @@ export async function GET() {
   const rows = await listSignups(5000);
   const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const lines = [
-    ["Date", "Prénom", "E-mail", "Téléphone", "Commerce", "Métier", "Pack", "Statut", "Lots", "Coût moyen par partie", "Cadeau de la roue", "Source", "Campagne"],
+    ["Date", "Prénom", "E-mail", "Téléphone", "Commerce", "Métier", "Pack", "Statut", "Lots", "Coût moyen par partie", "Cadeau de la roue", "Source", "Campagne", "Lots demandés", "Message", "Notes"],
     ...rows.map((r) => [
       r.createdAt.slice(0, 16).replace("T", " "),
       r.firstName,
@@ -25,6 +25,9 @@ export async function GET() {
       r.offer ? offerSummary(r.offer) : "",
       r.utm.source ?? r.utm.referrer ?? "",
       r.utm.campaign ?? "",
+      r.request?.prizes ?? "",
+      r.request?.message ?? "",
+      r.notes ?? "",
     ]),
   ];
   const csv = "﻿" + lines.map((l) => l.map(esc).join(";")).join("\r\n");

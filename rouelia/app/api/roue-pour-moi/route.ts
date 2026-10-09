@@ -1,10 +1,10 @@
-import { database, saveSignup } from "@/lib/db";
+import { database, saveSignup, saveSignupLogo } from "@/lib/db";
+import { wheelRequestSignup } from "@/lib/admin";
 import { hit } from "@/lib/game";
 import { clientIp, json, readJson } from "@/lib/http";
 import { sendMail } from "@/lib/mail";
 import { wheelRequestAlertMail, wheelRequestConfirmMail } from "@/lib/mail-templates";
-import { isEmail, normalizeFrenchPhone, type SignupRecord } from "@/lib/signup";
-import { consentText } from "@/textes/formulaires";
+import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
 import { countEvent } from "@/lib/mesure";
 import { doneForYou, pricing, type PackId } from "@/content";
 
@@ -18,33 +18,6 @@ function parseLogo(v: unknown, name: string): { filename: string; content: strin
   const ext = m[1] === "svg+xml" ? "svg" : m[1] === "jpeg" ? "jpg" : m[1];
   const safe = name.replace(/\.[a-z0-9]+$/i, "").replace(/[^a-z0-9_-]+/gi, "-").slice(0, 40) || "logo";
   return { filename: `${safe}.${ext}`, content: m[2], base64: true };
-}
-
-/** Inscription à l'essai tirée d'une demande « Créez-la pour moi » (statut « essai à ouvrir »). */
-function wheelRequestSignup(
-  p: { shopName: string; name: string; phone: string; email: string; address: string; google: string; pack: PackId },
-  now: Date,
-): SignupRecord {
-  const at = now.toISOString();
-  return {
-    id: crypto.randomUUID(),
-    createdAt: at,
-    firstName: p.name || p.shopName,
-    email: p.email,
-    phone: p.phone,
-    shopName: p.shopName,
-    establishment: { name: p.shopName, placeId: null, address: p.address || null, googleMapsUrl: /^https?:\/\//.test(p.google) ? p.google : null },
-    trade: null,
-    pack: p.pack,
-    wheelConfig: null,
-    utm: { source: "Créez-la pour moi", medium: null, campaign: null, term: null, content: null, referrer: null, landingPath: "/creer-ma-roue#pour-moi" },
-    consent: { accepted: true, date: at, text: consentText },
-    status: "essai_en_attente",
-    trialStartedAt: null,
-    firstPlayAt: null,
-    stripeCustomerId: null,
-    offer: null,
-  };
 }
 
 type WheelRequestField = "shopName" | "phone" | "email" | "address" | "google" | "consent";
@@ -87,15 +60,20 @@ export async function POST(req: Request) {
   let stored = false;
   try {
     if ((await hit(`roue:${clientIp(req)}`, now)) > 8) return json({ ok: false, error: "rate" }, 429);
+    // La demande apparaît aussi dans /admin comme un essai à ouvrir, sur le pack choisi, avec le logo envoyé :
+    // on prépare la roue, puis le bouton habituel crée le commerce et envoie l'accès.
+    const requestId = crypto.randomUUID();
+    // Logo gardé pour l'admin s'il ne dépasse pas 1 Mo (même limite que l'espace commerçant) ; sinon il reste dans l'e-mail.
+    const keptLogo = logo && typeof body.logo === "string" && body.logo.length <= 1_000_000 ? body.logo : null;
+    const signup = wheelRequestSignup(p, requestId, now, !!keptLogo);
     const db = await database();
     await db
       .prepare("INSERT INTO wheel_requests (id, created_at, email, data) VALUES (?, ?, ?, ?)")
-      .bind(crypto.randomUUID(), now.toISOString(), p.email, JSON.stringify(p))
+      .bind(requestId, now.toISOString(), p.email, JSON.stringify({ ...p, signupId: signup.id }))
       .run();
     stored = true;
-    // La demande apparaît aussi dans /admin comme un essai à ouvrir, sur le pack choisi : le bouton habituel
-    // crée le commerce et envoie l'accès au commerçant.
-    await saveSignup(wheelRequestSignup(p, now));
+    await saveSignup(signup);
+    if (keptLogo) await saveSignupLogo(signup.id, keptLogo, now);
   } catch (e) {
     // L'e-mail part quand même : la demande ne doit pas se perdre si la base est indisponible.
     console.error("[roue-pour-moi] enregistrement impossible", e);

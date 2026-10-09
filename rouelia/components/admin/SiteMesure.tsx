@@ -15,8 +15,9 @@ export function SiteMesure() {
       .catch(() => setFailed(true));
   }, []);
   return (
-    <details className="mt-6 rounded-xl bg-paper p-4 ring-1 ring-line">
-      <summary className="cursor-pointer font-semibold">Mesure du site (sans cookie)</summary>
+    <section aria-labelledby="mesure-titre" className="rounded-xl bg-paper p-4 ring-1 ring-line sm:p-5">
+      <h2 id="mesure-titre" className="font-semibold">Mesure du site (sans cookie)</h2>
+      <p className="mt-1 text-sm text-ink-soft">Compteurs par jour : aucune donnée personnelle, aucun cookie.</p>
       {failed ? (
         <p className="mt-3 text-sm text-ink-soft">Compteurs indisponibles (base non connectée).</p>
       ) : !rows ? (
@@ -41,6 +42,6 @@ export function SiteMesure() {
           </tbody>
         </table>
       )}
-    </details>
+    </section>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy, ExternalLink, KeyRound, LoaderCircle, MessageCircle, Store } from "lucide-react";
+import { Check, Copy, ExternalLink, KeyRound, LoaderCircle, MessageCircle, Send, SlidersHorizontal, Store } from "lucide-react";
 import { pricing, type PackId } from "@/content";
 import { formatDay, parisDay } from "@/lib/dates";
 import type { ShopPlan } from "@/lib/shop-config";
@@ -48,11 +48,13 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
     }
   }
 
-  async function open() {
-    const d = await call("/api/admin/shops", { method: "POST", body: JSON.stringify({ signupId: signup.id }) });
+  async function open(invite = true) {
+    const d = await call("/api/admin/shops", { method: "POST", body: JSON.stringify({ signupId: signup.id, invite }) });
     if (d) {
-      setLink(inviteUrl(d.token));
-      setEmailed(d.emailed === true);
+      if (d.token) {
+        setLink(inviteUrl(d.token));
+        setEmailed(d.emailed === true);
+      }
       onChange();
     }
   }
@@ -79,9 +81,28 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
   return (
     <div className="mt-3 rounded-lg bg-cream p-3 text-sm ring-1 ring-line">
       {!shop ? (
-        <button type="button" disabled={busy} onClick={open} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-sauge px-4 font-semibold text-white disabled:opacity-60">
-          {busy ? <LoaderCircle aria-hidden size={16} className="animate-spin" /> : <Store aria-hidden size={16} />} Ouvrir l&apos;essai
-        </button>
+        signup.request ? (
+          // « Créez-la pour moi » : la roue est préparée avant que le commerçant reçoive son accès.
+          <div className="space-y-2">
+            <ol className="list-inside list-decimal space-y-0.5 font-semibold">
+              <li>Créer sa roue (il n&apos;est pas encore prévenu)</li>
+              <li>La préparer : lots, couleurs, logo</li>
+              <li>Lui envoyer son accès</li>
+            </ol>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" disabled={busy} onClick={() => open(false)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-sauge px-4 font-semibold text-white disabled:opacity-60">
+                {busy ? <LoaderCircle aria-hidden size={16} className="animate-spin" /> : <Store aria-hidden size={16} />} Créer sa roue
+              </button>
+              <button type="button" disabled={busy} onClick={() => open(true)} className="inline-flex min-h-11 items-center rounded-full bg-paper px-4 font-semibold ring-1 ring-line disabled:opacity-60">
+                Ouvrir l&apos;essai et envoyer l&apos;accès tout de suite
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button type="button" disabled={busy} onClick={() => open(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-sauge px-4 font-semibold text-white disabled:opacity-60">
+            {busy ? <LoaderCircle aria-hidden size={16} className="animate-spin" /> : <Store aria-hidden size={16} />} Ouvrir l&apos;essai
+          </button>
+        )
       ) : (
         <div className="space-y-2">
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -90,11 +111,20 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
               <ExternalLink aria-hidden size={14} /> Voir
             </a>
             <span className="text-ink-soft">
-              {shop.hasPassword ? "Compte activé" : "Mot de passe pas encore choisi"}
+              {shop.hasPassword ? "Compte activé" : "Accès pas encore utilisé"}
               {shop.plan === "trial" ? ` · Essai jusqu'au ${formatDay(parisDay(new Date(shop.trialEndsAt)))}` : ""}
             </span>
           </p>
           <div className="flex flex-wrap items-center gap-2">
+            {/* Ouvre l'espace du commerçant (onglet Roue) dans un nouvel onglet : lots, couleurs, logo, réglages. */}
+            <a href={`/api/admin/shops/${shop.id}/espace`} target="_blank" rel="noopener" className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-tomette px-4 font-semibold text-white">
+              <SlidersHorizontal aria-hidden size={14} /> Préparer sa roue
+            </a>
+            {!shop.hasPassword ? (
+              <button type="button" disabled={busy} onClick={newLink} className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-sauge px-4 font-semibold text-white disabled:opacity-60">
+                <Send aria-hidden size={14} /> Envoyer son accès
+              </button>
+            ) : null}
             <label className="sr-only" htmlFor={`plan-${shop.id}`}>Offre du commerce</label>
             <select id={`plan-${shop.id}`} value={shop.plan} disabled={busy} onChange={(e) => patch({ plan: e.target.value })} className="min-h-10 rounded-full bg-paper px-3 font-semibold ring-1 ring-line">
               {(Object.keys(PLAN_LABEL) as ShopPlan[]).map((p) => (
@@ -112,9 +142,11 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
                 Prolonger de 7 jours
               </button>
             ) : null}
-            <button type="button" disabled={busy} onClick={newLink} className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-paper px-3 font-semibold ring-1 ring-line">
-              <KeyRound aria-hidden size={14} /> {shop.hasPassword ? "Lien nouveau mot de passe" : "Nouveau lien d'invitation"}
-            </button>
+            {shop.hasPassword ? (
+              <button type="button" disabled={busy} onClick={newLink} className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-paper px-3 font-semibold ring-1 ring-line">
+                <KeyRound aria-hidden size={14} /> Lien nouveau mot de passe
+              </button>
+            ) : null}
           </div>
         </div>
       )}

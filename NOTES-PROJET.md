@@ -50,6 +50,21 @@
 - Rédaction : vouvoiement, aucun tiret cadratin ou demi-cadratin, aucun emoji (contrôle : `npm run check-copy`).
 - Secrets : jamais dans le dépôt ni demandés dans le chat ; ce sont des secrets Cloudflare posés par Aymen.
 
+## Espace admin (/admin), refait le 9 octobre 2026
+
+- **Inscriptions** : filtres À ouvrir, Essai en cours, Clients, Perdus, Tous ; recherche (y compris dans les notes) ; export Excel.
+  Chaque fiche se modifie (crayon : commerce, prénom, e-mail, téléphone, pack ; l'e-mail, le prénom et le téléphone du commerce
+  suivent si l'essai est ouvert), a des notes privées enregistrées toutes seules, et des boutons Appeler, WhatsApp, E-mail.
+- **« Créez-la pour moi »** : la fiche montre lots souhaités, message, adresse, fiche Google et logo (téléchargeable). Trois étapes :
+  « Créer sa roue » (sans prévenir le commerçant ; le logo envoyé est posé sur la roue), « Préparer sa roue » (ouvre son espace,
+  onglet Roue, dans un nouvel onglet), « Envoyer son accès ». Le bouton « Ouvrir l'essai et envoyer l'accès tout de suite » reste possible.
+- **Appels** : réservations de /rendez-vous, à venir d'abord ; « Appel fait », notes, annulation (le créneau redevient libre).
+- **Demandes** : formulaires « Créez-la pour moi » et « Autre activité » ; « Traitée », notes, suppression ; « Ajouter aux inscriptions »
+  pour une ancienne demande « Créez-la pour moi » (celles d'avant le 9 octobre au soir, dont le test d'Aymen).
+- **Mesure** : compteurs sans cookie.
+- Pastilles rouges sur les onglets : essais à ouvrir, appels à venir non faits, demandes non traitées.
+- Code : `components/admin/*`, `lib/admin.ts`, routes `app/api/admin/*`. Tests : `tests/admin.test.ts`.
+
 ## Constantes
 
 - `rouelia/config.ts` : `EMAIL` = contact@rouelia.fr ; `WHATSAPP_NUMBER` = 33672780326 (provisoire, une ligne à changer pour
