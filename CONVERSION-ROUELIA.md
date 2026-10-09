@@ -14,6 +14,22 @@ Légende :
 - **[Principe]** : mécanisme documenté en psychologie ou en ergonomie.
 - **[Opinion]** : mon avis.
 
+
+## Suivi (mis à jour le 9 octobre 2026, avant /compact)
+
+Aucune recommandation n'est encore appliquée au site. Réponses d'Aymen aux questions de la section 9 :
+
+- [x] Q1 Essai : ouvert à la main (pas automatique). Délai à promettre : à préciser par Aymen.
+- [x] Q2 « Créez-la pour moi » : essai sur le pack Essentiel (à confirmer dans la formulation).
+- [ ] Q3 Haut de page téléphone (texte d'abord ou roue réduite) : en attente.
+- [ ] Q4 WhatsApp (lien discret ou bouton flottant) : en attente.
+- [ ] Q5 Présence humaine sur l'accueil et choix de la photo : en attente.
+- [ ] Q6 Page comparative : en attente.
+- [ ] Q7 Créneaux d'appel du matin et du milieu d'après-midi : en attente (une ligne dans `rouelia/config.ts`).
+
+Autres décisions : rentabilité « 2 clients » partout ; SMS et relances prévus mais non codés (ne pas les promettre).
+Les 5 actions de la section 7 restent à faire, aucune n'est commencée.
+
 ---
 
 ## 1. Verdict global
