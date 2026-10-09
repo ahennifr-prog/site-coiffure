@@ -74,7 +74,7 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
   }
 
   const message = link
-    ? `Bonjour ${signup.firstName}, votre roue Rouelia est prête. Choisissez votre mot de passe ici : ${link} (lien valable 14 jours). Vous y trouverez la caisse, le suivi, les réglages et votre QR code.`
+    ? `Bonjour ${signup.firstName}, merci pour votre confiance : votre roue Rouelia est prête. Il vous reste à choisir votre mot de passe ici : ${link} (lien valable 14 jours). Vous y trouverez votre QR code à imprimer, la caisse et les réglages de votre roue. À bientôt !`
     : "";
   const waPhone = signup.phone.replace("+", "");
 

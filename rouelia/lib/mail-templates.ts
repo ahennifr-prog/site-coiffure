@@ -127,20 +127,29 @@ const rouelia = (title: string, paragraphs: string[], button?: { label: string; 
   text: text([...paragraphs, button && `${button.label} : ${button.url}`, footer]),
 });
 
-export function merchantInviteMail(p: { email: string; firstName: string; shopName: string; link: string; trialEnd: string }): Mail {
+/**
+ * Accès à l'espace commerçant (premier mot de passe). Simple et chaleureux : merci, la roue est prête, un seul geste à faire.
+ * `prepared` : roue préparée par nos soins (« Créez-la pour moi »).
+ */
+export function merchantInviteMail(p: { email: string; firstName: string; shopName: string; link: string; trialEnd: string; prepared?: boolean }): Mail {
   return {
     to: { email: p.email, name: p.firstName },
-    subject: "Votre roue Rouelia est prête",
+    subject: `${p.shopName} : votre roue Rouelia est prête`,
     tags: ["invitation"],
     replyTo: brand.email,
     ...rouelia(
       "Votre roue est prête",
       [
         `Bonjour ${p.firstName},`,
-        `La roue de ${p.shopName} est créée, avec les lots que vous avez choisis. Votre essai gratuit dure jusqu'au ${formatDay(p.trialEnd)}.`,
-        "Choisissez votre mot de passe avec le bouton ci-dessous (lien valable 14 jours). Vous trouverez ensuite la caisse, le suivi, les réglages et votre QR code.",
+        p.prepared
+          ? `Merci de nous avoir confié la roue de ${p.shopName}. Elle est prête, préparée avec les informations que vous nous avez envoyées.`
+          : `Merci d'avoir choisi Rouelia. La roue de ${p.shopName} est prête, avec les lots que vous avez choisis.`,
+        `Votre essai est gratuit jusqu'au ${formatDay(p.trialEnd)}, sans carte bancaire et sans engagement.`,
+        "Dans votre espace, vous trouverez votre QR code prêt à imprimer pour votre comptoir, la caisse pour valider les cadeaux de vos clients en un geste, et les réglages de votre roue, que vous pouvez changer quand vous voulez.",
+        "Il ne vous reste qu'une chose à faire : choisir votre mot de passe, avec le bouton ci-dessous.",
       ],
       { label: "Choisir mon mot de passe", url: p.link },
+      `Ce lien est valable 14 jours. Une question, un lot à changer ? Répondez simplement à cet e-mail. ${brand.name}, ${brand.url.replace("https://", "")}.`,
     ),
   };
 }
@@ -484,13 +493,15 @@ export function wheelRequestAlertMail(p: WheelRequestMail, logo: { filename: str
 export function wheelRequestConfirmMail(p: { email: string; name: string; shopName: string; pack: string }): Mail {
   return {
     to: { email: p.email, name: p.name || p.shopName },
-    subject: "Votre roue Rouelia est en préparation",
+    subject: "Merci, votre roue Rouelia est en préparation",
     tags: ["roue-a-creer"],
     replyTo: brand.email,
-    ...rouelia("C'est parti", [
+    ...rouelia("Merci pour votre confiance", [
       `Bonjour${p.name ? ` ${p.name}` : ""},`,
-      `Nous préparons la roue de ${p.shopName}. Vous recevrez votre QR code par e-mail en quelques heures, avec votre essai gratuit de 14 jours sur le pack ${p.pack}.`,
-      "Une précision à ajouter ? Répondez simplement à cet e-mail.",
+      `Merci d'avoir choisi Rouelia pour ${p.shopName}. Nous préparons votre roue avec vos informations.`,
+      "Dans quelques heures, vous recevrez un e-mail avec votre accès : vous choisirez votre mot de passe en un clic, et votre QR code sera prêt à imprimer.",
+      `Votre essai est gratuit pendant 14 jours, sur le pack ${p.pack}, sans carte bancaire et sans engagement.`,
+      "Vous n'avez rien d'autre à faire. Une précision à ajouter, comme vos horaires ou un lot ? Répondez simplement à cet e-mail.",
     ]),
   };
 }

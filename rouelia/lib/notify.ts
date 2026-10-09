@@ -2,6 +2,7 @@
 import { brand, pricing } from "@/content";
 import { addDays, parisClock, parisDay } from "@/lib/dates";
 import { markReminded, periodNumbers, playsToRemind, type Play } from "@/lib/game";
+import { getSignup } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
 import { offerById } from "@/lib/offers";
 import { stripeReady } from "@/lib/stripe";
@@ -52,7 +53,9 @@ export async function sendClientCode(shop: Shop, play: Play, now = new Date()) {
 }
 
 export async function sendInvite(shop: Shop, token: string) {
-  return sendMail(merchantInviteMail({ email: shop.email, firstName: shop.firstName, shopName: shop.settings.name, link: inviteUrl(token), trialEnd: parisDay(new Date(shop.trialEndsAt)) }));
+  // Roue préparée par nos soins (« Créez-la pour moi ») : l'e-mail le dit.
+  const prepared = shop.signupId ? !!(await getSignup(shop.signupId))?.request : false;
+  return sendMail(merchantInviteMail({ email: shop.email, firstName: shop.firstName, shopName: shop.settings.name, link: inviteUrl(token), trialEnd: parisDay(new Date(shop.trialEndsAt)), prepared }));
 }
 
 export async function sendReset(shop: Shop, token: string) {
