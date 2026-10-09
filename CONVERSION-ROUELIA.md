@@ -190,7 +190,7 @@ ACTUEL                                    RECOMMANDÉ
   - « Créez-la pour moi » ne dit nulle part si c'est l'essai gratuit ni ce que ça coûte ensuite.
 - **Principe** : réduction de l'incertitude. L'anxiété sur la suite (« je vais être engagé ? appelé ? facturé ? ») est une cause classique d'abandon. Après l'action, un délai inconnu fait retomber l'élan.
 - **Modification** :
-  - sous chaque bouton d'envoi, une ligne « Ensuite : … » (exemple : « Vous recevez votre QR code sous 24 à 48 h. C'est votre essai gratuit de 14 jours, sans carte bancaire. ») ;
+  - sous chaque bouton d'envoi, une ligne « Ensuite : … » (exemple : « Vous recevez votre QR code en quelques heures. C'est votre essai gratuit de 14 jours, sans carte bancaire. ») ;
   - un délai précis après l'inscription (« sous 24 h ») ;
   - à terme, une ouverture d'essai automatique.
 - **Effort** : faible pour les textes, élevé pour l'ouverture automatique.
@@ -268,7 +268,7 @@ ACTUEL                                    RECOMMANDÉ
 - **L1. Une présence humaine sur l'accueil**, si tu l'acceptes, puisque tu as retiré la section fondateur. Une petite photo ronde et une ligne près du contact (« C'est moi qui vous réponds, Enzo ») suffiraient.
   - [Principe] Autorité et identification : face à un commerce de quartier, un visage rassure plus qu'une marque.
   - **Point d'attention [Opinion]** : la photo actuelle de /a-propos a un rendu « banque d'images ». Un sceptique peut la juger artificielle, alors que l'authenticité est le levier principal ici. Une vraie photo, même moins léchée, servirait mieux.
-- **L2. Reformuler « Créer ma roue »** quand il mène au parcours « Créez-la pour moi ». Le visiteur clique pour « créer » et arrive sur un formulaire. Le texte « Votre roue, prête aujourd'hui. » est en plus inexact pour ce parcours (24 à 48 h). Effort faible.
+- **L2. Reformuler « Créer ma roue »** quand il mène au parcours « Créez-la pour moi ». Le visiteur clique pour « créer » et arrive sur un formulaire. Le texte « Votre roue, prête aujourd'hui. » était inexact quand ce parcours annonçait 24 à 48 h ; depuis le 9 octobre, la roue est annoncée prête en quelques heures, ce qui rend la promesse juste. Effort faible.
 - **L3. Le cadeau de la roue d'offres n'est valable qu'en Croissance et en Premium**, et on ne l'apprend qu'après avoir joué. Une petite déception est possible au moment le plus positif (pic et fin). Écrire « valable sur Croissance et Premium » avant le lancer, ce qui est déjà le cas dans le sous-titre, mais en plus petit. Effort faible.
 
 ---

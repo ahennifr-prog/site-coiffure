@@ -157,7 +157,7 @@ de l'objectif de 90.
 - **M8. Petites incohérences** :
   - « Un cadeau par compte » (`content.ts:674`) contre « par commerce » dans les CGV ;
   - « à deux minutes d'ici » (blog, CTA finaux) contre « 5 minutes » ailleurs ;
-  - « Votre roue, prête aujourd'hui » alors que le parcours « Créez-la pour moi » prend 24 à 48 h ;
+  - « Votre roue, prête aujourd'hui » alors que le parcours « Créez-la pour moi » annonçait 24 à 48 h (corrigé le 9 octobre : « en quelques heures ») ;
   - « au téléphone » dans la section contact, sans numéro affiché.
 
   Effort faible.
