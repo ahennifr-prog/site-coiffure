@@ -26,12 +26,14 @@ export function ReviewCard({ review: r }: { review: MerchantReview }) {
           <p className="truncate text-xs text-ink-soft">{fr(reviewSubtitle(r))}</p>
         </figcaption>
       </div>
-      <div className="mt-3 flex gap-0.5 text-safran" aria-label={`${r.stars} sur 5`}>
-        {Array.from({ length: 5 }, (_, i) => (
-          <Star key={i} size={16} fill={i < r.stars ? "currentColor" : "none"} strokeWidth={i < r.stars ? 0 : 1.5} />
-        ))}
-      </div>
-      <blockquote className="mt-2 text-[15px] leading-snug text-ink">« {fr(r.text)} »</blockquote>
+      {r.stars ? (
+        <div className="mt-3 flex gap-0.5 text-safran" aria-label={`${r.stars} sur 5`}>
+          {Array.from({ length: 5 }, (_, k) => (
+            <Star key={k} size={16} fill={k < r.stars! ? "currentColor" : "none"} strokeWidth={k < r.stars! ? 0 : 1.5} />
+          ))}
+        </div>
+      ) : null}
+      <blockquote className="mt-3 text-[15px] leading-snug text-ink">« {fr(r.text)} »</blockquote>
       {r.date || r.ficheGoogle ? (
         <p className="mt-auto flex items-center justify-between gap-3 pt-3 text-xs text-ink-soft">
           <span>{r.date}</span>

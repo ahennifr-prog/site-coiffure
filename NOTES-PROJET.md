@@ -26,6 +26,9 @@
   fondateur (alt et JSON-LD rétablis). Pastille « À propos » : photo de profil du Drive (9 octobre), recadrée en 96 et 192 px
   (`FOUNDER_AVATAR`, `scripts/photo-profil.sh`).
 - **Avis de commerçants** : sans date ni ville pour l'instant ; d'autres avis seront ajoutés petit à petit.
+  10 octobre : 4 avis ajoutés et publiés (Yoga Sens, Coffee Shop Paris, Spa Traditionnel, Cleans Cars), logos du Drive, sans note sur 5.
+  Nails Studio NON publié (`valide: false`) : son texte dit « notre note Google a augmenté », ce qui relie Rouelia aux avis.
+  À republier avec un texte sans la note Google, validé par écrit par le commerçant.
 - **Participation au jeu** : mention affichée seulement si le commerçant limite les parties (réglage « Rejouer après »).
 - **Fonctions prévues, en cours de développement** : leurs textes restent affichés tels quels (consigne du 9 octobre).
   Liste à jour ci-dessous, section « Fonctions affichées non codées ».

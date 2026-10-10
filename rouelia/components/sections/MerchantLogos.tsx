@@ -18,7 +18,7 @@ export function MerchantLogos() {
         <h2 id="logos-title" className="text-center text-xs font-bold tracking-[0.12em] text-ink-soft uppercase">
           {fr(merchantReviewsSection.logosTitle)}
         </h2>
-        <ul className="mx-auto mt-4 grid max-w-3xl grid-cols-4 gap-2 sm:mt-5 sm:gap-6">
+        <ul className="mx-auto mt-4 grid max-w-5xl grid-cols-4 gap-x-2 gap-y-4 sm:mt-5 sm:gap-6 lg:grid-cols-8">
           {shops.map((r) => (
             <li key={r.shop} className="flex flex-col items-center gap-1.5 text-center">
               {r.logo ? (
