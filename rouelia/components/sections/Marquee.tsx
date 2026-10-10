@@ -26,7 +26,7 @@ export function Marquee() {
     </ul>
   );
   return (
-    <section aria-label={advantages.label} className="mt-5 sm:mt-8">
+    <section aria-label={advantages.label} className="mt-3 sm:mt-4">
       <div
         className="advantages-band overflow-hidden border-y border-line bg-paper py-2.5 sm:py-3.5"
         data-held={held || undefined}

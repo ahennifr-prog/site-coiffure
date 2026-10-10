@@ -35,8 +35,9 @@ export default function Home() {
       <main id="contenu">
         <FromWheelWelcome />
         <Hero />
-        <MerchantLogos />
         <VideoShowcase />
+        {/* Les deux bandes qui défilent, l'une sous l'autre : les commerces, puis les avantages. */}
+        <MerchantLogos />
         <Marquee />
         <HowItWorks />
         <MerchantReviews />
