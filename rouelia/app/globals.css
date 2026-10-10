@@ -254,6 +254,14 @@ dialog::backdrop {
 .fx-on .tl-fillx { transform: scaleX(0); }
 
 /* Bandeau des avis de commerçants : défilement lent, pause au survol, relief des cartes. */
+/* Bande des logos de commerçants : défilement continu, pause au survol ; au doigt sans animation. */
+.logos-track { display: flex; width: max-content; animation: marquee 40s linear infinite; }
+.logos-band:hover .logos-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .logos-band { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .logos-track { animation: none; }
+}
+
 .reviews-track { display: flex; width: max-content; animation: marquee 70s linear infinite; }
 .reviews-band:hover .reviews-track { animation-play-state: paused; }
 .review-card { transition: transform 500ms var(--ease-out), box-shadow 500ms var(--ease-out); transform: translateZ(0); }

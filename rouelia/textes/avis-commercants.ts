@@ -34,16 +34,7 @@ export interface MerchantReview {
 }
 
 export const merchantReviews: MerchantReview[] = [
-  {
-    shop: "Alia Coiffure",
-    trade: "Salon de coiffure",
-    text: "Je ne m'attendais pas à ce que ça apporte autant. Avec cette roue, mes clientes reviennent et mon planning est plus rempli.",
-    stars: 5,
-    logo: { src: "/logos/alia-coiffure.webp", width: 160, height: 158, background: "#1D1A16" },
-    monogram: "AC",
-    color: "#1D1A16",
-    valide: true,
-  },
+  // Ordre d'affichage choisi par Aymen (10 octobre 2026) : Pizza Time et Bangkok Factory 94 en premier.
   {
     shop: "Pizza Time",
     trade: "Pizzeria",
@@ -65,15 +56,15 @@ export const merchantReviews: MerchantReview[] = [
     valide: true,
   },
   {
-    shop: "Elsa Beauty",
-    trade: "Institut de beauté",
-    text: "Simple à installer, et mes clientes reviennent plus souvent. Je recommande.",
+    shop: "Alia Coiffure",
+    trade: "Salon de coiffure",
+    text: "Je ne m'attendais pas à ce que ça apporte autant. Avec cette roue, mes clientes reviennent et mon planning est plus rempli.",
     stars: 5,
-    monogram: "EB",
-    color: "#8A4B5C",
+    logo: { src: "/logos/alia-coiffure.webp", width: 160, height: 158, background: "#1D1A16" },
+    monogram: "AC",
+    color: "#1D1A16",
     valide: true,
   },
-  // Avis transmis par Aymen le 10 octobre 2026, avec les logos (Drive). Pas de note sur 5 : elle n'a pas été donnée.
   {
     shop: "Nails Studio",
     trade: "Prothésiste ongulaire",
@@ -86,21 +77,30 @@ export const merchantReviews: MerchantReview[] = [
     valide: true,
   },
   {
-    shop: "Yoga Sens",
-    trade: "Studio de yoga",
-    text: "Une belle découverte pour notre studio. Rouelia rend l'expérience plus interactive et donne envie de participer.",
-    logo: { src: "/logos/yoga-sens.webp", width: 200, height: 200, background: "#000000" },
-    monogram: "YS",
-    color: "#C4401F",
-    valide: true,
-  },
-  {
     shop: "Coffee Shop Paris",
     trade: "Coffee shop",
     text: "Une solution sympa pour faire découvrir notre coffee shop et donner aux clients une bonne raison de revenir !",
     logo: { src: "/logos/coffee-shop-paris.webp", width: 200, height: 200, background: "#D9C3A5" },
     monogram: "CS",
     color: "#5C3B28",
+    valide: true,
+  },
+  {
+    shop: "Elsa Beauty",
+    trade: "Institut de beauté",
+    text: "Simple à installer, et mes clientes reviennent plus souvent. Je recommande.",
+    stars: 5,
+    monogram: "EB",
+    color: "#8A4B5C",
+    valide: true,
+  },
+  {
+    shop: "Yoga Sens",
+    trade: "Studio de yoga",
+    text: "Une belle découverte pour notre studio. Rouelia rend l'expérience plus interactive et donne envie de participer.",
+    logo: { src: "/logos/yoga-sens.webp", width: 200, height: 200, background: "#000000" },
+    monogram: "YS",
+    color: "#C4401F",
     valide: true,
   },
   {
