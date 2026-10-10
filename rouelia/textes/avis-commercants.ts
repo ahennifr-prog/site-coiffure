@@ -4,7 +4,7 @@
  * Seuls les avis valides s'affichent. Tant qu'aucun ne l'est, la section reste masquée
  * (aperçu interne possible avec l'adresse /?apercu=avis, signalé « brouillon »).
  * Les 4 premiers avis ont été validés par les commerçants (confirmé par Aymen le 8 octobre 2026) ; les 5 suivants ont été
- * transmis par Aymen le 10 octobre 2026 (Nails Studio non publié, voir plus bas).
+ * transmis par Aymen le 10 octobre 2026.
  */
 export interface MerchantReview {
   shop: string;
@@ -77,13 +77,13 @@ export const merchantReviews: MerchantReview[] = [
   {
     shop: "Nails Studio",
     trade: "Prothésiste ongulaire",
-    // Non publié : le texte relie Rouelia à la note Google, ce que le site s'interdit (aucun lien entre le jeu et un avis).
-    // À republier si le commerçant valide par écrit une version sans la note Google.
+    // Publié à la demande d'Aymen (10 octobre 2026) : c'est le constat du commerçant, des clients contents laissent de
+    // meilleurs avis ; le jeu reste sans aucun lien avec un avis (cadeau remis à tous, invitation facultative après le gain).
     text: "Grâce à Rouelia, notre note Google a augmenté. Un vrai plus pour la visibilité et l'image de notre salon !",
-    logo: { src: "/logos/nails-studio.webp", width: 200, height: 200, background: "#F6DCD6" },
+    logo: { src: "/logos/nails-studio.webp", width: 200, height: 200, background: "#EFECE4" },
     monogram: "NS",
     color: "#B76E79",
-    valide: false,
+    valide: true,
   },
   {
     shop: "Yoga Sens",

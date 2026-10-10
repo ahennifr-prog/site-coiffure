@@ -12,13 +12,20 @@ import { Container } from "@/components/ui/Section";
 export function MerchantLogos() {
   const shops = merchantReviews.filter((r) => r.valide);
   if (!shops.length) return null;
+  // Colonnes choisies selon le nombre de commerces, pour ne jamais laisser un logo seul sur sa ligne.
+  const n = shops.length;
+  const mobileCols = n <= 4 ? n : n % 4 === 0 ? 4 : n % 3 === 0 ? 3 : 4;
+  const desktopCols = n <= 9 ? n : Math.ceil(n / 2);
   return (
     <section id="logos" aria-labelledby="logos-title" className="pt-2 pb-8 sm:pt-0 sm:pb-12">
       <Container>
         <h2 id="logos-title" className="text-center text-xs font-bold tracking-[0.12em] text-ink-soft uppercase">
           {fr(merchantReviewsSection.logosTitle)}
         </h2>
-        <ul className="mx-auto mt-4 grid max-w-5xl grid-cols-4 gap-x-2 gap-y-4 sm:mt-5 sm:gap-6 lg:grid-cols-8">
+        <ul
+          className="mx-auto mt-4 grid max-w-5xl grid-cols-[repeat(var(--m),minmax(0,1fr))] gap-x-2 gap-y-4 sm:mt-5 sm:gap-6 lg:grid-cols-[repeat(var(--d),minmax(0,1fr))]"
+          style={{ ["--m" as string]: mobileCols, ["--d" as string]: desktopCols }}
+        >
           {shops.map((r) => (
             <li key={r.shop} className="flex flex-col items-center gap-1.5 text-center">
               {r.logo ? (
