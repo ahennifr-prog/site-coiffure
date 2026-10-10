@@ -8,6 +8,7 @@ import { AppStateProvider } from "@/components/AppState";
 import { SignupMount } from "@/components/signup/SignupMount";
 import { ScrollReset } from "@/components/ui/ScrollReset";
 import { Mesure } from "@/components/ui/Mesure";
+import { PauseOffscreen } from "@/components/ui/PauseOffscreen";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 
 const fraunces = Fraunces({
@@ -15,6 +16,10 @@ const fraunces = Fraunces({
   axes: ["SOFT", "opsz"],
   variable: "--font-fraunces",
   display: "swap",
+  // Police des titres (118 Ko, axes SOFT et opsz) : pas de préchargement, pour ne pas retarder le premier écran.
+  // Le titre s'affiche d'abord dans une police de secours aux mêmes dimensions, puis bascule.
+  preload: false,
+  fallback: ["Georgia", "serif"],
 });
 
 const figtree = Figtree({
@@ -49,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </AppStateProvider>
         <WhatsAppFloat />
         <Mesure />
+        <PauseOffscreen />
       </body>
     </html>
   );

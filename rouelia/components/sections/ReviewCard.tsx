@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ExternalLink, Star } from "lucide-react";
 import { merchantReviewsSection, reviewSubtitle, type MerchantReview } from "@/textes/avis-commercants";
 import { fr } from "@/lib/format";
@@ -14,7 +13,8 @@ export function ReviewCard({ review: r }: { review: MerchantReview }) {
       <div className="flex items-center gap-3">
         {r.logo ? (
           <span className="inline-flex h-12 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg p-1 ring-1 ring-line" style={{ background: r.logo.background }}>
-            <Image src={r.logo.src} alt={`Logo ${r.shop}`} width={r.logo.width} height={r.logo.height} className="h-full w-full object-contain" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- fichiers déjà réduits à 200 px : pas besoin du redimensionneur */}
+            <img src={r.logo.src} alt={`Logo ${r.shop}`} width={r.logo.width} height={r.logo.height} loading="lazy" decoding="async" className="h-full w-full object-contain" />
           </span>
         ) : (
           <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-display text-lg font-semibold text-white" style={{ background: r.color }}>

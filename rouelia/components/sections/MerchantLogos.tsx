@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import { merchantReviews, merchantReviewsSection, type MerchantReview } from "@/textes/avis-commercants";
 import { fr } from "@/lib/format";
@@ -10,7 +9,8 @@ function Shop({ r }: { r: MerchantReview }) {
     <li className="flex w-24 shrink-0 flex-col items-center gap-1.5 px-1 text-center sm:w-32">
       {r.logo ? (
         <span className="inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl p-1.5 shadow-sm ring-1 ring-line sm:h-16 sm:w-16" style={{ background: r.logo.background }}>
-          <Image src={r.logo.src} alt="" width={r.logo.width} height={r.logo.height} sizes="64px" className="h-full w-full object-contain" />
+          {/* eslint-disable-next-line @next/next/no-img-element -- fichiers déjà réduits à 200 px : pas besoin du redimensionneur */}
+          <img src={r.logo.src} alt="" width={r.logo.width} height={r.logo.height} loading="lazy" decoding="async" className="h-full w-full object-contain" />
         </span>
       ) : (
         <span aria-hidden className="inline-flex h-14 w-14 items-center justify-center rounded-xl font-display text-lg font-semibold text-white shadow-sm sm:h-16 sm:w-16" style={{ background: r.color }}>
@@ -48,7 +48,7 @@ export function MerchantLogos() {
           </a>
         </p>
       </Container>
-      <div className="logos-band mt-3 overflow-hidden py-1 sm:mt-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <div data-anim className="logos-band mt-3 overflow-hidden py-1 sm:mt-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
         <div className="logos-track">
           {/* Deux suites identiques : la première commence par la vraie liste, le reste ne sert qu'à boucler. */}
           {[0, 1].map((copy) => (

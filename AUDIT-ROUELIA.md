@@ -32,7 +32,9 @@ Appliqué sur la branche de travail `claude/inspiring-mccarthy-13gj1h`, **pas en
 - [ ] C1 SIREN, adresse, contact : en attente d'Aymen.
 - [ ] I1, I2 confidentialité (Anthropic, Stripe, « Autre activité ») et relecture juridique : à faire.
 - [ ] I5, I6, I7 en-têtes de sécurité, limites de débit : à faire.
-- [ ] I8 purge des données, I10 performance de l'accueil : à faire.
+- [x] I10 performance de l'accueil : 90 à 93 sur mobile (contre 83 à 86 dans des conditions comparables), 99 sur ordinateur ;
+      détail dans NOTES-PROJET.md (10 octobre, en attente de « go prod »).
+- [ ] I8 purge des données : à faire.
 
 ---
 

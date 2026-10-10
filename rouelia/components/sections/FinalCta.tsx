@@ -5,7 +5,7 @@ import { fr } from "@/lib/format";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Section";
 import { Awning } from "@/components/brand/Awning";
-import { OfferWheel } from "./OfferWheel";
+import { OfferWheelLazy } from "./OfferWheelLazy";
 
 const card =
   "flex min-h-16 items-center gap-3 rounded-xl bg-white/95 px-4 py-3 font-semibold text-ink shadow-md transition-transform duration-300 hover:-translate-y-0.5 hover:bg-white";
@@ -29,7 +29,7 @@ export function FinalCta() {
           </div>
         </div>
         <div className="mx-auto w-full max-w-[380px]">
-          <OfferWheel />
+          <OfferWheelLazy />
         </div>
       </Container>
       <Container className="mt-8">

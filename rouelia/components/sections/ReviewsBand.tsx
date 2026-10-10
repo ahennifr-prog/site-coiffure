@@ -36,7 +36,7 @@ export function ReviewsBand({ reviews, compact, draft = false }: { reviews: Merc
           </li>
         ))}
       </ul>
-      <div aria-hidden className="reviews-band mt-8 overflow-hidden py-6 sm:mt-10" style={{ perspective: "1200px" }}>
+      <div aria-hidden data-anim className="reviews-band mt-8 overflow-hidden py-6 sm:mt-10" style={{ perspective: "1200px" }}>
         <div className="reviews-track">
           {[0, 1].map((k) => (
             <div key={k} className="flex shrink-0 gap-5 pr-5">

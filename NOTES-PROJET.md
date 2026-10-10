@@ -1,4 +1,4 @@
-# Notes du projet Rouelia (mises à jour le 9 octobre 2026)
+# Notes du projet Rouelia (mises à jour le 10 octobre 2026)
 
 À lire en premier en reprenant le travail, avec `rouelia/REPRISE.md` (historique technique détaillé),
 `AUDIT-ROUELIA.md` (audit complet) et `CONVERSION-ROUELIA.md` (analyse de conversion).
@@ -6,9 +6,10 @@
 ## État des branches
 
 - **Production** : `claude/great-lovelace-lpyydk`. Chaque push déploie rouelia.fr (Cloudflare Workers). Dernier commit
-  déployé : `6edc835` (page Pour qui, bandeau défilant, retour en haut de page, boutons sans doublon).
-- **Travail** : `claude/inspiring-mccarthy-13gj1h`. Production + documents (audit, conversion, notes) + le lot
-  « modifications ciblées » (14 points de conversion) + le lot « finalisation » du 9 octobre. **Les deux lots attendent « go prod »**.
+  déployé : `c87f135` (10 octobre : vidéo sous le haut de page, puis bandes logos et avantages ; confirmé en ligne par Aymen).
+  Tout ce qui précède est en ligne : lot conversion, finalisation, nouvel admin, e-mails, 9 avis, bande de logos qui défile.
+- **Travail** : `claude/inspiring-mccarthy-13gj1h`. Production + le lot « vitesse de l'accueil » du 10 octobre
+  (voir plus bas). **Ce lot attend « go prod »**.
 - Règle : on travaille sur la branche de travail, on vérifie, puis Aymen dit « go prod » et on avance la branche de production
   (avance rapide, sans réécrire l'historique).
 
@@ -68,6 +69,21 @@
 - **Mesure** : compteurs sans cookie.
 - Pastilles rouges sur les onglets : essais à ouvrir, appels à venir non faits, demandes non traitées.
 - Code : `components/admin/*`, `lib/admin.ts`, routes `app/api/admin/*`. Tests : `tests/admin.test.ts`.
+
+## Vitesse de l'accueil (10 octobre 2026, en attente de « go prod »)
+
+Mesure : Lighthouse mobile en local, derrière un relais qui compresse en brotli comme Cloudflare (PageSpeed Insights
+refusé : quota anonyme épuisé). Avant : 83 à 86, LCP environ 3,7 s, 576 Ko. Après : **90 à 93** sur 5 passages, LCP 2,4
+à 3,4 s, 444 Ko, CLS 0,003. Ordinateur : 99, CLS 0,052 (bascule de police des grands titres, sous le seuil de 0,1).
+Ce qui a été fait, sans rien changer à l'apparence :
+- logos (bande et cartes d'avis) servis tels quels (`<img>` chargé à la demande) au lieu du redimensionneur de Next ;
+- aperçu de la vidéo en WebP 640, 960 et 1280 px (10 à 22 Ko au lieu de 120 Ko) ;
+- roue d'offres de bas de page chargée à l'approche (`OfferWheelLazy`, place réservée : rien ne bouge) ;
+- police des titres (Fraunces, 118 Ko) non préchargée ; police de secours Georgia aux mêmes dimensions ;
+- pas de préchargement de l'accueil depuis l'accueil (logo du menu) ;
+- bandes qui défilent en pause hors de l'écran (`PauseOffscreen`, attribut `data-anim`).
+À vérifier une fois en ligne : PageSpeed Insights sur rouelia.fr (mobile), quand le quota le permet.
+Pistes suivantes si besoin : réduire le JavaScript de démarrage (moins de composants client dans le haut de page).
 
 ## Constantes
 

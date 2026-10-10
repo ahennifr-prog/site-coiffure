@@ -183,6 +183,8 @@ export const video = {
   mp4: "/video/rouelia-16x9.mp4",
   webm: "/video/rouelia-16x9.webm",
   poster: "/video/apercu-16x9.jpg",
+  /** Même image en WebP (640, 960, 1280 px de large) : 10 à 22 Ko au lieu de 120 Ko. */
+  posterWebp: (w: 640 | 960 | 1280) => `/video/apercu-16x9-${w}.webp`,
 };
 
 /* ------------------------------------------------------------------ */

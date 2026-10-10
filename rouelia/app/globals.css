@@ -254,6 +254,9 @@ dialog::backdrop {
 .fx-on .tl-fillx { transform: scaleX(0); }
 
 /* Bandeau des avis de commerçants : défilement lent, pause au survol, relief des cartes. */
+/* Animations continues en pause hors de l'écran (attribut posé par <PauseOffscreen>). */
+[data-anim][data-off] * { animation-play-state: paused !important; }
+
 /* Bande des logos de commerçants : défilement continu, pause au survol ; au doigt sans animation. */
 .logos-track { display: flex; width: max-content; animation: marquee 40s linear infinite; }
 .logos-band:hover .logos-track { animation-play-state: paused; }

@@ -55,7 +55,16 @@ export function VideoShowcase() {
             ) : (
               <button type="button" onClick={play} aria-label={video.play} className="group absolute inset-0 block h-full w-full cursor-pointer">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={video.poster} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]" />
+                <img
+                  src={video.posterWebp(960)}
+                  srcSet={`${video.posterWebp(640)} 640w, ${video.posterWebp(960)} 960w, ${video.posterWebp(1280)} 1280w`}
+                  sizes="(min-width: 1152px) 1088px, calc(100vw - 40px)"
+                  width={1600}
+                  height={900}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]" />
                 <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/55 via-ink/10 to-transparent" />
                 <span aria-hidden className="absolute inset-0 flex items-center justify-center">
                   <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-tomette text-white shadow-[0_20px_60px_-10px_rgb(196_64_31/0.8)] transition-transform duration-500 group-hover:scale-110 sm:h-28 sm:w-28">

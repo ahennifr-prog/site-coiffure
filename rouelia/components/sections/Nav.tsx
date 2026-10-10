@@ -84,7 +84,8 @@ export function Nav() {
         {nav.skipLink}
       </a>
       <nav aria-label={ui.mainNav} className="mx-auto flex h-full max-w-6xl items-center gap-3 px-5 sm:px-8">
-        <Link href="/" className="-ml-1 rounded-lg px-1 py-2" title={ui.homeLink}>
+        {/* Sur l'accueil, inutile de précharger l'accueil lui-même (environ 15 Ko de données en plus). */}
+        <Link href="/" prefetch={pathname === "/" ? false : undefined} className="-ml-1 rounded-lg px-1 py-2" title={ui.homeLink}>
           <Logo />
         </Link>
 
