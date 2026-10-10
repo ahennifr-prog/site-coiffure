@@ -28,8 +28,8 @@
 - **Avis de commerçants** : sans date ni ville pour l'instant ; d'autres avis seront ajoutés petit à petit.
   10 octobre : 4 avis ajoutés et publiés (Yoga Sens, Coffee Shop Paris, Spa Traditionnel, Cleans Cars), logos du Drive, sans note sur 5.
   Nails Studio publié aussi, avec son nouveau logo « L'Art de l'Ongle » et un texte reformulé sans « note Google qui augmente »
-  (« Nos clientes repartent ravies, et ça se voit sur notre fiche Google. ») : choix d'Aymen le 10 octobre ; à faire valider
-  par écrit par le commerçant.
+  (« Nos clientes repartent ravies, et ça se voit sur notre fiche Google. ») : choix d'Aymen le 10 octobre, validé par le commerçant le jour même
+  (accord à garder avec les autres).
 - **Participation au jeu** : mention affichée seulement si le commerçant limite les parties (réglage « Rejouer après »).
 - **Fonctions prévues, en cours de développement** : leurs textes restent affichés tels quels (consigne du 9 octobre).
   Liste à jour ci-dessous, section « Fonctions affichées non codées ».

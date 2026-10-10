@@ -78,7 +78,7 @@ export const merchantReviews: MerchantReview[] = [
     shop: "Nails Studio",
     trade: "Prothésiste ongulaire",
     // Texte reformulé à la demande d'Aymen (10 octobre 2026) : la satisfaction d'abord, sans « note Google qui augmente ».
-    // Version d'origine : « Grâce à Rouelia, notre note Google a augmenté. » À faire valider par écrit par le commerçant.
+    // Version d'origine : « Grâce à Rouelia, notre note Google a augmenté. » Nouveau texte validé par le commerçant le 10 octobre 2026.
     text: "Nos clientes repartent ravies, et ça se voit sur notre fiche Google. Un vrai plus pour la visibilité et l'image de notre salon !",
     logo: { src: "/logos/nails-studio.webp", width: 200, height: 200, background: "#EFECE4" },
     monogram: "NS",
