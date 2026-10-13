@@ -1,7 +1,30 @@
-# Notes du projet Rouelia (mises à jour le 10 octobre 2026)
+# Notes du projet Rouelia (mises à jour le 13 octobre 2026)
 
 À lire en premier en reprenant le travail, avec `rouelia/REPRISE.md` (historique technique détaillé),
 `AUDIT-ROUELIA.md` (audit complet) et `CONVERSION-ROUELIA.md` (analyse de conversion).
+
+## Point au 13 octobre 2026 (à lire en premier)
+
+**Fait et en ligne** (production `395001e`) : lot conversion (14 points), finalisation (Essentiel, participation, 2 clients),
+nouvel admin (Inscriptions, Appels, Demandes, Mesure ; « Créez-la pour moi » en 3 étapes), e-mails simplifiés,
+« en quelques heures », 9 avis avec logos (bande qui défile), vidéo sous le haut de page, vitesse de l'accueil (90 à 93
+mobile en local), SIREN et adresse dans les pages légales. Stripe configuré par Aymen (marque crème et vert sauge).
+
+**À configurer par Aymen** (Cloudflare, Worker `rouelia`, Variables et secrets) :
+1. Stripe réel : `STRIPE_SECRET_KEY` en `sk_live_`, `STRIPE_WEBHOOK_SECRET` du webhook réel vers
+   `https://rouelia.fr/api/stripe/webhook` ; puis paiement test à 29 € et remboursement (le commerce doit passer
+   « Client (payant) » dans l'admin).
+2. `ANTHROPIC_API_KEY` (réponses aux avis par IA, Croissance et Premium).
+3. Numéro WhatsApp business (aujourd'hui le 06 perso, `WHATSAPP_NUMBER` dans `rouelia/config.ts`).
+4. `RESEND_API_KEY` facultatif (Brevo fonctionne).
+
+**À fournir par Aymen** : relecture juridique (CGV, confidentialité, règlement du jeu) ; correction du code APE
+58.14Z en 58.29C auprès de l'INSEE ; étoiles des 5 derniers avis, puis ville, fiche Google et date de chaque avis.
+
+**À faire par Claude sur feu vert** : sécurité (en-têtes, limites d'essais sur inscription et connexion admin, audit
+I5 à I7) ; purge automatique des données (I8) ; confidentialité complétée avec Anthropic, Stripe et « Autre activité »
+(page légale : accord d'Aymen nécessaire). Fonctions prévues non codées : SMS, publication des réponses sur Google,
+domaine personnalisé (textes laissés tels quels).
 
 ## État des branches
 
