@@ -127,6 +127,10 @@ fiche Google, refonte saisonnière, chevalet offert, support sous 24 h, installa
    À faire par Aymen dans Stripe : faire valider le compte réel avec le SIREN, créer le webhook
    `https://rouelia.fr/api/stripe/webhook`, puis poser `STRIPE_SECRET_KEY` (sk_live) et `STRIPE_WEBHOOK_SECRET` dans
    Cloudflare (DEPLOIEMENT.md, section 3 ter). Le connecteur Stripe de Claude n'était pas autorisé : compte non vérifié.
+   13 octobre : Aymen a configuré Stripe (entreprise individuelle, SIREN, sans numéro de TVA : franchise 293 B ;
+   URL assistance https://rouelia.fr/#contact, confidentialité /confidentialite, conditions /cgv ; libellé ROUELIA).
+   Image de marque Stripe : icône et logo dans `stripe-marque/`, logo privilégié, couleur de la marque #FBF6EE (crème),
+   accentuation #2E6150 (vert sauge, bouton « Payer » plus calme que le rouge).
    Accès à l'API Google Business Profile : à demander plus tard.
 6. Relecture juridique : CGV (sous-traitance RGPD, pénalités B2B), confidentialité (Anthropic, Stripe), règlement du jeu.
 
