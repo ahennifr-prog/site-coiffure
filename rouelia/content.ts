@@ -68,13 +68,14 @@ export const company = {
   owner: "Aymen Henni",
   form: "Entrepreneur individuel (EI), régime de la micro-entreprise",
   tradeName: "Rouelia",
-  siren: "",
-  address: "",
+  /** Immatriculé au Registre national des entreprises (RNE) le 12 octobre 2026. SIRET de l'établissement : 131 385 403 00012. */
+  siren: "131 385 403",
+  address: "21 rue Brochant, 75017 Paris",
   publisher: "Aymen Henni",
   /** Franchise en base de TVA (art. 293 B du CGI). */
   vatExempt: true,
   vatMention: "TVA non applicable, art. 293 B du CGI",
-  lastUpdate: "8 octobre 2026",
+  lastUpdate: "13 octobre 2026",
 };
 
 const missing = "[à compléter]";

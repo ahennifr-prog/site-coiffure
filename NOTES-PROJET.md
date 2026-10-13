@@ -9,7 +9,7 @@
   déployé : `c87f135` (10 octobre : vidéo sous le haut de page, puis bandes logos et avantages ; confirmé en ligne par Aymen).
   Tout ce qui précède est en ligne : lot conversion, finalisation, nouvel admin, e-mails, 9 avis, bande de logos qui défile.
 - **Travail** : `claude/inspiring-mccarthy-13gj1h`. Production + le lot « vitesse de l'accueil » du 10 octobre
-  (voir plus bas). **Ce lot attend « go prod »**.
+  (voir plus bas) + SIREN et adresse dans les pages légales (13 octobre). **Ces deux lots attendent « go prod »**.
 - Règle : on travaille sur la branche de travail, on vérifie, puis Aymen dit « go prod » et on avance la branche de production
   (avance rapide, sans réécrire l'historique).
 
@@ -119,7 +119,9 @@ fiche Google, refonte saisonnière, chevalet offert, support sous 24 h, installa
 
 0. Plus tard, pour chaque témoignage : métier, ville, lien de fiche Google, date (champs prêts, vides).
 
-1. SIREN et adresse (domiciliation possible) : `company.siren` et `company.address` dans `content.ts`.
+1. ~~SIREN et adresse~~ : faits le 13 octobre (SIREN 131 385 403, SIRET 131 385 403 00012, 21 rue Brochant 75017 Paris).
+   Code APE attribué : 58.14Z (édition de revues et périodiques), à faire corriger auprès de l'INSEE en 58.29C
+   (édition de logiciels applicatifs) si l'activité réelle est le logiciel.
 2. Clé `RESEND_API_KEY` (facultative, Brevo fonctionne) et numéro WhatsApp business.
 3. Lien éventuel entre Alia Coiffure et l'éditeur (à indiquer près du témoignage s'il existe).
 4. Plus tard, un cas chiffré ALIA avec accord écrit.

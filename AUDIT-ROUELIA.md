@@ -29,7 +29,8 @@ Appliqué sur la branche de travail `claude/inspiring-mccarthy-13gj1h`, **pas en
 - [x] Coquilles « besoin,. » et « dites-le moi » corrigées.
 - [ ] C3 Rappel e-mail promis aux clients en Essentiel : laissé tel quel (fonctions prévues, consigne D du 9 octobre).
 - [ ] SMS et relances : prévus mais non codés, textes laissés tels quels (liste dans NOTES-PROJET.md).
-- [ ] C1 SIREN, adresse, contact : en attente d'Aymen.
+- [x] C1 SIREN (131 385 403, immatriculé au RNE le 12 octobre 2026) et adresse (21 rue Brochant, 75017 Paris) : ajoutés
+      le 13 octobre aux mentions légales, aux CGV et à la confidentialité (en attente de « go prod »).
 - [ ] I1, I2 confidentialité (Anthropic, Stripe, « Autre activité ») et relecture juridique : à faire.
 - [ ] I5, I6, I7 en-têtes de sécurité, limites de débit : à faire.
 - [x] I10 performance de l'accueil : 90 à 93 sur mobile (contre 83 à 86 dans des conditions comparables), 99 sur ordinateur ;
