@@ -6,10 +6,8 @@
 ## État des branches
 
 - **Production** : `claude/great-lovelace-lpyydk`. Chaque push déploie rouelia.fr (Cloudflare Workers). Dernier commit
-  déployé : `c87f135` (10 octobre : vidéo sous le haut de page, puis bandes logos et avantages ; confirmé en ligne par Aymen).
-  Tout ce qui précède est en ligne : lot conversion, finalisation, nouvel admin, e-mails, 9 avis, bande de logos qui défile.
-- **Travail** : `claude/inspiring-mccarthy-13gj1h`. Production + le lot « vitesse de l'accueil » du 10 octobre
-  (voir plus bas) + SIREN et adresse dans les pages légales (13 octobre). **Ces deux lots attendent « go prod »**.
+  déployé : `395001e` (13 octobre : vitesse de l'accueil + SIREN et adresse dans les pages légales).
+- **Travail** : `claude/inspiring-mccarthy-13gj1h`, au même point que la production.
 - Règle : on travaille sur la branche de travail, on vérifie, puis Aymen dit « go prod » et on avance la branche de production
   (avance rapide, sans réécrire l'historique).
 
@@ -70,7 +68,7 @@
 - Pastilles rouges sur les onglets : essais à ouvrir, appels à venir non faits, demandes non traitées.
 - Code : `components/admin/*`, `lib/admin.ts`, routes `app/api/admin/*`. Tests : `tests/admin.test.ts`.
 
-## Vitesse de l'accueil (10 octobre 2026, en attente de « go prod »)
+## Vitesse de l'accueil (10 octobre 2026, en ligne le 13 octobre)
 
 Mesure : Lighthouse mobile en local, derrière un relais qui compresse en brotli comme Cloudflare (PageSpeed Insights
 refusé : quota anonyme épuisé). Avant : 83 à 86, LCP environ 3,7 s, 576 Ko. Après : **90 à 93** sur 5 passages, LCP 2,4
@@ -125,7 +123,11 @@ fiche Google, refonte saisonnière, chevalet offert, support sous 24 h, installa
 2. Clé `RESEND_API_KEY` (facultative, Brevo fonctionne) et numéro WhatsApp business.
 3. Lien éventuel entre Alia Coiffure et l'éditeur (à indiquer près du témoignage s'il existe).
 4. Plus tard, un cas chiffré ALIA avec accord écrit.
-5. Clés Stripe en mode réel (après le SIREN) et accès à l'API Google Business Profile.
+5. Stripe en mode réel : le code est prêt (produits et prix créés tout seuls au premier paiement, `lib/stripe.ts`).
+   À faire par Aymen dans Stripe : faire valider le compte réel avec le SIREN, créer le webhook
+   `https://rouelia.fr/api/stripe/webhook`, puis poser `STRIPE_SECRET_KEY` (sk_live) et `STRIPE_WEBHOOK_SECRET` dans
+   Cloudflare (DEPLOIEMENT.md, section 3 ter). Le connecteur Stripe de Claude n'était pas autorisé : compte non vérifié.
+   Accès à l'API Google Business Profile : à demander plus tard.
 6. Relecture juridique : CGV (sous-traitance RGPD, pénalités B2B), confidentialité (Anthropic, Stripe), règlement du jeu.
 
 ## Prochaines étapes proposées (rien n'est commencé)
