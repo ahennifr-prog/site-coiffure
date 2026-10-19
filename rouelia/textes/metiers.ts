@@ -61,7 +61,7 @@ export const tradePages: TradePage[] = [
       {
         h2: "Le cadeau ne dépend jamais d'un avis",
         answer:
-          "Le client gagne son cadeau en jouant, point final. Après le jeu, il peut se voir proposer de partager son avis sur Google, de façon neutre et facultative.",
+          "Avant de lancer la roue, le client est invité à laisser un avis sur Google. Il peut fermer l'invitation d'une croix : son cadeau reste le même dans tous les cas.",
         p: [
           "Aucun tri selon la note, aucune condition. Le jeu est gratuit, sans obligation d'achat, avec un règlement et une page données pour votre salon. Tout est expliqué sur la page [utilisation responsable](/utilisation-responsable).",
         ],
@@ -154,7 +154,7 @@ export const tradePages: TradePage[] = [
       {
         h2: "Un jeu propre, sans condition d'avis",
         answer:
-          "Le cadeau est acquis dès que la roue s'arrête. La proposition de laisser un avis Google, après le jeu, est neutre et facultative.",
+          "Avant de lancer la roue, le client est invité à laisser un avis Google. Il peut fermer l'invitation d'une croix, et le cadeau est acquis dès que la roue s'arrête, quel que soit son choix.",
         p: [
           "Pas de « laissez un avis pour jouer », pas de filtre selon la note. Le jeu est gratuit et sans obligation d'achat, avec un règlement et une page données propres à votre restaurant. Détails sur la page [utilisation responsable](/utilisation-responsable).",
         ],
@@ -338,7 +338,7 @@ export const tradePages: TradePage[] = [
       {
         h2: "Aucun avis demandé en échange du cadeau",
         answer:
-          "Le client gagne en jouant, sans condition. Il peut ensuite être invité, de façon neutre et facultative, à donner son avis sur Google.",
+          "Avant de lancer la roue, le client est invité à donner son avis sur Google. Il peut fermer l'invitation d'une croix : il gagne en jouant, sans condition.",
         p: [
           "Pas de tri selon la note, pas de cadeau conditionné. Le jeu est gratuit et sans obligation d'achat, avec un règlement et une page données pour votre boulangerie. Tout est expliqué sur la page [utilisation responsable](/utilisation-responsable).",
         ],

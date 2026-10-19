@@ -87,7 +87,7 @@ export const faqPage: Omit<SeoPage, "sections" | "faq"> & { groups: { title: str
         },
         {
           q: "Le cadeau dépend-il d'un avis Google ?",
-          a: "Non, jamais. Le client a déjà gagné son cadeau quand on lui propose, de façon neutre et facultative, de partager son avis. Il peut refuser, il garde son cadeau. Aucun tri n'est fait selon la note. Pour comprendre pourquoi, lisez notre article sur les [avis Google conformes](/blog/avis-google-conformes-2026).",
+          a: "Non, jamais. Avant de lancer la roue, le client est invité à laisser un avis sur Google. Il peut fermer l'invitation d'une croix, et son cadeau reste le même dans tous les cas. Aucun tri n'est fait selon la note. Pour comprendre pourquoi, lisez notre article sur les [avis Google conformes](/blog/avis-google-conformes-2026).",
         },
         {
           q: "Un règlement du jeu est-il prévu ?",

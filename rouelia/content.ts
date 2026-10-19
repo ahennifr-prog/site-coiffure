@@ -673,7 +673,7 @@ export const faq = {
     },
     {
       q: "Le cadeau dépend-il d'un avis Google ?",
-      a: "Non, jamais. Le cadeau est remis quoi que fasse le client. Partager son avis lui est ensuite proposé, de façon facultative.",
+      a: "Non, jamais. Avant de lancer la roue, le client est invité à laisser un avis sur Google. Il peut fermer l'invitation d'une croix, et le cadeau est remis quoi qu'il fasse.",
     },
     {
       q: "Combien me coûtent les cadeaux ?",

@@ -309,7 +309,7 @@ export function Reglages({ slug, pack, onSaved }: { slug: string; pack: PackId; 
               value={c.reviewUrl}
               placeholder="https://g.page/r/..."
               onChange={(v) => set({ reviewUrl: v })}
-              help="Sur Google, ouvrez votre fiche en étant connecté au compte du commerce, cliquez sur « Demander des avis » et copiez le lien. L'invitation est proposée après le gain, à tous, et reste facultative. Sans lien, elle n'apparaît pas."
+              help="Sur Google, ouvrez votre fiche en étant connecté au compte du commerce, cliquez sur « Demander des avis » et copiez le lien. Au premier toucher de la roue, vos clients sont invités à laisser un avis ; ils peuvent fermer l'invitation d'une croix, le cadeau reste le même. Sans lien, elle n'apparaît pas et la roue tourne directement."
             />
             {f.booking ? (
               <TextField id="rdv" type="url" label="Lien de réservation (affiché après le jeu)" value={c.bookingUrl} placeholder="https://www.planity.com/..." onChange={(v) => set({ bookingUrl: v })} help="Facultatif : Planity, TheFork, votre site." />
