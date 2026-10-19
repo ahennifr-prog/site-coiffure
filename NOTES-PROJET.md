@@ -3,6 +3,13 @@
 À lire en premier en reprenant le travail, avec `rouelia/REPRISE.md` (historique technique détaillé),
 `AUDIT-ROUELIA.md` (audit complet) et `CONVERSION-ROUELIA.md` (analyse de conversion).
 
+## 19 octobre 2026 : cadeau de bienvenue déplacé (branche de travail, pas encore en production)
+
+- La roue d'offres quitte l'accueil et devient le « Cadeau de bienvenue » en haut de /creer-ma-roue (components/sections/WelcomeGift.tsx) : fond doré, roue dorée et noire, texte « Cette roue n'est pas celle de vos clients ».
+- Le cadeau gagné suit les deux parcours : l'inscription (comme avant) et « Créez-la pour moi » (jeton signé vérifié par /api/roue-pour-moi, visible sur la fiche admin et dans l'e-mail d'alerte).
+- Bas de l'accueil : un seul bouton « Créer ma roue », contacts en petits liens (WhatsApp, e-mail, appel de 5 minutes).
+- Reste de la relecture visiteur à faire sur feu vert : liens Markdown affichés en brut (À propos, 4 pages métiers), image de la vidéo coupée, « Voir plus (1) », avis fixes au lieu du défilement, données (purge et confidentialité), créneaux de 15 minutes, chiffres de rentabilité.
+
 ## Point au 13 octobre 2026 (à lire en premier)
 
 **Fait et en ligne** (production `395001e`) : lot conversion (14 points), finalisation (Essentiel, participation, 2 clients),
