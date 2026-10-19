@@ -5,6 +5,7 @@ import { markReminded, periodNumbers, playsToRemind, type Play } from "@/lib/gam
 import { getSignup } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
 import { offerById } from "@/lib/offers";
+import { purgeExpired, type PurgeReport } from "@/lib/purge";
 import { stripeReady } from "@/lib/stripe";
 import {
   clientCodeMail, clientReminderMail, merchantInviteMail, merchantResetMail, merchantTrialLastMail, merchantTrialMail, merchantWeeklyMail,
@@ -75,7 +76,7 @@ const LAST_CALL_MAX_DAYS = 10;
  */
 export async function runDaily(now = new Date()) {
   const today = parisDay(now);
-  const done = { rappels: 0, essais: 0, rapports: 0, erreurs: 0 };
+  const done: { rappels: number; essais: number; rapports: number; erreurs: number; menage?: PurgeReport } = { rappels: 0, essais: 0, rapports: 0, erreurs: 0 };
   const shops = new Map<string, Shop>();
   const shopOf = async (id: string) => {
     if (!shops.has(id)) {
@@ -142,6 +143,14 @@ export async function runDaily(now = new Date()) {
     }
 
     if (changed) await saveShop({ ...shop, mails });
+  }
+  // 4. Ménage : suppression des données dont la durée de conservation est dépassée (lib/purge.ts).
+  // Un échec ici n'empêche pas les e-mails ci-dessus, déjà partis.
+  try {
+    done.menage = await purgeExpired(now);
+  } catch (e) {
+    console.error("[cron] ménage impossible", e);
+    done.erreurs++;
   }
   return done;
 }

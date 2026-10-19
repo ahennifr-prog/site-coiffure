@@ -75,7 +75,7 @@ export const company = {
   /** Franchise en base de TVA (art. 293 B du CGI). */
   vatExempt: true,
   vatMention: "TVA non applicable, art. 293 B du CGI",
-  lastUpdate: "13 octobre 2026",
+  lastUpdate: "19 octobre 2026",
 };
 
 const missing = "[à compléter]";
@@ -918,14 +918,14 @@ export const legal = {
           p: [
             "Nous collectons votre prénom, votre e-mail, votre téléphone, le nom de votre établissement, le pack choisi, la configuration de votre roue, le cadeau éventuellement gagné et la page d'où vous venez.",
             "Finalité : créer votre compte d'essai et vous accompagner. Base légale : votre consentement, puis l'exécution du contrat si vous devenez client.",
-            "Durée de conservation : 3 ans après le dernier contact si vous ne devenez pas client. Si vous devenez client, pendant toute la durée de l'abonnement puis 5 ans. Les factures sont gardées 10 ans, comme l'exige la loi.",
+            "Durée de conservation : si vous ne devenez pas client, 3 ans après votre inscription ou la fin de votre essai. Si vous devenez client, pendant toute la durée de l'abonnement puis 5 ans après la fin de la dernière période payée. Les factures sont gardées 10 ans par notre prestataire de paiement, comme l'exige la loi.",
           ],
         },
         {
           h: "Les appels et les demandes de création de roue",
           p: [
             "Quand vous réservez un appel (/rendez-vous) ou demandez qu'on crée votre roue (/creer-ma-roue), nous collectons les informations du formulaire : nom ou prénom, téléphone, e-mail, nom et adresse du commerce, lien ou nom de la fiche Google, lots souhaités, message et logo éventuel.",
-            "Finalité : vous rappeler au créneau choisi, préparer votre roue et vous répondre. Base légale : votre consentement, donné en cochant la case du formulaire. Durée de conservation : 3 ans après le dernier contact si vous ne devenez pas client.",
+            "Finalité : vous rappeler au créneau choisi, préparer votre roue et vous répondre. Base légale : votre consentement, donné en cochant la case du formulaire. Durée de conservation : 3 ans après la demande ou l'appel si vous ne devenez pas client.",
           ],
         },
         {
@@ -940,7 +940,11 @@ export const legal = {
         {
           h: "Les données de vos clients",
           p: [
-            "Quand vos clients jouent, Rouelia agit comme sous-traitant pour votre compte. Ils ne sont recontactés que s'ils l'ont accepté, et chaque message contient un lien de désinscription.",
+            "Quand vos clients jouent, Rouelia agit comme sous-traitant pour votre compte : vous êtes responsable du jeu proposé dans votre commerce, nous l'hébergeons et le faisons fonctionner.",
+            "Données collectées : prénom, numéro de téléphone, e-mail s'il est indiqué, cadeau gagné et son code, date de la partie et du retrait en caisse, et l'accord éventuel pour recevoir les offres du commerce.",
+            "Finalités : remettre le cadeau, envoyer le code et un seul rappel avant la date limite quand un e-mail est indiqué, et limiter le jeu à une partie par personne sur la période choisie par le commerce.",
+            "Durée de conservation : les parties sont supprimées automatiquement un an après la date limite du cadeau. Le numéro qui sert à limiter le jeu est effacé dès la fin de la période choisie par le commerce.",
+            "Ces données ne sont ni revendues, ni utilisées pour la publicité de tiers. Vos clients ne sont recontactés que s'ils l'ont accepté, et chaque message contient un lien de désinscription.",
           ],
         },
         {
@@ -949,6 +953,12 @@ export const legal = {
             "Le site public (rouelia.fr) ne dépose aucun cookie et aucun traceur publicitaire. Il garde seulement dans votre navigateur votre roue de démo et le cadeau de la roue d'offres, pour que vous les retrouviez : ces éléments servent au fonctionnement du site et ne demandent pas d'accord.",
             "Pour savoir quels boutons et quelles pages sont utiles, le site compte certaines actions : clic sur « Créer ma roue », sur WhatsApp ou sur les tarifs, envoi d'un formulaire, réservation d'un appel, profondeur de lecture de la page d'accueil, arrivée depuis la roue d'un commerçant. Chaque action ajoute seulement 1 à un compteur du jour. Aucune adresse IP, aucun identifiant et aucune information sur votre navigateur ne sont enregistrés : il est impossible de relier un compteur à une personne. Cette mesure ne lit et n'écrit rien sur votre appareil, elle ne demande donc pas d'accord.",
             "Le détail est sur notre page Cookies.",
+          ],
+        },
+        {
+          h: "Suppression automatique",
+          p: [
+            "Chaque jour, un traitement automatique supprime les données dont la durée de conservation est dépassée : parties de jeu, inscriptions, demandes, appels réservés et comptes arrêtés. Les données encore utiles (cadeau encore valable, essai en cours, client actif) ne sont jamais touchées.",
           ],
         },
         {
