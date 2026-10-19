@@ -11,6 +11,8 @@
 - Relecture visiteur, corrigé le même jour : liens affichés en brut (À propos, 4 pages métiers : le texte de fin passait en titre géant), nouvel aperçu de la vidéo (image à 22,5 s, bouton lecture dans la zone vide), plus de « Voir plus (1) », pack Essentiel sans doublon ni second chiffre de rentabilité, avis en cartes fixes à faire glisser (flèches sur ordinateur), créneaux d'appel tous les quarts d'heure (l'appel reste de 5 minutes dans l'invitation), logo lu « Rouelia » par les robots.
 - Mis en production le 19 octobre (5fef24f) : cadeau de bienvenue et relecture visiteur.
 - Données personnelles (branche de travail, en attente de validation du texte par Aymen) : lib/purge.ts, lancé chaque jour à la fin de runDaily (lib/notify.ts). Parties : 1 an après la date limite du cadeau ; verrous de jeu dès leur fin ; compteurs anti-abus après 2 jours ; appels et demandes 3 ans ; essai jamais payé 3 ans après sa fin ; ancien client 5 ans après la dernière période payée (stripe.periodEnd) ; inscriptions de plus de 3 ans sans commerce gardé. Compte rendu chiffré dans les journaux (champ « menage »). Politique de confidentialité complétée (données des joueurs, suppression automatique, durées précisées), date de mise à jour 19 octobre 2026.
+- Mis en production le 19 octobre (9f5dc51) : suppression automatique et politique de confidentialité.
+- Blog (branche de travail) : trois articles du 19 octobre en tête de textes/blog.ts : « Vos clients reviennent moins souvent » (/blog/clients-ne-reviennent-plus), « Satisfaction client » (/blog/satisfaction-client-commerce), « Pourquoi les avis Google comptent » (/blog/importance-avis-google-commerce). Sitemap et llms.txt suivent automatiquement.
 
 ## Point au 13 octobre 2026 (à lire en premier)
 

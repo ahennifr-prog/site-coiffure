@@ -6,6 +6,269 @@ import type { Article } from "./types";
 
 export const articles: Article[] = [
   {
+    slug: "clients-ne-reviennent-plus",
+    path: "/blog/clients-ne-reviennent-plus",
+    date: "2026-10-19",
+    updated: "2026-10-19",
+    author: "Enzo",
+    readingMinutes: 6,
+    title: "Vos clients reviennent moins ? Causes et solutions",
+    description:
+      "Des habitués qu'on voit moins, un carnet moins rempli : pourquoi la fidélité baisse dans un commerce de quartier, comment le repérer tôt et quoi faire.",
+    eyebrow: "Fidélisation",
+    h1: "Vos clients reviennent moins souvent : pourquoi, et que faire",
+    excerpt:
+      "Quand la fidélité baisse, ce n'est presque jamais à cause d'une seule chose. Voici les causes les plus courantes, les signes à surveiller et les gestes simples pour redonner aux clients une raison de revenir.",
+    lead:
+      "Un habitué qui passait chaque semaine et que l'on ne voit plus qu'une fois par mois. Un carnet de rendez-vous moins rempli qu'avant. Des visages nouveaux, mais qui ne reviennent pas. La baisse de fidélité arrive rarement d'un coup : elle s'installe doucement, et on la remarque tard. Cet article vous aide à comprendre ce qui se passe, à le repérer plus tôt et à agir sans brader vos prix.",
+    sections: [
+      {
+        h2: "Pourquoi un client fidèle finit-il par moins revenir ?",
+        answer:
+          "Le plus souvent, il n'est pas mécontent : il a simplement oublié, trouvé plus pratique ailleurs, ou n'a plus de raison particulière de choisir votre commerce plutôt qu'un autre.",
+        p: [
+          "On imagine souvent qu'un client qui part est un client déçu. C'est parfois vrai, mais ce n'est pas le cas le plus fréquent. Beaucoup de clients s'éloignent sans aucun reproche. Ils déménagent, changent d'horaires de travail, passent par une autre rue. Ils ne vous ont pas quitté : ils ont perdu l'habitude.",
+          "Autour de vous, l'offre bouge aussi. Un nouveau commerce ouvre, une application de réservation propose une remise de bienvenue, une enseigne voisine lance une promotion. Un client satisfait peut tout de même tester ailleurs, par curiosité ou par commodité. S'il n'a pas de raison précise de revenir chez vous, la nouveauté l'emporte facilement.",
+          "Enfin, la routine joue contre vous. Si chaque visite se ressemble et que rien ne marque le client, il n'a pas de souvenir particulier qui le ramène. La fidélité se nourrit de petits moments agréables, pas seulement d'un bon service.",
+        ],
+      },
+      {
+        h2: "Quels signes montrent que la fidélité baisse ?",
+        answer:
+          "Des habitués que vous voyez moins, des visites plus espacées, des nouveaux clients qui ne reviennent pas une deuxième fois. Ces signes se voient avant que le chiffre d'affaires ne baisse.",
+        list: [
+          "Des prénoms que vous connaissiez bien et que vous n'entendez plus.",
+          "Un délai entre deux visites qui s'allonge, même chez vos meilleurs clients.",
+          "Beaucoup de premières visites, mais peu de deuxièmes.",
+          "Des créneaux qui se remplissaient seuls et qu'il faut maintenant pousser.",
+          "Des clients qui demandent surtout s'il y a une promotion en cours.",
+        ],
+        p: [
+          "Le signal le plus utile est la deuxième visite. Un client qui revient une deuxième fois a de bonnes chances de devenir un habitué. Un client qui ne revient jamais après la première visite est celui qu'il faut chercher à retenir en priorité.",
+          "Si vous avez un logiciel de caisse ou un carnet de rendez-vous, regardez qui n'est pas revenu depuis longtemps. Sinon, notez simplement pendant deux semaines les clients que vous reconnaissez. Ce petit exercice suffit souvent à rendre visible ce que l'on sentait sans pouvoir le dire.",
+        ],
+      },
+      {
+        h2: "Comment redonner aux clients une raison de revenir ?",
+        answer:
+          "En leur donnant un motif concret et proche dans le temps : un avantage à utiliser lors de la prochaine visite, avec une date limite.",
+        p: [
+          "Le client qui sort de chez vous a déjà fait l'effort de venir. C'est le meilleur moment pour préparer la visite suivante. Un cadeau à utiliser la prochaine fois transforme une visite terminée en rendez-vous à venir. La date limite donne un horizon : le client sait qu'il doit repasser bientôt pour en profiter.",
+          "C'est le principe de la [roue à cadeaux Rouelia](/) : le client scanne un QR code, tourne la roue sur son téléphone et gagne un cadeau valable à sa prochaine visite. Il repart avec un code, et vous le validez en caisse quand il revient. Le guide [fidéliser ses clients avec un jeu en boutique](/blog/fideliser-clients-jeu-en-boutique) détaille la méthode.",
+          "D'autres gestes comptent aussi. Appeler un client par son prénom, se souvenir de ce qu'il a pris la dernière fois, le prévenir d'une nouveauté qui pourrait lui plaire : ce sont des attentions qui ne coûtent rien et qui font la différence avec une enseigne anonyme.",
+        ],
+      },
+      {
+        h2: "Faut-il baisser ses prix pour garder ses clients ?",
+        answer:
+          "Rarement. Une remise générale coûte cher, profite aussi à ceux qui seraient revenus de toute façon et habitue les clients à attendre la prochaine promotion.",
+        p: [
+          "Baisser les prix est la réponse la plus visible, mais souvent la moins efficace pour un commerce de quartier. Vous rognez votre marge sur toutes les ventes, alors que le problème ne concerne qu'une partie de vos clients.",
+          "Un avantage ciblé fonctionne mieux. Il ne s'applique qu'au client qui revient, il a un coût que vous maîtrisez et il garde votre prix normal intact. Avec Rouelia, vous réglez le coût de chaque cadeau et sa chance de sortir : l'outil affiche le coût moyen d'une partie avant même de lancer le jeu. Les détails sont sur la page [tarifs](/tarifs).",
+        ],
+      },
+      {
+        h2: "Comment savoir si vos actions fonctionnent ?",
+        answer:
+          "Comptez les clients qui reviennent réellement : les cadeaux utilisés en caisse, les deuxièmes visites, les habitués revus.",
+        p: [
+          "Une action de fidélisation se juge sur les retours, pas sur l'enthousiasme du moment. Dans votre espace Rouelia, vous voyez le nombre de parties jouées et le nombre de cadeaux retirés en caisse. Ce second chiffre vous dit combien de clients sont revenus pour utiliser leur cadeau.",
+          "Laissez à chaque essai le temps de produire ses effets, au moins le temps d'un cycle de visite normal pour votre métier. Un coiffeur et une boulangerie n'ont pas le même rythme : adaptez la date limite des cadeaux à la fréquence de vos clients. Les pages par métier donnent des repères pour les [coiffeurs](/jeu-fidelisation-coiffeur), les [restaurants](/jeu-fidelisation-restaurant), les [instituts de beauté](/jeu-fidelisation-institut-beaute) et les [boulangeries](/jeu-fidelisation-boulangerie).",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Un client qui ne revient plus est-il forcément mécontent ?",
+        a: "Non. Beaucoup de clients s'éloignent par habitude, par commodité ou par curiosité pour une nouvelle adresse. C'est pour cela qu'une raison concrète de revenir, comme un cadeau valable à la prochaine visite, peut suffire à les faire repasser.",
+      },
+      {
+        q: "Quel est le meilleur moment pour fidéliser un client ?",
+        a: "La fin de sa visite, quand il est encore chez vous et de bonne humeur. C'est le moment de lui donner une raison de revenir, plutôt que d'essayer de le rattraper des semaines plus tard.",
+      },
+      {
+        q: "Une carte à tampons suffit-elle ?",
+        a: "Elle peut aider, mais la récompense arrive tard et beaucoup de cartes se perdent. Notre [comparatif entre carte, appli et roue](/comparatif) vous aide à choisir selon votre commerce.",
+      },
+    ],
+  },
+  {
+    slug: "satisfaction-client-commerce",
+    path: "/blog/satisfaction-client-commerce",
+    date: "2026-10-19",
+    updated: "2026-10-19",
+    author: "Enzo",
+    readingMinutes: 5,
+    title: "Satisfaction client : la base de la fidélité en commerce",
+    description:
+      "Un client satisfait revient, parle de vous et se souvient de sa visite. Comment mesurer la satisfaction simplement et réagir quand un client est déçu.",
+    eyebrow: "Satisfaction client",
+    h1: "Satisfaction client : pourquoi elle décide de la fidélité de votre commerce",
+    excerpt:
+      "La fidélité commence par une visite réussie. Voici pourquoi la satisfaction compte autant, comment la mesurer sans questionnaire compliqué et comment transformer une déception en seconde chance.",
+    lead:
+      "Aucune astuce de fidélisation ne remplace une bonne visite. Un client qui a été bien reçu, bien servi et qui repart content a déjà envie de revenir. À l'inverse, un cadeau ou une remise ne rattrape pas une mauvaise expérience. Cet article explique pourquoi la satisfaction est le point de départ de tout, et comment la suivre au quotidien dans un commerce de quartier.",
+    sections: [
+      {
+        h2: "Pourquoi la satisfaction compte-t-elle autant pour un commerce de quartier ?",
+        answer:
+          "Parce qu'un client satisfait revient plus volontiers, recommande votre adresse autour de lui et décrit une image juste de votre commerce quand il en parle.",
+        p: [
+          "Un commerce de quartier vit de ses habitués et du bouche-à-oreille. Chaque client content est un ambassadeur discret : il parle de vous à ses proches, à ses collègues, à ses voisins. Un client déçu en parle aussi, parfois plus volontiers.",
+          "La satisfaction pèse aussi sur l'image que les autres se font de vous. Quand un client parle de sa visite, à voix haute ou en ligne, il raconte ce qu'il a vécu. C'est votre accueil et votre service qui écrivent cette histoire, bien avant tout outil.",
+        ],
+      },
+      {
+        h2: "Qu'est-ce qui rend un client vraiment satisfait ?",
+        answer:
+          "Un accueil chaleureux, un service à la hauteur de ce qu'il attendait, un prix qui lui semble juste et un petit moment qui rend la visite agréable.",
+        list: [
+          "Être accueilli rapidement, même quand il faut attendre un peu.",
+          "Recevoir ce qui était promis, sans mauvaise surprise.",
+          "Comprendre ce qu'il paie, sans supplément inattendu.",
+          "Se sentir reconnu, surtout quand on revient.",
+          "Repartir avec un bon souvenir, même petit.",
+        ],
+        p: [
+          "Le dernier point est souvent oublié. Un client peut être correctement servi sans rien retenir de sa visite. Un mot gentil, un conseil personnalisé ou un petit cadeau pour la prochaine fois donnent une couleur à la visite. Avec [Rouelia](/), le client tourne une roue au moment de partir et gagne un cadeau à utiliser lors de sa prochaine visite : un moment agréable qui prolonge la relation.",
+        ],
+      },
+      {
+        h2: "Comment mesurer la satisfaction sans questionnaire compliqué ?",
+        answer:
+          "En posant une question simple au bon moment, en écoutant ce que disent les clients et en regardant qui revient.",
+        p: [
+          "Au moment de payer, une question ouverte suffit : « Tout s'est bien passé ? ». Posée sincèrement, elle obtient souvent une vraie réponse. Notez les remarques qui reviennent : elles vous disent ce qui plaît et ce qui agace.",
+          "Le retour des clients est la mesure la plus honnête. Un client satisfait revient ; un client déçu, rarement. Si vous suivez les visites de retour, par exemple avec les cadeaux retirés en caisse dans votre espace Rouelia, vous avez un indicateur concret de l'effet de vos efforts.",
+          "Lisez aussi ce que les clients écrivent en ligne, les compliments comme les critiques. Ils parlent de leur expérience avec leurs mots, et c'est une source précieuse pour améliorer ce qui peut l'être.",
+        ],
+      },
+      {
+        h2: "Que faire quand un client est déçu ?",
+        answer:
+          "L'écouter sans se défendre, reconnaître le problème et proposer une solution concrète. Un problème bien réglé peut laisser un meilleur souvenir qu'une visite sans histoire.",
+        p: [
+          "Sur le moment, le réflexe est de se justifier. Mieux vaut d'abord écouter jusqu'au bout. Le client veut surtout être entendu. Une fois qu'il l'est, il devient beaucoup plus facile de trouver une solution ensemble.",
+          "Proposez ensuite quelque chose de concret : refaire, corriger, offrir un geste à la prochaine visite. L'important est de montrer que la déception a été prise au sérieux. Si la critique arrive en ligne, la même logique s'applique : notre guide [répondre à un avis négatif](/blog/repondre-avis-negatif-modeles) propose une méthode et des modèles.",
+        ],
+      },
+      {
+        h2: "Satisfaction et avis en ligne : quel lien ?",
+        answer:
+          "Les avis reflètent l'expérience vécue. Améliorer la satisfaction est la seule façon durable d'avoir une image en ligne fidèle à la qualité de votre commerce.",
+        p: [
+          "Les clients écrivent ce qu'ils ont ressenti. Une fiche qui reflète bien votre commerce commence donc par des visites réussies, pas par des techniques pour obtenir des avis. Vous pouvez inviter vos clients à donner leur avis, à condition de le proposer à tous, sans contrepartie et sans trier selon leur satisfaction.",
+          "Ces règles sont détaillées dans notre article sur [les avis Google conformes](/blog/avis-google-conformes-2026). Chez Rouelia, le cadeau ne dépend jamais d'un avis : il est gagné avant toute autre étape, comme l'explique la page [utilisation responsable](/utilisation-responsable).",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Faut-il un questionnaire de satisfaction pour un petit commerce ?",
+        a: "Ce n'est pas indispensable. Une question simple au moment de payer, l'écoute des remarques et le suivi des clients qui reviennent donnent déjà une image fiable de la satisfaction.",
+      },
+      {
+        q: "Un client satisfait revient-il forcément ?",
+        a: "Pas toujours. Il peut être content et tout de même oublier, ou tester une autre adresse. C'est pour cela qu'il est utile de lui donner une raison concrète de revenir, comme un cadeau valable à sa prochaine visite. Voir [vos clients reviennent moins](/blog/clients-ne-reviennent-plus).",
+      },
+      {
+        q: "Peut-on demander un avis uniquement aux clients contents ?",
+        a: "Non. Les règles de Google interdisent de trier les clients avant de leur demander un avis. Proposez-le à tous, ou à personne. Le détail est dans notre article sur [les avis Google conformes](/blog/avis-google-conformes-2026).",
+      },
+    ],
+  },
+  {
+    slug: "importance-avis-google-commerce",
+    path: "/blog/importance-avis-google-commerce",
+    date: "2026-10-19",
+    updated: "2026-10-19",
+    author: "Enzo",
+    readingMinutes: 5,
+    title: "Avis Google : pourquoi ils comptent pour votre commerce",
+    description:
+      "Les avis Google influencent le choix d'un commerce de quartier. Ce qu'ils disent de vous, ce que les clients y regardent et comment les faire vivre dans les règles.",
+    eyebrow: "Avis en ligne",
+    h1: "Pourquoi les avis Google comptent pour un commerce de quartier",
+    excerpt:
+      "Avant de pousser votre porte, beaucoup de clients regardent votre fiche Google. Voici ce que les avis disent de vous, ce que les clients y cherchent et comment les faire vivre sans enfreindre les règles.",
+    lead:
+      "Votre fiche Google est souvent la première image que l'on a de votre commerce, avant même de passer devant la vitrine. Les avis y occupent une place centrale : ils racontent l'expérience des autres clients, avec leurs mots. Comprendre leur rôle vous aide à mieux prendre soin de votre image, sans tomber dans les pratiques interdites.",
+    sections: [
+      {
+        h2: "Pourquoi les avis Google sont-ils importants ?",
+        answer:
+          "Parce qu'ils aident les clients qui ne vous connaissent pas encore à se décider, et qu'ils donnent une image de votre commerce que vous ne contrôlez pas directement.",
+        p: [
+          "Quelqu'un qui cherche un coiffeur, un restaurant ou une boulangerie près de chez lui tombe très souvent sur une carte avec plusieurs adresses. Pour choisir, il regarde la note, quelques avis, les photos. Votre fiche fait alors office de vitrine.",
+          "Les avis rassurent aussi les clients hésitants. Lire qu'une autre personne a été bien accueillie, qu'un plat était bon ou qu'une coupe était réussie lève une partie du doute. C'est une forme de bouche-à-oreille, simplement écrite.",
+        ],
+      },
+      {
+        h2: "Que regardent les clients dans vos avis ?",
+        answer:
+          "La note, mais surtout le contenu des avis récents, la façon dont vous répondez et les points qui reviennent souvent.",
+        list: [
+          "La note moyenne, comme première impression.",
+          "Les avis récents, qui disent comment est votre commerce aujourd'hui.",
+          "Les détails concrets : accueil, attente, qualité, prix.",
+          "Vos réponses, surtout aux critiques.",
+          "Les photos publiées par les clients.",
+        ],
+        p: [
+          "Une note parfaite n'est pas forcément la plus convaincante. Quelques critiques auxquelles vous avez répondu avec calme montrent un commerce réel et attentif. La façon dont vous réagissez à un reproche compte souvent autant que le reproche lui-même.",
+        ],
+      },
+      {
+        h2: "Comment faire vivre ses avis dans les règles ?",
+        answer:
+          "En offrant une bonne expérience, en proposant à tous les clients de donner leur avis sans contrepartie, et en répondant aux avis reçus.",
+        p: [
+          "La base reste la qualité de la visite : les avis décrivent ce que les clients ont vécu. Ensuite, vous pouvez inviter vos clients à partager leur avis, par exemple avec un lien ou un QR code. L'invitation doit être la même pour tous, sans cadeau en échange et sans choisir uniquement les clients contents.",
+          "Ces interdits ne sont pas des détails : Google peut supprimer les avis concernés et prendre des mesures contre la fiche. Notre article sur [les avis Google conformes](/blog/avis-google-conformes-2026) détaille ce qui est permis et ce qui ne l'est pas.",
+          "Chez Rouelia, le cadeau de la roue est toujours gagné avant toute autre étape et ne dépend jamais d'un avis. Proposer de laisser un avis après le jeu est facultatif, identique pour tous et sans aucun lien avec le cadeau. Le cadre complet est sur la page [utilisation responsable](/utilisation-responsable).",
+        ],
+      },
+      {
+        h2: "Faut-il répondre à tous les avis ?",
+        answer:
+          "C'est une bonne habitude, surtout pour les avis négatifs. Une réponse courte, polie et personnalisée montre que vous êtes à l'écoute.",
+        p: [
+          "Remercier pour un avis positif prend quelques secondes et montre que vous lisez ce que l'on écrit. Pour un avis négatif, une réponse calme et factuelle rassure les futurs clients qui la liront. Évitez de vous justifier longuement ou de contester point par point.",
+          "Répondre prend du temps quand on tient une boutique. Notre guide [répondre à un avis négatif](/blog/repondre-avis-negatif-modeles) donne des modèles. Les packs Croissance et Premium incluent une aide à la réponse aux avis par IA : vous relisez le brouillon proposé, vous le corrigez, et c'est vous qui publiez.",
+        ],
+      },
+      {
+        h2: "Les erreurs à éviter avec les avis Google",
+        answer:
+          "Acheter ou échanger des avis, ne solliciter que les clients contents, ignorer les critiques ou y répondre avec agacement.",
+        list: [
+          "Offrir une réduction, un produit ou un cadeau en échange d'un avis.",
+          "Demander un avis seulement aux clients qui semblent ravis.",
+          "Publier de faux avis, ou en faire écrire par des proches.",
+          "Laisser une critique sans réponse pendant des mois.",
+          "Répondre sur un ton agressif ou en révélant des informations sur le client.",
+        ],
+        p: [
+          "Une image en ligne solide se construit avec le temps, visite après visite. Concentrez-vous sur ce que vous maîtrisez : l'accueil, la qualité, la manière de traiter un problème, et une [satisfaction client](/blog/satisfaction-client-commerce) suivie au quotidien.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Peut-on supprimer un avis Google négatif ?",
+        a: "Vous ne pouvez pas le supprimer vous-même. S'il enfreint les règles de Google, par exemple s'il est faux ou injurieux, vous pouvez le signaler depuis votre fiche. Dans tous les cas, une réponse calme reste utile pour les lecteurs.",
+      },
+      {
+        q: "Peut-on offrir un cadeau aux clients qui laissent un avis ?",
+        a: "Non. Toute contrepartie en échange d'un avis est interdite par les règles de Google. Avec Rouelia, le cadeau est gagné au jeu, avant toute autre étape, et ne dépend jamais d'un avis.",
+      },
+      {
+        q: "Une bonne note suffit-elle à attirer des clients ?",
+        a: "Elle aide à être choisi, mais c'est la visite qui décide si le client revient. Pour garder ceux qui sont venus une première fois, lisez [vos clients reviennent moins](/blog/clients-ne-reviennent-plus).",
+      },
+    ],
+  },
+  {
     slug: "fideliser-clients-jeu-en-boutique",
     path: "/blog/fideliser-clients-jeu-en-boutique",
     date: "2026-10-08",
