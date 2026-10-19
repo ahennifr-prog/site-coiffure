@@ -449,6 +449,8 @@ export const contact = {
   eyebrow: "Contact",
   title: "Une question ? Parlons-en.",
   text: "Une vraie personne vous répond, par WhatsApp, par e-mail ou au téléphone.",
+  /** Lien vers /rendez-vous dans le bas de l'accueil. */
+  callLink: "Un appel de 5 minutes",
 };
 
 /* ------------------------------------------------------------------ */
@@ -696,19 +698,24 @@ export interface Offer {
 }
 
 export const offerWheel = {
-  title: "Avant de partir, tournez la roue Rouelia.",
-  text: "Chaque case est un cadeau pour démarrer, valable sur Croissance et Premium.",
-  wheelLabel: "Roue d'offres Rouelia",
-  spinHint: "Touchez la roue pour tenter votre chance",
+  /** Bloc de la page /creer-ma-roue, juste au-dessus des deux parcours. Doré et sombre : on ne le confond pas avec la roue des clients. */
+  badge: "Cadeau de bienvenue",
+  title: "Avant de commencer, un cadeau pour vous.",
+  text: "Cette roue n'est pas celle de vos clients : c'est un cadeau de bienvenue offert par Rouelia pour bien démarrer. Chaque case est gagnante.",
+  note: "Valable 7 jours sur les packs Croissance et Premium.",
+  wheelLabel: "Roue du cadeau de bienvenue Rouelia",
+  spinHint: "Touchez la roue pour découvrir votre cadeau",
   spinning: "La roue tourne",
-  won: "Gagné",
+  won: "Votre cadeau de bienvenue",
   codeLabel: "Votre code",
-  activate: "Créez votre compte pour activer votre cadeau (valable 7 jours)",
+  activate: "Il s'ajoute tout seul à votre compte : choisissez votre parcours ci-dessous.",
   validUntil: (date: string) => `Valable jusqu'au ${date}, sur Croissance et Premium.`,
-  cta: "Créer mon compte",
+  cta: "Choisir mon parcours",
   expired: "Votre cadeau a expiré. Vous pouvez retenter votre chance.",
   error: "Le tirage n'a pas fonctionné. Vérifiez votre connexion et réessayez.",
   rules: "Un seul tirage, gardé 7 jours sur cet appareil. Un cadeau par compte, non cumulable, non échangeable contre de l'argent.",
+  /** Rappel affiché dans le formulaire « Créez-la pour moi » quand un cadeau a été gagné. */
+  inRequest: (label: string) => `Votre cadeau de bienvenue (${label}) sera ajouté à votre demande.`,
   /** Durée de validité du cadeau, en jours. */
   validityDays: 7,
   codePrefix: "OFF",
@@ -749,8 +756,8 @@ export const fromWheel = {
 };
 
 export const finalCta = {
-  title: "Votre roue est à deux minutes d'ici.",
-  text: "Réglez vos lots, testez, posez le QR code demain.",
+  title: "Votre roue, prête en 5 minutes.",
+  text: "Choisissez vos cadeaux, testez la roue comme un client, posez le QR code sur votre comptoir.",
   button: cta.primary,
   note: "14 jours gratuits, sans carte bancaire.",
 };

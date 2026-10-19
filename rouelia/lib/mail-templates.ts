@@ -468,6 +468,8 @@ export interface WheelRequestMail {
   logoName: string | null;
   /** Nom du pack choisi pour l'essai (Croissance ou Premium). */
   pack: string;
+  /** Cadeau de bienvenue gagné sur la page, résumé (absent ou null s'il n'y en a pas). */
+  gift?: string | null;
 }
 
 export function wheelRequestAlertMail(p: WheelRequestMail, logo: { filename: string; content: string; base64: true } | null): Mail {
@@ -486,6 +488,7 @@ export function wheelRequestAlertMail(p: WheelRequestMail, logo: { filename: str
       `Lots souhaités : ${p.prizes || "à proposer"}.`,
       `Message : ${p.message || "aucun"}.`,
       p.logoName ? `Logo joint : ${p.logoName}.` : "Pas de logo envoyé.",
+      ...(p.gift ? [`Cadeau de bienvenue : ${p.gift}.`] : []),
     ], undefined, "Alerte interne Rouelia. Envoyer le QR code en quelques heures."),
   };
 }

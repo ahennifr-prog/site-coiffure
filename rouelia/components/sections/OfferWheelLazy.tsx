@@ -10,15 +10,15 @@ const OfferWheel = dynamic(() => import("./OfferWheel").then((m) => m.OfferWheel
 function Placeholder() {
   return (
     <div role="status" aria-label={offerWheel.wheelLabel} className="flex flex-col items-center">
-      <div className="aspect-square w-full rounded-full bg-white/10 ring-1 ring-white/20" />
+      <div className="aspect-square w-full max-w-[min(72vw,320px)] rounded-full bg-safran/20 ring-1 ring-safran/40" />
       <div className="mt-4 h-11" />
     </div>
   );
 }
 
 /**
- * Roue d'offres de bas de page, chargée seulement à l'approche (environ deux écrans avant) :
- * l'accueil s'affiche plus vite, sans rien changer pour le visiteur qui descend jusqu'à elle.
+ * Roue du cadeau de bienvenue, chargée seulement à l'approche :
+ * la page s'affiche plus vite, sans rien changer pour le visiteur.
  */
 export function OfferWheelLazy() {
   return (

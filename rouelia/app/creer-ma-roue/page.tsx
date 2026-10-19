@@ -5,6 +5,7 @@ import { PageShell } from "@/components/pages/PageShell";
 import { PageHero } from "@/components/pages/Blocks";
 import { Container } from "@/components/ui/Section";
 import { WheelPaths } from "@/components/forms/WheelPaths";
+import { WelcomeGift } from "@/components/sections/WelcomeGift";
 
 export const metadata: Metadata = {
   title: createWheel.title,
@@ -17,6 +18,7 @@ export default function Page() {
     <PageShell crumbs={[{ name: createWheel.eyebrow, href: createWheel.path }]}>
       <Container className="pb-20">
         <PageHero eyebrow={createWheel.eyebrow} h1={createWheel.h1} lead={createWheel.lead} />
+        <WelcomeGift />
         <WheelPaths />
       </Container>
     </PageShell>

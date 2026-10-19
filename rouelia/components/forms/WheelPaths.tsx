@@ -35,7 +35,7 @@ export function WheelPaths() {
   ];
 
   return (
-    <div>
+    <div id="parcours" className="scroll-mt-24">
       <h2 className="sr-only">{createWheel.choose}</h2>
       <div role="tablist" aria-label={createWheel.choose} className="grid gap-7 md:grid-cols-2 md:gap-5">
         {cards.map((c) => {

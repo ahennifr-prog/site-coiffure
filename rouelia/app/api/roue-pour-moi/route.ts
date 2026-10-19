@@ -6,6 +6,8 @@ import { sendMail } from "@/lib/mail";
 import { wheelRequestAlertMail, wheelRequestConfirmMail } from "@/lib/mail-templates";
 import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
 import { countEvent } from "@/lib/mesure";
+import { checkPayload, signPayload } from "@/lib/auth";
+import { offerForSignup, offerSummary } from "@/lib/offers";
 import { doneForYou, pricing, type PackId } from "@/content";
 
 const str = (v: unknown, max = 200) => (typeof v === "string" ? v.trim().slice(0, max) : "");
@@ -57,6 +59,8 @@ export async function POST(req: Request) {
   p.phone = normalizeFrenchPhone(p.phone) ?? p.phone;
 
   const now = new Date();
+  // Cadeau de bienvenue gagné sur /creer-ma-roue : seul le jeton signé par le serveur fait foi.
+  const offer = offerForSignup(body.offerToken, p.pack, { sign: signPayload, check: checkPayload }, now);
   let stored = false;
   try {
     if ((await hit(`roue:${clientIp(req)}`, now)) > 8) return json({ ok: false, error: "rate" }, 429);
@@ -65,7 +69,7 @@ export async function POST(req: Request) {
     const requestId = crypto.randomUUID();
     // Logo gardé pour l'admin s'il ne dépasse pas 1 Mo (même limite que l'espace commerçant) ; sinon il reste dans l'e-mail.
     const keptLogo = logo && typeof body.logo === "string" && body.logo.length <= 1_000_000 ? body.logo : null;
-    const signup = wheelRequestSignup(p, requestId, now, !!keptLogo);
+    const signup = { ...wheelRequestSignup(p, requestId, now, !!keptLogo), offer };
     const db = await database();
     await db
       .prepare("INSERT INTO wheel_requests (id, created_at, email, data) VALUES (?, ?, ?, ?)")
@@ -79,7 +83,7 @@ export async function POST(req: Request) {
     console.error("[roue-pour-moi] enregistrement impossible", e);
   }
 
-  const alert = await sendMail(wheelRequestAlertMail({ ...p, pack: packLabel }, logo));
+  const alert = await sendMail(wheelRequestAlertMail({ ...p, pack: packLabel, gift: offer ? offerSummary(offer) : null }, logo));
   if (!alert.ok && (!stored || !alert.skipped)) return json({ ok: false, error: "mail" }, 502);
   await countEvent("roue_pour_moi_envoye", now);
   await sendMail(wheelRequestConfirmMail({ email: p.email, name: p.name, shopName: p.shopName, pack: packLabel }));

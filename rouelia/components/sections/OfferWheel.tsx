@@ -4,21 +4,22 @@ import { useRef, useState } from "react";
 import { Gift } from "lucide-react";
 import { offerWheel } from "@/content";
 import { formatDate, fr } from "@/lib/format";
-import { offerById, suggestedPack, type WonOffer } from "@/lib/offers";
+import { offerById, type WonOffer } from "@/lib/offers";
 import { readableOn } from "@/lib/wheel";
 import { useAppState } from "@/components/AppState";
 import { Wheel, type WheelHandle } from "@/components/wheel/Wheel";
 
-const COLORS = ["#C4401F", "#FBF6EE", "#F3B23C", "#2E6150"];
+// Doré et sombre, pas les couleurs de la roue des clients : on voit tout de suite que c'est un cadeau pour le commerçant.
+const COLORS = ["#1D1A16", "#F3B23C", "#FBF6EE", "#F3B23C"];
 
 const segments = offerWheel.offers.map((o, i) => {
   const color = COLORS[i % COLORS.length];
   return { label: o.short, color, textColor: readableOn(color), icon: o.icon };
 });
 
-/** Roue d'offres Rouelia : un tirage fait par le serveur, un cadeau gardé 7 jours. */
+/** Roue du cadeau de bienvenue (page /creer-ma-roue) : un tirage fait par le serveur, un cadeau gardé 7 jours. */
 export function OfferWheel() {
-  const { offer, setOffer, openSignup } = useAppState();
+  const { offer, setOffer } = useAppState();
   const wheel = useRef<WheelHandle>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
@@ -44,9 +45,9 @@ export function OfferWheel() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="group relative w-full max-w-[min(88vw,440px)]">
+      <div className="group relative w-full max-w-[min(72vw,320px)]">
         <span aria-hidden className="absolute inset-x-[8%] top-[10%] bottom-[4%] rounded-full shadow-wheel" />
-        <Wheel ref={wheel} segments={segments} idle={!busy && !offer} label={offerWheel.wheelLabel} monogram="R" className="w-full transition-transform duration-300 group-hover:scale-[1.015]" />
+        <Wheel ref={wheel} segments={segments} rimColor="#F3B23C" hubColor="#1D1A16" idle={!busy && !offer} label={offerWheel.wheelLabel} monogram="R" className="w-full transition-transform duration-300 group-hover:scale-[1.015]" />
         {!offer ? (
           <button
             type="button"
@@ -58,9 +59,9 @@ export function OfferWheel() {
         ) : null}
       </div>
 
-      <div aria-live="polite" className="mt-4 w-full max-w-[440px]">
+      <div aria-live="polite" className="mt-4 w-full max-w-[400px]">
         {offer && won ? (
-          <div className="pop-in rounded-xl bg-paper p-5 text-ink shadow-lg">
+          <div className="pop-in rounded-xl bg-paper p-5 text-ink shadow-lg ring-1 ring-safran">
             <p className="flex items-center gap-2 text-sm font-bold tracking-[0.08em] text-tomette-deep uppercase">
               <Gift aria-hidden size={18} /> {offerWheel.won}
             </p>
@@ -73,20 +74,20 @@ export function OfferWheel() {
             <p className="mt-1 text-sm text-ink-soft">{fr(offerWheel.validUntil(formatDate(new Date(offer.expiresAt))))}</p>
             <button
               type="button"
-              onClick={() => openSignup(suggestedPack(offer.id))}
-              className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-tomette px-6 text-lg font-semibold text-white shadow-md hover:bg-tomette-deep"
+              onClick={() => document.getElementById("parcours")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-ink px-6 text-lg font-semibold text-white shadow-md hover:bg-night-soft"
             >
               {offerWheel.cta}
             </button>
           </div>
         ) : (
-          <p className="flex min-h-11 items-center justify-center text-center text-sm font-medium text-white">
+          <p className="flex min-h-11 items-center justify-center text-center text-sm font-semibold text-ink">
             {error ? fr(offerWheel.error) : busy ? offerWheel.spinning : fr(offerWheel.spinHint)}
           </p>
         )}
       </div>
 
-      <p className="mt-3 max-w-[440px] text-center text-xs text-white">{fr(offerWheel.rules)}</p>
+      <p className="mt-2 max-w-[400px] text-center text-xs text-ink-soft">{fr(offerWheel.rules)}</p>
     </div>
   );
 }

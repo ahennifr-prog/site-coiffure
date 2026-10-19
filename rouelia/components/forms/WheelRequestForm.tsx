@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { CheckCircle2, ImagePlus, LoaderCircle, X } from "lucide-react";
-import { brand, cta, doneForYou, pricing, type PackId } from "@/content";
+import { CheckCircle2, Gift, ImagePlus, LoaderCircle, X } from "lucide-react";
+import { brand, cta, doneForYou, offerWheel, pricing, type PackId } from "@/content";
 import { formatPrice, fr } from "@/lib/format";
 import { isEmail, normalizeFrenchPhone } from "@/lib/signup";
+import { offerById, resolveOffer } from "@/lib/offers";
+import { useAppState } from "@/components/AppState";
 import { consentText, createWheel } from "@/textes/formulaires";
 import { readImage } from "@/components/demo/readImage";
 import { describedBy, Field, Honeypot, inputClass, NextStep } from "./Field";
@@ -15,8 +17,11 @@ type Key = "shopName" | "phone" | "email" | "address" | "google" | "consent";
 
 /** Formulaire « Créez-la pour moi » : une seule étape, envoi à contact@ et confirmation au commerçant. */
 export function WheelRequestForm() {
+  const { offer } = useAppState();
   const [v, setV] = useState({ shopName: "", name: "", phone: "", email: "", address: "", google: "", prizes: "", message: "" });
   const [pack, setPack] = useState<PackId>(doneForYou.packs[0]);
+  // Cadeau de bienvenue gagné sur la roue de la page : ajouté à la demande, avec les règles du pack choisi.
+  const gift = offer ? resolveOffer(offer.id, pack) : null;
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState("");
   const [logo, setLogo] = useState<{ dataUrl: string; name: string } | null>(null);
@@ -66,7 +71,7 @@ export function WheelRequestForm() {
       const res = await fetch("/api/roue-pour-moi", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...v, pack, consent, website, logo: logo?.dataUrl ?? null, logoName: logo?.name ?? "" }),
+        body: JSON.stringify({ ...v, pack, consent, website, logo: logo?.dataUrl ?? null, logoName: logo?.name ?? "", offerToken: offer?.token ?? null }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
@@ -149,6 +154,11 @@ export function WheelRequestForm() {
             {t.essentielLink}
           </a>
         </p>
+        {gift?.status === "applied" ? (
+          <p className="mt-3 flex gap-2 rounded-lg bg-safran-soft p-3 text-sm font-semibold ring-1 ring-safran">
+            <Gift aria-hidden size={16} className="mt-0.5 shrink-0" /> {fr(offerWheel.inRequest(offerById(gift.id).label))}
+          </p>
+        ) : null}
       </fieldset>
       {tried && Object.values(check).some((x) => !x) ? (
         <p role="alert" className="mt-4 rounded-lg bg-danger/10 p-3 text-sm font-semibold text-danger">

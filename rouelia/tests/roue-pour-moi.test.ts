@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { listSignups, setTestDb } from "@/lib/db";
 import { POST } from "@/app/api/roue-pour-moi/route";
 import { sqliteD1 } from "./sqlite";
+import { checkPayload, signPayload } from "@/lib/auth";
+import { offerToken } from "@/lib/offers";
 
 beforeEach(() => setTestDb(sqliteD1()));
 
@@ -30,5 +32,16 @@ describe("« Créez-la pour moi »", () => {
   it("ramène un pack non concerné (Essentiel) sur Croissance", async () => {
     await post({ ...body, pack: "essentiel" });
     expect((await listSignups())[0].pack).toBe("croissance");
+  });
+
+  it("ajoute le cadeau de bienvenue gagné sur la page, et ignore un jeton faux", async () => {
+    const now = Date.now();
+    const won = { id: "flyers" as const, code: "OFF-TEST", wonAt: new Date(now).toISOString(), expiresAt: new Date(now + 86_400_000).toISOString() };
+    await post({ ...body, offerToken: offerToken(won, { sign: signPayload, check: checkPayload }) });
+    expect((await listSignups())[0].offer).toMatchObject({ id: "flyers", code: "OFF-TEST", status: "applied" });
+
+    setTestDb(sqliteD1());
+    await post({ ...body, offerToken: "faux.jeton" });
+    expect((await listSignups())[0].offer).toBeNull();
   });
 });
