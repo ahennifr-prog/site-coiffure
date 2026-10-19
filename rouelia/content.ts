@@ -316,8 +316,8 @@ export const demo = {
  */
 export const reviewPrompt = {
   /** Fenêtre affichée au premier toucher de la roue (components/jeu/ReviewGate.tsx). Toujours facultative. */
-  title: "Votre avis nous aide beaucoup",
-  text: "Nous vous invitons à partager votre expérience sur Google. Chaque avis nous aide à nous faire connaître. Ensuite, revenez ici et touchez la roue.",
+  title: "Merci de votre visite",
+  text: "Nous vous invitons à nous laisser un avis sur Google : c'est la meilleure façon de nous soutenir. Revenez ensuite ici et touchez la roue.",
   button: "Laisser un avis sur Google",
   close: "Fermer",
   demoNotice: "Dans la vraie version, ce bouton ouvre la fiche Google du commerce. Fermez puis touchez la roue.",

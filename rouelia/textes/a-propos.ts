@@ -75,7 +75,7 @@ export const aboutPage: Omit<SeoPage, "sections" | "faq"> & {
       {
         title: "Un cadeau jamais lié à un avis",
         text:
-          "Le cadeau est gagné avant toute autre étape. Le client peut ensuite, s'il le souhaite, partager son avis sur Google, mais rien ne dépend de ce choix et aucun tri n'est fait selon la note.",
+          "Avant de lancer la roue, le client est invité à laisser un avis sur Google. Il peut fermer l'invitation d'une simple croix : le cadeau est le même dans tous les cas et aucun tri n'est fait selon la note.",
       },
       {
         title: "Une installation sur place possible",
