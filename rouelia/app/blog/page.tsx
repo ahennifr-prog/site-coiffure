@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { finalCta } from "@/content";
 import { ArrowRight } from "lucide-react";
 import { articles } from "@/textes/blog";
 import { formatDay } from "@/lib/dates";
@@ -50,7 +51,7 @@ export default function Page() {
           ))}
         </ul>
       </Container>
-      <CtaBand title="Votre roue est à deux minutes d'ici." text="Réglez vos lots, testez, posez le QR code demain." />
+      <CtaBand title={finalCta.title} text={finalCta.text} />
     </PageShell>
   );
 }

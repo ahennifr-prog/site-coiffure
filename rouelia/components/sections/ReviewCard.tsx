@@ -4,12 +4,10 @@ import { fr } from "@/lib/format";
 
 /**
  * Carte d'avis : logo ou monogramme, nom, texte, étoiles. Relief léger au survol (CSS).
- * Dans le bandeau animé (décoratif pour les lecteurs d'écran), le lien vers la fiche Google reste cliquable
- * mais hors de la tabulation : la liste accessible de ReviewsBand porte le même lien.
  */
 export function ReviewCard({ review: r }: { review: MerchantReview }) {
   return (
-    <figure className="review-card flex w-[280px] shrink-0 flex-col rounded-xl bg-paper p-5 shadow-md ring-1 ring-line sm:w-[340px]">
+    <figure className="review-card flex w-[78vw] max-w-[340px] shrink-0 flex-col rounded-xl bg-paper p-5 shadow-md ring-1 ring-line sm:w-[340px] sm:max-w-none">
       <div className="flex items-center gap-3">
         {r.logo ? (
           <span className="inline-flex h-12 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg p-1 ring-1 ring-line" style={{ background: r.logo.background }}>
@@ -38,7 +36,7 @@ export function ReviewCard({ review: r }: { review: MerchantReview }) {
         <p className="mt-auto flex items-center justify-between gap-3 pt-3 text-xs text-ink-soft">
           <span>{r.date}</span>
           {r.ficheGoogle ? (
-            <a href={r.ficheGoogle} target="_blank" rel="noopener noreferrer" tabIndex={-1} className="inline-flex min-h-8 items-center gap-1 font-semibold text-tomette-deep underline underline-offset-2">
+            <a href={r.ficheGoogle} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-8 items-center gap-1 font-semibold text-tomette-deep underline underline-offset-2">
               {merchantReviewsSection.googleLink}
               <ExternalLink aria-hidden size={12} />
             </a>

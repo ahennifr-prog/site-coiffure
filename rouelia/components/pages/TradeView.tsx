@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Gift } from "lucide-react";
-import { cta } from "@/content";
+import { cta, finalCta } from "@/content";
 import { fr } from "@/lib/format";
 import { faqJsonLd } from "@/lib/jsonld";
 import { tradePages } from "@/textes/metiers";
@@ -79,7 +79,7 @@ export function TradeView({ page: p }: { page: TradePage }) {
           </aside>
         </div>
       </Container>
-      <CtaBand title={p.cta} />
+      <CtaBand title={finalCta.title} text={p.cta} />
     </PageShell>
   );
 }

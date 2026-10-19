@@ -15,19 +15,19 @@ describe("rendez-vous", () => {
     expect(parisToDate("2026-11-10", "12:00").toISOString()).toBe("2026-11-10T11:00:00.000Z");
   });
 
-  it("propose 14 jours, du lundi au vendredi, 9 h à 17 h et 18 h à 20 h, par 5 minutes", () => {
+  it("propose 14 jours, du lundi au vendredi, 9 h à 17 h et 18 h à 20 h, par quart d'heure, pour des appels de 5 minutes", () => {
     const days = buildCalendar(now, new Set());
     expect(days).toHaveLength(14);
     const thu = days[0];
     // Jeudi 10 h : le délai de 2 heures ouvre à midi.
     expect(thu.slots[0].id).toBe("2026-10-08T12:00");
-    expect(thu.slots).toHaveLength(5 * 12 + 2 * 12);
+    expect(thu.slots).toHaveLength(5 * 4 + 2 * 4);
     const fri = days[1];
     expect(fri.slots[0].id).toBe("2026-10-09T09:00");
-    expect(fri.slots).toHaveLength(10 * 12);
+    expect(fri.slots).toHaveLength(10 * 4);
     expect(new Set(fri.slots.map((s) => s.id)).size).toBe(fri.slots.length);
     expect(fri.slots.some((s) => s.time === "17:30")).toBe(false);
-    expect(thu.slots.at(-1)?.time).toBe("19:55");
+    expect(thu.slots.at(-1)?.time).toBe("19:45");
     expect(days.find((d) => d.day === "2026-10-10")?.slots).toHaveLength(0); // samedi
   });
 
@@ -37,12 +37,14 @@ describe("rendez-vous", () => {
   });
 
   it("empêche la double réservation d'un créneau", async () => {
-    const a = await reserve({ ...input, slot: "2026-10-09T12:05" }, now);
+    const a = await reserve({ ...input, slot: "2026-10-09T12:15" }, now);
+    // Créneaux d'un quart d'heure, mais l'appel lui-même dure 5 minutes (invitation agenda).
+    if (a.ok) expect(new Date(a.booking.end).getTime() - new Date(a.booking.start).getTime()).toBe(5 * 60_000);
     expect(a.ok).toBe(true);
-    const b = await reserve({ ...input, email: "autre@x.fr", slot: "2026-10-09T12:05" }, now);
+    const b = await reserve({ ...input, email: "autre@x.fr", slot: "2026-10-09T12:15" }, now);
     expect(b).toEqual({ ok: false, error: "taken" });
-    expect((await takenSlots(now)).has("2026-10-09T12:05")).toBe(true);
-    expect(buildCalendar(now, await takenSlots(now))[1].slots.find((s) => s.id === "2026-10-09T12:05")?.free).toBe(false);
+    expect((await takenSlots(now)).has("2026-10-09T12:15")).toBe(true);
+    expect(buildCalendar(now, await takenSlots(now))[1].slots.find((s) => s.id === "2026-10-09T12:15")?.free).toBe(false);
   });
 
   it("refuse un créneau fermé ou passé", async () => {

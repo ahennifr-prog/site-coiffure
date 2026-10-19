@@ -548,10 +548,9 @@ export const pricing = {
       price: 29,
       tagline: "Idéal pour démarrer seul, en 5 minutes.",
       highlights: [
-        "Vos clients repartent avec une raison de revenir",
-        "Un cadeau valable à la prochaine visite fait revenir vos clients",
+        "Un cadeau valable à la prochaine visite : vos clients ont une raison de revenir",
         "Vous gardez la main sur le coût de chaque cadeau",
-        "Un client de plus par mois peut suffire à le rembourser",
+        "Vous voyez les parties jouées et les cadeaux retirés en caisse",
       ],
       features: "Roue 100 % gagnante, QR code, chevalet et flyer à imprimer, codes validés en caisse, code envoyé par e-mail, suivi des parties.",
     },

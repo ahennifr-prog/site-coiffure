@@ -37,7 +37,9 @@ function Cell({ v }: { v: boolean | string }) {
 function PackDetails({ items, features, featured }: { items: string[]; features: string; featured: boolean }) {
   const [open, setOpen] = useState(false);
   const id = useId();
-  const visible = Math.max(3, items.length - pricing.hiddenHighlights);
+  // Un « Voir plus » pour une seule ligne n'a pas de sens : dans ce cas, tout est affiché.
+  const folded = Math.max(3, items.length - pricing.hiddenHighlights);
+  const visible = items.length - folded > 1 ? folded : items.length;
   const hidden = items.length - visible;
   const row = (h: string, i: number) => (
     <li key={h} className={`flex gap-2.5 ${i >= pricing.mobileHighlights && !open ? "max-sm:hidden" : ""}`}>

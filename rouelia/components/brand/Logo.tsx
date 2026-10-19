@@ -4,6 +4,8 @@ export function Logo({ className = "", tone = "ink" }: { className?: string; ton
   return (
     <span className={`inline-flex items-center font-display text-[1.6rem] leading-none font-semibold ${text} ${className}`} role="img" aria-label="Rouelia">
       <span aria-hidden>R</span>
+      {/* Le « o » dessiné n'est pas du texte : cette lettre invisible fait lire « Rouelia » aux robots et au copier-coller. */}
+      <span aria-hidden className="sr-only">o</span>
       <svg aria-hidden viewBox="0 0 24 24" className="mx-[0.04em] h-[0.72em] w-[0.72em] translate-y-[0.08em]">
         <circle cx="12" cy="12" r="11.5" fill="#C4401F" />
         {Array.from({ length: 8 }, (_, i) => {

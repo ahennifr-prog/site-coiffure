@@ -126,7 +126,7 @@ export async function reserve(input: BookingInput, now = new Date()): Promise<{ 
     phone: normalizeFrenchPhone(input.phone) ?? input.phone,
     createdAt: now.toISOString(),
     start: start.toISOString(),
-    end: new Date(start.getTime() + BOOKING.slotMinutes * 60000).toISOString(),
+    end: new Date(start.getTime() + BOOKING.callMinutes * 60000).toISOString(),
   };
   const db = await database();
   try {

@@ -8,7 +8,8 @@
 - La roue d'offres quitte l'accueil et devient le « Cadeau de bienvenue » en haut de /creer-ma-roue (components/sections/WelcomeGift.tsx) : fond doré, roue dorée et noire, texte « Cette roue n'est pas celle de vos clients ».
 - Le cadeau gagné suit les deux parcours : l'inscription (comme avant) et « Créez-la pour moi » (jeton signé vérifié par /api/roue-pour-moi, visible sur la fiche admin et dans l'e-mail d'alerte).
 - Bas de l'accueil : un seul bouton « Créer ma roue », contacts en petits liens (WhatsApp, e-mail, appel de 5 minutes).
-- Reste de la relecture visiteur à faire sur feu vert : liens Markdown affichés en brut (À propos, 4 pages métiers), image de la vidéo coupée, « Voir plus (1) », avis fixes au lieu du défilement, données (purge et confidentialité), créneaux de 15 minutes, chiffres de rentabilité.
+- Relecture visiteur, corrigé le même jour : liens affichés en brut (À propos, 4 pages métiers : le texte de fin passait en titre géant), nouvel aperçu de la vidéo (image à 22,5 s, bouton lecture dans la zone vide), plus de « Voir plus (1) », pack Essentiel sans doublon ni second chiffre de rentabilité, avis en cartes fixes à faire glisser (flèches sur ordinateur), créneaux d'appel tous les quarts d'heure (l'appel reste de 5 minutes dans l'invitation), logo lu « Rouelia » par les robots.
+- Reste : données personnelles (purge quotidienne et politique de confidentialité), à faire après validation d'Aymen.
 
 ## Point au 13 octobre 2026 (à lire en premier)
 

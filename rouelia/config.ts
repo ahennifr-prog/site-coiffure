@@ -24,8 +24,10 @@ const WEEKDAY_HOURS: [string, string][] = [
 ];
 
 export const BOOKING = {
-  /** Durée d'un créneau, en minutes. */
-  slotMinutes: 5,
+  /** Écart entre deux créneaux proposés, en minutes : un tous les quarts d'heure reste lisible sur téléphone. */
+  slotMinutes: 15,
+  /** Durée de l'appel lui-même, en minutes (invitation agenda et fin de l'appel dans l'admin). */
+  callMinutes: 5,
   /** Nombre de jours affichés à partir d'aujourd'hui. */
   daysAhead: 14,
   /** Délai minimum avant un créneau, en heures. */

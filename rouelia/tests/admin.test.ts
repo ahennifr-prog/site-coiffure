@@ -46,10 +46,10 @@ describe("admin", () => {
     expect((await listRequests())[0]).toMatchObject({ done: true, notes: "Roue envoyée" });
 
     const now = new Date("2026-10-08T08:00:00Z");
-    await reserve({ name: "Karim", phone: "0612345678", email: "k@x.fr", shop: "", slot: "2026-10-09T12:05", consent: true }, now);
-    await followCall("2026-10-09T12:05", { done: true, notes: "Rappeler lundi" });
+    await reserve({ name: "Karim", phone: "0612345678", email: "k@x.fr", shop: "", slot: "2026-10-09T12:15", consent: true }, now);
+    await followCall("2026-10-09T12:15", { done: true, notes: "Rappeler lundi" });
     expect((await listCalls())[0]).toMatchObject({ name: "Karim", done: true, notes: "Rappeler lundi" });
-    await deleteCall("2026-10-09T12:05");
+    await deleteCall("2026-10-09T12:15");
     expect(await listCalls()).toHaveLength(0);
   });
 

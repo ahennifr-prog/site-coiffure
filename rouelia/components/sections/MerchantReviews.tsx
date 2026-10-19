@@ -3,7 +3,7 @@ import { ReviewsBand } from "./ReviewsBand";
 import { DraftReviews } from "./DraftReviews";
 
 /**
- * Avis de commerçants en bandeau qui défile lentement (pause au survol).
+ * Avis de commerçants en cartes fixes, à faire glisser.
  * Seuls les avis validés par le commerçant s'affichent ; sinon la section reste masquée.
  */
 export function MerchantReviews({ compact = false }: { compact?: boolean }) {

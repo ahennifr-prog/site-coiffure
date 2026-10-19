@@ -5,8 +5,9 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/Button";
 import { Awning } from "@/components/brand/Awning";
 import { Container } from "@/components/ui/Section";
+import { RichText } from "./RichText";
 
-/** Bloc d'appel final des pages de contenu : créer sa roue, réserver un appel ou écrire sur WhatsApp. */
+/** Bloc d'appel final des pages de contenu : créer sa roue, réserver un appel ou écrire sur WhatsApp. Le texte accepte les liens [texte](/chemin). */
 export function CtaBand({ title, text }: { title: string; text?: string }) {
   return (
     <section aria-labelledby="cta-final" data-wa-hide className="relative mt-16 overflow-hidden bg-tomette text-white sm:mt-24">
@@ -15,7 +16,11 @@ export function CtaBand({ title, text }: { title: string; text?: string }) {
         <h2 id="cta-final" className="max-w-3xl font-display text-3xl leading-[1.08] font-semibold tracking-[-0.03em] text-balance sm:text-5xl">
           {fr(title)}
         </h2>
-        {text ? <p className="mt-4 max-w-2xl text-lg text-white sm:text-xl">{fr(text)}</p> : null}
+        {text ? (
+          <p className="mt-4 max-w-2xl text-lg text-white sm:text-xl">
+            <RichText text={text} linkClassName="font-semibold text-white underline underline-offset-4 hover:no-underline" />
+          </p>
+        ) : null}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <ButtonLink href={cta.href} size="lg" variant="light" className="shadow-lg">
             {cta.primary}

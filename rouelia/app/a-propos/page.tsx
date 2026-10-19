@@ -7,6 +7,7 @@ import { faqJsonLd, personJsonLd } from "@/lib/jsonld";
 import { pageMeta } from "@/lib/seo";
 import { PageShell } from "@/components/pages/PageShell";
 import { FaqList, PageHero } from "@/components/pages/Blocks";
+import { RichText } from "@/components/pages/RichText";
 import { CtaBand } from "@/components/pages/CtaBand";
 import { Awning } from "@/components/brand/Awning";
 import { MerchantReviews } from "@/components/sections/MerchantReviews";
@@ -126,7 +127,9 @@ export default function Page() {
                 <Check aria-hidden size={20} strokeWidth={3} className="mt-0.5 shrink-0 text-sauge" />
                 <span>
                   <span className="block font-bold">{fr(x.title)}</span>
-                  <span className="mt-1 block text-sm text-ink-soft">{fr(x.text)}</span>
+                  <span className="mt-1 block text-sm text-ink-soft">
+                    <RichText text={x.text} />
+                  </span>
                 </span>
               </li>
             ))}

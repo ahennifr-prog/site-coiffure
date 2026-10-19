@@ -129,6 +129,8 @@ export const merchantReviewsSection = {
   draft: "Brouillon, non publié : en attente de validation du commerçant",
   /** Information sur la collecte des avis, affichée sous le bandeau (art. L111-7-2 du Code de la consommation). */
   googleLink: "Voir la fiche Google",
+  prev: "Avis précédents",
+  next: "Avis suivants",
   howTitle: "Comment ces avis sont recueillis",
   logosTitle: "Ils utilisent Rouelia dans leur commerce",
   logosLink: "Lire leurs avis",

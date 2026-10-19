@@ -4,8 +4,10 @@ import { fr } from "@/lib/format";
 
 const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
-/** Texte avec liens internes écrits [texte](/chemin). */
-export function RichText({ text }: { text: string }) {
+const LINK_CLASS = "font-semibold text-tomette-deep underline underline-offset-4 hover:no-underline";
+
+/** Texte avec liens internes écrits [texte](/chemin). `linkClassName` adapte les liens à un fond coloré. */
+export function RichText({ text, linkClassName = LINK_CLASS }: { text: string; linkClassName?: string }) {
   const out: React.ReactNode[] = [];
   let last = 0;
   for (const m of text.matchAll(LINK)) {
@@ -15,11 +17,11 @@ export function RichText({ text }: { text: string }) {
     const external = /^https?:/.test(href);
     out.push(
       external ? (
-        <a key={`l${i}`} href={href} target="_blank" rel="noopener noreferrer" className="font-semibold text-tomette-deep underline underline-offset-4 hover:no-underline">
+        <a key={`l${i}`} href={href} target="_blank" rel="noopener noreferrer" className={linkClassName}>
           {fr(m[1])}
         </a>
       ) : (
-        <Link key={`l${i}`} href={href} className="font-semibold text-tomette-deep underline underline-offset-4 hover:no-underline">
+        <Link key={`l${i}`} href={href} className={linkClassName}>
           {fr(m[1])}
         </Link>
       ),

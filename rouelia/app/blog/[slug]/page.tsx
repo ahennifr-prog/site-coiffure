@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/textes/blog";
-import { brand } from "@/content";
+import { brand, finalCta } from "@/content";
 import { formatDay } from "@/lib/dates";
 import { fr } from "@/lib/format";
 import { articleJsonLd, faqJsonLd } from "@/lib/jsonld";
@@ -72,7 +72,7 @@ export default async function Page({ params }: Props) {
           </nav>
         </article>
       </Container>
-      <CtaBand title="Votre roue est à deux minutes d'ici." text="Réglez vos lots, testez, posez le QR code demain." />
+      <CtaBand title={finalCta.title} text={finalCta.text} />
     </PageShell>
   );
 }
