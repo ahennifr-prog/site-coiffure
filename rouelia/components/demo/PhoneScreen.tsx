@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Info, RotateCcw, Settings2, Volume2, VolumeX } from "lucide-react";
-import { demo as demoText, reviewPrompt, winScreen } from "@/content";
+import { demo as demoText, winScreen } from "@/content";
 import { formatDate, fr } from "@/lib/format";
 import { deadlineFrom, generateCode, pickWeighted, readableOn } from "@/lib/wheel";
 import { Wheel, type WheelHandle } from "@/components/wheel/Wheel";
+import { ReviewGate } from "@/components/jeu/ReviewGate";
 import { prizeIcons } from "@/components/wheel/icons";
 import { useAppState } from "@/components/AppState";
 
@@ -74,6 +75,8 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
   const wheel = useRef<WheelHandle>(null);
   const [phase, setPhase] = useState<Phase>("ready");
   const [reviewNotice, setReviewNotice] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewAsked, setReviewAsked] = useState(false);
   const [sound, setSound] = useState(false);
   const [win, setWin] = useState<{ index: number; name: string; code: string; deadline: Date } | null>(null);
   const [announce, setAnnounce] = useState("");
@@ -84,6 +87,8 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
     setPhase("ready");
     setWin(null);
     setReviewNotice(false);
+    setReviewOpen(false);
+    setReviewAsked(false);
     if (mode === "test") spinBtn.current?.focus({ preventScroll: true });
   }, [mode]);
 
@@ -99,11 +104,22 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
     image: p.image,
   }));
 
-  async function spin() {
+  // Comme le vrai jeu : au premier toucher, l'invitation à l'avis ; la croix la ferme, le toucher suivant lance la roue.
+  function requestSpin() {
     if (mode !== "test") return onStartTest?.();
+    if (phase !== "ready") return;
+    if (!reviewAsked) {
+      setReviewAsked(true);
+      setReviewNotice(false);
+      setReviewOpen(true);
+      return;
+    }
+    void spin();
+  }
+
+  async function spin() {
     if (phase !== "ready" || !wheel.current) return;
     setPhase("spinning");
-    setReviewNotice(false);
     setAnnounce(demoText.preview.spinning);
     const index = pickWeighted(demo.prizes);
     await wheel.current.spin(index);
@@ -122,6 +138,7 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
   function replay() {
     setWin(null);
     setReviewNotice(false);
+    setReviewAsked(false);
     setPhase("ready");
   }
 
@@ -176,7 +193,7 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
           />
           <button
             type="button"
-            onClick={spin}
+            onClick={requestSpin}
             disabled={phase === "spinning" || phase === "won"}
             tabIndex={mode === "test" && phase === "ready" ? 0 : -1}
             aria-hidden={mode !== "test" || phase !== "ready" ? true : undefined}
@@ -200,7 +217,7 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
           <button
             ref={spinBtn}
             type="button"
-            onClick={spin}
+            onClick={requestSpin}
             disabled={phase !== "ready"}
             className="flex min-h-12 w-full items-center justify-center rounded-full px-5 font-semibold text-white shadow-md transition-opacity disabled:opacity-70"
             style={{ background: readableOn(primary) === "#FFFFFF" ? primary : "#1D1A16" }}
@@ -209,6 +226,14 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
           </button>
         )}
       </div>
+
+      <ReviewGate
+        open={reviewOpen}
+        onReview={() => setReviewNotice(true)}
+        onClose={() => setReviewOpen(false)}
+        demoNotice={reviewNotice}
+        className="absolute"
+      />
 
       {/* Écran de gain */}
       {phase === "won" && win ? (
@@ -244,20 +269,6 @@ export function PhoneScreen({ mode, onStartTest, onExitTest, compact = false }: 
               <p className="mt-3 text-sm text-ink-soft">{fr(winScreen.howTo(displayName))}</p>
             </div>
             <p className="mt-3 text-xs text-white">{fr(winScreen.emailNote)}</p>
-            {/* Invitation à l'avis : comme dans le vrai produit, après le gain, facultative et sans lien avec le cadeau. */}
-            <div className="mt-3 w-full rounded-xl bg-white/12 p-3 text-sm ring-1 ring-white/30">
-              <p className="font-semibold">{fr(reviewPrompt.title)}</p>
-              <p className="mt-0.5 text-white/90">{fr(reviewPrompt.text)}</p>
-              {reviewNotice ? (
-                <p role="status" className="mt-2 text-xs font-semibold text-white">
-                  {fr(reviewPrompt.demoNotice)}
-                </p>
-              ) : (
-                <button type="button" onClick={() => setReviewNotice(true)} className="mt-2 inline-flex min-h-10 items-center rounded-full bg-paper px-4 text-xs font-semibold text-ink">
-                  {reviewPrompt.button}
-                </button>
-              )}
-            </div>
             <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-night/35 px-3 py-1 text-xs font-semibold">
               <Info aria-hidden size={14} /> {fr(winScreen.demoNotice)}
             </p>

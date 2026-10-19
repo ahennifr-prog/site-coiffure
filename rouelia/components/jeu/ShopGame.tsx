@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CalendarCheck, Check, Copy, Crown, Gift, LoaderCircle, MapPin, Phone, Share2, Volume2, VolumeX } from "lucide-react";
-import { reviewPrompt } from "@/content";
+import { ReviewGate } from "./ReviewGate";
 import { formatDay, parisDay } from "@/lib/dates";
 import { fr } from "@/lib/format";
 import { participationRule, type PublicShop } from "@/lib/shop-config";
@@ -77,33 +77,6 @@ function Social({ shop }: { shop: PublicShop }) {
           </a>
         ) : null}
       </div>
-    </div>
-  );
-}
-
-/**
- * Invitation à partager son avis : proposée APRÈS le gain, à tous, sans condition ni tri selon la note.
- * Le cadeau est déjà attribué ; ne jamais la remettre avant la roue ni la lier au cadeau.
- */
-function ReviewInvite({ shop, onShow, onClick }: { shop: PublicShop; onShow: () => void; onClick: () => void }) {
-  useEffect(() => {
-    onShow();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  if (!shop.reviewUrl) return null;
-  return (
-    <div className="mt-5 rounded-xl bg-paper p-4 text-center ring-1 ring-line">
-      <p className="font-semibold">{fr(reviewPrompt.title)}</p>
-      <p className="mt-1 text-sm text-ink-soft">{fr(reviewPrompt.text)}</p>
-      <a
-        href={shop.reviewUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onClick}
-        className="mt-3 inline-flex min-h-11 items-center justify-center rounded-full bg-paper px-5 text-sm font-semibold ring-1 ring-ink/30"
-      >
-        {reviewPrompt.button}
-      </a>
     </div>
   );
 }
@@ -240,9 +213,22 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
     if (step !== "accueil") window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
-  // On joue directement : aucune étape d'avis avant la roue.
   function start() {
     setStep("infos");
+  }
+
+  // Invitation à l'avis au premier toucher de la roue, une seule fois, si le commerce a une fiche Google.
+  // Facultative : la croix la ferme, puis un nouveau toucher lance la roue ; le tirage est déjà fait par le serveur et ne change pas.
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewAsked, setReviewAsked] = useState(false);
+  function requestSpin() {
+    if (shop.reviewUrl && !reviewAsked) {
+      setReviewAsked(true);
+      setReviewOpen(true);
+      send("avis_ouverts");
+      return;
+    }
+    void spin();
   }
 
   const phoneOk = !!normalizeFrenchPhone(phone);
@@ -323,6 +309,15 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
         {announce}
       </p>
       {celebrate ? <Confetti colors={[...colors.slice(0, 3), primary]} /> : null}
+      <ReviewGate
+        open={reviewOpen}
+        href={shop.reviewUrl}
+        onReview={() => {
+          send("avis_clics");
+          setReviewOpen(false);
+        }}
+        onClose={() => setReviewOpen(false)}
+      />
 
       <div className="relative mx-auto flex min-h-svh max-w-6xl flex-col px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-6 sm:px-8">
         <header className="flex items-center justify-between gap-3">
@@ -376,7 +371,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
               className="relative w-full"
             />
             {step === "roue" ? (
-              <button type="button" onClick={spin} disabled={spinning} aria-label="Tourner la roue" tabIndex={-1} className="absolute inset-[6%] cursor-pointer rounded-full disabled:cursor-progress" />
+              <button type="button" onClick={requestSpin} disabled={spinning} aria-label="Tourner la roue" tabIndex={-1} className="absolute inset-[6%] cursor-pointer rounded-full disabled:cursor-progress" />
             ) : null}
           </div>
 
@@ -524,7 +519,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                 <button
                   ref={spinRef}
                   type="button"
-                  onClick={spin}
+                  onClick={requestSpin}
                   disabled={spinning}
                   className="mt-6 inline-flex min-h-14 w-full max-w-sm items-center justify-center rounded-full px-8 text-lg font-semibold shadow-lg transition-transform active:scale-[0.98] disabled:opacity-80"
                   style={buttonStyle}
@@ -544,7 +539,6 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                   {step === "gain" && emailed ? " Il vous a aussi été envoyé par e-mail." : ""}
                 </p>
                 <Ticket play={result.play} shop={shop} />
-                {step === "gain" ? <ReviewInvite shop={shop} onShow={() => shop.reviewUrl && send("avis_ouverts")} onClick={() => send("avis_clics")} /> : null}
               </div>
             ) : null}
           </div>

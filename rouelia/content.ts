@@ -311,16 +311,16 @@ export const demo = {
 };
 
 /**
- * Invitation à l'avis : reproduit le vrai produit à l'identique (components/jeu/ShopGame.tsx).
- * Règles de conformité (Google et Code de la consommation), à ne jamais changer :
- * proposée APRÈS le gain, à tous les joueurs, sans condition, sans tri selon la note, texte neutre.
+ * Invitation à l'avis, avant le lancement de la roue (choix d'Aymen, 19 octobre 2026), dans le jeu et la démo.
+ * Toujours facultative : une croix la ferme, le cadeau ne dépend pas de l'avis, aucun tri selon la note.
  */
 export const reviewPrompt = {
-  title: "Partager votre avis, c'est facultatif",
-  text: "Votre cadeau est déjà à vous, quoi que vous fassiez.",
-  button: "Partager mon avis sur Google",
+  /** Fenêtre affichée au premier toucher de la roue (components/jeu/ReviewGate.tsx). Toujours facultative. */
+  title: "Un petit avis sur Google ?",
+  text: "C'est facultatif : votre cadeau ne dépend pas de votre avis. Après votre avis, revenez ici et touchez la roue.",
+  button: "Laisser un avis sur Google",
   close: "Fermer",
-  demoNotice: "Dans la vraie version, ce lien ouvre votre fiche Google.",
+  demoNotice: "Dans la vraie version, ce bouton ouvre la fiche Google du commerce. Fermez puis touchez la roue.",
 };
 
 export const winScreen = {
