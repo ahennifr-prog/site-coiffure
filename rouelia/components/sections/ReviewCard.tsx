@@ -3,7 +3,7 @@ import { merchantReviewsSection, reviewSubtitle, type MerchantReview } from "@/t
 import { fr } from "@/lib/format";
 
 /**
- * Carte d'avis : logo ou monogramme, nom, texte, étoiles. Relief léger au survol (CSS).
+ * Carte d'avis : logo ou monogramme, nom, chiffre éventuel (en vert), texte, étoiles. Relief léger au survol (CSS).
  */
 export function ReviewCard({ review: r }: { review: MerchantReview }) {
   return (
@@ -30,6 +30,12 @@ export function ReviewCard({ review: r }: { review: MerchantReview }) {
             <Star key={k} size={16} fill={k < r.stars! ? "currentColor" : "none"} strokeWidth={k < r.stars! ? 0 : 1.5} />
           ))}
         </div>
+      ) : null}
+      {r.chiffre ? (
+        <p className="mt-3 flex items-baseline gap-2 rounded-lg bg-sauge-soft px-3 py-2 text-sauge">
+          <span className="font-display text-3xl leading-none font-semibold">{r.chiffre.value}</span>
+          <span className="text-sm leading-tight font-semibold">{fr(r.chiffre.label)}</span>
+        </p>
       ) : null}
       <blockquote className="mt-3 text-[15px] leading-snug text-ink">« {fr(r.text)} »</blockquote>
       {r.date || r.ficheGoogle ? (

@@ -18,7 +18,8 @@ export function HowItWorks() {
         <div className="max-w-xl">
           <Eyebrow>{howItWorks.eyebrow}</Eyebrow>
           <SectionTitle id="fonctionnement-title">{howItWorks.title}</SectionTitle>
-          <p className="mt-4 text-lg text-ink-soft">{fr(howItWorks.answer)}</p>
+          {/* Résumé gardé pour les lecteurs d'écran et les robots : les trois étapes juste dessous disent la même chose à l'œil. */}
+          <p className="sr-only">{fr(howItWorks.answer)}</p>
         </div>
 
         {/* Téléphone et tablette */}

@@ -132,6 +132,13 @@ export async function shopForInvite(token: string, now = new Date()): Promise<Sh
   return parse(row);
 }
 
+/** Le commerçant a-t-il déjà choisi un mot de passe ? */
+export async function hasPassword(shopId: string): Promise<boolean> {
+  const db = await database();
+  const row = await db.prepare("SELECT pwd_hash FROM shops WHERE id = ?").bind(shopId).first<{ pwd_hash: string | null }>();
+  return !!row?.pwd_hash;
+}
+
 /** Enregistre le mot de passe, invalide le lien et les anciennes sessions. Renvoie la nouvelle version de session. */
 export async function setPassword(shopId: string, password: string): Promise<number> {
   const db = await database();

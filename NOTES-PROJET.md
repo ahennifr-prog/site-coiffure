@@ -3,6 +3,14 @@
 À lire en premier en reprenant le travail, avec `rouelia/REPRISE.md` (historique technique détaillé),
 `AUDIT-ROUELIA.md` (audit complet) et `CONVERSION-ROUELIA.md` (analyse de conversion).
 
+## 19 octobre 2026 (suite) : essai ouvert automatiquement, alertes, espace en image
+
+- Inscription « Je crée ma roue moi-même » : l'essai s'ouvre tout seul (lib/trial.ts, partagé avec l'admin). Le commerce est créé, l'accès part par e-mail et l'écran de fin propose « Choisir mon mot de passe » tout de suite. Si l'ouverture échoue, l'inscription reste « à ouvrir » dans l'admin et le commerçant reçoit l'accusé de réception. Limite : 6 inscriptions par heure et par adresse. « Créez-la pour moi » reste préparé à la main par Aymen.
+- Alertes immédiates à contact@rouelia.fr (lib/alerts.ts) : essai ouvert, accès activé (mot de passe choisi la première fois), première partie jouée sur une roue, nouveau client payant, abonnement arrêté. Les alertes « Créez-la pour moi », appel réservé et « Autre activité » existaient déjà.
+- Aperçu de l'espace commerçant sur l'accueil, après « Comment ça marche » (components/sections/EspacePreview.tsx, images /public/espace, version téléphone dédiée). Vraies captures d'un commerce de démonstration local « Salon Lila ».
+- Avis Pizza Time : « +42 clients revenus utiliser leur cadeau » en vert (champ `chiffre`, donné par Aymen).
+- Cadeau de bienvenue replié sur téléphone, titre en double retiré sur /tarifs, animations des titres plus courtes, fil d'Ariane sur une ligne, répétitions retirées (bandeau des avantages, résumé de « Comment ça marche », point « Rentable » du pack Croissance, intro de « Pour qui ? », sur-titre des avis).
+
 ## 19 octobre 2026 : cadeau de bienvenue déplacé (branche de travail, pas encore en production)
 
 - La roue d'offres quitte l'accueil et devient le « Cadeau de bienvenue » en haut de /creer-ma-roue (components/sections/WelcomeGift.tsx) : fond doré, roue dorée et noire, texte « Cette roue n'est pas celle de vos clients ».

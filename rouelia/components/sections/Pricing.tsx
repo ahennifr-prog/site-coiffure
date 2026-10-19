@@ -86,12 +86,21 @@ export function Pricing({ standalone = false }: { standalone?: boolean }) {
   const { openSignup } = useAppState();
 
   return (
-    <Section id="tarifs" labelledBy="tarifs-title" className="bg-paper">
+    <Section id="tarifs" labelledBy="tarifs-title" className={`bg-paper ${standalone ? "[--section-y:2.5rem] sm:[--section-y:3.5rem]" : ""}`}>
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <Eyebrow>{pricing.eyebrow}</Eyebrow>
-          <SectionTitle id="tarifs-title">{pricing.title}</SectionTitle>
-          <p className="mt-4 text-lg text-ink-soft">{fr(pricing.lead)}</p>
+          {/* Sur /tarifs, le haut de page porte déjà le titre et l'essai gratuit : on ne le répète pas ici. */}
+          {standalone ? (
+            <h2 id="tarifs-title" className="sr-only">
+              {pricing.title}
+            </h2>
+          ) : (
+            <>
+              <Eyebrow>{pricing.eyebrow}</Eyebrow>
+              <SectionTitle id="tarifs-title">{pricing.title}</SectionTitle>
+              <p className="mt-4 text-lg text-ink-soft">{fr(pricing.lead)}</p>
+            </>
+          )}
           <p className="mt-6 inline-flex flex-wrap items-baseline justify-center gap-x-2 rounded-full bg-sauge-soft px-5 py-2.5 font-semibold text-sauge">
             {fr(pricing.profit)}
             <span className="text-xs font-medium text-ink-soft">{fr(pricing.profitNote)}</span>

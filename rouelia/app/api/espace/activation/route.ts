@@ -1,7 +1,8 @@
 import { hit } from "@/lib/game";
 import { shopCookie, shopSessionToken } from "@/lib/espace";
 import { clientIp, json, readJson } from "@/lib/http";
-import { MIN_PASSWORD, setPassword, shopForInvite } from "@/lib/shops";
+import { hasPassword, MIN_PASSWORD, setPassword, shopForInvite } from "@/lib/shops";
+import { alertActivated } from "@/lib/alerts";
 
 /** Lien d'invitation : le commerçant choisit son mot de passe et se retrouve connecté. */
 export async function POST(req: Request) {
@@ -12,7 +13,10 @@ export async function POST(req: Request) {
   if (password.length < MIN_PASSWORD || password.length > 200) return json({ ok: false, error: "court" }, 422);
   const shop = await shopForInvite(token);
   if (!shop) return json({ ok: false, error: "lien" }, 410);
+  // Première activation seulement (un lien de nouveau mot de passe passe aussi par ici).
+  const firstTime = !(await hasPassword(shop.id));
   const version = await setPassword(shop.id, password);
+  if (firstTime) await alertActivated(shop);
   const res = json({ ok: true });
   res.cookies.set(shopCookie(shopSessionToken(shop.id, version)));
   return res;

@@ -7,12 +7,16 @@ import { offerById, offerForSignup } from "@/lib/offers";
 import { pricing } from "@/content";
 import { buildRecord } from "@/lib/signup";
 import { countEvent } from "@/lib/mesure";
+import { clientIp } from "@/lib/http";
+import { hit } from "@/lib/game";
+import { inviteUrl } from "@/lib/notify";
+import { openTrial } from "@/lib/trial";
 
 /**
  * Inscription à l'essai gratuit.
- * Validation, puis enregistrement dans la base D1 de Cloudflare (mémoire en local).
- * Le cadeau de la roue d'offres est vérifié et rattaché selon le pack choisi.
- * À brancher plus tard : création du client Stripe (stripeCustomerId), e-mail de bienvenue.
+ * Validation, enregistrement dans la base D1 de Cloudflare, puis ouverture automatique de l'essai
+ * (commerce créé, accès envoyé par e-mail) et alerte immédiate à contact@.
+ * Le cadeau de bienvenue est vérifié et rattaché selon le pack choisi.
  */
 export async function POST(req: Request) {
   const length = Number(req.headers.get("content-length") ?? 0);
@@ -33,6 +37,12 @@ export async function POST(req: Request) {
   }
 
   const now = new Date();
+  // Limite anti-abus : quelques inscriptions par heure et par adresse.
+  try {
+    if ((await hit(`inscription:${clientIp(req)}`, now)) > 6) return NextResponse.json({ ok: false, error: "rate" }, { status: 429 });
+  } catch {
+    // Base indisponible : l'enregistrement plus bas renverra l'erreur.
+  }
   const result = buildRecord(body, now, crypto.randomUUID());
   if (!result.ok) {
     return NextResponse.json({ ok: false, errors: result.errors }, { status: 422 });
@@ -49,10 +59,18 @@ export async function POST(req: Request) {
 
   await countEvent("essai_envoye", now);
 
-  // Accusé de réception au commerçant et alerte interne (sans effet si Brevo n'est pas branché).
+  // Ouverture automatique de l'essai : le commerce est créé et l'accès part tout de suite par e-mail.
+  // Si quelque chose échoue, l'inscription reste « à ouvrir » dans l'admin et le commerçant reçoit l'accusé de réception.
   const r = result.record;
+  let opened: Awaited<ReturnType<typeof openTrial>> | null = null;
+  try {
+    opened = await openTrial(r, now);
+  } catch (e) {
+    console.error("[inscription] ouverture automatique impossible", e);
+  }
+
   await Promise.all([
-    sendMail(signupConfirmMail({ email: r.email, firstName: r.firstName, shopName: r.shopName })),
+    opened ? Promise.resolve() : sendMail(signupConfirmMail({ email: r.email, firstName: r.firstName, shopName: r.shopName })),
     sendMail(
       signupAlertMail({
         firstName: r.firstName,
@@ -61,9 +79,12 @@ export async function POST(req: Request) {
         phone: r.phone,
         pack: pricing.packs.find((p) => p.id === r.pack)?.name ?? r.pack,
         offer: r.offer ? `${offerById(r.offer.id).label} (${r.offer.status === "applied" ? "à appliquer" : "non applicable à ce pack"})` : null,
+        opened: !!opened,
+        slug: opened?.shop.slug,
       }),
     ),
   ]);
 
-  return NextResponse.json({ ok: true, id: r.id }, { status: 201 });
+  // Le lien d'accès est aussi rendu au navigateur : le commerçant choisit son mot de passe sans attendre l'e-mail.
+  return NextResponse.json({ ok: true, id: r.id, opened: !!opened, access: opened?.token ? inviteUrl(opened.token) : null }, { status: 201 });
 }

@@ -96,7 +96,8 @@ export function ScrollFx() {
             split.unobserve(e.target);
           }
       },
-      { rootMargin: "0px 0px -12% 0px" },
+      // Déclenché juste avant que le titre n'entre à l'écran : il est déjà en place quand on le lit.
+      { rootMargin: "0px 0px 10% 0px" },
     );
     const watchSplit = () => document.querySelectorAll<HTMLElement>("[data-split]:not(.is-in)").forEach((el) => split.observe(el));
 

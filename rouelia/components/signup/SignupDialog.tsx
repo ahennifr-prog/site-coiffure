@@ -92,6 +92,8 @@ export function SignupDialog() {
   // Champ piège invisible pour les robots.
   const [website, setWebsite] = useState("");
   const [wonLabel, setWonLabel] = useState<string | null>(null);
+  // Lien pour choisir son mot de passe, rendu par le serveur quand l'essai s'est ouvert tout seul.
+  const [access, setAccess] = useState<string | null>(null);
 
   // Ouverture : on reprend la roue et le pack choisis.
   useEffect(() => {
@@ -145,6 +147,8 @@ export function SignupDialog() {
         body: JSON.stringify({ ...payload, offerToken: app.offer?.token ?? null, website }),
       });
       if (!res.ok) throw new Error(String(res.status));
+      const data = (await res.json().catch(() => ({}))) as { access?: string | null };
+      setAccess(typeof data.access === "string" && data.access.startsWith("http") ? data.access : null);
       const applied = app.offer ? resolveOffer(app.offer.id, pack) : null;
       setWonLabel(applied?.status === "applied" ? offerById(applied.id).label : null);
       setStatus("success");
@@ -188,14 +192,19 @@ export function SignupDialog() {
               <Check aria-hidden size={32} strokeWidth={3} />
             </span>
             <h2 id={`${uid}-title`} className="mt-5 font-display text-3xl font-semibold">
-              {fr(t.success.title)}
+              {fr(access ? t.success.title : t.success.pendingTitle)}
             </h2>
-            <p className="mt-3 text-ink-soft">{fr(t.success.text(firstName.trim()))}</p>
+            <p className="mt-3 text-ink-soft">{fr(access ? t.success.text(firstName.trim()) : t.success.pending(firstName.trim()))}</p>
             {wonLabel ? <p className="mt-2 font-semibold">{fr(offerWheel.signup.success(wonLabel))}</p> : null}
+            {access ? (
+              <a href={access} className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-tomette px-7 text-lg font-semibold text-white shadow-md hover:bg-tomette-deep">
+                {t.success.access}
+              </a>
+            ) : null}
             <button
               type="button"
               onClick={app.closeSignup}
-              className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-ink px-6 font-semibold text-white"
+              className={access ? "mt-4 block w-full text-center text-sm font-semibold text-ink-soft underline underline-offset-4" : "mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-ink px-6 font-semibold text-white"}
             >
               {t.success.close}
             </button>

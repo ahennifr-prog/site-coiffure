@@ -6,6 +6,7 @@ import { Hero } from "@/components/sections/Hero";
 import { FromWheelWelcome } from "@/components/sections/FromWheelWelcome";
 import { MerchantLogos } from "@/components/sections/MerchantLogos";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { EspacePreview } from "@/components/sections/EspacePreview";
 import { WhoTeaser } from "@/components/sections/WhoTeaser";
 import { MerchantReviews } from "@/components/sections/MerchantReviews";
 import { Pricing } from "@/components/sections/Pricing";
@@ -40,6 +41,7 @@ export default function Home() {
         <MerchantLogos />
         <Marquee />
         <HowItWorks />
+        <EspacePreview />
         <MerchantReviews />
         <WhoTeaser />
         <Pricing />

@@ -11,6 +11,7 @@ export type Crumb = { name: string; href: string };
 /** Cadre commun des pages de contenu : menu, fil d'Ariane (visible et JSON-LD), contenu, pied de page. */
 export function PageShell({ crumbs, jsonLd = [], children }: { crumbs: Crumb[]; jsonLd?: object[]; children: React.ReactNode }) {
   const trail = [{ name: "Accueil", href: "/" }, ...crumbs];
+  const last = trail.length - 1;
   return (
     <>
       {[breadcrumbJsonLd(trail), ...jsonLd].map((d, i) => (
@@ -20,16 +21,17 @@ export function PageShell({ crumbs, jsonLd = [], children }: { crumbs: Crumb[]; 
       <main id="contenu">
         <Container>
           <nav aria-label="Fil d'Ariane" className="pt-5 text-sm text-ink-soft">
-            <ol className="flex flex-wrap items-center gap-1">
+            {/* Une seule ligne : la page en cours (souvent un long titre d'article, répété juste en dessous) est coupée. */}
+            <ol className="flex items-center gap-1">
               {trail.map((c, i) => (
-                <li key={c.href} className="inline-flex items-center gap-1">
+                <li key={c.href} className={`inline-flex items-center gap-1 ${i === last ? "min-w-0" : "shrink-0"}`}>
                   {i > 0 ? <ChevronRight aria-hidden size={14} /> : null}
-                  {i < trail.length - 1 ? (
+                  {i < last ? (
                     <Link href={c.href} className="inline-flex min-h-8 items-center underline-offset-4 hover:underline">
                       {fr(c.name)}
                     </Link>
                   ) : (
-                    <span aria-current="page" className="font-medium text-ink">
+                    <span aria-current="page" className="truncate font-medium text-ink">
                       {fr(c.name)}
                     </span>
                   )}

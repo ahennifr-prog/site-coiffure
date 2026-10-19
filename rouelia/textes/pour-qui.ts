@@ -19,7 +19,7 @@ export const whoPage = {
   eyebrow: "Pour qui ?",
   h1: "Pour tous les commerces qui vivent de leurs habitués.",
   lead:
-    "Rouelia s'adresse à tous les commerçants et indépendants qui ont besoin de fidéliser leurs clients. Le principe reste le même partout : le client scanne, joue, et gagne un cadeau à utiliser lors de sa prochaine visite. Seuls les cadeaux changent, et c'est vous qui les choisissez.",
+    "Le principe reste le même partout : le client scanne, joue, et gagne un cadeau à utiliser lors de sa prochaine visite. Seuls les cadeaux changent, et c'est vous qui les choisissez.",
   answer:
     "Rouelia convient à tout commerce de proximité où un client peut revenir : salon, restaurant, institut, boulangerie, bar, boutique ou activité indépendante.",
   giftsLabel: "Exemples de cadeaux",

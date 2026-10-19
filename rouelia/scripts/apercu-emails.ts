@@ -30,8 +30,8 @@ const mails: [string, string, Mail][] = [
   ["Commerçant", "4 jours après la fin de l'essai, sans réponse, la roue avait tourné", merchantTrialLastMail({ ...trial, daysLeft: -4, daysUsed: 14, results: { parties: 58, retraits: 14, avisClics: 17, enAttente: 31 } })],
   ["Commerçant", "4 jours après la fin de l'essai, sans réponse, la roue n'avait pas été jouée", merchantTrialLastMail({ ...trial, daysLeft: -4, daysUsed: 14, results: { parties: 0, retraits: 0, avisClics: 0, enAttente: 0 } })],
   ["Commerçant", "Chaque lundi matin", merchantWeeklyMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine", numbers: { visites: 64, parties: 41, avisClics: 12, retraits: 9, enAttente: 23, expirentBientot: 5 } })],
-  ["Commerçant qui s'inscrit", "Juste après l'inscription sur rouelia.fr", signupConfirmMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine" })],
-  ["Vous (contact@rouelia.fr)", "À chaque inscription", signupAlertMail({ firstName: "Martine", shopName: "Salon Martine", email: "martine@salon.fr", phone: "+33612345678", pack: "Croissance", offer: "Essai prolongé à 21 jours (à appliquer)" })],
+  ["Commerçant qui s'inscrit", "Juste après l'inscription, seulement si l'essai n'a pas pu s'ouvrir tout seul", signupConfirmMail({ email: "martine@salon.fr", firstName: "Martine", shopName: "Salon Martine" })],
+  ["Vous (contact@rouelia.fr)", "À chaque inscription", signupAlertMail({ firstName: "Martine", shopName: "Salon Martine", email: "martine@salon.fr", phone: "+33612345678", pack: "Croissance", offer: "Essai prolongé à 21 jours (à appliquer)", opened: true, slug: "salon-martine" })],
 ];
 
 const sms: [string, string, string][] = [

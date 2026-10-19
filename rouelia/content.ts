@@ -192,10 +192,25 @@ export const video = {
 /* Bandeau de cadeaux                                                  */
 /* ------------------------------------------------------------------ */
 
+/** Aperçu de l'espace commerçant, sur l'accueil après « Comment ça marche ». Image : /public/espace (vraies captures d'un commerce de démonstration). */
+export const espacePreview = {
+  eyebrow: "Votre espace",
+  title: "Vos clients, vos cadeaux, votre QR code. Tout au même endroit.",
+  points: [
+    "Chaque gagnant avec son cadeau et son code",
+    "Un geste en caisse pour valider un cadeau",
+    "Les cadeaux à retirer et ceux déjà retirés, d'un coup d'œil",
+    "Votre QR code prêt à imprimer",
+  ],
+  note: "Sur téléphone comme sur ordinateur. Exemple d'un salon de démonstration.",
+  alt: "Espace commerçant Rouelia : suivi des parties et des cadeaux retirés sur ordinateur, caisse avec la liste des gagnants sur téléphone (cadeaux valables et déjà retirés), et QR code prêt à imprimer.",
+};
+
 /** Bandeau des avantages pour le commerçant, sous la vidéo. */
 export const advantages = {
   label: "Ce que vous y gagnez",
-  items: ["14 jours d'essai gratuit", "Plus de clients fidèles", "De nouveaux clients", "Prêt en 5 minutes", "Sans engagement", "Sans appli à installer"],
+  // Sans « 14 jours gratuits » ni « sans engagement » : déjà sous le bouton du haut de page.
+  items: ["Plus de clients fidèles", "De nouveaux clients", "Prêt en 5 minutes", "Sans appli à installer", "Cadeaux validés en caisse", "À vos couleurs, avec votre logo"],
 };
 
 /* ------------------------------------------------------------------ */
@@ -561,7 +576,8 @@ export const pricing = {
       badge: "Recommandé",
       tagline: "Idéal pour faire revenir vos clients plus souvent.",
       highlights: [
-        `Rentable dès ${profitability.clients} clients qui reviennent par mois`,
+        // La rentabilité est déjà dans l'encadré vert au-dessus des packs : pas de doublon ici.
+        "On crée votre roue pour vous, en quelques heures",
         "Vos clients sont prévenus avant que leur cadeau expire",
         "Vos habitués font venir leurs amis grâce au parrainage",
         "Votre roue change avec les saisons, sans y penser",
@@ -702,6 +718,8 @@ export const offerWheel = {
   title: "Avant de commencer, un cadeau pour vous.",
   text: "Cette roue n'est pas celle de vos clients : c'est un cadeau de bienvenue offert par Rouelia pour bien démarrer. Chaque case est gagnante.",
   note: "Valable 7 jours sur les packs Croissance et Premium.",
+  /** Bouton qui déplie la roue sur téléphone. */
+  open: "Découvrir mon cadeau",
   wheelLabel: "Roue du cadeau de bienvenue Rouelia",
   spinHint: "Touchez la roue pour découvrir votre cadeau",
   spinning: "La roue tourne",
@@ -837,12 +855,17 @@ export const signup = {
     server: "L'envoi n'a pas fonctionné. Vérifiez votre connexion et réessayez.",
   },
   submit: "Créer mon compte d'essai",
-  next: "nous validons votre inscription et vous envoyons votre accès par e-mail, en général en quelques minutes (24 h maximum). Vous créez votre mot de passe et votre roue est prête.",
+  next: "votre essai de 14 jours s'ouvre tout de suite. Vous choisissez votre mot de passe et vous retrouvez votre QR code dans votre espace. Le lien part aussi par e-mail.",
   submitting: "Création en cours",
   success: {
-    title: "C'est noté, merci.",
+    title: "Votre roue est prête.",
     text: (firstName: string) =>
-      `${firstName}, votre demande est enregistrée avec votre roue. Nous la validons et vous envoyons votre accès par e-mail, en général en quelques minutes (24 h maximum). Vous créez votre mot de passe et votre roue est prête.`,
+      `Bienvenue ${firstName}. Votre essai gratuit de 14 jours est ouvert. Choisissez votre mot de passe pour entrer dans votre espace : votre QR code à imprimer vous y attend. Le lien vous est aussi envoyé par e-mail.`,
+    access: "Choisir mon mot de passe",
+    /** Si l'ouverture automatique a échoué : l'accès est envoyé à la main. */
+    pendingTitle: "C'est noté, merci.",
+    pending: (firstName: string) =>
+      `${firstName}, votre inscription est enregistrée avec votre roue. Nous vous envoyons votre accès par e-mail dans la journée. Vous créerez alors votre mot de passe.`,
     close: "Revenir au site",
   },
   close: "Fermer",

@@ -1,6 +1,7 @@
 import { getSignup, updateSignup } from "@/lib/db";
 import { getShop, saveShop, type Shop } from "@/lib/shops";
 import { applySubscription, type StripeSubscription } from "@/lib/stripe";
+import { alertSubscription } from "@/lib/alerts";
 
 /** Enregistre ce que Stripe dit de l'abonnement ; un commerce qui devient client l'est aussi dans les inscriptions. */
 export async function syncSubscription(shop: Shop, sub: StripeSubscription): Promise<Shop> {
@@ -10,6 +11,7 @@ export async function syncSubscription(shop: Shop, sub: StripeSubscription): Pro
     const s = await getSignup(shop.signupId);
     if (s && s.status !== "client") await updateSignup({ ...s, status: "client", stripeCustomerId: sub.customer });
   }
+  await alertSubscription(shop, next);
   return next;
 }
 

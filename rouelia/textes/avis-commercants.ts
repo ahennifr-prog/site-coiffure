@@ -21,6 +21,8 @@ export interface MerchantReview {
   /** Lien public de la fiche Google du commerce (https://...). */
   ficheGoogle?: string;
   text: string;
+  /** Résultat chiffré mis en avant en vert sur la carte. Uniquement un chiffre réel donné par le commerçant. */
+  chiffre?: { value: string; label: string };
   /** Note sur 5, affichée seulement si le commerçant l'a donnée. */
   stars?: number;
   /** Mois de publication, affiché sur la carte s'il est renseigné. Laissé vide pour l'instant (choix d'Aymen, 9 octobre 2026). */
@@ -39,6 +41,8 @@ export const merchantReviews: MerchantReview[] = [
     shop: "Pizza Time",
     trade: "Pizzeria",
     text: "Les clients adorent jouer en attendant leur commande, et ils reviennent pour leur cadeau.",
+    // Chiffre donné par Aymen le 19 octobre 2026, à partir des cadeaux retirés chez Pizza Time.
+    chiffre: { value: "+42", label: "clients revenus utiliser leur cadeau" },
     stars: 5,
     logo: { src: "/logos/pizza-time.webp", width: 200, height: 131, background: "#FFFFFF" },
     monogram: "PT",
@@ -124,7 +128,7 @@ export const merchantReviews: MerchantReview[] = [
 ];
 
 export const merchantReviewsSection = {
-  eyebrow: "Ils l'utilisent",
+  eyebrow: "Témoignages",
   title: "Ce qu'en disent les commerçants.",
   draft: "Brouillon, non publié : en attente de validation du commerçant",
   /** Information sur la collecte des avis, affichée sous le bandeau (art. L111-7-2 du Code de la consommation). */

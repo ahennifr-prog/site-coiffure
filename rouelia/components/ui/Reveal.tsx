@@ -19,7 +19,7 @@ export function Reveal({ children, className = "", delay = 0 }: { children: Reac
           io.disconnect();
         }
       },
-      { rootMargin: "0px 0px -10% 0px" },
+      { rootMargin: "0px 0px 5% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();

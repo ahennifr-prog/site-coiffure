@@ -410,18 +410,30 @@ export function signupConfirmMail(p: { email: string; firstName: string; shopNam
   };
 }
 
-export function signupAlertMail(p: { firstName: string; shopName: string; email: string; phone: string; pack: string; offer: string | null }): Mail {
+export function signupAlertMail(p: { firstName: string; shopName: string; email: string; phone: string; pack: string; offer: string | null; opened: boolean; slug?: string }): Mail {
   const lines = [
-    `Nouvelle inscription : ${p.shopName} (${p.firstName}).`,
+    p.opened ? `Essai ouvert automatiquement : ${p.shopName} (${p.firstName}). Son accès vient de partir par e-mail.` : `Nouvelle inscription : ${p.shopName} (${p.firstName}). L'essai n'a pas pu s'ouvrir tout seul : ouvrez-le depuis l'admin.`,
     `Pack ${p.pack}. Téléphone : ${p.phone}. E-mail : ${p.email}.`,
-    p.offer ? `Cadeau de la roue d'offres : ${p.offer}.` : "Pas de cadeau de la roue d'offres.",
+    p.offer ? `Cadeau de bienvenue : ${p.offer}.` : "Pas de cadeau de bienvenue.",
+    ...(p.slug ? [`Sa roue : ${brand.url}/j/${p.slug}`] : []),
   ];
   return {
     to: { email: brand.email, name: brand.name },
-    subject: `Nouvelle inscription : ${p.shopName}`,
+    subject: p.opened ? `Essai ouvert : ${p.shopName}` : `Inscription à ouvrir : ${p.shopName}`,
     tags: ["alerte"],
     replyTo: p.email,
-    ...rouelia("Nouvelle inscription", lines, { label: "Ouvrir l'admin", url: `${brand.url}/admin` }, "Alerte interne Rouelia."),
+    ...rouelia(p.opened ? "Nouvel essai ouvert" : "Nouvelle inscription", lines, { label: "Ouvrir l'admin", url: `${brand.url}/admin` }, "Alerte interne Rouelia."),
+  };
+}
+
+/** Alerte interne courte (accès activé, première partie, abonnement...), envoyée tout de suite à contact@. */
+export function adminAlertMail(p: { subject: string; title: string; lines: string[]; replyTo?: string }): Mail {
+  return {
+    to: { email: brand.email, name: brand.name },
+    subject: p.subject,
+    tags: ["alerte"],
+    ...(p.replyTo ? { replyTo: p.replyTo } : {}),
+    ...rouelia(p.title, p.lines, { label: "Ouvrir l'admin", url: `${brand.url}/admin` }, "Alerte interne Rouelia."),
   };
 }
 
