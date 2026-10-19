@@ -99,22 +99,6 @@ export default function Page() {
           </ul>
         </section>
 
-        <section aria-labelledby="etapes" className="mt-20 rounded-xl bg-night p-6 text-cream sm:mt-28 sm:p-12">
-          <h2 id="etapes" className={h2}>
-            {fr(p.how.h2)}
-          </h2>
-          <ol className="mt-10 grid gap-8 md:grid-cols-3">
-            {p.how.steps.map((s, i) => (
-              <li key={s.title}>
-                <span aria-hidden className="font-display text-6xl leading-none font-semibold text-safran">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-3 text-xl font-bold">{fr(s.title)}</h3>
-                <p className="mt-2 text-cream/85">{fr(s.text)}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
 
         <section aria-labelledby="preuves" className="mt-20 sm:mt-28">
           <h2 id="preuves" className={`${h2} max-w-2xl`}>
