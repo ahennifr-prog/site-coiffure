@@ -42,7 +42,7 @@ export const merchantReviews: MerchantReview[] = [
     trade: "Pizzeria",
     text: "Les clients adorent jouer en attendant leur commande, et ils reviennent pour leur cadeau.",
     // Chiffre donné par Aymen le 19 octobre 2026, à partir des cadeaux retirés chez Pizza Time.
-    chiffre: { value: "+42", label: "clients revenus utiliser leur cadeau" },
+    chiffre: { value: "+42", label: "clients revenus utiliser leur cadeau, en 1 mois" },
     stars: 5,
     logo: { src: "/logos/pizza-time.webp", width: 200, height: 131, background: "#FFFFFF" },
     monogram: "PT",

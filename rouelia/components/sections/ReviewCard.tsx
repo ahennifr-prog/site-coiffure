@@ -34,7 +34,7 @@ export function ReviewCard({ review: r }: { review: MerchantReview }) {
       {r.chiffre ? (
         <p className="mt-3 flex items-baseline gap-2 rounded-lg bg-sauge-soft px-3 py-2 text-sauge">
           <span className="font-display text-3xl leading-none font-semibold">{r.chiffre.value}</span>
-          <span className="text-sm leading-tight font-semibold">{fr(r.chiffre.label)}</span>
+          <span className="text-xs leading-snug font-semibold">{fr(r.chiffre.label)}</span>
         </p>
       ) : null}
       <blockquote className="mt-3 text-[15px] leading-snug text-ink">« {fr(r.text)} »</blockquote>
