@@ -42,14 +42,14 @@
     ],
     "signStep": 14,
     "scanPhone": [
-      10,
-      30
+      6,
+      20
     ],
     "scanLaser": [
-      36,
-      54
+      20,
+      32
     ],
-    "scanFlash": 56,
+    "scanFlash": 34,
     "gateTap": 34,
     "stars": [
       44,

@@ -161,13 +161,22 @@ function Scan() {
       {/* téléphone qui arrive en perspective */}
       <div style={{ position: "absolute", left: 580 + (1 - phoneIn) * 600, top: 640 + (1 - phoneIn) * 300, perspective: 1600 }}>
         <div style={{ transform: `rotateY(${-28 + phoneIn * 14 - sway}deg) rotateX(6deg) rotateZ(${-4 + phoneIn * 2}deg)` }}>
-          <Phone width={400} screen={scanned ? C.cream : "#111"}>
+          <Phone width={400} screen={C.cream}>
             {scanned ? (
               <div style={{ position: "absolute", inset: 0, transform: `scale(${0.85 + 0.15 * screenPop})`, opacity: screenPop }}>
                 <WheelScreen width={400 * 0.93} rotation={(f - ev.scanFlash) * 4} />
               </div>
             ) : (
-              <div style={{ position: "absolute", inset: "20% 12%", border: "4px solid rgba(255,255,255,0.7)", borderRadius: 24 }} />
+              // Vue de l'appareil photo : le QR code du chevalet, cadré, pendant le scan.
+              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 45%, #FFF6E2, #E9CFA2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ transform: `rotate(-6deg) scale(${1 + laser * 0.08})`, filter: `blur(${Math.max(0, 1.5 - laser * 3)}px)`, boxShadow: "0 10px 24px rgba(80,40,0,0.25)" }}>
+                  <QR text="https://rouelia.fr" size={190} />
+                </div>
+                {[0, 1, 2, 3].map((c) => (
+                  <div key={c} style={{ position: "absolute", width: 56, height: 56, left: c % 2 ? undefined : "16%", right: c % 2 ? "16%" : undefined, top: c < 2 ? "30%" : undefined, bottom: c < 2 ? undefined : "30%", borderColor: "#fff", borderStyle: "solid", borderWidth: `${c < 2 ? 6 : 0}px ${c % 2 ? 6 : 0}px ${c < 2 ? 0 : 6}px ${c % 2 ? 0 : 6}px`, borderRadius: 10, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.4))" }} />
+                ))}
+                {laser > 0 && laser < 1 ? <div style={{ position: "absolute", left: "16%", right: "16%", top: `${30 + laser * 40}%`, height: 5, background: "#FF5A3C", boxShadow: "0 0 18px 6px rgba(255,90,60,0.7)" }} /> : null}
+              </div>
             )}
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 60%)", transform: `translateX(${-100 + (f % 105) * 2.2}%)` }} />
             <div style={{ position: "absolute", inset: 0, background: "#fff", opacity: flash }} />
