@@ -225,7 +225,9 @@ for (let k = 0; k < 3; k++) pop(at("probleme", ev.probWords[0] + k * ev.probWord
 for (let k = 0; k < 4; k++) pop(at("probleme", ev.probWords2[0] + k * ev.probWords2[1] + 2), 0.2, 800);
 hit(at("probleme", ev.probWords2[0] + ev.probWords2[1] * 3 + 2), 0.6);
 thud(at("probleme", ev.probLeave[1] - 14), 0.45);
-for (let f = ev.signStep; f < 90; f += ev.signStep) tick(at("probleme", f), 0.25, 3000);
+pop(at("probleme", ev.promise), 0.45, 1300);
+bell(at("probleme", ev.promise + 1), note(83), 0.25, 0.3);
+for (let f = ev.signStep; f < ev.promise; f += ev.signStep) tick(at("probleme", f), 0.25, 3000);
 // 2. Scan : téléphone, laser, bip, la roue apparaît.
 whoosh(at("scan", ev.scanPhone[0]), 0.4, 0.3);
 add(sfx, at("scan", ev.scanLaser[0]), fr(ev.scanLaser[1] - ev.scanLaser[0]), (t) => Math.sin(TAU * (900 + 300 * Math.sin(t * 30)) * t) * 0.08, 0.5);

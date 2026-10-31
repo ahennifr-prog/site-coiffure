@@ -49,6 +49,7 @@ function Probleme() {
   const walk = interpolate(f, ev.probLeave, [0, 1], clamp);
   const door = interpolate(f, [ev.probLeave[0] - 8, ev.probLeave[0], ev.probLeave[1] - 22, ev.probLeave[1] - 12], [0, 1, 1, 0], clamp);
   const orbit = interpolate(f, [0, 75], [-22, -12], clamp);
+  const promise = spring({ frame: f - ev.promise, fps: 30, config: { damping: 10, stiffness: 170 } });
   return (
     <AbsoluteFill>
       <GoldBg />
@@ -81,10 +82,19 @@ function Probleme() {
           </div>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1500, display: "flex", justifyContent: "center" }}>
-        <div key={k} style={{ transform: `translateY(${(1 - swap) * 30}px) scale(${0.8 + 0.2 * swap})`, opacity: Math.min(1, swap * 1.5) }}>
-          <GlossyButton color="gold" size={40}>{ICONS[k].label}</GlossyButton>
-        </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1490, display: "flex", justifyContent: "center" }}>
+        {f < ev.promise ? (
+          <div key={k} style={{ transform: `translateY(${(1 - swap) * 30}px) scale(${0.8 + 0.2 * swap})`, opacity: Math.min(1, swap * 1.5) }}>
+            <GlossyButton color="gold" size={40}>{ICONS[k].label}</GlossyButton>
+          </div>
+        ) : (
+          // La promesse arrive dès la 2e seconde : la solution se comprend avant même le scan.
+          <div style={{ transform: `scale(${promise}) rotate(${(1 - promise) * -6}deg)`, opacity: Math.min(1, promise * 1.5) }}>
+            <GlossyButton color="green" size={50}>
+              Rouelia les fait <span style={{ color: "#FFD84D", textShadow: "0 3px 0 #6E3F02" }}>revenir</span>
+            </GlossyButton>
+          </div>
+        )}
       </div>
     </AbsoluteFill>
   );
