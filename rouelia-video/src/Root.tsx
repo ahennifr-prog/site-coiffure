@@ -3,7 +3,8 @@ import { Composition } from "remotion";
 import timing from "./timing.json";
 import { RoueliaVideo } from "./Video";
 import story from "./story.json";
-import { StoryPoster, StoryVideo } from "./story";
+import { StoryVideo } from "./story";
+import { StoryPoster } from "./poster";
 
 export function Root() {
   return (

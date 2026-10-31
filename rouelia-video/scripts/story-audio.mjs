@@ -1,7 +1,7 @@
 /**
- * Son de la pub story (25 s, sans voix) : musique rapide à 120 BPM et bruitages, synthétisés en code.
+ * Son de la pub story (19,5 s, sans voix) : musique rapide à 120 BPM et bruitages, synthétisés en code.
  * Lit le minutage partagé avec l'image (src/story.json) et écrit public/audio/story.wav.
- * Les coupes tombent toutes sur un temps (3 s, 6 s, 11 s, 16 s, 22 s).
+ * Les coupes tombent toutes sur un temps (2,5 s, 5 s, 9 s, 12,5 s, 16,5 s).
  * Usage : node scripts/story-audio.mjs
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -121,7 +121,7 @@ function hat(t0, g = 1, open = false) {
 for (let t = 0, k = 0; t < END - 0.3; t += BEAT / 4, k++) {
   const c = chordAt(t);
   const n = c[[0, 1, 2, 3, 2, 1, 3, 2][k % 8]] + 24;
-  const g = t < at("scan") ? 0.07 : 0.1;
+  const g = 0.1;
   add(music, t, 0.25, (tt) => (Math.sin(TAU * note(n) * tt) + 0.25 * Math.sin(TAU * note(n) * 3 * tt) * Math.exp(-tt / 0.015)) * env(tt, 0.002, 0.07), g, k % 2 ? 0.35 : -0.35);
 }
 
@@ -205,7 +205,8 @@ ev.stars.forEach((f, k) => bell(at("avis", f), note(83 + [0, 2, 4, 7, 9][k]), 0.
 for (let f = ev.stars[4]; f < ev.published - 1; f += 1) tick(at("avis", f) + rnd() * 0.01, 0.1, 1800 + rnd() * 600);
 bell(at("avis", ev.published), note(88), 0.3, 0.3);
 bell(at("avis", ev.published + 3), note(95), 0.3, 0.4);
-whoosh(at("avis", ev.backToWheel - 4), 0.3, 0.25);
+whoosh(at("avis", ev.wheelOut - 4), 0.45, 0.4);
+pop(at("avis", ev.wheelOut + 4), 0.4, 700);
 click(at("avis", ev.spinTap), 0.7);
 {
   const seg = 360 / ev.spin.segments;
@@ -234,7 +235,7 @@ ev.tiles.forEach((f, k) => {
   bell(at("espace", end), note(84 + k * 2), 0.25, 0.3);
 });
 // 6. Fin : cercle, bouton, adresse.
-[0, 6, 12].forEach((f, k) => pop(at("fin", f + 2), 0.3, 900 + k * 200));
+ev.pills.forEach((f, k) => pop(at("fin", f + 2), 0.3, 900 + k * 200));
 thud(at("fin", 1), 0.5);
 pop(at("fin", ev.ctaButton), 0.4, 1100);
 bell(at("fin", ev.ctaUrl), note(86), 0.3, 0.8);
