@@ -1,0 +1,37 @@
+{
+  "fps": 30,
+  "duration": 750,
+  "scenes": {
+    "probleme": [0, 90],
+    "scan": [90, 180],
+    "avis": [180, 330],
+    "cadeau": [330, 480],
+    "espace": [480, 660],
+    "fin": [660, 750]
+  },
+  "ev": {
+    "probWords": [2, 3],
+    "probWords2": [14, 3],
+    "probLeave": [26, 76],
+    "signStep": 14,
+    "scanPhone": [12, 32],
+    "scanLaser": [36, 54],
+    "scanFlash": 56,
+    "gateTap": 30,
+    "stars": [44, 48, 52, 56, 60],
+    "published": 68,
+    "backToWheel": 80,
+    "spinTap": 88,
+    "spin": { "start": 90, "end": 134, "index": 0, "segments": 6, "turns": 4 },
+    "giftCaption": 66,
+    "rdvButton": 44,
+    "rdvTap": 84,
+    "rdvCal": 92,
+    "rdvCheck": 104,
+    "tiles": [14, 26, 38, 50],
+    "countLen": 60,
+    "ringIn": 0,
+    "ctaButton": 26,
+    "ctaUrl": 36
+  }
+}

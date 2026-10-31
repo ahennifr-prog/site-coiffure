@@ -8,7 +8,7 @@ import { clamp, ease, easeIn, Horizontal, STAGE } from "./components";
 const OVERLAP = 8;
 
 /** Entrée et sortie de scène : zoom avant, flou de vitesse, léger décalage. */
-function Shell({ children, len, first, last }: { children: React.ReactNode; len: number; first: boolean; last: boolean }) {
+export function Shell({ children, len, first, last }: { children: React.ReactNode; len: number; first: boolean; last: boolean }) {
   const f = useCurrentFrame();
   const inP = first ? 1 : interpolate(f, [0, OVERLAP + 2], [0, 1], { ...clamp, easing: ease });
   const outP = last ? 0 : interpolate(f, [len - 2, len + OVERLAP], [0, 1], { ...clamp, easing: easeIn });
@@ -21,7 +21,7 @@ function Shell({ children, len, first, last }: { children: React.ReactNode; len:
 }
 
 /** Effets de lumière par-dessus l'image : reflet qui balaie l'écran à chaque coupe, bokeh doux, vignette. */
-function LightFx({ cuts }: { cuts: number[] }) {
+export function LightFx({ cuts }: { cuts: number[] }) {
   const f = useCurrentFrame();
   const cut = [...cuts].reverse().find((c) => f >= c - 4);
   const p = cut === undefined ? -1 : (f - (cut - 4)) / 18;

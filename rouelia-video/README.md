@@ -58,3 +58,11 @@ Higgsfield (compte gratuit, environ 7 crédits) : la génération d'images deman
   Attention : la prise principale commence à parler dès 0 s (ne pas se fier au premier « silence_end »).
 - **Son** : bruitages devant la musique, pas de whoosh aux coupes (jugé lassant), clic discret à la place.
 - `npm run audio` refait musique, bruitages et mix ; puis rendu de chaque composition.
+
+## Pub story 25 s (31 octobre 2026)
+Verticale 1080 × 1920, sans voix, pour les stories Instagram et les messages. Composition `story`
+(`src/story.tsx`, minutage dans `src/story.json`), image fixe `affiche`. Mêmes composants que la vidéo du site.
+Tout le texte reste entre 300 et 1580 px de haut (zone sûre des stories). Chiffres de l'espace marqués « Exemple ».
+- `node scripts/story-audio.mjs && ffmpeg -y -i public/audio/story-raw.wav -af loudnorm=I=-14:TP=-1.5:LRA=11 -ar 48000 public/audio/story.wav` : musique 120 BPM et bruitages ;
+- `npx remotion render story out/story/rouelia-story-25s.mp4 --codec=h264 --crf=18 --audio-codec=aac` : la vidéo ;
+- `npx remotion still affiche out/story/rouelia-affiche.png` : l'image fixe.
