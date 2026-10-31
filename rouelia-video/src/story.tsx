@@ -7,7 +7,7 @@ import { Banner, Burst, Card3D, DEEP_GREEN, GlossyButton, GOLD, GoldBg, goldText
 import { LightFx, Shell } from "./Video";
 
 /**
- * Pub verticale de 19,5 s pour les stories Instagram et les messages (WhatsApp, SMS), sans voix.
+ * Pub verticale de 26,5 s pour les stories Instagram et les messages (WhatsApp, SMS), sans voix.
  * Style « 3D » du flyer (fx3d.tsx) : or, ruban rouge, lumière chaude, perspective.
  * Tout le texte reste entre 300 et 1580 px de haut, à l'abri des barres d'Instagram.
  */
@@ -38,7 +38,7 @@ function ShopIcon({ k, size, color }: { k: number; size: number; color: string }
 }
 
 /* ------------------------------------------------------------------ */
-/* 1. Le problème (2,5 s)                                              */
+/* 1. Le problème (4 s)                                              */
 /* ------------------------------------------------------------------ */
 
 function Probleme() {
@@ -48,7 +48,7 @@ function Probleme() {
   const swap = spring({ frame: f - k * ev.signStep, fps: 30, config: { damping: 11, stiffness: 200 } });
   const walk = interpolate(f, ev.probLeave, [0, 1], clamp);
   const door = interpolate(f, [ev.probLeave[0] - 8, ev.probLeave[0], ev.probLeave[1] - 22, ev.probLeave[1] - 12], [0, 1, 1, 0], clamp);
-  const orbit = interpolate(f, [0, 75], [-22, -12], clamp);
+  const orbit = interpolate(f, [0, 120], [-22, -12], clamp);
   const promise = spring({ frame: f - ev.promise, fps: 30, config: { damping: 10, stiffness: 170 } });
   return (
     <AbsoluteFill>
@@ -122,7 +122,7 @@ function WheelScreen({ width, rotation = 0, dim = 0 }: { width: number; rotation
 }
 
 /* ------------------------------------------------------------------ */
-/* 2. Le scan au comptoir (2,5 s)                                      */
+/* 2. Le scan au comptoir (3,5 s)                                      */
 /* ------------------------------------------------------------------ */
 
 function Scan() {
@@ -169,7 +169,7 @@ function Scan() {
             ) : (
               <div style={{ position: "absolute", inset: "20% 12%", border: "4px solid rgba(255,255,255,0.7)", borderRadius: 24 }} />
             )}
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 60%)", transform: `translateX(${-100 + (f % 75) * 3}%)` }} />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 60%)", transform: `translateX(${-100 + (f % 105) * 2.2}%)` }} />
             <div style={{ position: "absolute", inset: 0, background: "#fff", opacity: flash }} />
           </Phone>
         </div>
@@ -180,7 +180,7 @@ function Scan() {
 }
 
 /* ------------------------------------------------------------------ */
-/* 3. L'avis, puis la grande roue (4 s)                                */
+/* 3. L'avis, puis la grande roue (6 s)                                */
 /* ------------------------------------------------------------------ */
 
 const SPIN = ev.spin;
@@ -277,7 +277,7 @@ function Avis() {
 }
 
 /* ------------------------------------------------------------------ */
-/* 4. Le cadeau et le retour (3,5 s)                                   */
+/* 4. Le cadeau et le retour (4,5 s)                                   */
 /* ------------------------------------------------------------------ */
 
 function Cadeau() {
@@ -336,7 +336,7 @@ function Cadeau() {
 }
 
 /* ------------------------------------------------------------------ */
-/* 5. L'espace du commerçant (4 s)                                     */
+/* 5. L'espace du commerçant (4,5 s)                                     */
 /* ------------------------------------------------------------------ */
 
 const TILES = [
@@ -362,7 +362,7 @@ function Espace() {
   const cw = 800;
   const ch = 170;
   const path = pts.map((v, i) => `${i ? "L" : "M"}${(i / (pts.length - 1)) * cw} ${ch - v * ch}`).join(" ");
-  const ry = -12 + interpolate(f, [0, 120], [0, 14], clamp);
+  const ry = -12 + interpolate(f, [0, 135], [0, 14], clamp);
   return (
     <AbsoluteFill>
       <GoldBg />
@@ -417,7 +417,7 @@ function Espace() {
 }
 
 /* ------------------------------------------------------------------ */
-/* 6. Le cercle Jeu, Avis, Retour et l'appel à l'action (3 s)          */
+/* 6. Le cercle Jeu, Avis, Retour et l'appel à l'action (4 s)          */
 /* ------------------------------------------------------------------ */
 
 const LOOP = [
@@ -432,7 +432,7 @@ function Fin() {
   const ring = useSpring(2, { damping: 13 });
   const panel = useSpring(ev.ctaButton, { damping: 12 });
   const url = useSpring(ev.ctaUrl, { damping: 11 });
-  const turn = 360 * interpolate(f, [0, 84], [0, 1], { ...clamp, easing: ease });
+  const turn = 360 * interpolate(f, [0, 100], [0, 1], { ...clamp, easing: ease });
   const cx = W / 2, cy = 760, R = 330, RY = 120;
   return (
     <AbsoluteFill>

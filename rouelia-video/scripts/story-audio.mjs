@@ -1,7 +1,7 @@
 /**
- * Son de la pub story (19,5 s, sans voix) : musique rapide à 120 BPM et bruitages, synthétisés en code.
+ * Son de la pub story (26,5 s, sans voix) : musique rapide à 120 BPM et bruitages, synthétisés en code.
  * Lit le minutage partagé avec l'image (src/story.json) et écrit public/audio/story.wav.
- * Les coupes tombent toutes sur un temps (2,5 s, 5 s, 9 s, 12,5 s, 16,5 s).
+ * Les coupes tombent toutes sur un temps (4 s, 7,5 s, 13,5 s, 18 s, 22,5 s).
  * Usage : node scripts/story-audio.mjs
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -169,9 +169,9 @@ function lead(t0, dur, n, g = 0.16) {
     return (body * Math.min(1, t / 0.012) * (0.85 + 0.15 * Math.exp(-t / 0.2)) + bellL) * release;
   }, g, 0.05);
 }
-// Deux passages du refrain, puis la signature sonore « Rou-e-li-a » sur l'adresse du site.
+// Passages du refrain, puis la signature sonore « Rou-e-li-a » sur l'adresse du site.
 const logoT = at("fin", ev.ctaUrl);
-for (let rep = 0; rep < 2; rep++) {
+for (let rep = 0; rep < 3; rep++) {
   PHRASE.forEach((bar, b) => bar.forEach(([st, d, n]) => {
     const t = HOOK + rep * 8 + b * 2 + st * BEAT;
     if (t < logoT - 0.3) lead(t, d * BEAT, n);

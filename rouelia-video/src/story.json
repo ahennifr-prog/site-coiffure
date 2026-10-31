@@ -1,30 +1,30 @@
 {
   "fps": 30,
-  "duration": 585,
+  "duration": 795,
   "scenes": {
     "probleme": [
       0,
-      75
+      120
     ],
     "scan": [
-      75,
-      150
+      120,
+      225
     ],
     "avis": [
-      150,
-      270
+      225,
+      405
     ],
     "cadeau": [
-      270,
-      375
+      405,
+      540
     ],
     "espace": [
-      375,
-      495
+      540,
+      675
     ],
     "fin": [
-      495,
-      585
+      675,
+      795
     ]
   },
   "ev": {
@@ -37,55 +37,55 @@
       3
     ],
     "probLeave": [
-      20,
-      62
+      24,
+      80
     ],
-    "signStep": 12,
+    "signStep": 14,
     "scanPhone": [
-      6,
-      22
+      10,
+      30
     ],
     "scanLaser": [
-      26,
-      40
+      36,
+      54
     ],
-    "scanFlash": 42,
-    "gateTap": 20,
+    "scanFlash": 56,
+    "gateTap": 34,
     "stars": [
-      28,
-      31,
-      34,
-      37,
-      40
+      44,
+      47,
+      50,
+      53,
+      56
     ],
-    "published": 48,
-    "wheelOut": 56,
-    "spinTap": 64,
+    "published": 64,
+    "wheelOut": 84,
+    "spinTap": 96,
     "spin": {
-      "start": 66,
-      "end": 102,
+      "start": 98,
+      "end": 140,
       "index": 0,
       "segments": 6,
       "turns": 4
     },
-    "rdvButton": 28,
-    "rdvTap": 54,
-    "rdvCal": 60,
-    "rdvCheck": 70,
+    "rdvButton": 36,
+    "rdvTap": 72,
+    "rdvCal": 78,
+    "rdvCheck": 88,
     "tiles": [
-      8,
-      16,
-      24,
-      32
+      10,
+      20,
+      30,
+      40
     ],
-    "countLen": 42,
+    "countLen": 45,
     "pills": [
       0,
       6,
       12
     ],
-    "ctaButton": 26,
-    "ctaUrl": 36,
-    "promise": 40
+    "ctaButton": 30,
+    "ctaUrl": 42,
+    "promise": 60
   }
 }
