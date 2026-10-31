@@ -62,7 +62,9 @@ const chords = [
   [43, 50, 55, 59], // G
   [50, 54, 57, 62], // D
 ];
-const chordAt = (t) => chords[Math.floor(t / (BEAT * 4)) % 4];
+// Grille d'accords calée pour qu'un cycle Em, C, G, D démarre avec le refrain (2,5 s, début du scan).
+const HOOK = fr(S.scan[0]);
+const chordAt = (t) => chords[(((Math.floor((t - HOOK) / (BEAT * 4)) % 4) + 4) % 4)];
 const spinStart = at("avis", ev.spin.start);
 const spinEnd = at("avis", ev.spin.end);
 const finT = at("fin", 0);
@@ -121,7 +123,7 @@ function hat(t0, g = 1, open = false) {
 for (let t = 0, k = 0; t < END - 0.3; t += BEAT / 4, k++) {
   const c = chordAt(t);
   const n = c[[0, 1, 2, 3, 2, 1, 3, 2][k % 8]] + 24;
-  const g = 0.1;
+  const g = t >= HOOK ? 0.06 : 0.1;
   add(music, t, 0.25, (tt) => (Math.sin(TAU * note(n) * tt) + 0.25 * Math.sin(TAU * note(n) * 3 * tt) * Math.exp(-tt / 0.015)) * env(tt, 0.002, 0.07), g, k % 2 ? 0.35 : -0.35);
 }
 
@@ -145,6 +147,37 @@ function riser(tEnd, len, g = 0.5) {
   add(music, tEnd - len, len, (t) => { const p = t / len; return f(rnd(), 400 + 7000 * p * p, 0.5).band * p * p * 1.6; }, g);
 }
 riser(finT, 1, 0.5);
+
+/*
+ * Refrain : mélodie originale, simple et répétée pour rester en tête, sur la suite d'accords pop
+ * la plus familière (Em, C, G, D). Son de sifflet brillant doublé d'une cloche à l'octave.
+ * Notes : [temps de départ, durée, note MIDI], en temps (0,5 s) depuis le début de la mesure.
+ */
+const PHRASE = [
+  [[0, 0.5, 79], [0.5, 0.5, 79], [1, 1, 83], [2, 0.5, 81], [2.5, 0.5, 79], [3, 1, 76]],
+  [[0, 0.5, 76], [0.5, 0.5, 79], [1, 1, 84], [2, 0.5, 83], [2.5, 0.5, 79], [3, 1, 76]],
+  [[0, 0.5, 74], [0.5, 0.5, 79], [1, 1, 83], [2, 0.5, 81], [2.5, 0.5, 79], [3, 1, 81]],
+  [[0, 0.5, 81], [0.5, 0.5, 78], [1, 1.5, 74], [3, 0.5, 78], [3.5, 0.5, 79]],
+];
+function lead(t0, dur, n, g = 0.16) {
+  const fq = note(n);
+  add(music, t0, dur * 0.95 + 0.25, (t) => {
+    const vib = 1 + 0.006 * Math.sin(TAU * 5.5 * t) * Math.min(1, t / 0.15);
+    const body = Math.sin(TAU * fq * vib * t) + 0.18 * Math.sin(TAU * fq * 2 * vib * t) + 0.08 * Math.sin(TAU * fq * 3 * t);
+    const bellL = 0.35 * Math.sin(TAU * fq * 2 * t) * Math.exp(-t / 0.12);
+    const release = t > dur * 0.95 ? Math.exp(-(t - dur * 0.95) / 0.06) : 1;
+    return (body * Math.min(1, t / 0.012) * (0.85 + 0.15 * Math.exp(-t / 0.2)) + bellL) * release;
+  }, g, 0.05);
+}
+// Deux passages du refrain, puis la signature sonore « Rou-e-li-a » sur l'adresse du site.
+const logoT = at("fin", ev.ctaUrl);
+for (let rep = 0; rep < 2; rep++) {
+  PHRASE.forEach((bar, b) => bar.forEach(([st, d, n]) => {
+    const t = HOOK + rep * 8 + b * 2 + st * BEAT;
+    if (t < logoT - 0.3) lead(t, d * BEAT, n);
+  }));
+}
+[[0, 74], [0.16, 79], [0.32, 83], [0.48, 86]].forEach(([dt, n], k) => lead(logoT + dt, k === 3 ? 0.9 : 0.15, n, 0.2));
 
 /* ------------------------------------------------------------------ */
 /* Bruitages                                                           */
