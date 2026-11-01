@@ -66,6 +66,8 @@ interface ShopInfo {
   onColor: string;
   replyTo: string;
   gameUrl: string;
+  /** Rappel avant la date limite (Croissance et Premium). Absent : pas de rappel annoncé. */
+  reminders?: boolean;
 }
 
 interface PlayInfo {
@@ -87,7 +89,7 @@ export function clientCodeMail(shop: ShopInfo, play: PlayInfo, email: string, to
     `${when(play, today)} Montrez ce code en caisse lors de votre prochaine visite chez ${shop.name}.`,
   ];
   if (shop.address) lines.push(`Adresse : ${shop.address}.`);
-  const footer = `Vous recevez cet e-mail parce que vous avez joué à la roue de ${shop.name} et indiqué votre adresse. Un seul rappel vous sera envoyé avant la date limite.`;
+  const footer = `Vous recevez cet e-mail parce que vous avez joué à la roue de ${shop.name} et indiqué votre adresse.${shop.reminders ? " Un seul rappel vous sera envoyé avant la date limite." : ""}`;
   return {
     to: { email, name: play.firstName },
     subject: `Votre cadeau chez ${shop.name} : ${play.prizeName}`,

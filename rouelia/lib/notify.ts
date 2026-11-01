@@ -17,7 +17,7 @@ export const inviteUrl = (token: string) => `${brand.url}/espace/invitation#${to
 function shopInfo(shop: Shop) {
   const s = withDefaults(shop.settings);
   const theme = shopTheme(s);
-  return { name: s.name, address: s.address, color: theme.primary, onColor: theme.onPrimary, replyTo: shop.email, gameUrl: `${brand.url}/j/${shop.slug}` };
+  return { name: s.name, address: s.address, color: theme.primary, onColor: theme.onPrimary, replyTo: shop.email, gameUrl: `${brand.url}/j/${shop.slug}`, reminders: packFeatures(shop.pack).reminders };
 }
 
 type Pack = (typeof pricing.packs)[number];

@@ -61,6 +61,13 @@ describe("e-mails", () => {
     expect(m.html).not.toContain("<script>");
     expect(m.html).toContain("&lt;b&gt;Salon&lt;/b&gt;");
   });
+
+  it("n'annonce le rappel que si le pack l'envoie", () => {
+    const shop = { name: "Salon", address: "", color: "#000", onColor: "#fff", replyTo: "a@b.fr", gameUrl: "" };
+    const play = { firstName: "Léa", prizeName: "Soin", prizeDetail: "", code: "SAL-AAAAA", validFrom: "2026-10-02", expiresOn: "2026-11-01" };
+    expect(clientCodeMail(shop, play, "x@y.fr", "2026-10-02").text).not.toContain("rappel");
+    expect(clientCodeMail({ ...shop, reminders: true }, play, "x@y.fr", "2026-10-02").text).toContain("Un seul rappel");
+  });
 });
 
 describe("tâche quotidienne", () => {

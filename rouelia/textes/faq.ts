@@ -108,7 +108,7 @@ export const faqPage: Omit<SeoPage, "sections" | "faq"> & { groups: { title: str
         },
         {
           q: "Quelles informations le client doit-il donner ?",
-          a: "Son prénom et son numéro de téléphone, et c'est tout. L'e-mail est facultatif : il sert seulement à recevoir le code et un rappel avant la date limite. Le client coche un accord avant de jouer.",
+          a: "Son prénom et son numéro de téléphone, et c'est tout. L'e-mail est facultatif : il sert seulement à recevoir le code, et un rappel avant la date limite avec les packs Croissance et Premium. Le client coche un accord avant de jouer.",
         },
         {
           q: "Un code cadeau peut-il servir deux fois ?",

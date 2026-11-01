@@ -471,7 +471,7 @@ export function ShopGame({ shop }: { shop: PublicShop }) {
                     {errors.email ? (
                       <p id="email-err" className="mt-1 text-sm font-medium text-danger">{errors.email}</p>
                     ) : (
-                      <p id="email-aide" className="mt-1 text-xs text-ink-soft">Pour recevoir votre code et un rappel avant la date limite.</p>
+                      <p id="email-aide" className="mt-1 text-xs text-ink-soft">{shop.reminders ? "Pour recevoir votre code et un rappel avant la date limite." : "Pour recevoir votre code par e-mail."}</p>
                     )}
                   </div>
                   <div>

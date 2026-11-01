@@ -361,6 +361,7 @@ export function publicShop(shop: Shop, now = new Date()) {
     instagramUrl: f.social ? s.instagramUrl : "",
     facebookUrl: f.social ? s.facebookUrl : "",
     referral: f.referral && s.referral.enabled ? s.referral.reward : null,
+    reminders: f.reminders,
   };
 }
 export type PublicShop = ReturnType<typeof publicShop>;
