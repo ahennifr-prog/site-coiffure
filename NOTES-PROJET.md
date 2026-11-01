@@ -175,6 +175,12 @@ fiche Google, refonte saisonnière, chevalet offert, support sous 24 h, installa
    Image de marque Stripe : icône et logo dans `stripe-marque/`, logo privilégié, couleur de la marque #FBF6EE (crème),
    accentuation #2E6150 (vert sauge, bouton « Payer » plus calme que le rouge).
    Accès à l'API Google Business Profile : à demander plus tard.
+   **1er novembre 2026 : Stripe en mode réel branché et testé par Aymen** (clé à accès restreint « sauf opérations sensibles »,
+   webhook, portail client avec annulation à la fin de la période, pied de facture 293 B, e-mails Stripe, annulation après
+   échecs de paiement). Secrets Cloudflare tous de type Secret : ADMIN_PASSWORD, ANTHROPIC_API_KEY, BREVO_API_KEY,
+   SESSION_SECRET (renouvelé ce jour), STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET. Changement de pack dans le portail :
+   à activer quand les 3 produits Rouelia existeront dans Stripe (créés au premier abonnement de chaque pack).
+   Essai : 14 jours, décision d'Aymen du 1er novembre (pas de passage à 7 jours pour l'instant).
 6. Relecture juridique : CGV (sous-traitance RGPD, pénalités B2B), confidentialité (Anthropic, Stripe), règlement du jeu.
 
 ## Prochaines étapes proposées (rien n'est commencé)
