@@ -6,6 +6,7 @@ import { admin, pricing, trades, type PackId } from "@/content";
 import { formatEuroCents, fr } from "@/lib/format";
 import { offerSummary } from "@/lib/offers";
 import { SIGNUP_STATUSES, type SignupRecord, type SignupStatus } from "@/lib/signup";
+import { SUBSCRIPTION_STYLE, subscriptionNote } from "@/lib/subscription-status";
 import { ShopPanel, type AdminShop } from "./ShopPanel";
 import { adminFetch, ContactButtons, NotesField, phoneDisplay, when } from "./ui";
 
@@ -40,6 +41,9 @@ export function SignupCard({ s, shop, onSaved, onRemoved, onReload }: { s: Signu
   const pack = pricing.packs.find((p) => p.id === s.pack)?.name ?? s.pack;
   const source = [s.utm.source, s.utm.medium, s.utm.campaign].filter(Boolean).join(" / ") || s.utm.referrer || admin.direct;
   const isRequest = !!s.request;
+  // Résiliation demandée ou paiement en retard : visible sans ouvrir la fiche.
+  const sn = subscriptionNote(shop?.stripe);
+  const cancelNote = sn && sn.tone === "alerte" ? sn : null;
 
   async function patch(body: object): Promise<SignupRecord | null> {
     const d = await adminFetch<{ signup?: SignupRecord; errors?: (keyof Draft)[] }>("/api/admin/signups", "PATCH", { id: s.id, ...body });
@@ -79,6 +83,7 @@ export function SignupCard({ s, shop, onSaved, onRemoved, onReload }: { s: Signu
             <span>{when(s.createdAt)}</span>
             {trade ? <span>· {trade}</span> : null}
             <span>· Pack {pack}</span>
+            {cancelNote ? <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${SUBSCRIPTION_STYLE[cancelNote.tone]}`}>{cancelNote.label}</span> : null}
             {isRequest ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-tomette-soft px-2 py-0.5 text-xs font-bold text-tomette-deep">
                 <Sparkles aria-hidden size={12} /> Créez-la pour moi

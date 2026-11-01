@@ -6,6 +6,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { brand, pricing, type OfferId, type PackId } from "@/content";
 import { quotePack } from "@/lib/billing";
+import { parisDay } from "@/lib/dates";
 import { resolveOffer } from "@/lib/offers";
 import type { Shop } from "@/lib/shops";
 
@@ -20,6 +21,10 @@ export interface ShopStripe {
   /** Fin de la période payée (AAAA-MM-JJ). */
   periodEnd: string | null;
   cancelAtPeriodEnd: boolean;
+  /** Jour où la résiliation a été demandée (AAAA-MM-JJ), tant qu'elle n'est pas retirée. */
+  cancelRequestedOn?: string | null;
+  /** Jour où l'abonnement s'est arrêté (AAAA-MM-JJ). */
+  endedOn?: string | null;
 }
 
 type Params = Record<string, unknown>;
@@ -160,12 +165,16 @@ export interface StripeSubscription {
 
 const day = (unix?: number) => (unix ? new Date(unix * 1000).toISOString().slice(0, 10) : null);
 const LIVE = ["active", "trialing", "past_due"];
+const ENDED = ["canceled", "unpaid", "incomplete_expired"];
 
 /** Le commerce après un changement d'abonnement : client payant tant que Stripe le dit, en pause sinon. */
 export function applySubscription(shop: Shop, sub: StripeSubscription, now = new Date()): Shop {
   const item = sub.items?.data[0];
   const pack = (item?.price?.metadata?.pack ?? sub.metadata?.pack) as PackId | undefined;
   const live = LIVE.includes(sub.status);
+  const before = shop.stripe?.subscriptionId === sub.id ? shop.stripe : undefined;
+  const cancelling = !!sub.cancel_at_period_end && live;
+  const today = parisDay(now);
   const next: Shop = {
     ...shop,
     stripe: {
@@ -174,11 +183,13 @@ export function applySubscription(shop: Shop, sub: StripeSubscription, now = new
       status: sub.status,
       periodEnd: day(item?.current_period_end ?? sub.current_period_end),
       cancelAtPeriodEnd: !!sub.cancel_at_period_end,
+      cancelRequestedOn: cancelling ? (before?.cancelRequestedOn ?? today) : live ? null : (before?.cancelRequestedOn ?? null),
+      endedOn: ENDED.includes(sub.status) ? (before?.endedOn ?? today) : null,
     },
   };
   if (pack && pricing.packs.some((p) => p.id === pack)) next.pack = pack;
   if (live) next.plan = "active";
-  else if (["canceled", "unpaid", "incomplete_expired"].includes(sub.status) && shop.plan === "active")
+  else if (ENDED.includes(sub.status) && shop.plan === "active")
     // Arrêt pendant l'essai : le commerçant garde ses jours gratuits restants, puis la roue se met en pause.
     next.plan = new Date(shop.trialEndsAt).getTime() > now.getTime() ? "trial" : "paused";
   return next;

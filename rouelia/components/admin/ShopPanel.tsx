@@ -6,6 +6,7 @@ import { pricing, type PackId } from "@/content";
 import { formatDay, parisDay } from "@/lib/dates";
 import type { ShopPlan } from "@/lib/shop-config";
 import type { SignupRecord } from "@/lib/signup";
+import { SUBSCRIPTION_STYLE, subscriptionNote, type SubscriptionInfo } from "@/lib/subscription-status";
 
 /** Résumé d'un commerce tel que renvoyé par /api/admin/shops. */
 export interface AdminShop {
@@ -18,6 +19,8 @@ export interface AdminShop {
   trialEndsAt: string;
   hasPassword: boolean;
   active: boolean;
+  /** Abonnement Stripe, absent si le commerçant ne s'est jamais abonné. */
+  stripe?: SubscriptionInfo;
 }
 
 const PLAN_LABEL: Record<ShopPlan, string> = { trial: "Essai gratuit", active: "Client (payant)", paused: "En pause" };
@@ -28,6 +31,7 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
   const [link, setLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const note = subscriptionNote(shop?.stripe);
   const [emailed, setEmailed] = useState(false);
 
   const inviteUrl = (token: string) => `${window.location.origin}/espace/invitation#${token}`;
@@ -115,6 +119,7 @@ export function ShopPanel({ signup, shop, onChange }: { signup: SignupRecord; sh
               {shop.plan === "trial" ? ` · Essai jusqu'au ${formatDay(parisDay(new Date(shop.trialEndsAt)))}` : ""}
             </span>
           </p>
+          {note ? <p className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${SUBSCRIPTION_STYLE[note.tone]}`}>{note.label}</p> : null}
           <div className="flex flex-wrap items-center gap-2">
             {/* Ouvre l'espace du commerçant (onglet Roue) dans un nouvel onglet : lots, couleurs, logo, réglages. */}
             <a href={`/api/admin/shops/${shop.id}/espace`} target="_blank" rel="noopener" className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-tomette px-4 font-semibold text-white">

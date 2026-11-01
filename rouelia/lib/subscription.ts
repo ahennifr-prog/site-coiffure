@@ -10,6 +10,11 @@ export async function syncSubscription(shop: Shop, sub: StripeSubscription): Pro
   if (next.plan === "active" && shop.plan !== "active" && shop.signupId) {
     const s = await getSignup(shop.signupId);
     if (s && s.status !== "client") await updateSignup({ ...s, status: "client", stripeCustomerId: sub.customer });
+  } else if (shop.plan === "active" && next.plan !== "active" && shop.signupId) {
+    // Abonnement arrêté : « Perdu », ou de nouveau « Essai en cours » s'il lui reste des jours gratuits.
+    const s = await getSignup(shop.signupId);
+    const status = next.plan === "trial" ? "essai_en_cours" : "perdu";
+    if (s && s.status !== status) await updateSignup({ ...s, status });
   }
   await alertSubscription(shop, next);
   return next;

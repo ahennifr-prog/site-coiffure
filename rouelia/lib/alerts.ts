@@ -1,6 +1,7 @@
 import { pricing } from "@/content";
 import { database, getSignup, updateSignup } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
+import { formatDay } from "@/lib/dates";
 import { adminAlertMail } from "@/lib/mail-templates";
 import type { Shop } from "@/lib/shops";
 
@@ -47,8 +48,25 @@ export async function alertIfFirstPlay(shop: Shop, now = new Date()): Promise<bo
   return true;
 }
 
-/** Changement d'abonnement : nouveau client payant, ou abonnement arrêté. */
+/** Changement d'abonnement : nouveau client payant, résiliation demandée ou retirée, abonnement arrêté. */
 export async function alertSubscription(before: Shop, after: Shop) {
+  const wasCancelling = !!before.stripe?.cancelAtPeriodEnd && before.stripe.subscriptionId === after.stripe?.subscriptionId;
+  const cancelling = after.plan === "active" && !!after.stripe?.cancelAtPeriodEnd;
+  if (cancelling && !wasCancelling) {
+    const end = after.stripe?.periodEnd ? formatDay(after.stripe.periodEnd) : "la fin du mois payé";
+    await send(`Résiliation demandée : ${name(after)}`, "Un commerçant a demandé à arrêter son abonnement", [
+      `${after.firstName} (${name(after)}) a demandé la résiliation de son pack ${packName(after)}.`,
+      `Sa roue continue de tourner jusqu'au ${end}, puis l'abonnement s'arrête. Il peut encore changer d'avis depuis son espace.`,
+      `Téléphone : ${after.phone}. E-mail : ${after.email}. Un appel peut aider à comprendre pourquoi.`,
+    ], after.email);
+    return;
+  }
+  if (after.plan === "active" && before.plan === "active" && wasCancelling && !after.stripe?.cancelAtPeriodEnd) {
+    await send(`Résiliation retirée : ${name(after)}`, "Un commerçant garde finalement son abonnement", [
+      `${after.firstName} (${name(after)}) a annulé sa demande de résiliation : l'abonnement continue, pack ${packName(after)}.`,
+    ], after.email);
+    return;
+  }
   if (after.plan === "active" && before.plan !== "active")
     await send(`Nouveau client : ${name(after)}`, "Un commerçant vient de s'abonner", [
       `${after.firstName} (${name(after)}) a payé son abonnement, pack ${packName(after)}.`,

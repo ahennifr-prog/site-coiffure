@@ -6,6 +6,10 @@ import { getShop, insertShop, shopFromSignup, type Shop } from "@/lib/shops";
 import { buildRecord } from "@/lib/signup";
 import { applySubscription, createCheckout, formEncode, setStripeFetch, verifyWebhook, type StripeSubscription } from "@/lib/stripe";
 import { POST as webhook } from "@/app/api/stripe/webhook/route";
+import { getSignup, saveSignup } from "@/lib/db";
+import { setMailTransport, type Mail } from "@/lib/mail";
+import { syncSubscription } from "@/lib/subscription";
+import { subscriptionNote } from "@/lib/subscription-status";
 import { sqliteD1 } from "./sqlite";
 
 const now = new Date("2026-10-02T10:00:00Z");
@@ -135,5 +139,50 @@ describe("Stripe", () => {
     expect((await getShop("shop-1"))?.plan).toBe("active");
     const bad = await webhook(new Request("https://rouelia.fr/api/stripe/webhook", { method: "POST", body: payload, headers: { "stripe-signature": `t=${t},v1=faux` } }));
     expect(bad.status).toBe(400);
+  });
+
+  it("garde le jour de la demande de résiliation et celui de l'arrêt", async () => {
+    const shop = applySubscription(await newShop(), sub({ status: "active" }));
+    const asked = applySubscription(shop, sub({ status: "active", cancel_at_period_end: true }), new Date("2026-10-05T10:00:00Z"));
+    expect(asked.stripe?.cancelRequestedOn).toBe("2026-10-05");
+    // Une seconde notification ne change pas le jour de la demande.
+    expect(applySubscription(asked, sub({ status: "active", cancel_at_period_end: true }), new Date("2026-10-08T10:00:00Z")).stripe?.cancelRequestedOn).toBe("2026-10-05");
+    expect(applySubscription(asked, sub({ status: "active" })).stripe?.cancelRequestedOn).toBeNull();
+    const ended = applySubscription(asked, sub({ status: "canceled", cancel_at_period_end: true }), new Date("2026-10-16T08:00:00Z"));
+    expect(ended.stripe).toMatchObject({ endedOn: "2026-10-16", cancelRequestedOn: "2026-10-05" });
+    expect(subscriptionNote(asked.stripe)).toEqual({ label: "Résiliation demandée le 5 octobre 2026, fin le 16 octobre 2026", tone: "alerte" });
+    expect(subscriptionNote(ended.stripe)?.label).toBe("Abonnement arrêté le 16 octobre 2026");
+    expect(subscriptionNote(undefined)).toBeNull();
+  });
+
+  it("prévient Aymen d'une résiliation et passe l'inscription en perdu à l'arrêt", async () => {
+    const sent: Mail[] = [];
+    setMailTransport(async (m) => {
+      sent.push(m);
+      return { ok: true };
+    });
+    try {
+      const r = buildRecord(
+        { firstName: "Martine", email: "martine@salon.fr", phone: "0612345678", establishment: { name: "Salon Martine" }, pack: "croissance", utm: {}, consent: { accepted: true, text: "ok" }, wheel: null },
+        now,
+        "s1",
+      );
+      if (!r.ok) throw new Error();
+      await saveSignup({ ...r.record, status: "essai_en_cours" });
+      let shop = await newShop({ signupId: r.record.id, trialEndsAt: "2026-10-01T10:00:00Z" });
+      shop = await syncSubscription(shop, sub({ status: "active" }));
+      expect((await getSignup(r.record.id))?.status).toBe("client");
+      shop = await syncSubscription(shop, sub({ status: "active", cancel_at_period_end: true }));
+      expect(sent.at(-1)?.subject).toContain("Résiliation demandée");
+      const count = sent.length;
+      shop = await syncSubscription(shop, sub({ status: "active", cancel_at_period_end: true }));
+      expect(sent.length).toBe(count);
+      shop = await syncSubscription(shop, sub({ status: "canceled", cancel_at_period_end: true }));
+      expect(shop.plan).toBe("paused");
+      expect(sent.at(-1)?.subject).toContain("Abonnement arrêté");
+      expect((await getSignup(r.record.id))?.status).toBe("perdu");
+    } finally {
+      setMailTransport(null);
+    }
   });
 });
