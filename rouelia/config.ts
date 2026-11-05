@@ -7,7 +7,7 @@
 export const EMAIL = "contact@rouelia.fr";
 
 /** Numéro WhatsApp au format international, sans + ni espaces. Provisoire : remplacer par le numéro business. */
-export const WHATSAPP_NUMBER = "33672780326";
+export const WHATSAPP_NUMBER = "33767050047";
 export const WHATSAPP_TEXT = "Bonjour, je souhaite en savoir plus sur Rouelia";
 export const whatsappUrl = (text: string = WHATSAPP_TEXT) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 

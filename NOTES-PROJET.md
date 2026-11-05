@@ -35,7 +35,7 @@ mobile en local), SIREN et adresse dans les pages légales. Stripe configuré pa
    `https://rouelia.fr/api/stripe/webhook` ; puis paiement test à 29 € et remboursement (le commerce doit passer
    « Client (payant) » dans l'admin).
 2. `ANTHROPIC_API_KEY` (réponses aux avis par IA, Croissance et Premium).
-3. Numéro WhatsApp business (aujourd'hui le 06 perso, `WHATSAPP_NUMBER` dans `rouelia/config.ts`).
+3. ~~Numéro WhatsApp business~~ : fait le 5 novembre 2026 (07 67 05 00 47).
 4. `RESEND_API_KEY` facultatif (Brevo fonctionne).
 
 **À fournir par Aymen** : relecture juridique (CGV, confidentialité, règlement du jeu) ; correction du code APE
@@ -128,7 +128,7 @@ Pistes suivantes si besoin : réduire le JavaScript de démarrage (moins de comp
 
 ## Constantes
 
-- `rouelia/config.ts` : `EMAIL` = contact@rouelia.fr ; `WHATSAPP_NUMBER` = 33672780326 (provisoire, une ligne à changer pour
+- `rouelia/config.ts` : `EMAIL` = contact@rouelia.fr ; `WHATSAPP_NUMBER` = 33767050047 (WhatsApp Business de Rouelia depuis le 5 novembre 2026 ; une ligne à changer pour
   le numéro business) ; créneaux d'appel `BOOKING` (lundi à vendredi, plages `WEEKDAY_HOURS` : 9 h à 12 h, 12 h à 14 h, 14 h à 17 h,
   18 h à 20 h ; 5 minutes, 14 jours, délai 2 h, jours bloqués) ; `FOUNDER_AVATAR` (photo de la pastille « À propos »,
   null = initiale du fondateur).
